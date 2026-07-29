@@ -291,7 +291,17 @@ const ProductDetail = () => {
                 </button>
                 {!isOutOfStock && (
                   <button 
-                    onClick={() => addToCollection('cart')}
+                    onClick={async () => {
+                      const cartItemId = selectedSize ? `${product.id}-${selectedSize.size}` : product.id;
+                      if (!cart.some(item => (item.cartId || item.id) === cartItemId)) {
+                        await addToCart(product, selectedSize);
+                      }
+                      if (!user) {
+                        navigate(`/signup?redirect=${encodeURIComponent('/checkout')}`);
+                      } else {
+                        navigate('/checkout');
+                      }
+                    }}
                     className="w-full h-12 bg-white text-black font-semibold text-[10px] uppercase tracking-widest hover:bg-white/85 transition-all duration-300"
                   >
                     Buy it Now

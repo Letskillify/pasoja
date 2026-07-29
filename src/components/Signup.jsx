@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "./useAuth";
 import { Mail, Lock, User, ArrowRight, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const Signup = () => {
   const { signup } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
@@ -14,13 +15,15 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const redirectPath = searchParams.get("redirect") || "/";
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
     try {
       await signup(email, password, displayName);
-      navigate("/");
+      navigate(redirectPath);
     } catch {
       setError("Failed to create account. Please check your details and try again.");
     } finally {
@@ -158,7 +161,7 @@ const Signup = () => {
           <div className="relative z-10 pt-6">
             <span className="text-[12px] text-white/20 tracking-wider">
               Already have an account?{" "}
-              <Link to="/login" className="text-white font-bold hover:text-white/60 transition-colors uppercase text-[11px] tracking-wider ml-1">Sign in</Link>
+              <Link to={`/login?redirect=${encodeURIComponent(redirectPath)}`} className="text-white font-bold hover:text-white/60 transition-colors uppercase text-[11px] tracking-wider ml-1">Sign in</Link>
             </span>
           </div>
         </div>

@@ -153,7 +153,7 @@ const Login = () => {
           <div className="relative z-10 pt-6">
             <span className="text-[12px] text-white/20 tracking-wider">
               Don't have an account?{" "}
-              <Link to="/signup" className="text-white font-bold hover:text-white/60 transition-colors uppercase text-[11px] tracking-wider ml-1">Create one</Link>
+              <Link to={`/signup?redirect=${encodeURIComponent(redirectPath)}`} className="text-white font-bold hover:text-white/60 transition-colors uppercase text-[11px] tracking-wider ml-1">Create one</Link>
             </span>
           </div>
         </div>

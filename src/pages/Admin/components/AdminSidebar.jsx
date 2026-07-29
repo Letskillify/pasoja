@@ -29,7 +29,8 @@ import {
   History,
   HelpCircle,
   LogOut,
-  Shirt
+  Shirt,
+  X
 } from 'lucide-react';
 
 const sidebarSections = [
@@ -106,7 +107,7 @@ const sidebarSections = [
   }
 ];
 
-const AdminSidebar = ({ activeItem, setActiveItem }) => {
+const AdminSidebar = ({ activeItem, setActiveItem, isOpen, onClose }) => {
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to logout?")) {
       localStorage.removeItem("adminToken");
@@ -116,65 +117,85 @@ const AdminSidebar = ({ activeItem, setActiveItem }) => {
   };
 
   return (
-    <aside className="w-64 border-r border-[#1a1a1a] bg-[#090909] text-gray-400 flex flex-col h-screen shrink-0 selection:bg-white selection:text-black">
-      {/* Brand Header */}
-      <div className="px-6 py-5 border-b border-[#1a1a1a] sticky top-0 bg-[#090909] z-10">
-        <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-lg bg-[#c9a962] text-[#090909] flex items-center justify-center shadow-lg shadow-[#c9a962]/10">
-            <Shirt size={18} strokeWidth={2.5} />
-          </div>
-          <div>
-            <p className="text-sm font-poppins font-bold tracking-wider text-white">
-              PASOJA ADMIN
-            </p>
-            <p className="text-[10px] text-zinc-500 uppercase tracking-widest">E-commerce Suite</p>
-          </div>
-        </div>
-      </div>
+    <>
+      {/* Mobile Drawer Backdrop */}
+      {isOpen && (
+        <div 
+          onClick={onClose}
+          className="fixed inset-0 bg-black/60 z-30 lg:hidden"
+        />
+      )}
 
-      {/* Navigation Groups */}
-      <nav className="flex-grow overflow-y-auto px-4 py-6 space-y-7">
-        {sidebarSections.map((section) => (
-          <div key={section.title} className="space-y-1.5">
-            <p className="text-[9px] font-bold text-zinc-600 tracking-[0.2em] px-3 uppercase">
-              {section.title}
-            </p>
-            <div className="space-y-0.5">
-              {section.items.map((item) => {
-                const isActive = item.name === activeItem;
-                const Icon = item.icon;
-                return (
-                  <button
-                    key={item.name}
-                    type="button"
-                    onClick={() => setActiveItem(item.name)}
-                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold tracking-wide transition-all ${
-                      isActive
-                        ? "bg-[#c9a962]/10 text-[#c9a962] border border-[#c9a962]/20"
-                        : "text-zinc-400 hover:bg-[#121212] hover:text-white border border-transparent"
-                    }`}
-                  >
-                    <Icon size={14} strokeWidth={2} />
-                    <span>{item.name}</span>
-                  </button>
-                );
-              })}
+      <aside className={`fixed inset-y-0 left-0 z-40 w-64 border-r border-[#1a1a1a] bg-[#090909] text-gray-400 flex flex-col h-screen shrink-0 transition-transform duration-300 lg:static lg:translate-x-0 selection:bg-white selection:text-black ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        {/* Brand Header */}
+        <div className="px-6 py-5 border-b border-[#1a1a1a] sticky top-0 bg-[#090909] z-10 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-lg bg-[#c9a962] text-[#090909] flex items-center justify-center shadow-lg shadow-[#c9a962]/10">
+              <Shirt size={18} strokeWidth={2.5} />
+            </div>
+            <div>
+              <p className="text-sm font-poppins font-bold tracking-wider text-white">
+                PASOJA ADMIN
+              </p>
+              <p className="text-[10px] text-zinc-500 uppercase tracking-widest">E-commerce Suite</p>
             </div>
           </div>
-        ))}
-      </nav>
+          {/* Close button on mobile */}
+          <button 
+            onClick={onClose} 
+            className="lg:hidden p-1.5 hover:bg-white/5 text-zinc-500 hover:text-white rounded"
+          >
+            <X size={16} />
+          </button>
+        </div>
 
-      {/* Logout button */}
-      <div className="p-4 border-t border-[#1a1a1a] bg-[#0c0c0c]">
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-bold text-red-400 hover:bg-red-950/20 hover:text-red-300 transition-all border border-transparent hover:border-red-900/30"
-        >
-          <LogOut size={14} />
-          <span>LOGOUT</span>
-        </button>
-      </div>
-    </aside>
+        {/* Navigation Groups */}
+        <nav className="flex-grow overflow-y-auto px-4 py-6 space-y-7">
+          {sidebarSections.map((section) => (
+            <div key={section.title} className="space-y-1.5">
+              <p className="text-[9px] font-bold text-zinc-600 tracking-[0.2em] px-3 uppercase">
+                {section.title}
+              </p>
+              <div className="space-y-0.5">
+                {section.items.map((item) => {
+                  const isActive = item.name === activeItem;
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.name}
+                      type="button"
+                      onClick={() => {
+                        setActiveItem(item.name);
+                        onClose();
+                      }}
+                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold tracking-wide transition-all ${
+                        isActive
+                          ? "bg-[#c9a962]/10 text-[#c9a962] border border-[#c9a962]/20"
+                          : "text-zinc-400 hover:bg-[#121212] hover:text-white border border-transparent"
+                      }`}
+                    >
+                      <Icon size={14} strokeWidth={2} />
+                      <span>{item.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </nav>
+
+        {/* Logout button */}
+        <div className="p-4 border-t border-[#1a1a1a] bg-[#0c0c0c]">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-bold text-red-400 hover:bg-red-950/20 hover:text-red-300 transition-all border border-transparent hover:border-red-900/30"
+          >
+            <LogOut size={14} />
+            <span>LOGOUT</span>
+          </button>
+        </div>
+      </aside>
+    </>
   );
 };
 

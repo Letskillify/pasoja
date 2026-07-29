@@ -29,7 +29,8 @@ import {
 import { 
   X, Plus, Edit2, Trash2, CheckCircle2, AlertTriangle, 
   User, Calendar, DollarSign, ShoppingBag, Eye, Printer, 
-  Download, PlusCircle, Check, HelpCircle, FileText 
+  Download, PlusCircle, Check, HelpCircle, FileText,
+  Shirt, AlertCircle, Mail, Lock, ArrowRight
 } from "lucide-react";
 
 // Import components
@@ -777,7 +778,27 @@ const ActivityLogsView = () => {
 };
 
 const Admin = () => {
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(
+    localStorage.getItem("adminToken") === "PASOJA_SUPER_ADMIN" ||
+    sessionStorage.getItem("adminToken") === "PASOJA_SUPER_ADMIN"
+  );
+  const [adminEmail, setAdminEmail] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+
+  const handleAdminLogin = (e) => {
+    e.preventDefault();
+    if (adminEmail === "super@pasoja.in" && adminPassword === "Super@321.Admin") {
+      sessionStorage.setItem("adminToken", "PASOJA_SUPER_ADMIN");
+      setIsAdminLoggedIn(true);
+      setLoginError("");
+    } else {
+      setLoginError("Invalid Administrator Credentials.");
+    }
+  };
+
   const [activeItem, setActiveItem] = useState("Overview");
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [searchVal, setSearchVal] = useState("");
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -1248,13 +1269,64 @@ const Admin = () => {
     }
   };
 
+  if (!isAdminLoggedIn) {
+    return (
+      <div className="min-h-screen bg-[#070707] flex flex-col justify-center items-center px-5 font-['Inter',sans-serif]">
+        <div className="w-full max-w-md border border-white/5 bg-[#0a0a0a] p-8 md:p-10 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] space-y-6">
+          <div className="text-center">
+            <div className="h-12 w-12 rounded-lg bg-[#c9a962] text-[#090909] flex items-center justify-center shadow-lg shadow-[#c9a962]/10 mx-auto mb-4">
+              <Shirt size={22} strokeWidth={2.5} />
+            </div>
+            <h1 className="text-lg font-poppins font-bold tracking-widest text-white uppercase">PASOJA ADMIN</h1>
+            <p className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">ATELIER CONTROL CENTRE</p>
+          </div>
+
+          {loginError && (
+            <div className="p-3.5 bg-red-950/40 border border-red-900/30 rounded text-red-400 text-[11px] font-medium flex items-center gap-2">
+              <AlertCircle size={14} className="shrink-0" />
+              <span>{loginError}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleAdminLogin} className="space-y-4">
+            <div className="space-y-1.5">
+              <label className="text-[9px] font-bold uppercase tracking-[0.25em] text-white/30">Admin ID</label>
+              <div className="relative">
+                <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20" />
+                <input type="email" value={adminEmail} onChange={(e) => setAdminEmail(e.target.value)} placeholder="super@pasoja.in" required
+                  className="w-full pl-10 pr-4 py-3 bg-[#0d0d0d] border border-white/5 text-xs text-white outline-none focus:border-[#c9a962]/40 transition-all duration-300 placeholder:text-white/20"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-[9px] font-bold uppercase tracking-[0.25em] text-white/30">Security Password</label>
+              <div className="relative">
+                <Lock size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20" />
+                <input type="password" value={adminPassword} onChange={(e) => setAdminPassword(e.target.value)} placeholder="••••••••" required
+                  className="w-full pl-10 pr-4 py-3 bg-[#0d0d0d] border border-white/5 text-xs text-white outline-none focus:border-[#c9a962]/40 transition-all duration-300 placeholder:text-white/20"
+                />
+              </div>
+            </div>
+
+            <button type="submit"
+              className="w-full py-3.5 bg-[#c9a962] text-[#090909] font-bold text-[10px] uppercase tracking-[0.2em] transition-all duration-300 hover:bg-white hover:text-black flex items-center justify-center gap-2 cursor-pointer"
+            >
+              Authenticate Admin <ArrowRight size={13} />
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex bg-[#090909] text-white selection:bg-white selection:text-black">
-      <AdminSidebar activeItem={activeItem} setActiveItem={setActiveItem} />
+      <AdminSidebar activeItem={activeItem} setActiveItem={setActiveItem} isOpen={isMobileSidebarOpen} onClose={() => setIsMobileSidebarOpen(false)} />
 
-      <main className="flex-1 px-6 py-8 md:px-10 lg:px-12 overflow-auto bg-[#090909]">
+      <main className="flex-1 px-4 py-6 md:px-8 lg:px-12 overflow-auto bg-[#090909]">
         <div className="max-w-7xl mx-auto">
-          <AdminHeader activeItem={activeItem} searchVal={searchVal} setSearchVal={setSearchVal} />
+          <AdminHeader activeItem={activeItem} searchVal={searchVal} setSearchVal={setSearchVal} onMenuClick={() => setIsMobileSidebarOpen(true)} />
 
           {activeItem === "Products" && (
             <div className="flex justify-end mb-6">

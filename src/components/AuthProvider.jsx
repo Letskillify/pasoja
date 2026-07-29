@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { auth, db } from "./Firebase";
-import { onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { AuthContext } from "./useAuth";
 
@@ -18,6 +18,7 @@ const AuthProvider = ({ children }) => {
         if (!snap.exists()) {
           await setDoc(userDoc, {
             email: u.email || "",
+            displayName: u.displayName || "",
             createdAt: serverTimestamp(),
           });
         }
@@ -27,7 +28,17 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (email, password) => signInWithEmailAndPassword(auth, email, password);
-  const signup = (email, password) => createUserWithEmailAndPassword(auth, email, password);
+  const signup = async (email, password, displayName) => {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(cred.user, { displayName });
+    const userDoc = doc(db, "users", cred.user.uid);
+    await setDoc(userDoc, {
+      email: cred.user.email || "",
+      displayName: displayName || "",
+      createdAt: serverTimestamp(),
+    });
+    return cred;
+  };
   const logout = () => signOut(auth);
 
   const value = { user, loading, login, signup, logout };

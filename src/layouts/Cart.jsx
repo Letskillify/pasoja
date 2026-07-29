@@ -49,7 +49,7 @@ const Cart = () => {
   });
 
   const handleCheckout = () => {
-    if (!user) navigate("/login?redirect=checkout");
+    if (!user) navigate(`/signup?redirect=${encodeURIComponent('/checkout')}`);
     else navigate("/checkout");
   };
 
