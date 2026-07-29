@@ -1,17 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { User, Search, Menu, X, Heart, ArrowRight, ShoppingBag, Sparkles, Compass, HelpCircle } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { User, Search, Menu, X, Heart, ArrowRight, ShoppingBag, ChevronDown, Compass, HelpCircle, Tag, ShoppingCart } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from './useAuth';
 import { useStore } from './StoreProvider';
+import { db } from './Firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 const easing = [0.22, 1, 0.36, 1];
+
+const DEFAULT_COLLECTIONS = [
+  'T-Shirts',
+  'Shirts',
+  'Jeans',
+  'Jackets',
+  'Dresses',
+  'Sweaters',
+  'Shorts',
+  'Accessories'
+];
+
+const POPULAR_SEARCHES = [
+  'T-Shirts',
+  'Jackets',
+  'Jeans',
+  'Dresses',
+  'Cotton',
+  'New Season'
+];
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isCollectionsDropdownOpen, setIsCollectionsDropdownOpen] = useState(false);
+  const [isMobileCollectionsOpen, setIsMobileCollectionsOpen] = useState(false);
+  const [collections, setCollections] = useState(DEFAULT_COLLECTIONS);
+  const [allProducts, setAllProducts] = useState([]);
+
   const location = useLocation();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { cart, wishlist } = useStore();
   const { scrollY } = useScroll();
@@ -30,6 +58,8 @@ const Header = () => {
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
+    setIsCollectionsDropdownOpen(false);
+    setIsSearchActive(false);
   }, [location]);
 
   useEffect(() => {
@@ -37,17 +67,86 @@ const Header = () => {
     return () => { document.body.style.overflow = ''; };
   }, [isMobileMenuOpen]);
 
-  const leftNavLinks = [
-    { name: 'Shop All', path: '/shop' },
-    { name: 'New Arrivals', path: '/shop?filter=new' },
-    { name: 'Collections', path: '/collections' },
-  ];
+  // Handle Escape key to close search overlay
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && isSearchActive) {
+        setIsSearchActive(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isSearchActive]);
+
+  // Fetch all products for live search & categories
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const snap = await getDocs(collection(db, 'products'));
+        const productsList = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setAllProducts(productsList);
+
+        const set = new Set(DEFAULT_COLLECTIONS);
+        productsList.forEach(d => {
+          if (d.category && typeof d.category === 'string') set.add(d.category.trim());
+        });
+        setCollections(Array.from(set));
+      } catch (err) {
+        console.error('Error loading header data:', err);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handleSearchSubmit = (e) => {
+    if (e) e.preventDefault();
+    if (!searchQuery.trim()) return;
+    const term = searchQuery.trim();
+    setIsSearchActive(false);
+    setSearchQuery('');
+    navigate(`/shop?search=${encodeURIComponent(term)}`);
+  };
+
+  const handleQuickTagClick = (tag) => {
+    setIsSearchActive(false);
+    setSearchQuery('');
+    navigate(`/shop?search=${encodeURIComponent(tag)}`);
+  };
+
+  const handleProductClick = (productId) => {
+    setIsSearchActive(false);
+    setSearchQuery('');
+    navigate(`/product/${productId}`);
+  };
+
+  const handleCollectionSelect = (col) => {
+    setIsCollectionsDropdownOpen(false);
+    setIsMobileMenuOpen(false);
+    if (col === 'All') {
+      navigate('/shop');
+    } else {
+      navigate(`/shop?category=${encodeURIComponent(col)}`);
+    }
+  };
+
+  // Filter live search matches
+  const liveSearchResults = searchQuery.trim()
+    ? allProducts.filter(p => {
+        const q = searchQuery.toLowerCase().trim();
+        return (
+          p.name?.toLowerCase().includes(q) ||
+          p.category?.toLowerCase().includes(q) ||
+          p.description?.toLowerCase().includes(q) ||
+          p.material?.toLowerCase().includes(q) ||
+          p.colors?.toLowerCase().includes(q)
+        );
+      })
+    : [];
 
   const rightNavLinks = [
     { name: 'Our Story', path: '/about' },
     { name: 'Contact', path: '/contact' },
   ];
-
 
   const tickerItems = [
     'COMPLIMENTARY SHIPPING OVER ₹1999',
@@ -89,16 +188,69 @@ const Header = () => {
 
             {/* Left Nav */}
             <div className="hidden lg:flex items-center gap-9 justify-start">
-              {leftNavLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  to={link.path}
-                  className="relative text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60 hover:text-white transition-colors duration-300 group py-2"
+              <Link
+                to="/shop"
+                className={`relative text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors duration-300 py-2 group ${
+                  location.pathname === '/shop' && !location.search ? 'text-white' : 'text-white/60 hover:text-white'
+                }`}
+              >
+                Shop All
+                <span className={`absolute bottom-0 left-0 h-[1px] bg-white transition-all duration-400 ${location.pathname === '/shop' && !location.search ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+              </Link>
+
+              {/* Collections Dropdown Trigger */}
+              <div
+                className="relative py-2"
+                onMouseEnter={() => setIsCollectionsDropdownOpen(true)}
+                onMouseLeave={() => setIsCollectionsDropdownOpen(false)}
+              >
+                <button
+                  type="button"
+                  onClick={() => navigate('/shop')}
+                  className={`flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors duration-300 group cursor-pointer ${
+                    location.search.includes('category=') || isCollectionsDropdownOpen ? 'text-white' : 'text-white/60 hover:text-white'
+                  }`}
                 >
-                  {link.name}
-                  <span className={`absolute bottom-0 left-0 h-[1px] bg-white transition-all duration-400 ${location.pathname === link.path ? 'w-full' : 'w-0 group-hover:w-full'}`} />
-                </Link>
-              ))}
+                  <span>Collections</span>
+                  <ChevronDown size={13} className={`transition-transform duration-300 ${isCollectionsDropdownOpen ? 'rotate-180 text-white' : 'text-white/40'}`} />
+                  <span className={`absolute bottom-0 left-0 h-[1px] bg-white transition-all duration-400 ${location.search.includes('category=') ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+                </button>
+
+                {/* Dropdown Menu */}
+                <AnimatePresence>
+                  {isCollectionsDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                      transition={{ duration: 0.2, ease: easing }}
+                      className="absolute top-full left-0 w-56 bg-[#0d0d0d] border border-white/10 shadow-2xl p-2 z-50 rounded-sm"
+                    >
+                      <div className="py-1">
+                        <button
+                          type="button"
+                          onClick={() => handleCollectionSelect('All')}
+                          className="w-full text-left px-4 py-2 text-[10px] font-extrabold uppercase tracking-widest text-[#c9a962] hover:bg-white/5 transition-colors border-b border-white/[0.06] mb-1 flex items-center justify-between"
+                        >
+                          <span>All Collections</span>
+                          <ArrowRight size={11} />
+                        </button>
+                        {collections.map((col) => (
+                          <button
+                            key={col}
+                            type="button"
+                            onClick={() => handleCollectionSelect(col)}
+                            className="w-full text-left px-4 py-2 text-[11px] uppercase tracking-wider text-white/60 hover:text-white hover:bg-white/5 transition-colors flex items-center justify-between group"
+                          >
+                            <span>{col}</span>
+                            <span className="opacity-0 group-hover:opacity-100 text-[#c9a962] text-[10px]">→</span>
+                          </button>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
 
             {/* Mobile Burger */}
@@ -185,7 +337,7 @@ const Header = () => {
           </div>
         </motion.nav>
 
-        {/* ── SEARCH OVERLAY ── */}
+        {/* ── FULL FUNCTIONAL LIVE SEARCH OVERLAY ── */}
         <AnimatePresence>
           {isSearchActive && (
             <motion.div
@@ -193,24 +345,135 @@ const Header = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3, ease: easing }}
-              className="absolute left-0 top-full w-full bg-[#0d0d0d] border-b border-white/10 px-6 md:px-14 py-7 z-[90]"
+              className="absolute left-0 top-full w-full bg-[#0d0d0d] border-b border-white/10 px-6 md:px-14 py-6 z-[90] shadow-2xl max-h-[85vh] overflow-y-auto"
             >
-              <div className="max-w-3xl mx-auto flex items-center gap-4">
-                <Search size={22} className="text-white/30 shrink-0" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search collections, products..."
-                  className="bg-transparent border-none outline-none w-full text-lg md:text-2xl text-white placeholder-white/25 font-light tracking-wide"
-                  autoFocus
-                />
-                <button
-                  onClick={() => setIsSearchActive(false)}
-                  className="text-[11px] uppercase tracking-[0.2em] text-white/40 hover:text-white font-bold shrink-0 transition-colors"
-                >
-                  Close
-                </button>
+              <div className="max-w-4xl mx-auto space-y-6">
+                {/* Search Form Input */}
+                <form onSubmit={handleSearchSubmit} className="flex items-center gap-4 border-b border-white/10 pb-4">
+                  <Search size={22} className="text-[#c9a962] shrink-0" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search apparel by name, fabric, category..."
+                    className="bg-transparent border-none outline-none w-full text-lg md:text-2xl text-white placeholder-white/25 font-light tracking-wide"
+                    autoFocus
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchQuery('')}
+                      className="p-1 text-white/40 hover:text-white transition-colors"
+                      title="Clear text"
+                    >
+                      <X size={18} />
+                    </button>
+                  )}
+                  <button
+                    type="submit"
+                    className="px-5 py-2.5 bg-white text-black font-extrabold text-[10px] uppercase tracking-[0.2em] hover:bg-white/85 transition-all shrink-0"
+                  >
+                    Search
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsSearchActive(false)}
+                    className="text-[11px] uppercase tracking-[0.2em] text-white/40 hover:text-white font-bold shrink-0 transition-colors pl-2"
+                  >
+                    Close
+                  </button>
+                </form>
+
+                {/* Popular Search Tags when query is empty */}
+                {!searchQuery.trim() && (
+                  <div className="space-y-3 pt-2">
+                    <div className="flex items-center gap-2 text-white/30 text-[10px] font-bold uppercase tracking-[0.25em]">
+                      <Tag size={12} className="text-[#c9a962]" />
+                      <span>Popular Searches</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {POPULAR_SEARCHES.map(tag => (
+                        <button
+                          key={tag}
+                          type="button"
+                          onClick={() => handleQuickTagClick(tag)}
+                          className="px-3.5 py-1.5 bg-white/5 border border-white/10 hover:border-white/30 text-white/70 hover:text-white text-[11px] uppercase tracking-wider transition-all"
+                        >
+                          {tag}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Live Search Instant Results */}
+                {searchQuery.trim() !== '' && (
+                  <div className="space-y-4 pt-2">
+                    <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-white/40 border-b border-white/[0.06] pb-2">
+                      <span>Products Found ({liveSearchResults.length})</span>
+                      {liveSearchResults.length > 0 && (
+                        <button
+                          type="button"
+                          onClick={handleSearchSubmit}
+                          className="text-[#c9a962] hover:underline"
+                        >
+                          View All Results →
+                        </button>
+                      )}
+                    </div>
+
+                    {liveSearchResults.length > 0 ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                        {liveSearchResults.slice(0, 4).map((product) => {
+                          const image = product.image || product.images?.[0] || 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?q=80&w=800';
+                          return (
+                            <div
+                              key={product.id}
+                              onClick={() => handleProductClick(product.id)}
+                              className="group bg-[#141414] border border-white/10 hover:border-white/30 p-3 cursor-pointer transition-all flex flex-col justify-between"
+                            >
+                              <div className="aspect-[3/4] bg-black overflow-hidden mb-3 relative">
+                                <img
+                                  src={image}
+                                  alt={product.name}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                />
+                                {product.stock === 0 && (
+                                  <span className="absolute top-2 left-2 bg-red-600 text-white text-[8px] font-bold uppercase tracking-wider px-2 py-0.5">
+                                    Sold Out
+                                  </span>
+                                )}
+                              </div>
+
+                              <div>
+                                {product.category && (
+                                  <span className="text-[9px] uppercase tracking-widest text-[#c9a962] font-semibold block mb-0.5">
+                                    {product.category}
+                                  </span>
+                                )}
+                                <h4 className="text-xs font-bold text-white uppercase tracking-wide truncate group-hover:text-[#c9a962] transition-colors">
+                                  {product.name}
+                                </h4>
+                                <p className="text-xs font-mono font-bold text-white/90 mt-1">
+                                  ₹{product.price?.toLocaleString('en-IN')}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div className="py-8 text-center space-y-2">
+                        <p className="text-sm text-white/50 font-light">
+                          No items match "<span className="text-white">{searchQuery}</span>"
+                        </p>
+                        <p className="text-[11px] text-white/30">
+                          Try searching by broader terms like "shirt", "cotton", or "jackets".
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </motion.div>
           )}
@@ -229,7 +492,11 @@ const Header = () => {
               {/* Menu Header */}
               <div className="w-full px-5 h-[72px] flex items-center justify-between border-b border-white/[0.06] shrink-0">
                 <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
-                  <img src="/img/Pasoja option-01.png" alt="Pasoja" className="h-9 w-auto object-contain brightness-0 invert" />
+                  <img
+                    src="https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/p3jd3nuet4vkqbfd5qaz.png"
+                    alt="Pasoja"
+                    className="h-9 w-auto object-contain brightness-0 invert"
+                  />
                 </Link>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -242,7 +509,64 @@ const Header = () => {
               {/* Nav Links */}
               <div className="px-8 pt-10 flex-1 overflow-y-auto pb-36">
                 <p className="text-[10px] uppercase tracking-[0.3em] text-white/25 font-bold mb-8">Navigation</p>
-                {[...leftNavLinks, ...rightNavLinks].map((link, idx) => (
+                
+                {/* Shop All */}
+                <Link
+                  to="/shop"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center justify-between py-5 border-b border-white/[0.06] group"
+                >
+                  <span className="text-2xl font-bold tracking-tight text-white group-hover:text-white/60 transition-colors duration-300">
+                    Shop All
+                  </span>
+                  <ArrowRight size={20} className="text-white/20 group-hover:text-white/60 group-hover:translate-x-1 transition-all duration-300" />
+                </Link>
+
+                {/* Collections Accordion */}
+                <div className="border-b border-white/[0.06]">
+                  <button
+                    type="button"
+                    onClick={() => setIsMobileCollectionsOpen(!isMobileCollectionsOpen)}
+                    className="w-full flex items-center justify-between py-5 group text-left"
+                  >
+                    <span className="text-2xl font-bold tracking-tight text-white group-hover:text-white/60 transition-colors duration-300">
+                      Collections
+                    </span>
+                    <ChevronDown size={20} className={`text-white/40 transition-transform duration-300 ${isMobileCollectionsOpen ? 'rotate-180 text-white' : ''}`} />
+                  </button>
+
+                  <AnimatePresence>
+                    {isMobileCollectionsOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden pb-4 space-y-3 pl-4"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => handleCollectionSelect('All')}
+                          className="block text-sm uppercase tracking-widest text-[#c9a962] font-bold py-1"
+                        >
+                          All Collections →
+                        </button>
+                        {collections.map((col) => (
+                          <button
+                            key={col}
+                            type="button"
+                            onClick={() => handleCollectionSelect(col)}
+                            className="block w-full text-left text-sm uppercase tracking-wider text-white/60 hover:text-white py-1 transition-colors"
+                          >
+                            {col}
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* Other Nav Links */}
+                {rightNavLinks.map((link, idx) => (
                   <motion.div
                     key={link.name}
                     initial={{ opacity: 0, x: -20 }}
@@ -263,14 +587,18 @@ const Header = () => {
                 ))}
 
                 <div className="pt-12 space-y-6">
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-white/25 font-bold mb-4">Support</p>
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-white/25 font-bold mb-4">Support & Account</p>
+                  <div className="flex items-center gap-4 text-white/50">
+                    <User size={18} strokeWidth={1.5} />
+                    <Link to="/account" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-medium hover:text-white transition-colors">My Account</Link>
+                  </div>
                   <div className="flex items-center gap-4 text-white/50">
                     <Compass size={18} strokeWidth={1.5} />
-                    <Link to="/stores" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-medium hover:text-white transition-colors">Find a Store</Link>
+                    <Link to="/about" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-medium hover:text-white transition-colors">About Us</Link>
                   </div>
                   <div className="flex items-center gap-4 text-white/50">
                     <HelpCircle size={18} strokeWidth={1.5} />
-                    <Link to="/support" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-medium hover:text-white transition-colors">Help & Support</Link>
+                    <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-medium hover:text-white transition-colors">Help & Contact</Link>
                   </div>
                 </div>
               </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import MiniLoader from '../MiniLoader';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -91,7 +92,39 @@ const Hero = () => {
     startAutoplay();
   };
 
-  if (loading || slides.length === 0) return null;
+  if (loading || slides.length === 0) return (
+    <section className="relative h-[85vh] md:h-screen w-full bg-[#0a0a0a] mt-[72px] md:mt-[80px] overflow-hidden flex flex-col justify-end pb-12 sm:pb-24 lg:pb-32 px-6 md:px-12 lg:px-16">
+      {/* Background ambient glow shimmer */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#121212] via-[#0a0a0a] to-[#141414] animate-pulse" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-black/60" />
+
+      {/* Hero Loading Banner Badge */}
+     
+      {/* Skeleton layout matching Hero typography */}
+      <div className="relative z-10 max-w-7xl mx-auto w-full space-y-6 opacity-40">
+        {/* Tag line skeleton */}
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-[1px] bg-white/30" />
+          <div className="h-3 w-28 bg-white/20 rounded animate-pulse" />
+        </div>
+
+        {/* Title skeleton */}
+        <div className="space-y-3 max-w-3xl">
+          <div className="h-10 sm:h-14 md:h-20 w-4/5 bg-white/20 rounded animate-pulse" />
+          <div className="h-10 sm:h-14 md:h-20 w-3/5 bg-white/20 rounded animate-pulse" />
+        </div>
+
+        {/* Subtitle & CTA skeleton */}
+        <div className="flex flex-col sm:flex-row sm:items-end gap-6 sm:gap-12 pt-2">
+          <div className="space-y-2 max-w-sm w-full">
+            <div className="h-3.5 w-full bg-white/20 rounded animate-pulse" />
+            <div className="h-3.5 w-3/4 bg-white/20 rounded animate-pulse" />
+          </div>
+          <div className="h-12 w-44 bg-white/25 rounded animate-pulse shrink-0" />
+        </div>
+      </div>
+    </section>
+  );
 
   const slide = slides[currentSlide];
 

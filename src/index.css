@@ -20,11 +20,11 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
   body {
     @apply bg-[#0a0a0a] text-white font-sans antialiased min-h-screen text-[14px];
-    overflow-x: hidden;
+    overflow-x: clip;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply text-white font-heading;
@@ -99,4 +99,67 @@ body :is(
 }
 body ::placeholder {
   font-size: 14px !important;
+}
+
+/* Shop Sidebar Typography Overrides */
+.shop-sidebar-badge {
+  font-size: 10px !important;
+  line-height: 1 !important;
+}
+.shop-sidebar-preset-btn {
+  font-size: 11px !important;
+  white-space: nowrap !important;
+  line-height: 1.2 !important;
+}
+.shop-sidebar-label {
+  font-size: 11px !important;
+  letter-spacing: 0.15em !important;
+}
+
+/* ── Mini Loader ── */
+.mini-loader-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 55vh;
+  background: #0a0a0a;
+}
+.mini-loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.mini-loader-ring-container {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mini-loader-ring {
+  width: 40px;
+  height: 40px;
+}
+.mini-loader-track {
+  stroke: rgba(255, 255, 255, 0.06);
+}
+.mini-loader-arc {
+  stroke: #c9a962;
+}
+.mini-loader-dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #c9a962;
+}
+.mini-loader-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: rgba(255, 255, 255, 0.25);
+  margin: 0;
 }

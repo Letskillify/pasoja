@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-const Preloader = ({ onComplete }) => {
+const Preloader = ({ onComplete, label = 'Loading', isDataReady }) => {
   const [progress, setProgress] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
   const [showContent, setShowContent] = useState(false);
   const [phase, setPhase] = useState('loading'); // 'loading' | 'ready'
 
   useEffect(() => {
-    const contentTimer = setTimeout(() => setShowContent(true), 80);
+    const contentTimer = setTimeout(() => setShowContent(true), 60);
 
     const timer = setInterval(() => {
       setProgress((prev) => {
@@ -16,16 +16,16 @@ const Preloader = ({ onComplete }) => {
           return 100;
         }
         const remaining = 100 - prev;
-        const increment = Math.random() * (remaining > 20 ? 13 : 1.8);
-        return Math.min(prev + increment, 100);
+        const step = isDataReady ? 25 : (remaining > 20 ? 14 : 3.5);
+        return Math.min(prev + step, 100);
       });
-    }, 75);
+    }, 50);
 
     return () => {
       clearInterval(timer);
       clearTimeout(contentTimer);
     };
-  }, []);
+  }, [isDataReady]);
 
   useEffect(() => {
     if (progress >= 100) {
@@ -34,8 +34,8 @@ const Preloader = ({ onComplete }) => {
         setIsExiting(true);
         setTimeout(() => {
           if (onComplete) onComplete();
-        }, 1000);
-      }, 600);
+        }, 800);
+      }, 350);
       return () => clearTimeout(exitTimer);
     }
   }, [progress, onComplete]);
@@ -52,7 +52,7 @@ const Preloader = ({ onComplete }) => {
           className="w-full h-1/2 bg-[#080808]"
           style={{
             transform: isExiting ? 'translateY(-100%)' : 'translateY(0%)',
-            transition: 'transform 1000ms cubic-bezier(0.85, 0, 0.15, 1)',
+            transition: 'transform 800ms cubic-bezier(0.85, 0, 0.15, 1)',
           }}
         />
         {/* Bottom curtain */}
@@ -60,7 +60,7 @@ const Preloader = ({ onComplete }) => {
           className="w-full h-1/2 bg-[#080808]"
           style={{
             transform: isExiting ? 'translateY(100%)' : 'translateY(0%)',
-            transition: 'transform 1000ms cubic-bezier(0.85, 0, 0.15, 1)',
+            transition: 'transform 800ms cubic-bezier(0.85, 0, 0.15, 1)',
           }}
         />
       </div>
@@ -75,15 +75,11 @@ const Preloader = ({ onComplete }) => {
 
       {/* Corner decorations */}
       <div className="absolute inset-5 md:inset-8 pointer-events-none z-20"
-        style={{ opacity: isExiting ? 0 : 1, transition: 'opacity 600ms ease' }}
+        style={{ opacity: isExiting ? 0 : 1, transition: 'opacity 500ms ease' }}
       >
-        {/* TL */}
         <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-white/10" />
-        {/* TR */}
         <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-white/10" />
-        {/* BL */}
         <div className="absolute bottom-0 left-0 w-8 h-8 border-b border-l border-white/10" />
-        {/* BR */}
         <div className="absolute bottom-0 right-0 w-8 h-8 border-b border-r border-white/10" />
       </div>
 
@@ -92,7 +88,7 @@ const Preloader = ({ onComplete }) => {
         style={{
           opacity: showContent ? (isExiting ? 0 : 1) : 0,
           transform: showContent ? (isExiting ? 'translateY(-16px)' : 'translateY(0)') : 'translateY(12px)',
-          transition: 'opacity 700ms ease, transform 700ms ease',
+          transition: 'opacity 500ms ease, transform 500ms ease',
         }}
       >
         {/* Logo */}
@@ -107,14 +103,12 @@ const Preloader = ({ onComplete }) => {
         {/* SVG Progress Ring */}
         <div className="relative w-24 h-24 flex items-center justify-center mb-8">
           <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
-            {/* Track */}
             <circle
               cx="50" cy="50" r="44"
               stroke="rgba(255,255,255,0.06)"
               strokeWidth="1"
               fill="none"
             />
-            {/* Progress */}
             <circle
               cx="50" cy="50" r="44"
               stroke="rgba(255,255,255,0.9)"
@@ -123,13 +117,10 @@ const Preloader = ({ onComplete }) => {
               strokeLinecap="square"
               strokeDasharray={2 * Math.PI * 44}
               strokeDashoffset={2 * Math.PI * 44 * (1 - progress / 100)}
-              style={{ transition: 'stroke-dashoffset 150ms ease-out' }}
+              style={{ transition: 'stroke-dashoffset 120ms ease-out' }}
             />
           </svg>
-          {/* Counter */}
-          <span className="text-[22px] font-black text-white tabular-nums leading-none tracking-tight"
-            style={{ fontFeatureSettings: '"tnum"' }}
-          >
+          <span className="text-[22px] font-black text-white tabular-nums leading-none tracking-tight">
             {displayProgress}
           </span>
         </div>
@@ -139,11 +130,10 @@ const Preloader = ({ onComplete }) => {
           <span
             className="block text-[10px] font-black uppercase tracking-[0.35em] transition-all duration-500"
             style={{
-              color: phase === 'ready' ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.25)',
-              transform: phase === 'ready' ? 'translateY(0)' : 'translateY(0)',
+              color: phase === 'ready' ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.3)',
             }}
           >
-            {phase === 'ready' ? 'Ready' : 'Loading'}
+            {phase === 'ready' ? 'Ready' : label}
           </span>
         </div>
 
@@ -163,7 +153,6 @@ const Preloader = ({ onComplete }) => {
         )}
       </div>
 
-      {/* Inline keyframe */}
       <style>{`
         @keyframes preloader-pulse {
           0%, 80%, 100% { opacity: 0.2; transform: scaleY(1); }

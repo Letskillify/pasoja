@@ -76,10 +76,16 @@ const Footer = () => {
           <div>
             <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/25 mb-6">Help</h4>
             <ul className="flex flex-col gap-3">
-              {['My Account', 'Track Order', 'Shipping Info', 'Returns & Exchanges', 'Size Guide', 'FAQs'].map((item) => (
-                <li key={item}>
-                  <Link to="/account" className="text-sm text-white/45 hover:text-white transition-colors duration-300 font-medium">
-                    {item}
+              {[
+                { label: 'My Account', path: '/account' },
+                { label: 'Track Order', path: '/orders' },
+                { label: 'Terms & Conditions', path: '/terms' },
+                { label: 'Privacy Policy', path: '/privacy' },
+                { label: 'Contact Us', path: '/contact' },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link to={item.path} className="text-sm text-white/45 hover:text-white transition-colors duration-300 font-medium">
+                    {item.label}
                   </Link>
                 </li>
               ))}
@@ -90,10 +96,15 @@ const Footer = () => {
           <div>
             <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/25 mb-6">Company</h4>
             <ul className="flex flex-col gap-3">
-              {['Our Story', 'Sustainability', 'Careers', 'Press', 'Gallery'].map((item) => (
-                <li key={item}>
-                  <Link to="/about" className="text-sm text-white/45 hover:text-white transition-colors duration-300 font-medium">
-                    {item}
+              {[
+                { label: 'Our Story', path: '/about' },
+                { label: 'Contact', path: '/contact' },
+                { label: 'Terms & Conditions', path: '/terms' },
+                { label: 'Privacy Policy', path: '/privacy' }
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link to={item.path} className="text-sm text-white/45 hover:text-white transition-colors duration-300 font-medium">
+                    {item.label}
                   </Link>
                 </li>
               ))}
@@ -160,11 +171,12 @@ const Footer = () => {
           </p>
 
           <div className="flex flex-wrap justify-center gap-6 text-[11px]">
-            {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((item) => (
-              <a key={item} href="#" className="text-white/25 hover:text-white transition-colors font-medium tracking-wide">
-                {item}
-              </a>
-            ))}
+            <Link to="/privacy" className="text-white/25 hover:text-white transition-colors font-medium tracking-wide">
+              Privacy Policy
+            </Link>
+            <Link to="/terms" className="text-white/25 hover:text-white transition-colors font-medium tracking-wide">
+              Terms of Service
+            </Link>
           </div>
 
           <button

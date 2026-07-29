@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import MiniLoader from '../components/MiniLoader';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { db } from '../components/Firebase';
 import { doc, getDoc, collection, getDocs, query, limit } from 'firebase/firestore';
@@ -86,14 +87,7 @@ const ProductDetail = () => {
   const images = rawImages;
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 border border-white/10 border-t-white rounded-full animate-spin" />
-          <div className="text-white/25 tracking-widest text-[10px] uppercase font-bold">Loading</div>
-        </div>
-      </div>
-    );
+    return <MiniLoader message="Loading Product" />;
   }
 
   if (!product) {
@@ -141,7 +135,7 @@ const ProductDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 
           {/* Gallery */}
-          <div className="lg:sticky lg:top-28 space-y-3">
+          <div className="sticky top-24 lg:top-28 self-start space-y-3 z-10">
             <div className="aspect-square bg-[#141414] overflow-hidden relative group">
               <img src={images[selectedImage]} alt={product.name}
                 className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"

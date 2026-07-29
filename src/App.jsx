@@ -23,6 +23,9 @@ const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Shop = lazy(() => import("./pages/Shop"));
 const Orders = lazy(() => import("./pages/Orders"));
+const TermsConditions = lazy(() => import("./pages/TermsConditions"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const RouteLoader = () => (
   <div className="min-h-[60vh] flex items-center justify-center bg-[#0a0a0a]">
@@ -58,9 +61,16 @@ const AppRoutes = () => {
             <Route path="/shop" element={<Shop />} />
 
             <Route path="/orders" element={<Orders />} />
-            {/* <Route path="/benefits" element={<Benefits />} /> */}
+            <Route path="/terms" element={<TermsConditions />} />
+            <Route path="/terms-and-conditions" element={<TermsConditions />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/product/:id/quickview" element={<QuickView />} />
+
+            {/* 404 Route */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </div>

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
+import MiniLoader from "../components/MiniLoader";
 import { useAuth } from "../components/useAuth";
 import { db } from "../components/Firebase";
 import { collection, getDocs, addDoc, serverTimestamp, doc, deleteDoc, getDoc, updateDoc } from "firebase/firestore";
 import { Link, useNavigate } from "react-router-dom";
-import { CreditCard, MapPin, User, Phone, Mail, CheckCircle, X, ShieldCheck, Zap, Sparkles } from "lucide-react";
+import { CreditCard, MapPin, User, Phone, Mail, CheckCircle, X, ShieldCheck, Zap, Sparkles, Plus, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageHeader from "../components/Home/PageHeader";
 
@@ -11,6 +12,8 @@ const Checkout = () => {
   const { user } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [savedAddresses, setSavedAddresses] = useState([]);
+  const [selectedAddressId, setSelectedAddressId] = useState(null);
   const [formData, setFormData] = useState({
     name: "", email: "", phone: "", address: "", city: "", state: "", pincode: "",
     paymentMethod: "online",
@@ -31,6 +34,25 @@ const Checkout = () => {
         const snap = await getDocs(collection(db, "users", user.uid, "cart"));
         setItems(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
         setFormData(prev => ({ ...prev, name: user.displayName || "", email: user.email || "" }));
+
+        // Fetch saved user addresses from Firestore
+        const addressSnap = await getDocs(collection(db, "users", user.uid, "addresses"));
+        const addrs = addressSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        setSavedAddresses(addrs);
+
+        if (addrs.length > 0) {
+          const defaultAddr = addrs.find(a => a.isDefault) || addrs[0];
+          setSelectedAddressId(defaultAddr.id);
+          setFormData(prev => ({
+            ...prev,
+            name: defaultAddr.name || user.displayName || prev.name,
+            phone: defaultAddr.phone || prev.phone,
+            address: defaultAddr.address || "",
+            city: defaultAddr.city || "",
+            state: defaultAddr.state || "",
+            pincode: defaultAddr.pincode || ""
+          }));
+        }
       } catch (error) { console.error("Error:", error); }
       finally { setLoading(false); }
     };
@@ -119,11 +141,7 @@ const Checkout = () => {
 
   const inputClass = "w-full bg-[#0a0a0a] border border-white/10 px-4 py-3 text-sm text-white outline-none focus:border-white/30 transition-colors placeholder:text-white/20";
 
-  if (loading) return (
-    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-      <div className="w-8 h-8 border border-white/10 border-t-white rounded-full animate-spin" />
-    </div>
-  );
+  if (loading) return <MiniLoader message="Preparing Checkout" />;
 
   if (!user) return (
     <div className="min-h-screen bg-[#0a0a0a]">
@@ -187,6 +205,92 @@ const Checkout = () => {
                   <div className="w-9 h-9 border border-white/10 text-white/30 flex items-center justify-center"><MapPin size={15} /></div>
                   <h2 className="text-[13px] font-light text-white uppercase tracking-widest">Shipping Address</h2>
                 </div>
+
+                {/* SAVED ADDRESS SELECTOR */}
+                {savedAddresses.length > 0 && (
+                  <div className="space-y-3 mb-6 bg-[#0c0c0c] border border-white/[0.08] p-4 rounded">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-[#c9a962] uppercase tracking-widest">
+                        Choose Saved Shipping Address
+                      </span>
+                      <Link to="/account" className="text-[9px] text-white/40 hover:text-white uppercase tracking-wider underline">
+                        Manage Addresses
+                      </Link>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                      {savedAddresses.map((addr) => {
+                        const isSelected = selectedAddressId === addr.id;
+                        return (
+                          <div
+                            key={addr.id}
+                            onClick={() => {
+                              setSelectedAddressId(addr.id);
+                              setFormData(prev => ({
+                                ...prev,
+                                name: addr.name || prev.name,
+                                phone: addr.phone || prev.phone,
+                                address: addr.address || "",
+                                city: addr.city || "",
+                                state: addr.state || "",
+                                pincode: addr.pincode || ""
+                              }));
+                              triggerToast(`Selected: ${addr.name}`);
+                            }}
+                            className={`p-3.5 border cursor-pointer transition-all relative rounded ${
+                              isSelected
+                                ? 'border-white bg-white/[0.08] shadow-md'
+                                : 'border-white/10 bg-[#0a0a0a] hover:border-white/25'
+                            }`}
+                          >
+                            {addr.isDefault && (
+                              <span className="absolute top-2 right-2 px-2 py-0.5 bg-[#c9a962]/15 border border-[#c9a962]/30 text-[#c9a962] text-[8px] font-bold uppercase tracking-wider">
+                                Default
+                              </span>
+                            )}
+                            <div className="flex items-start gap-2.5">
+                              <div className={`w-4 h-4 rounded-full border flex items-center justify-center mt-0.5 shrink-0 ${
+                                isSelected ? 'border-white bg-white text-black' : 'border-white/30'
+                              }`}>
+                                {isSelected && <div className="w-1.5 h-1.5 bg-black rounded-full" />}
+                              </div>
+                              <div className="space-y-1 text-xs pr-10">
+                                <p className="font-bold text-white uppercase tracking-wide">{addr.name}</p>
+                                <p className="text-white/40 text-[11px] leading-relaxed line-clamp-2">
+                                  {addr.address}, {addr.city}, {addr.state} - {addr.pincode}
+                                </p>
+                                <p className="text-[10px] text-[#c9a962] font-semibold">Ph: {addr.phone}</p>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+
+                      <div
+                        onClick={() => {
+                          setSelectedAddressId("custom");
+                          setFormData(prev => ({
+                            ...prev,
+                            address: "",
+                            city: "",
+                            state: "",
+                            pincode: ""
+                          }));
+                        }}
+                        className={`p-3.5 border cursor-pointer transition-all flex items-center justify-center gap-2 rounded ${
+                          selectedAddressId === "custom"
+                            ? 'border-white bg-white/[0.08]'
+                            : 'border-dashed border-white/15 bg-[#0a0a0a] hover:border-white/30'
+                        }`}
+                      >
+                        <Plus size={14} className="text-white/40" />
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-white/60">
+                          + Enter Custom Address
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25">Full Name</label>

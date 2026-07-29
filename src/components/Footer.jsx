@@ -76,10 +76,17 @@ const Footer = () => {
               Help
             </h4>
             <ul className="flex flex-col gap-2.5">
-              {['My Account', 'Track Order', 'Shipping Info', 'Returns & Exchanges', 'Size Guide', 'FAQs'].map((item) => (
-                <li key={item}>
-                  <Link to="/account" className="text-sm font-poppins text-[#5A2D0C]/80 hover:text-[#A85721] transition-colors flex items-center gap-1.5">
-                    <span>{item}</span>
+              {[
+                { label: 'My Account', path: '/account' },
+                { label: 'Track Order', path: '/orders' },
+                { label: 'Shipping Info', path: '/account' },
+                { label: 'Returns & Exchanges', path: '/account' },
+                { label: 'Size Guide', path: '/shop' },
+                { label: 'FAQs', path: '/contact' }
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link to={item.path} className="text-sm font-poppins text-[#5A2D0C]/80 hover:text-[#A85721] transition-colors flex items-center gap-1.5">
+                    <span>{item.label}</span>
                   </Link>
                 </li>
               ))}
