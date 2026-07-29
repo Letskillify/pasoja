@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-brand-cream: #F7F2EA;
+  --color-brand-primary: #5A2D0C;
+  --color-brand-primary-light: #8B5A3C;
+  --color-brand-accent: #A85721;
+  --color-brand-accent-light: #C87A3A;
+  --color-brand-gray: #E6D8C3;
+  --color-brand-gray-dark: #333333;
+  
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Nunito", sans-serif;
+  --font-heading: "Instrument Sans", sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+  body {
+    @apply bg-[#0a0a0a] text-white font-sans antialiased min-h-screen text-[14px];
+    overflow-x: hidden;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-white font-heading;
+  }
+  ::selection {
+    background-color: #ffffff;
+    color: #000000;
+  }
+}
+
+/* Custom Swiper Pagination */
+.swiper-pagination-bullet {
+  width: 4px !important;
+  height: 4px !important;
+  background: rgba(255,255,255,0.2) !important;
+  opacity: 1 !important;
+  transition: all 0.3s ease !important;
+  border-radius: 2px !important;
+}
+.swiper-pagination-bullet-active {
+  width: 20px !important;
+  opacity: 1 !important;
+  background: #ffffff !important;
+  border-radius: 2px !important;
+}
+
+/* Testimonial dots override */
+.testimonial-dots .swiper-pagination-bullet {
+  width: 4px !important;
+  height: 4px !important;
+  border-radius: 2px !important;
+  background: rgba(255,255,255,0.15) !important;
+  opacity: 1 !important;
+}
+.testimonial-dots .swiper-pagination-bullet-active {
+  width: 20px !important;
+  opacity: 1 !important;
+  background: #ffffff !important;
+}
+
+/* Line clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Enforce minimum font size of 14px across all elements */
+body, body * {
+  min-height: 0;
+}
+body :is(
+  [class*="text-xxs"],
+  [class*="text-xs"],
+  [class*="text-[9px]"],
+  [class*="text-[10px]"],
+  [class*="text-[11px]"],
+  [class*="text-[12px]"],
+  [class*="text-[13px]"]
+) {
+  font-size: 14px !important;
+}
+body ::placeholder {
+  font-size: 14px !important;
+}

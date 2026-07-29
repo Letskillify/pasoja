@@ -1,0 +1,182 @@
+import React from 'react';
+import {
+  LayoutDashboard,
+  BarChart3,
+  ClipboardList,
+  Package,
+  Grid,
+  Layers,
+  Sparkles,
+  Sliders,
+  ClipboardCheck,
+  ShoppingCart,
+  Undo2,
+  Users,
+  Percent,
+  Layout,
+  Image,
+  BookOpen,
+  FileText,
+  Star,
+  Heart,
+  Mail,
+  Settings,
+  CreditCard,
+  Truck,
+  Landmark,
+  ShieldAlert,
+  Globe,
+  History,
+  HelpCircle,
+  LogOut,
+  Shirt
+} from 'lucide-react';
+
+const sidebarSections = [
+  {
+    title: "DASHBOARD",
+    items: [
+      { name: "Overview", icon: LayoutDashboard },
+      { name: "Analytics", icon: BarChart3 },
+      { name: "Reports", icon: ClipboardList }
+    ]
+  },
+  {
+    title: "CATALOG",
+    items: [
+      { name: "Products", icon: Package },
+      { name: "Categories", icon: Grid },
+      { name: "Subcategories", icon: Layers },
+      { name: "Collections", icon: Sparkles },
+      { name: "Attributes", icon: Sliders },
+      { name: "Inventory", icon: ClipboardCheck }
+    ]
+  },
+  {
+    title: "SALES",
+    items: [
+      { name: "Orders", icon: ShoppingCart },
+      { name: "Returns / Refunds", icon: Undo2 },
+      { name: "Customers", icon: Users },
+      { name: "Coupons / Offers", icon: Percent }
+    ]
+  },
+  {
+    title: "CONTENT",
+    items: [
+      { name: "Hero Slides", icon: Layout },
+      { name: "Shop By Category", icon: Grid },
+      { name: "Shop The Look", icon: Sparkles },
+      { name: "Community Gallery", icon: Image },
+      { name: "Benefits Strip", icon: ClipboardList },
+      { name: "Blogs", icon: BookOpen },
+      { name: "Pages", icon: FileText }
+    ]
+  },
+  {
+    title: "CUSTOMER ENGAGEMENT",
+    items: [
+      { name: "Reviews", icon: Star },
+      { name: "Wishlists", icon: Heart },
+      { name: "Newsletter Subscribers", icon: Mail }
+    ]
+  },
+  {
+    title: "SETTINGS",
+    items: [
+      { name: "Store Settings", icon: Settings },
+      { name: "Payment Settings", icon: CreditCard },
+      { name: "Shipping Settings", icon: Truck },
+      { name: "Tax Settings", icon: Landmark },
+      { name: "Users & Roles", icon: ShieldAlert },
+      { name: "SEO Settings", icon: Globe }
+    ]
+  },
+  {
+    title: "SYSTEM",
+    items: [
+      { name: "Activity Logs", icon: History }
+    ]
+  },
+  {
+    title: "SUPPORT",
+    items: [
+      { name: "Help / Documentation", icon: HelpCircle }
+    ]
+  }
+];
+
+const AdminSidebar = ({ activeItem, setActiveItem }) => {
+  const handleLogout = () => {
+    if (window.confirm("Are you sure you want to logout?")) {
+      localStorage.removeItem("adminToken");
+      sessionStorage.removeItem("adminToken");
+      window.location.reload();
+    }
+  };
+
+  return (
+    <aside className="w-64 border-r border-[#1a1a1a] bg-[#090909] text-gray-400 flex flex-col h-screen shrink-0 selection:bg-white selection:text-black">
+      {/* Brand Header */}
+      <div className="px-6 py-5 border-b border-[#1a1a1a] sticky top-0 bg-[#090909] z-10">
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-lg bg-[#c9a962] text-[#090909] flex items-center justify-center shadow-lg shadow-[#c9a962]/10">
+            <Shirt size={18} strokeWidth={2.5} />
+          </div>
+          <div>
+            <p className="text-sm font-poppins font-bold tracking-wider text-white">
+              PASOJA ADMIN
+            </p>
+            <p className="text-[10px] text-zinc-500 uppercase tracking-widest">E-commerce Suite</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation Groups */}
+      <nav className="flex-grow overflow-y-auto px-4 py-6 space-y-7">
+        {sidebarSections.map((section) => (
+          <div key={section.title} className="space-y-1.5">
+            <p className="text-[9px] font-bold text-zinc-600 tracking-[0.2em] px-3 uppercase">
+              {section.title}
+            </p>
+            <div className="space-y-0.5">
+              {section.items.map((item) => {
+                const isActive = item.name === activeItem;
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.name}
+                    type="button"
+                    onClick={() => setActiveItem(item.name)}
+                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold tracking-wide transition-all ${
+                      isActive
+                        ? "bg-[#c9a962]/10 text-[#c9a962] border border-[#c9a962]/20"
+                        : "text-zinc-400 hover:bg-[#121212] hover:text-white border border-transparent"
+                    }`}
+                  >
+                    <Icon size={14} strokeWidth={2} />
+                    <span>{item.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </nav>
+
+      {/* Logout button */}
+      <div className="p-4 border-t border-[#1a1a1a] bg-[#0c0c0c]">
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-bold text-red-400 hover:bg-red-950/20 hover:text-red-300 transition-all border border-transparent hover:border-red-900/30"
+        >
+          <LogOut size={14} />
+          <span>LOGOUT</span>
+        </button>
+      </div>
+    </aside>
+  );
+};
+
+export default AdminSidebar;
+export { sidebarSections };
