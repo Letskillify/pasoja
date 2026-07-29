@@ -21,10 +21,5 @@
         }
       ]
     }
-  ],
-  "functions": {
-    "api/**/*": {
-      "runtime": "@vercel/node@3"
-    }
-  }
+  ]
 }
