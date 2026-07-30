@@ -33,44 +33,44 @@ const OrdersTable = () => {
   }, []);
 
   return (
-    <section className="bg-white rounded-2xl border border-[#D9D3C7] shadow-sm overflow-hidden">
-      <div className="px-6 py-5 flex items-center justify-between border-b border-[#D9D3C7]">
+    <section className="bg-white rounded-2xl border border-zinc-200 shadow-sm overflow-hidden">
+      <div className="px-6 py-5 flex items-center justify-between border-b border-zinc-200">
         <div>
-          <h2 className="text-lg font-poppins font-bold text-[#1C2B21]">Recent Orders</h2>
-          <p className="text-sm text-[#707A72] mt-1">Latest customer transactions</p>
+          <h2 className="text-lg font-poppins font-bold text-zinc-900">Recent Orders</h2>
+          <p className="text-xs text-zinc-500 mt-0.5">Latest customer transactions</p>
         </div>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full text-left text-sm">
-          <thead className="bg-[#EFECE6]">
-            <tr className="text-[12px] font-bold text-[#4A5D4E] uppercase tracking-widest">
-              <th className="px-6 py-4">ID</th>
-              <th className="px-6 py-4">Customer</th>
-              <th className="px-6 py-4">Total</th>
-              <th className="px-6 py-4">Method</th>
-              <th className="px-6 py-4">Status</th>
+          <thead className="bg-zinc-100">
+            <tr className="text-[11px] font-bold text-zinc-700 uppercase tracking-widest">
+              <th className="px-6 py-3.5">ID</th>
+              <th className="px-6 py-3.5">Customer</th>
+              <th className="px-6 py-3.5">Total</th>
+              <th className="px-6 py-3.5">Method</th>
+              <th className="px-6 py-3.5">Status</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#D9D3C7]">
+          <tbody className="divide-y divide-zinc-200">
             {loading ? (
               <tr>
-                <td colSpan="5" className="px-6 py-12 text-center text-gray-400">Loading orders...</td>
+                <td colSpan="5" className="px-6 py-12 text-center text-zinc-500">Loading orders...</td>
               </tr>
             ) : orders.length > 0 ? (
               orders.map((order) => (
-                <tr key={order.id} className="hover:bg-[#FDFBF7] transition-colors font-sans">
-                  <td className="px-6 py-4 font-bold text-[#1C2B21]">
+                <tr key={order.id} className="hover:bg-zinc-50/80 transition-colors font-sans">
+                  <td className="px-6 py-4 font-bold text-zinc-900">
                     #{order.id.slice(0, 6).toUpperCase()}
                   </td>
                   <td className="px-6 py-4">
-                    <p className="text-[#1C2B21] font-medium">{order.shipping?.name || "Member"}</p>
-                    <p className="text-[12px] text-[#707A72]">{order.userEmail}</p>
+                    <p className="text-zinc-900 font-semibold">{order.shipping?.name || "Member"}</p>
+                    <p className="text-[11px] text-zinc-500">{order.userEmail}</p>
                   </td>
-                  <td className="px-6 py-4 text-[#1C2B21] font-bold text-[15px]">₹{order.total}</td>
-                  <td className="px-6 py-4 text-[#707A72] uppercase text-[12px] font-bold tracking-wider">{order.paymentMethod}</td>
+                  <td className="px-6 py-4 text-zinc-900 font-bold text-[14px]">₹{order.total}</td>
+                  <td className="px-6 py-4 text-zinc-600 uppercase text-[11px] font-bold tracking-wider">{order.paymentMethod}</td>
                   <td className="px-6 py-4">
                     <span
-                      className={`inline-flex items-center px-4 py-1.5 rounded-lg border text-[11px] font-bold uppercase tracking-widest ${statusBadgeClasses(order.status)}`}
+                      className={`inline-flex items-center px-3 py-1 rounded-md border text-[11px] font-bold uppercase tracking-wider ${statusBadgeClasses(order.status)}`}
                     >
                       {order.status}
                     </span>
@@ -79,7 +79,7 @@ const OrdersTable = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="px-6 py-12 text-center text-gray-400">No recent orders found.</td>
+                <td colSpan="5" className="px-6 py-12 text-center text-zinc-500">No recent orders found.</td>
               </tr>
             )}
           </tbody>

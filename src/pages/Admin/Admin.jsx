@@ -135,12 +135,12 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
   };
 
   return (
-    <div className="bg-[#121212] border border-[#1a1a1a] rounded-xl p-6 text-white selection:bg-white selection:text-black">
+    <div className="bg-white border border-zinc-200 rounded-xl p-6 text-zinc-900 shadow-sm">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-lg font-bold text-white uppercase tracking-wider">{title}</h2>
+        <h2 className="text-lg font-bold text-zinc-900 uppercase tracking-wider">{title}</h2>
         <button
           onClick={handleCreateNew}
-          className="flex items-center gap-2 px-4 py-2 bg-[#c9a962] text-[#090909] text-xs font-bold rounded hover:bg-white hover:text-black transition-all"
+          className="flex items-center gap-2 px-4 py-2 bg-black text-white text-xs font-bold rounded-lg hover:bg-zinc-800 transition-all shadow-sm cursor-pointer"
         >
           <Plus size={14} /> Add New
         </button>
@@ -152,7 +152,7 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-[#1a1a1a] text-zinc-400 uppercase tracking-widest text-[10px]">
+              <tr className="border-b border-zinc-200 text-zinc-500 uppercase tracking-widest text-[10px]">
                 {fields.map(f => (
                   <th key={f.key} className="py-3 px-4">{f.label}</th>
                 ))}
@@ -161,13 +161,13 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
             </thead>
             <tbody>
               {items.map(item => (
-                <tr key={item.id} className="border-b border-[#1a1a1a] hover:bg-[#161616]">
+                <tr key={item.id} className="border-b border-zinc-200 hover:bg-zinc-50/80 transition-colors">
                   {fields.map(f => (
-                    <td key={f.key} className="py-3.5 px-4 font-light text-zinc-300">
+                    <td key={f.key} className="py-3.5 px-4 font-medium text-zinc-800">
                       {f.type === 'image' ? (
-                        <img src={item[f.key]} className="w-10 h-10 object-cover rounded bg-[#1e1e1e]" alt="thumb" />
+                        <img src={item[f.key]} className="w-10 h-10 object-cover rounded bg-zinc-100 border border-zinc-200" alt="thumb" />
                       ) : f.type === 'boolean' ? (
-                        <span className={`px-2 py-0.5 rounded text-[9px] font-bold ${item[f.key] ? 'bg-green-950 text-green-400' : 'bg-red-950 text-red-400'}`}>
+                        <span className={`px-2 py-0.5 rounded text-[9px] font-bold ${item[f.key] ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-red-100 text-red-800 border border-red-200'}`}>
                           {item[f.key] ? 'ACTIVE' : 'INACTIVE'}
                         </span>
                       ) : (
@@ -177,8 +177,8 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
                   ))}
                   <td className="py-3.5 px-4 text-right">
                     <div className="flex justify-end gap-2">
-                      <button onClick={() => handleEdit(item)} className="p-1 text-zinc-400 hover:text-[#c9a962]"><Edit2 size={13} /></button>
-                      <button onClick={() => handleDelete(item.id)} className="p-1 text-zinc-400 hover:text-red-400"><Trash2 size={13} /></button>
+                      <button onClick={() => handleEdit(item)} className="p-1.5 text-zinc-500 hover:text-black hover:bg-zinc-100 rounded transition-colors"><Edit2 size={13} /></button>
+                      <button onClick={() => handleDelete(item.id)} className="p-1.5 text-zinc-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"><Trash2 size={13} /></button>
                     </div>
                   </td>
                 </tr>
@@ -194,34 +194,36 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
       )}
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4">
-          <form onSubmit={handleSubmit} className="bg-[#121212] border border-[#1a1a1a] rounded-xl max-w-lg w-full p-6 space-y-4">
-            <div className="flex justify-between items-center border-b border-[#1a1a1a] pb-3">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-[#c9a962]">{editingItem ? "Edit Item" : "Create Item"}</h3>
-              <button type="button" onClick={() => setIsModalOpen(false)} className="text-zinc-400 hover:text-white"><X size={18} /></button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <form onSubmit={handleSubmit} className="bg-white border border-zinc-200 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+            <div className="flex justify-between items-center border-b border-zinc-200 pb-3">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-900">{editingItem ? "Edit Item" : "Create Item"}</h3>
+              <button type="button" onClick={() => setIsModalOpen(false)} className="text-zinc-400 hover:text-black p-1 rounded-full hover:bg-zinc-100">
+                <X size={16} />
+              </button>
             </div>
 
-            <div className="space-y-3.5 max-h-[60vh] overflow-y-auto pr-1">
+            <div className="space-y-3 max-h-[65vh] overflow-y-auto pr-1">
               {fields.map(f => (
                 <div key={f.key} className="space-y-1">
-                  <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">{f.label}</label>
+                  <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">{f.label}</label>
                   {f.type === 'image' ? (
-                    <div className="flex gap-4 items-center">
-                      <div className="w-16 h-16 bg-[#161616] border border-[#222] rounded overflow-hidden flex items-center justify-center">
-                        {formData[f.key] ? <img src={formData[f.key]} className="w-full h-full object-cover" alt="prev" /> : <span className="text-[9px] text-zinc-600">No Image</span>}
-                      </div>
+                    <div className="space-y-2">
+                      {formData[f.key] && (
+                        <img src={formData[f.key]} className="w-20 h-20 object-cover rounded-lg border border-zinc-200 bg-zinc-50" alt="preview" />
+                      )}
                       <input
                         type="file"
                         accept="image/*"
-                        onChange={(e) => handleImageUpload(e.target.files[0], f.key)}
-                        className="text-xs text-zinc-500 file:bg-zinc-800 file:border-0 file:text-white file:px-3 file:py-1 file:rounded file:text-xs hover:file:bg-zinc-700 cursor-pointer"
+                        onChange={e => handleFileUpload(e, f.key)}
+                        className="w-full text-xs text-zinc-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-zinc-100 file:text-zinc-900 hover:file:bg-zinc-200 cursor-pointer"
                       />
                     </div>
                   ) : f.type === 'boolean' ? (
                     <select
                       value={formData[f.key] ? 'true' : 'false'}
                       onChange={(e) => setFormData(prev => ({ ...prev, [f.key]: e.target.value === 'true' }))}
-                      className="w-full px-3 py-2 bg-[#161616] border border-[#222] rounded text-xs text-white focus:outline-none focus:border-[#c9a962]"
+                      className="w-full px-3 py-2 bg-zinc-50 border border-zinc-300 rounded-lg text-xs text-zinc-900 focus:bg-white focus:border-black outline-none transition-all"
                     >
                       <option value="true">Active</option>
                       <option value="false">Inactive</option>
@@ -231,27 +233,36 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
                       value={formData[f.key] || ''}
                       onChange={(e) => setFormData(prev => ({ ...prev, [f.key]: e.target.value }))}
                       rows={3}
-                      className="w-full px-3 py-2 bg-[#161616] border border-[#222] rounded text-xs text-white focus:outline-none focus:border-[#c9a962]"
+                      className="w-full px-3 py-2 bg-zinc-50 border border-zinc-300 rounded-lg text-xs text-zinc-900 focus:bg-white focus:border-black outline-none transition-all"
                     />
                   ) : (
                     <input
                       type={f.type || 'text'}
                       value={formData[f.key] || ''}
                       onChange={(e) => setFormData(prev => ({ ...prev, [f.key]: e.target.value }))}
-                      className="w-full px-3 py-2 bg-[#161616] border border-[#222] rounded text-xs text-white focus:outline-none focus:border-[#c9a962]"
+                      className="w-full px-3 py-2 bg-zinc-50 border border-zinc-300 rounded-lg text-xs text-zinc-900 focus:bg-white focus:border-black outline-none transition-all"
                     />
                   )}
                 </div>
               ))}
             </div>
 
-            <button
-              type="submit"
-              disabled={uploading}
-              className="w-full py-2.5 bg-[#c9a962] text-[#090909] font-bold text-xs rounded hover:bg-white hover:text-black transition-all"
-            >
-              {uploading ? "Uploading Image..." : "Save Changes"}
-            </button>
+            <div className="pt-3 border-t border-zinc-200 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(false)}
+                className="px-4 py-2 border border-zinc-300 text-zinc-700 text-xs font-bold rounded-lg hover:bg-zinc-100"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={uploading}
+                className="px-5 py-2 bg-black text-white text-xs font-bold rounded-lg hover:bg-zinc-800 disabled:opacity-50 shadow-sm cursor-pointer"
+              >
+                {uploading ? "Uploading..." : "Save Changes"}
+              </button>
+            </div>
           </form>
         </div>
       )}
@@ -414,23 +425,23 @@ const CommunityManager = () => {
   };
 
   return (
-    <div className="bg-[#121212] border border-[#1a1a1a] rounded-xl p-6 text-white">
-      <div className="flex border-b border-[#1a1a1a] mb-6 text-xs">
+    <div className="bg-white border border-zinc-200 rounded-xl p-6 text-zinc-900 shadow-sm">
+      <div className="flex border-b border-zinc-200 mb-6 text-xs">
         <button
           onClick={() => setSubTab("settings")}
-          className={`px-4 py-2 font-bold border-b-2 transition-all ${subTab === "settings" ? "border-[#c9a962] text-white" : "border-transparent text-zinc-500 hover:text-zinc-300"}`}
+          className={`px-4 py-2 font-bold border-b-2 transition-all ${subTab === "settings" ? "border-black text-zinc-900 font-extrabold" : "border-transparent text-zinc-500 hover:text-black"}`}
         >
           Section Settings
         </button>
         <button
           onClick={() => setSubTab("gallery")}
-          className={`px-4 py-2 font-bold border-b-2 transition-all ${subTab === "gallery" ? "border-[#c9a962] text-white" : "border-transparent text-zinc-500 hover:text-zinc-300"}`}
+          className={`px-4 py-2 font-bold border-b-2 transition-all ${subTab === "gallery" ? "border-black text-zinc-900 font-extrabold" : "border-transparent text-zinc-500 hover:text-black"}`}
         >
           Gallery Images
         </button>
         <button
           onClick={() => setSubTab("stats")}
-          className={`px-4 py-2 font-bold border-b-2 transition-all ${subTab === "stats" ? "border-[#c9a962] text-white" : "border-transparent text-zinc-500 hover:text-zinc-300"}`}
+          className={`px-4 py-2 font-bold border-b-2 transition-all ${subTab === "stats" ? "border-black text-zinc-900 font-extrabold" : "border-transparent text-zinc-500 hover:text-black"}`}
         >
           Social Proof Stats
         </button>
@@ -444,39 +455,39 @@ const CommunityManager = () => {
               id="settings-active"
               checked={settings.is_active !== false}
               onChange={(e) => setSettings(prev => ({ ...prev, is_active: e.target.checked }))}
-              className="rounded text-[#c9a962] focus:ring-[#c9a962] w-4 h-4 cursor-pointer"
+              className="rounded text-black focus:ring-black accent-black w-4 h-4 cursor-pointer"
             />
-            <label htmlFor="settings-active" className="font-bold text-zinc-300 cursor-pointer">Section Active</label>
+            <label htmlFor="settings-active" className="font-bold text-zinc-800 cursor-pointer">Section Active</label>
           </div>
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">Eyebrow</label>
+            <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">Eyebrow</label>
             <input
               type="text"
               value={settings.eyebrow}
               onChange={(e) => setSettings(prev => ({ ...prev, eyebrow: e.target.value }))}
-              className="w-full px-3 py-2 bg-[#161616] border border-[#222] rounded text-white"
+              className="w-full px-3 py-2 bg-zinc-50 border border-zinc-300 rounded text-zinc-900 focus:bg-white focus:border-black outline-none"
             />
           </div>
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">Heading</label>
+            <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">Heading</label>
             <input
               type="text"
               value={settings.heading}
               onChange={(e) => setSettings(prev => ({ ...prev, heading: e.target.value }))}
-              className="w-full px-3 py-2 bg-[#161616] border border-[#222] rounded text-white"
+              className="w-full px-3 py-2 bg-zinc-50 border border-zinc-300 rounded text-zinc-900 focus:bg-white focus:border-black outline-none"
             />
           </div>
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">Description Line 1</label>
+            <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">Description Line 1</label>
             <input
               type="text"
               value={settings.description_line_1}
               onChange={(e) => setSettings(prev => ({ ...prev, description_line_1: e.target.value }))}
-              className="w-full px-3 py-2 bg-[#161616] border border-[#222] rounded text-white"
+              className="w-full px-3 py-2 bg-zinc-50 border border-zinc-300 rounded text-zinc-900 focus:bg-white focus:border-black outline-none"
             />
           </div>
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">Description Line 2</label>
+            <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">Description Line 2</label>
             <input
               type="text"
               value={settings.description_line_2}
@@ -919,36 +930,36 @@ const Admin = () => {
     return (
       <div className="grid gap-6 md:grid-cols-2 mt-8">
         {/* Revenue Chart */}
-        <div className="bg-[#121212] border border-[#1a1a1a] p-5 rounded-xl">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4">Revenue Overview</h3>
+        <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-4">Revenue Overview</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartData}>
                 <defs>
                   <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#c9a962" stopOpacity={0.2}/>
-                    <stop offset="95%" stopColor="#c9a962" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#b8860b" stopOpacity={0.2}/>
+                    <stop offset="95%" stopColor="#b8860b" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="name" stroke="#52525b" fontSize={10} />
-                <YAxis stroke="#52525b" fontSize={10} />
-                <Tooltip contentStyle={{ backgroundColor: "#161616", borderColor: "#222", color: "#fff", fontSize: 11 }} />
-                <Area type="monotone" dataKey="Revenue" stroke="#c9a962" fillOpacity={1} fill="url(#colorRev)" />
+                <XAxis dataKey="name" stroke="#a1a1aa" fontSize={10} />
+                <YAxis stroke="#a1a1aa" fontSize={10} />
+                <Tooltip contentStyle={{ backgroundColor: "#ffffff", borderColor: "#e4e4e7", color: "#111111", borderRadius: 8, fontSize: 11, boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)" }} />
+                <Area type="monotone" dataKey="Revenue" stroke="#b8860b" fillOpacity={1} fill="url(#colorRev)" strokeWidth={2} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Orders Chart */}
-        <div className="bg-[#121212] border border-[#1a1a1a] p-5 rounded-xl">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4">Orders Overview</h3>
+        <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-4">Orders Overview</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData}>
-                <XAxis dataKey="name" stroke="#52525b" fontSize={10} />
-                <YAxis stroke="#52525b" fontSize={10} />
-                <Tooltip contentStyle={{ backgroundColor: "#161616", borderColor: "#222", color: "#fff", fontSize: 11 }} />
-                <Bar dataKey="Orders" fill="#c9a962" radius={[4, 4, 0, 0]} />
+                <XAxis dataKey="name" stroke="#a1a1aa" fontSize={10} />
+                <YAxis stroke="#a1a1aa" fontSize={10} />
+                <Tooltip contentStyle={{ backgroundColor: "#ffffff", borderColor: "#e4e4e7", color: "#111111", borderRadius: 8, fontSize: 11, boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)" }} />
+                <Bar dataKey="Orders" fill="#111111" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -962,24 +973,24 @@ const Admin = () => {
       <div className="space-y-6">
         {/* KPI Row */}
         <div className="grid gap-5 grid-cols-2 lg:grid-cols-4">
-          <div className="bg-[#121212] border border-[#1a1a1a] p-5 rounded-xl">
+          <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm">
             <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Total Revenue</p>
-            <h3 className="text-xl font-bold text-white mt-1">₹{statsSummary.revenue.toLocaleString('en-IN')}</h3>
-            <span className="text-[10px] text-green-400 font-bold block mt-1">+18.5% vs last month</span>
+            <h3 className="text-xl font-bold text-zinc-900 mt-1">₹{statsSummary.revenue.toLocaleString('en-IN')}</h3>
+            <span className="text-[10px] text-emerald-600 font-bold block mt-1">+18.5% vs last month</span>
           </div>
-          <div className="bg-[#121212] border border-[#1a1a1a] p-5 rounded-xl">
+          <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm">
             <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Total Orders</p>
-            <h3 className="text-xl font-bold text-white mt-1">{statsSummary.orders}</h3>
-            <span className="text-[10px] text-green-400 font-bold block mt-1">+22.4% vs last month</span>
+            <h3 className="text-xl font-bold text-zinc-900 mt-1">{statsSummary.orders}</h3>
+            <span className="text-[10px] text-emerald-600 font-bold block mt-1">+22.4% vs last month</span>
           </div>
-          <div className="bg-[#121212] border border-[#1a1a1a] p-5 rounded-xl">
+          <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm">
             <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Total Customers</p>
-            <h3 className="text-xl font-bold text-white mt-1">{statsSummary.customers}</h3>
-            <span className="text-[10px] text-green-400 font-bold block mt-1">+15.3% vs last month</span>
+            <h3 className="text-xl font-bold text-zinc-900 mt-1">{statsSummary.customers}</h3>
+            <span className="text-[10px] text-emerald-600 font-bold block mt-1">+15.3% vs last month</span>
           </div>
-          <div className="bg-[#121212] border border-[#1a1a1a] p-5 rounded-xl">
+          <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm">
             <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Total Products</p>
-            <h3 className="text-xl font-bold text-white mt-1">{statsSummary.products}</h3>
+            <h3 className="text-xl font-bold text-zinc-900 mt-1">{statsSummary.products}</h3>
             <span className="text-[10px] text-zinc-500 font-bold block mt-1">Flat stock index</span>
           </div>
         </div>
@@ -989,16 +1000,16 @@ const Admin = () => {
         {/* Dynamic widgets */}
         <div className="grid gap-6 md:grid-cols-3 mt-8">
           {/* Low Stock Alerts */}
-          <div className="bg-[#121212] border border-[#1a1a1a] p-5 rounded-xl text-xs space-y-4">
-            <h4 className="font-bold text-zinc-400 uppercase tracking-wider">Low Stock Alerts</h4>
+          <div className="bg-white border border-zinc-200 p-5 rounded-xl text-xs space-y-4 shadow-sm">
+            <h4 className="font-bold text-zinc-500 uppercase tracking-wider">Low Stock Alerts</h4>
             <div className="space-y-3">
               {products.filter(p => (parseInt(p.stock) || 0) <= 5).slice(0, 3).map(p => (
-                <div key={p.id} className="flex justify-between items-center border-b border-[#1a1a1a] pb-2">
+                <div key={p.id} className="flex justify-between items-center border-b border-zinc-100 pb-2">
                   <div>
-                    <p className="font-semibold text-white">{p.name}</p>
-                    <p className="text-[9px] text-zinc-500">Category: {p.category}</p>
+                    <p className="font-semibold text-zinc-900">{p.name}</p>
+                    <p className="text-[10px] text-zinc-500">Category: {p.category}</p>
                   </div>
-                  <span className="text-red-400 font-bold">Stock: {p.stock || 0}</span>
+                  <span className="text-red-600 font-bold">Stock: {p.stock || 0}</span>
                 </div>
               ))}
               {products.filter(p => (parseInt(p.stock) || 0) <= 5).length === 0 && (
@@ -1008,27 +1019,27 @@ const Admin = () => {
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-[#121212] border border-[#1a1a1a] p-5 rounded-xl text-xs space-y-4">
-            <h4 className="font-bold text-zinc-400 uppercase tracking-wider">Quick Actions</h4>
+          <div className="bg-white border border-zinc-200 p-5 rounded-xl text-xs space-y-4 shadow-sm">
+            <h4 className="font-bold text-zinc-500 uppercase tracking-wider">Quick Actions</h4>
             <div className="grid grid-cols-2 gap-2">
-              <button onClick={() => { setActiveItem("Products"); setIsProductModalOpen(true); }} className="p-3 bg-[#161616] border border-[#1a1a1a] text-zinc-300 hover:text-white rounded text-center">Add Product</button>
-              <button onClick={() => setActiveItem("Collections")} className="p-3 bg-[#161616] border border-[#1a1a1a] text-zinc-300 hover:text-white rounded text-center">Add Collection</button>
-              <button onClick={() => setActiveItem("Categories")} className="p-3 bg-[#161616] border border-[#1a1a1a] text-zinc-300 hover:text-white rounded text-center">Categories</button>
-              <button onClick={() => setActiveItem("Coupons / Offers")} className="p-3 bg-[#161616] border border-[#1a1a1a] text-zinc-300 hover:text-white rounded text-center">Add Coupon</button>
+              <button onClick={() => { setActiveItem("Products"); setIsProductModalOpen(true); }} className="p-3 bg-zinc-50 border border-zinc-200 text-zinc-700 font-semibold hover:bg-zinc-100 hover:text-black rounded-lg text-center cursor-pointer transition-all">Add Product</button>
+              <button onClick={() => setActiveItem("Collections")} className="p-3 bg-zinc-50 border border-zinc-200 text-zinc-700 font-semibold hover:bg-zinc-100 hover:text-black rounded-lg text-center cursor-pointer transition-all">Add Collection</button>
+              <button onClick={() => setActiveItem("Categories")} className="p-3 bg-zinc-50 border border-zinc-200 text-zinc-700 font-semibold hover:bg-zinc-100 hover:text-black rounded-lg text-center cursor-pointer transition-all">Categories</button>
+              <button onClick={() => setActiveItem("Coupons / Offers")} className="p-3 bg-zinc-50 border border-zinc-200 text-zinc-700 font-semibold hover:bg-zinc-100 hover:text-black rounded-lg text-center cursor-pointer transition-all">Add Coupon</button>
             </div>
           </div>
 
           {/* Recent Orders */}
-          <div className="bg-[#121212] border border-[#1a1a1a] p-5 rounded-xl text-xs space-y-4">
-            <h4 className="font-bold text-zinc-400 uppercase tracking-wider">Recent Orders</h4>
+          <div className="bg-white border border-zinc-200 p-5 rounded-xl text-xs space-y-4 shadow-sm">
+            <h4 className="font-bold text-zinc-500 uppercase tracking-wider">Recent Orders</h4>
             <div className="space-y-3">
               {orders.slice(0, 3).map(o => (
-                <div key={o.id} className="flex justify-between items-center border-b border-[#1a1a1a] pb-2">
+                <div key={o.id} className="flex justify-between items-center border-b border-zinc-100 pb-2">
                   <div>
-                    <p className="font-semibold text-white">#{o.id?.slice(0, 8)}</p>
-                    <p className="text-[9px] text-zinc-500">{o.customerName || 'Guest User'}</p>
+                    <p className="font-semibold text-zinc-900">#{o.id?.slice(0, 8)}</p>
+                    <p className="text-[10px] text-zinc-500">{o.customerName || 'Guest User'}</p>
                   </div>
-                  <span className="text-[#c9a962] font-bold">₹{(o.total || o.grandTotal || 0).toLocaleString('en-IN')}</span>
+                  <span className="text-[#b8860b] font-bold">₹{(o.total || o.grandTotal || 0).toLocaleString('en-IN')}</span>
                 </div>
               ))}
               {orders.length === 0 && <p className="text-zinc-500 text-center">No orders placed yet.</p>}
@@ -1259,9 +1270,9 @@ const Admin = () => {
         );
       case "Help / Documentation":
         return (
-          <div className="bg-[#121212] border border-[#1a1a1a] rounded-xl p-6 text-white text-xs space-y-4 max-w-xl">
-            <h2 className="text-base font-bold uppercase tracking-wider text-[#c9a962]">Pasoja Suite Help Center</h2>
-            <p className="text-zinc-400 font-light leading-relaxed">This dashboard controls the storefront sections, database lists, order timelines, inventory, and promotions in real time. All changes are saved automatically to Firebase Firestore.</p>
+          <div className="bg-white border border-zinc-200 rounded-xl p-6 text-zinc-900 text-xs space-y-4 max-w-xl shadow-sm">
+            <h2 className="text-base font-bold uppercase tracking-wider text-[#b8860b]">Pasoja Suite Help Center</h2>
+            <p className="text-zinc-600 font-light leading-relaxed">This dashboard controls the storefront sections, database lists, order timelines, inventory, and promotions in real time. All changes are saved automatically to Firebase Firestore.</p>
           </div>
         );
       default:
@@ -1271,18 +1282,18 @@ const Admin = () => {
 
   if (!isAdminLoggedIn) {
     return (
-      <div className="min-h-screen bg-[#070707] flex flex-col justify-center items-center px-5 font-['Inter',sans-serif]">
-        <div className="w-full max-w-md border border-white/5 bg-[#0a0a0a] p-8 md:p-10 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] space-y-6">
+      <div className="min-h-screen bg-[#faf9f5] flex flex-col justify-center items-center px-5 font-['Inter',sans-serif]">
+        <div className="w-full max-w-md border border-zinc-200 bg-white p-8 md:p-10 shadow-2xl rounded-2xl space-y-6">
           <div className="text-center">
-            <div className="h-12 w-12 rounded-lg bg-[#c9a962] text-[#090909] flex items-center justify-center shadow-lg shadow-[#c9a962]/10 mx-auto mb-4">
+            <div className="h-12 w-12 rounded-xl bg-black text-white flex items-center justify-center shadow-md mx-auto mb-4">
               <Shirt size={22} strokeWidth={2.5} />
             </div>
-            <h1 className="text-lg font-poppins font-bold tracking-widest text-white uppercase">PASOJA ADMIN</h1>
-            <p className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">ATELIER CONTROL CENTRE</p>
+            <h1 className="text-lg font-poppins font-bold tracking-widest text-zinc-900 uppercase">PASOJA ADMIN</h1>
+            <p className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1 font-semibold">ATELIER CONTROL CENTRE</p>
           </div>
 
           {loginError && (
-            <div className="p-3.5 bg-red-950/40 border border-red-900/30 rounded text-red-400 text-[11px] font-medium flex items-center gap-2">
+            <div className="p-3.5 bg-red-50 border border-red-200 rounded-lg text-red-700 text-[11px] font-medium flex items-center gap-2">
               <AlertCircle size={14} className="shrink-0" />
               <span>{loginError}</span>
             </div>
@@ -1290,27 +1301,27 @@ const Admin = () => {
 
           <form onSubmit={handleAdminLogin} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-[9px] font-bold uppercase tracking-[0.25em] text-white/30">Admin ID</label>
+              <label className="text-[9px] font-bold uppercase tracking-[0.25em] text-zinc-500">Admin ID</label>
               <div className="relative">
-                <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20" />
+                <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
                 <input type="email" value={adminEmail} onChange={(e) => setAdminEmail(e.target.value)} placeholder="super@pasoja.in" required
-                  className="w-full pl-10 pr-4 py-3 bg-[#0d0d0d] border border-white/5 text-xs text-white outline-none focus:border-[#c9a962]/40 transition-all duration-300 placeholder:text-white/20"
+                  className="w-full pl-10 pr-4 py-3 bg-zinc-50 border border-zinc-300 rounded-lg text-xs text-zinc-900 outline-none focus:border-black focus:bg-white transition-all duration-300 placeholder:text-zinc-400"
                 />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[9px] font-bold uppercase tracking-[0.25em] text-white/30">Security Password</label>
+              <label className="text-[9px] font-bold uppercase tracking-[0.25em] text-zinc-500">Security Password</label>
               <div className="relative">
-                <Lock size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20" />
+                <Lock size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
                 <input type="password" value={adminPassword} onChange={(e) => setAdminPassword(e.target.value)} placeholder="••••••••" required
-                  className="w-full pl-10 pr-4 py-3 bg-[#0d0d0d] border border-white/5 text-xs text-white outline-none focus:border-[#c9a962]/40 transition-all duration-300 placeholder:text-white/20"
+                  className="w-full pl-10 pr-4 py-3 bg-zinc-50 border border-zinc-300 rounded-lg text-xs text-zinc-900 outline-none focus:border-black focus:bg-white transition-all duration-300 placeholder:text-zinc-400"
                 />
               </div>
             </div>
 
             <button type="submit"
-              className="w-full py-3.5 bg-[#c9a962] text-[#090909] font-bold text-[10px] uppercase tracking-[0.2em] transition-all duration-300 hover:bg-white hover:text-black flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-3.5 bg-black text-white font-bold text-[10px] uppercase tracking-[0.2em] transition-all duration-300 hover:bg-zinc-800 flex items-center justify-center gap-2 cursor-pointer shadow-sm rounded-lg"
             >
               Authenticate Admin <ArrowRight size={13} />
             </button>
@@ -1321,10 +1332,10 @@ const Admin = () => {
   }
 
   return (
-    <div className="min-h-screen flex bg-[#090909] text-white selection:bg-white selection:text-black">
+    <div className="min-h-screen flex bg-[#faf9f5] text-zinc-900 selection:bg-black selection:text-white">
       <AdminSidebar activeItem={activeItem} setActiveItem={setActiveItem} isOpen={isMobileSidebarOpen} onClose={() => setIsMobileSidebarOpen(false)} />
 
-      <main className="flex-1 px-4 py-6 md:px-8 lg:px-12 overflow-auto bg-[#090909]">
+      <main className="flex-1 px-4 py-6 md:px-8 lg:px-12 overflow-auto bg-[#faf9f5]">
         <div className="max-w-7xl mx-auto">
           <AdminHeader activeItem={activeItem} searchVal={searchVal} setSearchVal={setSearchVal} onMenuClick={() => setIsMobileSidebarOpen(true)} />
 
@@ -1333,9 +1344,9 @@ const Admin = () => {
               <button
                 type="button"
                 onClick={() => setIsProductModalOpen(true)}
-                className="px-6 py-3 rounded-lg bg-[#c9a962] text-[#090909] text-xs font-bold hover:bg-white hover:text-black transition-all flex items-center gap-2"
+                className="px-6 py-3 rounded-lg bg-black text-white text-xs font-bold hover:bg-zinc-800 transition-all flex items-center gap-2 shadow-sm cursor-pointer"
               >
-                Add New Product
+                <Plus size={14} /> Add New Product
               </button>
             </div>
           )}
@@ -1345,18 +1356,18 @@ const Admin = () => {
       </main>
 
       {isProductModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-[#121212] border border-[#1a1a1a] rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="px-7 py-5 border-b border-[#1a1a1a] flex items-center justify-between">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-white border border-zinc-200 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="px-7 py-5 border-b border-zinc-200 flex items-center justify-between">
               <div>
-                <h2 className="text-base font-poppins font-bold text-white uppercase tracking-wider">
+                <h2 className="text-base font-poppins font-bold text-zinc-900 uppercase tracking-wider">
                   Add New Clothing Product
                 </h2>
               </div>
               <button
                 type="button"
                 onClick={() => setIsProductModalOpen(false)}
-                className="p-2 hover:bg-[#1c1c1c] rounded-lg transition-colors text-zinc-400"
+                className="p-2 hover:bg-zinc-100 rounded-lg transition-colors text-zinc-500 hover:text-black cursor-pointer"
               >
                 <X size={20} />
               </button>
@@ -1371,18 +1382,18 @@ const Admin = () => {
       )}
 
       {isEditModalOpen && editingProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-[#121212] border border-[#1a1a1a] rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="px-7 py-5 border-b border-[#1a1a1a] flex items-center justify-between">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-white border border-zinc-200 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="px-7 py-5 border-b border-zinc-200 flex items-center justify-between">
               <div>
-                <h2 className="text-base font-poppins font-bold text-white uppercase tracking-wider">
+                <h2 className="text-base font-poppins font-bold text-zinc-900 uppercase tracking-wider">
                   Edit Product
                 </h2>
               </div>
               <button
                 type="button"
                 onClick={() => setIsEditModalOpen(false)}
-                className="p-2 hover:bg-[#1c1c1c] rounded-lg transition-colors text-zinc-400"
+                className="p-2 hover:bg-zinc-100 rounded-lg transition-colors text-zinc-500 hover:text-black cursor-pointer"
               >
                 <X size={20} />
               </button>

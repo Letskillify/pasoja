@@ -47,32 +47,32 @@ const MetricCards = () => {
       value: loading ? "..." : stats.products,
       hint: "Across all categories",
       icon: Package,
-      color: "text-[#4A5D4E]",
-      bg: "bg-[#4A5D4E]/10"
+      color: "text-emerald-700",
+      bg: "bg-emerald-50 border border-emerald-100"
     },
     {
       label: "Open Orders",
       value: loading ? "..." : stats.orders,
       hint: "Confirmed & Pending",
       icon: ShoppingCart,
-      color: "text-[#D9A036]",
-      bg: "bg-[#D9A036]/10"
+      color: "text-amber-700",
+      bg: "bg-amber-50 border border-amber-100"
     },
     {
       label: "Total Revenue",
       value: loading ? "..." : `₹${stats.revenue.toLocaleString('en-IN')}`,
       hint: "Lifetime earnings",
       icon: IndianRupee,
-      color: "text-[#6D4C3D]",
-      bg: "bg-[#6D4C3D]/10"
+      color: "text-[#b8860b]",
+      bg: "bg-amber-50/60 border border-amber-200/60"
     },
     {
       label: "Active Users",
       value: loading ? "..." : stats.users,
       hint: "Registered customers",
       icon: Users,
-      color: "text-[#6b4f3]",
-      bg: "bg-[#6b4f3]/10"
+      color: "text-indigo-700",
+      bg: "bg-indigo-50 border border-indigo-100"
     },
   ];
 
@@ -83,23 +83,22 @@ const MetricCards = () => {
         return (
           <article
             key={card.label}
-            className="bg-white rounded-2xl border border-[#D9D3C7] shadow-sm hover:shadow-lg transition-all duration-300 group"
+            className="bg-white rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-all duration-300 group"
           >
             <div className="p-6">
               <div className={`w-12 h-12 rounded-xl ${card.bg} ${card.color} flex items-center justify-center mb-4 group-hover:scale-105 transition-transform`}>
                 <Icon size={24} strokeWidth={2} />
               </div>
-              <p className="text-sm font-bold tracking-wider text-[#707A72] uppercase mb-2">
+              <p className="text-xs font-bold tracking-wider text-zinc-500 uppercase mb-1">
                 {card.label}
               </p>
-              <p className="text-3xl font-poppins font-bold text-[#1C2B21] mb-1">
+              <p className="text-3xl font-poppins font-extrabold text-zinc-900 mb-1">
                 {card.value}
               </p>
-              <p className="text-sm font-medium text-[#707A72]">
+              <p className="text-xs font-medium text-zinc-500">
                 {card.hint}
               </p>
             </div>
-            <div className="h-1.5 w-full rounded-b-2xl bg-gradient-to-r from-[#4A5D4E] via-[#D9A036] to-[#6D4C3D]" />
           </article>
         );
       })}

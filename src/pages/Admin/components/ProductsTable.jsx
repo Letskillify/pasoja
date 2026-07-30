@@ -14,78 +14,78 @@ const statusBadgeClasses = (status) => {
 
 const ProductsTable = ({ products, onEdit, onDelete }) => {
   return (
-    <section className="bg-white rounded-2xl border border-[#D9D3C7] shadow-sm overflow-hidden">
-      <div className="px-6 py-5 flex items-center justify-between border-b border-[#D9D3C7]">
+    <section className="bg-white rounded-2xl border border-zinc-200 shadow-sm overflow-hidden">
+      <div className="px-6 py-5 flex items-center justify-between border-b border-zinc-200">
         <div>
-          <h2 className="text-lg font-poppins font-bold text-[#1C2B21]">Clothing Products</h2>
-          <p className="text-sm text-[#707A72] mt-1">
+          <h2 className="text-lg font-poppins font-bold text-zinc-900">Clothing Products</h2>
+          <p className="text-xs text-zinc-500 mt-0.5">
             Manage your clothing catalog
           </p>
         </div>
-        <span className="px-4 py-2 rounded-full bg-[#4A5D4E]/10 text-[#4A5D4E] text-sm font-bold">
+        <span className="px-3.5 py-1.5 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-800 text-xs font-bold">
           {products.length} Products
         </span>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full text-left text-sm">
-          <thead className="bg-[#EFECE6]">
-            <tr className="text-sm font-bold text-[#4A5D4E] uppercase tracking-wide">
-              <th className="px-6 py-4">Product</th>
-              <th className="px-6 py-4">Category</th>
-              <th className="px-6 py-4">Gender</th>
-              <th className="px-6 py-4">Price</th>
-              <th className="px-6 py-4">Qty</th>
-              <th className="px-6 py-4">Stock</th>
-              <th className="px-6 py-4 text-right">Actions</th>
+          <thead className="bg-zinc-100">
+            <tr className="text-[11px] font-bold text-zinc-700 uppercase tracking-widest">
+              <th className="px-6 py-3.5">Product</th>
+              <th className="px-6 py-3.5">Category</th>
+              <th className="px-6 py-3.5">Gender</th>
+              <th className="px-6 py-3.5">Price</th>
+              <th className="px-6 py-3.5">Qty</th>
+              <th className="px-6 py-3.5">Stock</th>
+              <th className="px-6 py-3.5 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#D9D3C7]">
+          <tbody className="divide-y divide-zinc-200">
             {products.map((row) => (
-              <tr key={row.id} className="hover:bg-[#FDFBF7] transition-colors">
-                <td className="px-6 py-4 text-[#1C2B21] font-medium">
+              <tr key={row.id} className="hover:bg-zinc-50/80 transition-colors">
+                <td className="px-6 py-4 text-zinc-900 font-medium">
                   <div className="flex items-center gap-3">
                     {/* Thumbnail */}
-                    <div className="relative w-10 h-12 rounded overflow-hidden bg-gray-100 flex-shrink-0 border border-gray-200">
+                    <div className="relative w-10 h-12 rounded overflow-hidden bg-zinc-100 flex-shrink-0 border border-zinc-200 shadow-sm">
                       <img
                         src={row.image || row.images?.[0] || 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?q=80&w=200&auto=format&fit=crop'}
                         alt={row.name}
                         className="w-full h-full object-cover"
                       />
                       {row.model_image && (
-                        <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#c9a962] rounded-bl-sm" title="Model photo included" />
+                        <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#b8860b] rounded-bl-sm" title="Model photo included" />
                       )}
                     </div>
                     <div>
-                      <span className="font-semibold text-gray-900 block">{row.name}</span>
+                      <span className="font-semibold text-zinc-900 block">{row.name}</span>
                       {row.model_image && (
-                        <span className="text-[10px] text-[#c9a962] font-bold uppercase tracking-wider block">
+                        <span className="text-[10px] text-[#b8860b] font-bold uppercase tracking-wider block">
                           ✦ Model Photo
                         </span>
                       )}
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-4 text-[#707A72]">
+                <td className="px-6 py-4 text-zinc-600">
                   {row.category || "-"}
                 </td>
                 <td className="px-6 py-4">
                   <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold ${
                     row.gender === 'Men' ? 'bg-blue-50 text-blue-700 border border-blue-200' :
                     row.gender === 'Women' ? 'bg-pink-50 text-pink-700 border border-pink-200' :
-                    'bg-gray-100 text-gray-700 border border-gray-200'
+                    'bg-zinc-100 text-zinc-700 border border-zinc-200'
                   }`}>
                     {row.gender || "Unisex"}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-[#1C2B21] font-semibold">
+                <td className="px-6 py-4 text-zinc-900 font-bold">
                   ₹{Number(row.price || 0).toFixed(0)}
                 </td>
-                <td className="px-6 py-4 text-[#1C2B21] font-bold tabular-nums">
+                <td className="px-6 py-4 text-zinc-900 font-bold tabular-nums">
                   {row.stock ?? '—'}
                 </td>
                 <td className="px-6 py-4">
                   <span
-                    className={`inline-flex items-center px-3 py-1.5 rounded-full border text-sm font-bold ${statusBadgeClasses(row.stock_status || "In Stock")}`}
+                    className={`inline-flex items-center px-3 py-1 rounded-full border text-xs font-bold ${statusBadgeClasses(row.stock_status || "In Stock")}`}
                   >
                     {row.stock_status || "In Stock"}
                   </span>
@@ -95,16 +95,16 @@ const ProductsTable = ({ products, onEdit, onDelete }) => {
                     <button
                       type="button"
                       onClick={() => onEdit(row)}
-                      className="p-2.5 rounded-lg bg-[#EFECE6] text-[#6b4f3] hover:bg-[#D9D3C7] transition-colors"
+                      className="p-2 rounded-lg bg-zinc-100 text-zinc-700 hover:bg-zinc-200 hover:text-black transition-colors border border-zinc-200"
                     >
-                      <Edit size={16} />
+                      <Edit size={15} />
                     </button>
                     <button
                       type="button"
                       onClick={() => onDelete(row.id)}
-                      className="p-2.5 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition-colors"
+                      className="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors border border-red-200"
                     >
-                      <Trash2 size={16} />
+                      <Trash2 size={15} />
                     </button>
                   </div>
                 </td>
@@ -114,7 +114,7 @@ const ProductsTable = ({ products, onEdit, onDelete }) => {
               <tr>
                 <td
                   colSpan={7}
-                  className="px-6 py-10 text-center text-sm text-[#707A72]"
+                  className="px-6 py-10 text-center text-sm text-zinc-500"
                 >
                   No products yet. Click &quot;Add Product&quot; to get started!
                 </td>

@@ -101,15 +101,15 @@ const ShopTheLook = () => {
         ))}
       </div>
 
-      {/* Mobile/Tablet View (lg:hidden): Bigger, prominent cards with smooth touchpad scroll */}
-      <div className="lg:hidden w-full max-w-none px-4">
+      {/* Mobile/Tablet View (lg:hidden): Seamless continuous Swiper with 0 gap */}
+      <div className="lg:hidden w-full max-w-none px-0">
         <Swiper
           onSwiper={(swiper) => { swiperRef.current = swiper; }}
-          spaceBetween={12}
+          spaceBetween={0}
           slidesPerView={1.25}
           breakpoints={{
-            500: { slidesPerView: 1.5, spaceBetween: 14 },
-            640: { slidesPerView: 2, spaceBetween: 16 }
+            500: { slidesPerView: 1.5, spaceBetween: 0 },
+            640: { slidesPerView: 2, spaceBetween: 0 }
           }}
           freeMode={true}
           mousewheel={{
@@ -124,7 +124,7 @@ const ShopTheLook = () => {
           className="w-full overflow-visible"
         >
           {looks.map((look) => (
-            <SwiperSlide key={look.id} className="flex flex-col bg-white border border-zinc-200 rounded-sm shadow-sm overflow-hidden">
+            <SwiperSlide key={look.id} className="flex flex-col bg-[#faf9f5] border-r border-zinc-200/80">
               <Link
                 to={look.link}
                 className="relative group block overflow-hidden bg-zinc-100 aspect-[3/4] w-full"
@@ -136,7 +136,7 @@ const ShopTheLook = () => {
                 />
               </Link>
               {/* Product Meta Text Content below Image */}
-              <div className="p-4 text-center flex flex-col items-center">
+              <div className="py-4 px-2 text-center flex flex-col items-center">
                 <span className="text-[10px] uppercase tracking-[0.2em] font-medium text-zinc-500 mb-1">
                   {look.category || 'COLLECTION'}
                 </span>

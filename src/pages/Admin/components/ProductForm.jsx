@@ -418,7 +418,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
             type="file"
             multiple
             accept="image/*"
-            className="w-full px-4 py-3 rounded-xl border border-dashed border-[#c9a962] hover:border-[#1a1a1a] transition-colors text-sm file:mr-4 file:py-2 file:px-5 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-[#c9a962]/10 file:text-[#c9a962] cursor-pointer bg-white"
+            className="w-full px-4 py-3 rounded-xl border border-dashed border-zinc-300 hover:border-black transition-colors text-sm file:mr-4 file:py-2 file:px-5 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-zinc-100 file:text-zinc-900 cursor-pointer bg-white"
             onChange={handleFileChange}
           />
         </div>
@@ -426,16 +426,16 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         {/* Image previews grid */}
         {imagePreviews.length > 0 && (
           <div className="space-y-2">
-            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider block">
+            <span className="text-xs font-bold text-zinc-500 uppercase tracking-wider block">
               Manage Images (Click on image to mark as Primary display thumbnail)
             </span>
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 bg-gray-50 p-4 rounded-xl border border-gray-200">
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 bg-zinc-50 p-4 rounded-xl border border-zinc-200">
               {imagePreviews.map((img, idx) => (
                 <div 
                   key={idx} 
                   onClick={() => selectPrimary(idx)}
                   className={`relative group aspect-square rounded-lg border overflow-hidden bg-white cursor-pointer transition-all ${
-                    primaryIndex === idx ? 'border-4 border-[#c9a962]' : 'border-gray-200 hover:border-[#c9a962]'
+                    primaryIndex === idx ? 'border-4 border-black' : 'border-zinc-200 hover:border-zinc-400'
                   }`}
                 >
                   <img src={img.url} alt="Preview" className="w-full h-full object-cover" />
@@ -457,7 +457,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
 
                   {/* Primary indicator badge */}
                   {primaryIndex === idx && (
-                    <span className="absolute bottom-1.5 left-1.5 bg-[#c9a962] text-[#71717b] text-[8px] font-bold tracking-wider px-1.5 py-0.5 rounded-sm uppercase">
+                    <span className="absolute bottom-1.5 left-1.5 bg-black text-white text-[8px] font-bold tracking-wider px-1.5 py-0.5 rounded-sm uppercase">
                       Primary
                     </span>
                   )}
@@ -469,12 +469,12 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
       </div>
 
       {/* Model Image Section (1 Image) */}
-      <div className="space-y-3 pt-3 border-t border-gray-200">
+      <div className="space-y-3 pt-3 border-t border-zinc-200">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-semibold text-[#71717b] uppercase tracking-wide flex items-center gap-2">
+          <label className="text-sm font-semibold text-zinc-700 uppercase tracking-wide flex items-center gap-2">
             <span>Model Image (Optional)</span>
           </label>
-          <span className="text-[11px] font-medium text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full border border-gray-200">
+          <span className="text-[11px] font-medium text-zinc-500 bg-zinc-100 px-2.5 py-1 rounded-full border border-zinc-200">
             Optional — 1 Image for lookbook view
           </span>
         </div>
@@ -482,7 +482,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
           <input
             type="file"
             accept="image/*"
-            className="w-full px-4 py-3 rounded-xl border border-dashed border-[#c9a962] hover:border-[#1a1a1a] transition-colors text-sm file:mr-4 file:py-2 file:px-5 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-[#c9a962]/10 file:text-[#c9a962] cursor-pointer bg-white"
+            className="w-full px-4 py-3 rounded-xl border border-dashed border-zinc-300 hover:border-black transition-colors text-sm file:mr-4 file:py-2 file:px-5 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-zinc-100 file:text-zinc-900 cursor-pointer bg-white"
             onChange={handleModelImageChange}
           />
         </div>
@@ -490,10 +490,10 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         {/* Model Image Preview */}
         {modelImagePreview && (
           <div className="space-y-2">
-            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider block">
+            <span className="text-xs font-bold text-zinc-500 uppercase tracking-wider block">
               Selected Model Image
             </span>
-            <div className="relative w-36 aspect-[3/4] rounded-xl border-2 border-[#c9a962] overflow-hidden bg-gray-50 shadow-md">
+            <div className="relative w-36 aspect-[3/4] rounded-xl border-2 border-black overflow-hidden bg-zinc-50 shadow-md">
               <img src={modelImagePreview} alt="Model Preview" className="w-full h-full object-cover" />
               <button
                 type="button"
@@ -505,7 +505,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-              <span className="absolute bottom-1.5 left-1.5 bg-black/80 text-white text-[8px] font-bold tracking-wider px-2 py-0.5 rounded-sm uppercase">
+              <span className="absolute bottom-1.5 left-1.5 bg-black text-white text-[8px] font-bold tracking-wider px-2 py-0.5 rounded-sm uppercase">
                 Model Photo
               </span>
             </div>
@@ -513,10 +513,10 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         )}
       </div>
 
-      <div className="flex items-center justify-end gap-3 pt-2 border-t border-gray-300 mt-4">
+      <div className="flex items-center justify-end gap-3 pt-2 border-t border-zinc-200 mt-4">
         {formState.isSubmitted && !loading && !error && (
-          <span className="flex items-center gap-1.5 text-sm font-bold text-[#c9a962]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#c9a962]" />
+          <span className="flex items-center gap-1.5 text-sm font-bold text-emerald-600">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
             Product {isEdit ? "Updated" : "Created"} Successfully
           </span>
         )}
@@ -528,7 +528,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         <button
           type="submit"
           disabled={loading}
-          className="px-8 py-3 rounded-xl bg-[#c9a962] text-[#71717b] text-sm font-bold shadow-lg shadow-[#c9a962]/20 hover:bg-[#1a1a1a] hover:text-white hover:-translate-y-0.5 transition-all disabled:opacity-60 disabled:translate-y-0"
+          className="px-8 py-3 rounded-xl bg-black text-white text-sm font-bold shadow-md hover:bg-zinc-800 transition-all disabled:opacity-60 disabled:translate-y-0 cursor-pointer"
         >
           {loading ? (
             <span className="flex items-center gap-2">
