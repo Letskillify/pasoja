@@ -241,7 +241,7 @@ const Orders = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-[#faf9f5] text-zinc-900">
       <PageHeader
         title="My Orders"
         subtitle="View your order history, track shipments, and download tax invoices"
@@ -257,18 +257,18 @@ const Orders = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <Link
             to="/account"
-            className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-semibold text-white/40 hover:text-white transition-colors"
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-semibold text-zinc-500 hover:text-black transition-colors"
           >
             <ArrowLeft size={14} /> Back to Dashboard
           </Link>
 
-          <span className="text-xs uppercase tracking-widest text-[#c9a962] font-mono font-bold">
+          <span className="text-xs uppercase tracking-widest text-[#b8860b] font-mono font-bold">
             Total Orders: {orders.length}
           </span>
         </div>
 
         {/* Filter & Search Bar */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-[#0c0c0c] border border-white/[0.06] p-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-white border border-zinc-200 p-4 shadow-sm">
           {/* Status Tabs */}
           <div className="flex flex-wrap gap-2">
             {[
@@ -283,8 +283,8 @@ const Orders = () => {
                 onClick={() => setStatusFilter(tab.id)}
                 className={`px-4 py-2 text-[10px] font-extrabold uppercase tracking-widest transition-all rounded-sm ${
                   statusFilter === tab.id
-                    ? "bg-white text-black font-black"
-                    : "bg-white/5 text-white/50 border border-white/10 hover:text-white"
+                    ? "bg-black text-white font-black"
+                    : "bg-zinc-100 text-zinc-600 border border-zinc-200 hover:text-black hover:bg-zinc-200"
                 }`}
               >
                 {tab.label}
@@ -294,19 +294,19 @@ const Orders = () => {
 
           {/* Order Search */}
           <div className="relative w-full md:w-72">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
             <input
               type="text"
               placeholder="Search by Order ID or item..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full bg-[#141414] border border-white/10 pl-9 pr-8 py-2 text-xs text-white outline-none focus:border-white/30 transition-colors placeholder:text-white/30"
+              className="w-full bg-zinc-50 border border-zinc-300 pl-9 pr-8 py-2 text-xs text-zinc-900 outline-none focus:border-zinc-500 transition-colors placeholder:text-zinc-400"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/30 hover:text-white"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-black"
               >
                 <X size={12} />
               </button>
@@ -316,21 +316,21 @@ const Orders = () => {
 
         {/* Orders List */}
         {filteredOrders.length === 0 ? (
-          <div className="text-center py-20 bg-[#0c0c0c] border border-white/[0.06] p-8 max-w-md mx-auto">
-            <div className="w-16 h-16 border border-white/10 flex items-center justify-center text-white/25 mx-auto mb-5">
+          <div className="text-center py-20 bg-white border border-zinc-200 p-8 max-w-md mx-auto shadow-sm">
+            <div className="w-16 h-16 border border-zinc-300 flex items-center justify-center text-zinc-400 mx-auto mb-5">
               <ShoppingBag size={24} strokeWidth={1.5} />
             </div>
-            <h3 className="text-lg font-light text-white tracking-widest uppercase mb-2">
+            <h3 className="text-lg font-light text-zinc-900 tracking-widest uppercase mb-2">
               No Orders Found
             </h3>
-            <p className="text-xs text-white/35 leading-relaxed mb-6">
+            <p className="text-xs text-zinc-500 leading-relaxed mb-6">
               {searchQuery || statusFilter !== "all"
                 ? "No orders match your filter criteria."
                 : "You haven't placed any orders yet."}
             </p>
             <Link
               to="/shop"
-              className="inline-flex items-center gap-2 px-7 py-3 bg-white text-black font-extrabold text-[10px] uppercase tracking-[0.2em] hover:bg-white/85 transition-all"
+              className="inline-flex items-center gap-2 px-7 py-3 bg-black text-white font-extrabold text-[10px] uppercase tracking-[0.2em] hover:bg-zinc-800 transition-all"
             >
               Explore Shop <ChevronRight size={12} />
             </Link>
@@ -357,19 +357,19 @@ const Orders = () => {
               return (
                 <div
                   key={order.id}
-                  className="bg-[#0c0c0c] border border-white/[0.08] hover:border-white/[0.16] transition-all overflow-hidden p-6 md:p-8 space-y-6"
+                  className="bg-white border border-zinc-200 hover:border-black/30 transition-all overflow-hidden p-6 md:p-8 space-y-6 shadow-sm"
                 >
                   {/* Order Top Bar */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-white/[0.06]">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-zinc-200">
                     <div className="flex items-center gap-4">
-                      <div className="w-11 h-11 border border-white/10 flex items-center justify-center text-white/40 shrink-0">
+                      <div className="w-11 h-11 border border-zinc-300 flex items-center justify-center text-zinc-500 shrink-0">
                         <Package size={18} strokeWidth={1.5} />
                       </div>
                       <div>
-                        <span className="text-[9px] font-black uppercase tracking-[0.25em] text-[#c9a962]">
+                        <span className="text-[9px] font-black uppercase tracking-[0.25em] text-[#b8860b]">
                           Order Reference
                         </span>
-                        <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">
+                        <h3 className="text-sm font-bold text-zinc-900 uppercase tracking-wider font-mono">
                           #{order.id.slice(0, 14).toUpperCase()}
                         </h3>
                       </div>
@@ -377,19 +377,19 @@ const Orders = () => {
 
                     <div className="flex flex-wrap items-center gap-3">
                       <div className="text-left sm:text-right mr-2">
-                        <span className="text-[9px] font-extrabold uppercase tracking-widest text-white/30 block">
+                        <span className="text-[9px] font-extrabold uppercase tracking-widest text-zinc-400 block">
                           Placed On
                         </span>
-                        <span className="text-xs text-white/70">{formattedDate}</span>
+                        <span className="text-xs text-zinc-700">{formattedDate}</span>
                       </div>
 
                       <span
                         className={`px-3 py-1 text-[9px] font-extrabold uppercase tracking-widest border flex items-center gap-1.5 ${
                           order.status === "confirmed" || order.status === "delivered"
-                            ? "bg-emerald-950/50 text-emerald-400 border-emerald-800/40"
+                            ? "bg-emerald-50 text-emerald-700 border-emerald-300"
                             : order.status === "failed"
-                            ? "bg-red-950/50 text-red-400 border-red-800/40"
-                            : "bg-amber-950/50 text-amber-400 border-amber-800/40"
+                            ? "bg-red-50 text-red-700 border-red-300"
+                            : "bg-amber-50 text-amber-700 border-amber-300"
                         }`}
                       >
                         {order.status === "confirmed" || order.status === "delivered" ? (
@@ -406,7 +406,7 @@ const Orders = () => {
                       <button
                         type="button"
                         onClick={() => handleDownloadInvoice(order)}
-                        className="px-3.5 py-2 bg-white/5 border border-white/10 hover:bg-[#c9a962] hover:text-black text-[#c9a962] text-[9px] font-extrabold uppercase tracking-widest transition-all flex items-center gap-2"
+                        className="px-3.5 py-2 bg-white border border-zinc-300 hover:bg-[#b8860b] hover:text-white text-[#b8860b] text-[9px] font-extrabold uppercase tracking-widest transition-all flex items-center gap-2"
                         title="Download official tax invoice PDF"
                       >
                         <Download size={12} />
@@ -417,7 +417,7 @@ const Orders = () => {
                       <button
                         type="button"
                         onClick={() => setSelectedOrder(order)}
-                        className="px-3.5 py-2 bg-white text-black font-extrabold text-[9px] uppercase tracking-widest hover:bg-white/85 transition-all flex items-center gap-1.5"
+                        className="px-3.5 py-2 bg-black text-white font-extrabold text-[9px] uppercase tracking-widest hover:bg-zinc-800 transition-all flex items-center gap-1.5"
                       >
                         <Eye size={12} />
                         Details
@@ -426,7 +426,7 @@ const Orders = () => {
                   </div>
 
                   {/* Order Items Preview */}
-                  <div className="divide-y divide-white/[0.04]">
+                  <div className="divide-y divide-zinc-200">
                     {items.map((item, idx) => {
                       const itemImg =
                         item.image ||
@@ -438,7 +438,7 @@ const Orders = () => {
                           className="py-3 flex items-center justify-between gap-4 first:pt-0 last:pb-0"
                         >
                           <div className="flex items-center gap-4">
-                            <div className="w-14 h-16 bg-[#161616] border border-white/10 overflow-hidden shrink-0">
+                            <div className="w-14 h-16 bg-zinc-100 border border-zinc-200 overflow-hidden shrink-0">
                               <img
                                 src={itemImg}
                                 alt={item.name}
@@ -446,18 +446,18 @@ const Orders = () => {
                               />
                             </div>
                             <div>
-                              <h4 className="text-xs font-bold text-white uppercase tracking-wider line-clamp-1">
+                              <h4 className="text-xs font-bold text-zinc-900 uppercase tracking-wider line-clamp-1">
                                 {item.name}
                               </h4>
-                              <div className="flex items-center gap-3 text-[11px] text-white/40 mt-1">
-                                {item.size && <span>Size: <strong className="text-white">{item.size}</strong></span>}
-                                <span>Qty: <strong className="text-white">{item.quantity || 1}</strong></span>
+                              <div className="flex items-center gap-3 text-[11px] text-zinc-500 mt-1">
+                                {item.size && <span>Size: <strong className="text-zinc-800">{item.size}</strong></span>}
+                                <span>Qty: <strong className="text-zinc-800">{item.quantity || 1}</strong></span>
                               </div>
                             </div>
                           </div>
 
                           <div className="text-right shrink-0">
-                            <span className="text-xs font-semibold text-white">
+                            <span className="text-xs font-semibold text-zinc-900">
                               ₹{((item.price || 0) * (item.quantity || 1)).toLocaleString("en-IN")}
                             </span>
                           </div>
@@ -467,16 +467,16 @@ const Orders = () => {
                   </div>
 
                   {/* Order Summary Bottom Bar */}
-                  <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs">
-                    <div className="text-white/40 text-[11px]">
-                      <span>Payment: <strong className="text-white uppercase">{order.paymentMethod || "Online"}</strong></span>
+                  <div className="pt-4 border-t border-zinc-200 flex items-center justify-between text-xs">
+                    <div className="text-zinc-500 text-[11px]">
+                      <span>Payment: <strong className="text-zinc-900 uppercase">{order.paymentMethod || "Online"}</strong></span>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className="text-white/40 uppercase text-[10px] tracking-wider font-bold">
+                      <span className="text-zinc-500 uppercase text-[10px] tracking-wider font-bold">
                         Grand Total:
                       </span>
-                      <span className="text-sm font-bold text-white font-mono">
+                      <span className="text-sm font-bold text-zinc-900 font-mono">
                         ₹{(order.total || 0).toLocaleString("en-IN")}
                       </span>
                     </div>
@@ -497,80 +497,80 @@ const Orders = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedOrder(null)}
-              className="fixed inset-0 bg-black/85 backdrop-blur-sm"
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm"
             />
 
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="relative bg-[#0d0d0d] border border-white/10 max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8 shadow-2xl z-10 space-y-6"
+              className="relative bg-white border border-zinc-200 max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8 shadow-2xl z-10 space-y-6 text-zinc-900 rounded-sm"
             >
               {/* Modal Header */}
-              <div className="flex items-center justify-between pb-4 border-b border-white/10">
+              <div className="flex items-center justify-between pb-4 border-b border-zinc-200">
                 <div>
-                  <span className="text-[9px] font-black uppercase tracking-[0.25em] text-[#c9a962]">
+                  <span className="text-[9px] font-black uppercase tracking-[0.25em] text-[#b8860b]">
                     Order Specification
                   </span>
-                  <h3 className="text-base font-bold text-white uppercase tracking-wider font-mono">
+                  <h3 className="text-base font-bold text-zinc-900 uppercase tracking-wider font-mono">
                     #{selectedOrder.id.slice(0, 14).toUpperCase()}
                   </h3>
                 </div>
                 <button
                   type="button"
                   onClick={() => setSelectedOrder(null)}
-                  className="p-1 text-white/40 hover:text-white"
+                  className="p-1 text-zinc-400 hover:text-black"
                 >
                   <X size={20} />
                 </button>
               </div>
 
               {/* Shipping & Payment Details */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-[#141414] p-4 border border-white/5 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-zinc-50 p-4 border border-zinc-200 text-xs">
                 <div className="space-y-1">
-                  <div className="flex items-center gap-1.5 text-[#c9a962] font-bold uppercase tracking-wider text-[10px] mb-1">
+                  <div className="flex items-center gap-1.5 text-[#b8860b] font-bold uppercase tracking-wider text-[10px] mb-1">
                     <MapPin size={12} /> Shipping Address
                   </div>
-                  <p className="font-bold text-white uppercase">{selectedOrder.shipping?.name || user?.displayName}</p>
-                  <p className="text-white/50">{selectedOrder.shipping?.address}</p>
-                  <p className="text-white/50">
+                  <p className="font-bold text-zinc-900 uppercase">{selectedOrder.shipping?.name || user?.displayName}</p>
+                  <p className="text-zinc-600">{selectedOrder.shipping?.address}</p>
+                  <p className="text-zinc-600">
                     {selectedOrder.shipping?.city}, {selectedOrder.shipping?.state} - {selectedOrder.shipping?.pincode}
                   </p>
-                  <p className="text-[#c9a962] font-mono text-[11px] pt-1">Phone: {selectedOrder.shipping?.phone || 'N/A'}</p>
+                  <p className="text-[#b8860b] font-mono text-[11px] pt-1">Phone: {selectedOrder.shipping?.phone || 'N/A'}</p>
                 </div>
 
                 <div className="space-y-1">
-                  <div className="flex items-center gap-1.5 text-[#c9a962] font-bold uppercase tracking-wider text-[10px] mb-1">
+                  <div className="flex items-center gap-1.5 text-[#b8860b] font-bold uppercase tracking-wider text-[10px] mb-1">
                     <CreditCard size={12} /> Payment Info
                   </div>
-                  <p className="text-white/70">Method: <strong className="text-white uppercase">{selectedOrder.paymentMethod || 'Online'}</strong></p>
-                  <p className="text-white/50 font-mono text-[11px]">Transaction ID: {selectedOrder.paymentId || 'COD'}</p>
-                  <p className="text-white/70">Status: <strong className="text-emerald-400 uppercase">PAID / CONFIRMED</strong></p>
+                  <p className="text-zinc-700">Method: <strong className="text-zinc-900 uppercase">{selectedOrder.paymentMethod || 'Online'}</strong></p>
+                  <p className="text-zinc-500 font-mono text-[11px]">Transaction ID: {selectedOrder.paymentId || 'COD'}</p>
+                  <p className="text-zinc-700">Status: <strong className="text-emerald-700 uppercase">PAID / CONFIRMED</strong></p>
                 </div>
               </div>
 
               {/* Purchased Items List */}
               <div className="space-y-3">
-                <h4 className="text-xs font-bold uppercase tracking-widest text-white/50">
+                <h4 className="text-xs font-bold uppercase tracking-widest text-zinc-500">
                   Itemized Summary
                 </h4>
-                <div className="divide-y divide-white/[0.06] bg-[#141414] p-4 border border-white/5">
+                <div className="divide-y divide-zinc-200 bg-zinc-50 p-4 border border-zinc-200">
                   {(selectedOrder.items || []).map((item, idx) => (
                     <div key={idx} className="py-3 flex items-center justify-between gap-4 first:pt-0 last:pb-0">
                       <div className="flex items-center gap-3">
                         <img
                           src={item.image || item.images?.[0]}
                           alt={item.name}
-                          className="w-12 h-14 object-cover bg-black border border-white/10 shrink-0"
+                          className="w-12 h-14 object-cover bg-zinc-100 border border-zinc-200 shrink-0"
                         />
                         <div>
-                          <p className="text-xs font-bold text-white uppercase">{item.name}</p>
-                          <p className="text-[11px] text-white/40">
+                          <p className="text-xs font-bold text-zinc-900 uppercase">{item.name}</p>
+                          <p className="text-[11px] text-zinc-500">
                             {item.size ? `Size: ${item.size} • ` : ""}Qty: {item.quantity || 1}
                           </p>
                         </div>
                       </div>
-                      <span className="text-xs font-bold text-white font-mono">
+                      <span className="text-xs font-bold text-zinc-900 font-mono">
                         ₹{((item.price || 0) * (item.quantity || 1)).toLocaleString("en-IN")}
                       </span>
                     </div>
@@ -579,16 +579,16 @@ const Orders = () => {
               </div>
 
               {/* Total Calculation */}
-              <div className="bg-[#141414] p-4 border border-white/5 space-y-2 text-xs">
-                <div className="flex justify-between text-white/50">
+              <div className="bg-zinc-50 p-4 border border-zinc-200 space-y-2 text-xs">
+                <div className="flex justify-between text-zinc-500">
                   <span>Subtotal</span>
                   <span>₹{(selectedOrder.total || 0).toLocaleString("en-IN")}</span>
                 </div>
-                <div className="flex justify-between text-white/50">
+                <div className="flex justify-between text-zinc-500">
                   <span>Express Shipping</span>
-                  <span className="text-emerald-400 font-bold">FREE</span>
+                  <span className="text-emerald-700 font-bold">FREE</span>
                 </div>
-                <div className="flex justify-between text-white text-sm font-bold pt-2 border-t border-white/10 font-mono">
+                <div className="flex justify-between text-zinc-900 text-sm font-bold pt-2 border-t border-zinc-200 font-mono">
                   <span>Grand Total</span>
                   <span>₹{(selectedOrder.total || 0).toLocaleString("en-IN")}</span>
                 </div>
@@ -599,14 +599,14 @@ const Orders = () => {
                 <button
                   type="button"
                   onClick={() => handleDownloadInvoice(selectedOrder)}
-                  className="flex-1 py-3 bg-[#c9a962] text-black font-extrabold text-[10px] uppercase tracking-widest hover:bg-white transition-all flex items-center justify-center gap-2"
+                  className="flex-1 py-3 bg-black text-white font-extrabold text-[10px] uppercase tracking-widest hover:bg-zinc-800 transition-all flex items-center justify-center gap-2"
                 >
                   <Download size={14} /> Download PDF Invoice
                 </button>
                 <button
                   type="button"
                   onClick={() => setSelectedOrder(null)}
-                  className="px-6 py-3 border border-white/20 text-white/60 font-bold text-[10px] uppercase tracking-widest hover:text-white"
+                  className="px-6 py-3 border border-zinc-300 text-zinc-700 font-bold text-[10px] uppercase tracking-widest hover:text-black hover:border-black"
                 >
                   Close
                 </button>

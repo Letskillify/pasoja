@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 const SectionHeader = ({ subtitle, title, description, action, border = true, center = false }) => {
   return (
-    <div className={`flex flex-col ${center ? 'items-center text-center' : 'md:flex-row md:items-end justify-between'} mb-16 ${border ? 'border-b border-white/[0.06] pb-8' : ''}`}>
+    <div className={`flex flex-col ${center ? 'items-center text-center' : 'md:flex-row md:items-end justify-between'} mb-6 md:mb-8 ${border ? 'border-b border-zinc-200 pb-4' : ''}`}>
       <div className={center ? 'flex flex-col items-center' : ''}>
         {subtitle && (
           <motion.span
@@ -11,7 +11,7 @@ const SectionHeader = ({ subtitle, title, description, action, border = true, ce
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-bold block mb-4"
+            className="text-[10px] uppercase tracking-[0.3em] text-[#b8860b] font-bold block mb-2"
           >
             {subtitle}
           </motion.span>
@@ -21,7 +21,7 @@ const SectionHeader = ({ subtitle, title, description, action, border = true, ce
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="text-3xl md:text-4xl lg:text-5xl font-light text-white tracking-widest uppercase leading-none"
+          className="text-2xl md:text-3xl lg:text-4xl font-light text-zinc-900 tracking-widest uppercase leading-none"
         >
           {title}
         </motion.h2>
@@ -32,10 +32,10 @@ const SectionHeader = ({ subtitle, title, description, action, border = true, ce
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className={`flex flex-col ${center ? 'items-center mt-6 text-center' : 'md:items-end md:mt-0 mt-6'} max-w-sm`}
+          className={`flex flex-col ${center ? 'items-center mt-4 text-center' : 'md:items-end md:mt-0 mt-4'} max-w-sm`}
         >
           {description && (
-            <p className="text-white/50 text-sm md:text-[15px] font-light leading-relaxed mb-4 md:mb-0 md:text-right">
+            <p className="text-zinc-600 text-xs md:text-sm font-light leading-relaxed mb-4 md:mb-0 md:text-right">
               {description}
             </p>
           )}

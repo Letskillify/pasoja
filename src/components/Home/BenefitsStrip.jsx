@@ -48,7 +48,7 @@ const BenefitsStrip = () => {
   if (loading || benefits.length === 0) return null;
 
   return (
-    <section className="bg-[#0a0a0a] border-y border-white/[0.06] py-4 overflow-hidden">
+    <section className="bg-[#f4f1ea] border-y border-zinc-200 py-3.5 overflow-hidden">
       <motion.div
         animate={{ x: ['0%', '-50%'] }}
         transition={{ repeat: Infinity, duration: 15, ease: 'linear' }}
@@ -59,11 +59,11 @@ const BenefitsStrip = () => {
           return (
             <span
               key={i}
-              className="inline-flex items-center gap-3 px-10 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/50"
+              className="inline-flex items-center gap-3 px-10 text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-700"
             >
-              <Icon size={13} strokeWidth={2} className="text-white/30 flex-shrink-0" />
+              <Icon size={13} strokeWidth={2} className="text-[#b8860b] flex-shrink-0" />
               {item.text}
-              <span className="w-1 h-1 bg-white/15 rounded-full ml-2 flex-shrink-0" />
+              <span className="w-1 h-1 bg-zinc-400 rounded-full ml-2 flex-shrink-0" />
             </span>
           );
         })}

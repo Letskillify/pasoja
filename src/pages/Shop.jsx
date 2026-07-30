@@ -74,10 +74,10 @@ const ProductCard = ({ product, idx, triggerToast }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => navigate(`/product/${product.id}`)}
-      className="group relative cursor-pointer flex flex-col bg-transparent transition-all duration-300"
+      className="group relative cursor-pointer flex flex-col bg-white border border-zinc-200 transition-all duration-300 hover:border-black/30"
     >
       {/* Image */}
-      <div className="relative w-full aspect-[3/4] overflow-hidden bg-[#151515] border border-white/[0.04]">
+      <div className="relative w-full aspect-[3/4] overflow-hidden bg-zinc-100 border-b border-zinc-200">
         <img
           src={displayedImage}
           alt={product.name}
@@ -95,7 +95,7 @@ const ProductCard = ({ product, idx, triggerToast }) => {
 
         {/* Top-left Badge */}
         <div className="absolute top-2.5 left-2.5 z-10">
-          <span className="bg-white text-black font-extrabold uppercase text-[8px] tracking-[0.18em] px-2.5 py-1 shadow-sm">
+          <span className="bg-black text-white font-extrabold uppercase text-[8px] tracking-[0.18em] px-2.5 py-1 shadow-sm">
             {badgeText}
           </span>
         </div>
@@ -104,48 +104,48 @@ const ProductCard = ({ product, idx, triggerToast }) => {
         <button
           type="button"
           onClick={e => handleAction(e, "wishlist")}
-          className="absolute top-2.5 right-2.5 z-30 text-white hover:scale-110 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-300 pointer-events-auto cursor-pointer"
+          className="absolute top-2.5 right-2.5 z-30 text-zinc-700 hover:text-black hover:scale-110 drop-shadow-sm transition-all duration-300 pointer-events-auto cursor-pointer"
         >
           <Heart
             size={15}
             strokeWidth={2}
             fill={isWishlisted ? "#ef4444" : "none"}
-            stroke={isWishlisted ? "#ef4444" : "#ffffff"}
+            stroke={isWishlisted ? "#ef4444" : "currentColor"}
             className="transition-colors duration-300"
           />
         </button>
       </div>
 
       {/* Info */}
-      <div className="pt-3.5 flex flex-col flex-grow">
+      <div className="pt-3.5 pb-4 px-3 flex flex-col flex-grow bg-white">
         {product.category && (
-          <span className="text-[9px] uppercase tracking-[0.2em] text-[#c9a962] font-semibold mb-1">
+          <span className="text-[9px] uppercase tracking-[0.2em] text-[#b8860b] font-semibold mb-1">
             {product.category}
           </span>
         )}
-        <h3 className="text-[12px] font-light text-white uppercase tracking-wider mb-1 line-clamp-1 group-hover:text-[#c9a962] transition-colors duration-300">
+        <h3 className="text-[12px] font-bold text-zinc-900 uppercase tracking-wider mb-1 line-clamp-1 group-hover:text-[#b8860b] transition-colors duration-300">
           {product.name}
         </h3>
 
         {/* Stars */}
-        <div className="flex items-center gap-1 mb-2.5 text-[10px] text-white/40">
-          <span className="text-[#c9a962]">★</span>
+        <div className="flex items-center gap-1 mb-2.5 text-[10px] text-zinc-500">
+          <span className="text-[#b8860b]">★</span>
           <span className="font-semibold">{rating.toFixed(1)}</span>
         </div>
 
         {/* Price & Cart row */}
-        <div className="flex items-center justify-between mt-auto pt-1 border-t border-white/[0.04]">
+        <div className="flex items-center justify-between mt-auto pt-2 border-t border-zinc-200">
           <div className="flex items-baseline gap-2">
-            <span className="text-sm font-semibold tracking-wide text-white">
+            <span className="text-sm font-semibold tracking-wide text-zinc-900">
               ₹{displayPrice?.toLocaleString("en-IN")}
             </span>
             {originalPrice !== displayPrice && (
-              <span className="text-[11px] text-white/30 line-through">
+              <span className="text-[11px] text-zinc-400 line-through">
                 ₹{originalPrice?.toLocaleString("en-IN")}
               </span>
             )}
             {savingsPercent > 0 && (
-              <span className="hidden md:inline text-red-400 text-[9px] font-bold">
+              <span className="hidden md:inline text-red-600 text-[9px] font-bold">
                 ({savingsPercent}% OFF)
               </span>
             )}
@@ -158,10 +158,10 @@ const ProductCard = ({ product, idx, triggerToast }) => {
             disabled={isOutOfStock}
             className={`w-9 h-9 border flex items-center justify-center transition-all duration-300 z-30 cursor-pointer relative pointer-events-auto ${
               isOutOfStock
-                ? "bg-transparent text-white/20 border-white/5 cursor-not-allowed"
+                ? "bg-transparent text-zinc-300 border-zinc-200 cursor-not-allowed"
                 : isInCart
-                ? "bg-white text-black border-white"
-                : "bg-transparent text-white/80 border-white/10 hover:bg-white hover:text-black hover:border-white"
+                ? "bg-black text-white border-black"
+                : "bg-white text-zinc-800 border-zinc-300 hover:bg-black hover:text-white hover:border-black"
             }`}
           >
             <ShoppingCart size={13} strokeWidth={2} />
@@ -186,7 +186,7 @@ const INITIAL_FILTERS = {
 };
 
 const Shop = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -195,16 +195,46 @@ const Shop = () => {
   const [filters, setFilters] = useState(INITIAL_FILTERS);
   const [feedbackMessage, setFeedbackMessage] = useState(null);
 
+  // ── Read URL query params into state on mount / URL change ──
   useEffect(() => {
+    const newFilters = { ...INITIAL_FILTERS };
+
     const cat = searchParams.get("category");
-    if (cat) {
-      setFilters(prev => ({ ...prev, category: cat }));
-    }
+    if (cat) newFilters.category = cat;
+
+    const gender = searchParams.get("gender");
+    if (gender) newFilters.gender = gender;
+
+    const minPrice = searchParams.get("minPrice");
+    if (minPrice) newFilters.minPrice = Number(minPrice);
+
+    const maxPrice = searchParams.get("maxPrice");
+    if (maxPrice) newFilters.maxPrice = Number(maxPrice);
+
+    const colors = searchParams.get("color") || searchParams.get("colors");
+    if (colors) newFilters.colors = colors.split(",").map(c => c.trim()).filter(Boolean);
+
+    const sizes = searchParams.get("size") || searchParams.get("sizes");
+    if (sizes) newFilters.sizes = sizes.split(",").map(s => s.trim()).filter(Boolean);
+
+    const materials = searchParams.get("material") || searchParams.get("materials");
+    if (materials) newFilters.materials = materials.split(",").map(m => m.trim()).filter(Boolean);
+
+    if (searchParams.get("inStock") === "true") newFilters.inStockOnly = true;
+    if (searchParams.get("onSale") === "true") newFilters.onSaleOnly = true;
+
+    const minRating = searchParams.get("minRating");
+    if (minRating) newFilters.minRating = Number(minRating);
+
     const q = searchParams.get("search") || searchParams.get("q");
-    if (q) {
-      setSearchTerm(q);
-    }
-  }, [searchParams]);
+    setSearchTerm(q || "");
+
+    const sort = searchParams.get("sort");
+    if (sort) setSortBy(sort);
+
+    setFilters(newFilters);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -261,6 +291,26 @@ const Shop = () => {
     });
     return Array.from(set);
   }, [products]);
+
+  // ── Write filter state back to URL query params ──
+  useEffect(() => {
+    const params = new URLSearchParams();
+
+    if (filters.category !== "All") params.set("category", filters.category);
+    if (filters.gender !== "All") params.set("gender", filters.gender);
+    if (filters.minPrice > 0) params.set("minPrice", String(filters.minPrice));
+    if (filters.maxPrice < maxPriceLimit) params.set("maxPrice", String(filters.maxPrice));
+    if (filters.colors.length > 0) params.set("color", filters.colors.join(","));
+    if (filters.sizes.length > 0) params.set("size", filters.sizes.join(","));
+    if (filters.materials.length > 0) params.set("material", filters.materials.join(","));
+    if (filters.inStockOnly) params.set("inStock", "true");
+    if (filters.onSaleOnly) params.set("onSale", "true");
+    if (filters.minRating > 0) params.set("minRating", String(filters.minRating));
+    if (searchTerm.trim()) params.set("search", searchTerm.trim());
+    if (sortBy !== "newest") params.set("sort", sortBy);
+
+    setSearchParams(params, { replace: true });
+  }, [filters, searchTerm, sortBy, maxPriceLimit, setSearchParams]);
 
   const resetFilters = () => {
     setSearchTerm("");
@@ -375,7 +425,7 @@ const Shop = () => {
   }, [filters, searchTerm, maxPriceLimit]);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]">
+    <div className="min-h-screen bg-[#faf9f5]">
       <PageHeader
         title="Shop Collection"
         subtitle="Explore our luxury attire crafted with precision"
@@ -384,17 +434,17 @@ const Shop = () => {
 
       <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14 pb-20 md:pb-24 pt-8 md:pt-12">
         {/* Top Control Bar: Search, Sort, Mobile Filter Trigger */}
-        <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between mb-8 pb-6 border-b border-white/[0.08]">
+        <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between mb-8 pb-6 border-b border-zinc-200">
           {/* Search bar */}
           <div className="relative flex-1 max-w-md">
             <Search
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/30"
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400"
               size={15}
             />
             <input
               type="text"
               placeholder="Search by name, fabric, or style..."
-              className="w-full bg-[#141414] border border-white/10 pl-10 pr-9 py-3 text-xs text-white outline-none focus:border-white/30 transition-colors placeholder:text-white/30"
+              className="w-full bg-white border border-zinc-300 pl-10 pr-9 py-3 text-xs text-zinc-900 outline-none focus:border-zinc-500 transition-colors placeholder:text-zinc-400"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
             />
@@ -402,7 +452,7 @@ const Shop = () => {
               <button
                 type="button"
                 onClick={() => setSearchTerm("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-800"
               >
                 <X size={13} />
               </button>
@@ -415,7 +465,7 @@ const Shop = () => {
               <select
                 value={sortBy}
                 onChange={e => setSortBy(e.target.value)}
-                className="appearance-none bg-[#141414] border border-white/10 px-4 py-3 pr-9 text-[10px] font-bold uppercase tracking-wider text-white/70 outline-none focus:border-white/30 transition-colors cursor-pointer w-full sm:w-auto"
+                className="appearance-none bg-white border border-zinc-300 px-4 py-3 pr-9 text-[10px] font-bold uppercase tracking-wider text-zinc-800 outline-none focus:border-zinc-500 transition-colors cursor-pointer w-full sm:w-auto"
               >
                 <option value="newest">Sort: Newest First</option>
                 <option value="price-low">Sort: Price (Low to High)</option>
@@ -424,7 +474,7 @@ const Shop = () => {
               </select>
               <ChevronDown
                 size={12}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none"
               />
             </div>
 
@@ -432,12 +482,12 @@ const Shop = () => {
             <button
               type="button"
               onClick={() => setShowMobileFilters(true)}
-              className="lg:hidden flex items-center justify-center gap-2 bg-[#141414] border border-white/10 px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-white/80 hover:bg-white/5 transition-all"
+              className="lg:hidden flex items-center justify-center gap-2 bg-white border border-zinc-300 px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-zinc-800 hover:bg-zinc-100 transition-all"
             >
-              <SlidersHorizontal size={13} className="text-[#c9a962]" />
+              <SlidersHorizontal size={13} className="text-[#b8860b]" />
               <span>Filters</span>
               {activeFiltersCount > 0 && (
-                <span className="w-4 h-4 rounded-full bg-[#c9a962] text-black text-[9px] font-extrabold flex items-center justify-center">
+                <span className="w-4 h-4 rounded-full bg-black text-white text-[9px] font-extrabold flex items-center justify-center">
                   {activeFiltersCount}
                 </span>
               )}
@@ -447,18 +497,18 @@ const Shop = () => {
 
         {/* Applied Active Filter Pills Bar */}
         {activeFiltersCount > 0 && (
-          <div className="flex flex-wrap items-center gap-2 mb-8 bg-[#111111] p-3 border border-white/[0.06]">
-            <span className="text-[9px] font-bold uppercase tracking-widest text-white/40 mr-1">
+          <div className="flex flex-wrap items-center gap-2 mb-8 bg-white p-3 border border-zinc-200 shadow-sm">
+            <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mr-1">
               Active Filters:
             </span>
 
             {filters.category !== "All" && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/10 text-white text-[9px] font-bold uppercase tracking-wider border border-white/15">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px] font-bold uppercase tracking-wider border border-zinc-300">
                 Category: {filters.category}
                 <button
                   type="button"
                   onClick={() => setFilters(p => ({ ...p, category: "All" }))}
-                  className="hover:text-[#c9a962]"
+                  className="hover:text-[#b8860b]"
                 >
                   <X size={10} />
                 </button>
@@ -466,12 +516,12 @@ const Shop = () => {
             )}
 
             {filters.gender !== "All" && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/10 text-white text-[9px] font-bold uppercase tracking-wider border border-white/15">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px] font-bold uppercase tracking-wider border border-zinc-300">
                 Gender: {filters.gender}
                 <button
                   type="button"
                   onClick={() => setFilters(p => ({ ...p, gender: "All" }))}
-                  className="hover:text-[#c9a962]"
+                  className="hover:text-[#b8860b]"
                 >
                   <X size={10} />
                 </button>
@@ -479,12 +529,12 @@ const Shop = () => {
             )}
 
             {(filters.minPrice > 0 || filters.maxPrice < maxPriceLimit) && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/10 text-white text-[9px] font-bold uppercase tracking-wider border border-white/15">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px] font-bold uppercase tracking-wider border border-zinc-300">
                 Max ₹{filters.maxPrice.toLocaleString("en-IN")}
                 <button
                   type="button"
                   onClick={() => setFilters(p => ({ ...p, minPrice: 0, maxPrice: maxPriceLimit }))}
-                  className="hover:text-[#c9a962]"
+                  className="hover:text-[#b8860b]"
                 >
                   <X size={10} />
                 </button>
@@ -494,7 +544,7 @@ const Shop = () => {
             {filters.sizes.map(sz => (
               <span
                 key={sz}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/10 text-white text-[9px] font-bold uppercase tracking-wider border border-white/15"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px] font-bold uppercase tracking-wider border border-zinc-300"
               >
                 Size: {sz}
                 <button
@@ -502,7 +552,7 @@ const Shop = () => {
                   onClick={() =>
                     setFilters(p => ({ ...p, sizes: p.sizes.filter(x => x !== sz) }))
                   }
-                  className="hover:text-[#c9a962]"
+                  className="hover:text-[#b8860b]"
                 >
                   <X size={10} />
                 </button>
@@ -512,7 +562,7 @@ const Shop = () => {
             {filters.colors.map(col => (
               <span
                 key={col}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/10 text-white text-[9px] font-bold uppercase tracking-wider border border-white/15"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px] font-bold uppercase tracking-wider border border-zinc-300"
               >
                 Color: {col}
                 <button
@@ -520,7 +570,7 @@ const Shop = () => {
                   onClick={() =>
                     setFilters(p => ({ ...p, colors: p.colors.filter(x => x !== col) }))
                   }
-                  className="hover:text-[#c9a962]"
+                  className="hover:text-[#b8860b]"
                 >
                   <X size={10} />
                 </button>
@@ -528,12 +578,12 @@ const Shop = () => {
             ))}
 
             {filters.inStockOnly && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/10 text-white text-[9px] font-bold uppercase tracking-wider border border-white/15">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px] font-bold uppercase tracking-wider border border-zinc-300">
                 In Stock Only
                 <button
                   type="button"
                   onClick={() => setFilters(p => ({ ...p, inStockOnly: false }))}
-                  className="hover:text-[#c9a962]"
+                  className="hover:text-[#b8860b]"
                 >
                   <X size={10} />
                 </button>
@@ -541,12 +591,12 @@ const Shop = () => {
             )}
 
             {filters.onSaleOnly && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/10 text-white text-[9px] font-bold uppercase tracking-wider border border-white/15">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px] font-bold uppercase tracking-wider border border-zinc-300">
                 On Sale
                 <button
                   type="button"
                   onClick={() => setFilters(p => ({ ...p, onSaleOnly: false }))}
-                  className="hover:text-[#c9a962]"
+                  className="hover:text-[#b8860b]"
                 >
                   <X size={10} />
                 </button>
@@ -556,7 +606,7 @@ const Shop = () => {
             <button
               type="button"
               onClick={resetFilters}
-              className="text-[9px] font-bold uppercase tracking-widest text-[#c9a962] hover:underline ml-auto"
+              className="text-[9px] font-bold uppercase tracking-widest text-[#b8860b] hover:underline ml-auto"
             >
               Clear All
             </button>
@@ -582,7 +632,7 @@ const Shop = () => {
           {/* Product Grid Container */}
           <div className="lg:col-span-3">
             {/* Grid Header Info */}
-            <div className="flex items-center justify-between text-[10px] text-white/40 uppercase tracking-widest mb-6 font-semibold">
+            <div className="flex items-center justify-between text-[10px] text-zinc-500 uppercase tracking-widest mb-6 font-semibold">
               <span>Showing {filteredProducts.length} Results</span>
             </div>
 
@@ -590,9 +640,9 @@ const Shop = () => {
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                 {[...Array(6)].map((_, i) => (
                   <div key={i} className="space-y-3">
-                    <div className="aspect-[3/4] bg-white/5 animate-pulse" />
-                    <div className="h-3 bg-white/5 animate-pulse w-2/3" />
-                    <div className="h-3 bg-white/5 animate-pulse w-1/3" />
+                    <div className="aspect-[3/4] bg-zinc-200 animate-pulse" />
+                    <div className="h-3 bg-zinc-200 animate-pulse w-2/3" />
+                    <div className="h-3 bg-zinc-200 animate-pulse w-1/3" />
                   </div>
                 ))}
               </div>
@@ -608,20 +658,20 @@ const Shop = () => {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-24 bg-[#0e0e0e] border border-white/[0.06] p-8 max-w-md mx-auto">
-                <div className="w-14 h-14 border border-white/10 flex items-center justify-center text-white/30 mx-auto mb-5">
+              <div className="text-center py-24 bg-white border border-zinc-200 p-8 max-w-md mx-auto shadow-sm">
+                <div className="w-14 h-14 border border-zinc-300 flex items-center justify-center text-zinc-400 mx-auto mb-5">
                   <Filter size={22} strokeWidth={1.5} />
                 </div>
-                <h3 className="text-lg font-light text-white tracking-widest uppercase mb-2">
+                <h3 className="text-lg font-light text-zinc-900 tracking-widest uppercase mb-2">
                   No Products Match
                 </h3>
-                <p className="text-[12px] text-white/40 leading-relaxed mb-6">
+                <p className="text-[12px] text-zinc-500 leading-relaxed mb-6">
                   Try clearing or adjusting your search keywords, price slider, or selected options.
                 </p>
                 <button
                   type="button"
                   onClick={resetFilters}
-                  className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] bg-white text-black px-6 py-3 hover:bg-white/85 transition-all"
+                  className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] bg-black text-white px-6 py-3 hover:bg-zinc-800 transition-all"
                 >
                   Reset All Filters
                   <ArrowUpRight size={13} />
@@ -639,7 +689,7 @@ const Shop = () => {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-white text-black px-5 py-3 shadow-2xl flex items-center gap-3"
+            className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-black text-white px-5 py-3 shadow-2xl flex items-center gap-3"
           >
             <p className="text-[11px] font-black uppercase tracking-wider whitespace-nowrap">
               {feedbackMessage}

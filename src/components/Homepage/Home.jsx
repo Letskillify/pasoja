@@ -64,7 +64,7 @@ const Home = () => {
   }, []);
 
   return (
-    <main className="bg-[#0a0a0a] min-h-screen selection:bg-white selection:text-black">
+    <main className="bg-[#faf9f5] min-h-screen selection:bg-black selection:text-white">
       <Hero />
       <BenefitsStrip />
       <GallerySwiper />

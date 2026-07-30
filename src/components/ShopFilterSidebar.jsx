@@ -40,26 +40,26 @@ const FilterSection = ({ title, children, defaultOpen = true, activeCount = 0 })
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className="border-b border-white/[0.08] py-4">
+    <div className="border-b border-zinc-200 py-4">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between text-left group cursor-pointer py-1"
       >
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold uppercase tracking-[0.18em] text-white/80 group-hover:text-white transition-colors">
+          <span className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-900 group-hover:text-black transition-colors">
             {title}
           </span>
           {activeCount > 0 && (
-            <span className="w-5 h-5 rounded-full bg-[#c9a962] text-black shop-sidebar-badge flex items-center justify-center font-extrabold shrink-0">
+            <span className="w-5 h-5 rounded-full bg-[#b8860b] text-white shop-sidebar-badge flex items-center justify-center font-extrabold shrink-0">
               {activeCount}
             </span>
           )}
         </div>
         {isOpen ? (
-          <ChevronUp size={14} className="text-white/40 group-hover:text-white transition-colors shrink-0" />
+          <ChevronUp size={14} className="text-zinc-400 group-hover:text-black transition-colors shrink-0" />
         ) : (
-          <ChevronDown size={14} className="text-white/40 group-hover:text-white transition-colors shrink-0" />
+          <ChevronDown size={14} className="text-zinc-400 group-hover:text-black transition-colors shrink-0" />
         )}
       </button>
 
@@ -120,13 +120,13 @@ const ShopFilterSidebar = ({
   };
 
   const sidebarContent = (
-    <div className="flex flex-col h-full space-y-2">
+    <div className="flex flex-col h-full space-y-2 text-zinc-900">
       {/* Header */}
-      <div className="pb-4 border-b border-white/[0.08] space-y-2.5">
+      <div className="pb-4 border-b border-zinc-200 space-y-2.5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Filter size={15} className="text-[#c9a962]" />
-            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white">
+            <Filter size={15} className="text-[#b8860b]" />
+            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-zinc-900">
               Refine By
             </h2>
           </div>
@@ -135,7 +135,7 @@ const ShopFilterSidebar = ({
             <button
               type="button"
               onClick={resetFilters}
-              className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-white/40 hover:text-[#c9a962] transition-colors"
+              className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-zinc-400 hover:text-[#b8860b] transition-colors"
             >
               <RotateCcw size={11} />
               <span>Reset All</span>
@@ -144,14 +144,14 @@ const ShopFilterSidebar = ({
         </div>
 
         {activeCount > 0 && (
-          <div className="flex items-center justify-between px-3 py-1.5 bg-[#c9a962]/10 border border-[#c9a962]/30 rounded-sm">
-            <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#c9a962] shop-sidebar-badge">
+          <div className="flex items-center justify-between px-3 py-1.5 bg-[#b8860b]/10 border border-[#b8860b]/30 rounded-sm">
+            <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#b8860b] shop-sidebar-badge">
               {activeCount} Filter{activeCount > 1 ? "s" : ""} Active
             </span>
             <button
               type="button"
               onClick={resetFilters}
-              className="text-[9px] font-bold uppercase tracking-wider text-white/50 hover:text-white"
+              className="text-[9px] font-bold uppercase tracking-wider text-zinc-500 hover:text-black"
             >
               Clear
             </button>
@@ -178,12 +178,12 @@ const ShopFilterSidebar = ({
                   onClick={() => setFilters(prev => ({ ...prev, category: cat }))}
                   className={`w-full flex items-center justify-between py-2 px-3 text-left uppercase transition-all rounded-sm ${
                     isSelected
-                      ? "bg-white/10 text-white font-bold border-l-2 border-[#c9a962]"
-                      : "text-white/50 hover:text-white hover:bg-white/[0.03]"
+                      ? "bg-zinc-100 text-zinc-900 font-bold border-l-2 border-[#b8860b]"
+                      : "text-zinc-600 hover:text-black hover:bg-zinc-50"
                   }`}
                 >
                   <span className="shop-sidebar-label">{cat}</span>
-                  {isSelected && <Check size={13} className="text-[#c9a962] shrink-0" />}
+                  {isSelected && <Check size={13} className="text-[#b8860b] shrink-0" />}
                 </button>
               );
             })}
@@ -206,8 +206,8 @@ const ShopFilterSidebar = ({
                   onClick={() => setFilters(prev => ({ ...prev, gender: g }))}
                   className={`py-2 px-2 text-center border uppercase transition-all ${
                     isSelected
-                      ? "bg-white text-black border-white font-bold"
-                      : "bg-transparent text-white/50 border-white/10 hover:border-white/30 hover:text-white"
+                      ? "bg-black text-white border-black font-bold"
+                      : "bg-white text-zinc-600 border-zinc-300 hover:border-black hover:text-black"
                   }`}
                 >
                   <span className="shop-sidebar-label">{g}</span>
@@ -225,9 +225,9 @@ const ShopFilterSidebar = ({
         >
           <div className="space-y-3.5">
             {/* Price values readout */}
-            <div className="flex items-center justify-between text-xs font-mono text-white/80">
+            <div className="flex items-center justify-between text-xs font-mono text-zinc-700">
               <span>₹{filters.minPrice?.toLocaleString("en-IN")}</span>
-              <span className="text-[#c9a962] font-bold">₹{filters.maxPrice?.toLocaleString("en-IN")}</span>
+              <span className="text-[#b8860b] font-bold">₹{filters.maxPrice?.toLocaleString("en-IN")}</span>
             </div>
 
             {/* Slider */}
@@ -241,7 +241,7 @@ const ShopFilterSidebar = ({
                 onChange={e =>
                   setFilters(prev => ({ ...prev, maxPrice: Number(e.target.value) }))
                 }
-                className="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[#c9a962]"
+                className="w-full h-1 bg-zinc-200 rounded-lg appearance-none cursor-pointer accent-[#b8860b]"
               />
             </div>
 
@@ -268,8 +268,8 @@ const ShopFilterSidebar = ({
                     }
                     className={`py-2 px-2 border text-center uppercase transition-all rounded-sm flex items-center justify-center ${
                       isSelected
-                        ? "border-[#c9a962] bg-[#c9a962]/15 text-[#c9a962] font-bold"
-                        : "border-white/10 text-white/50 hover:border-white/20 hover:text-white"
+                        ? "border-[#b8860b] bg-[#b8860b]/10 text-[#b8860b] font-bold"
+                        : "border-zinc-300 text-zinc-600 hover:border-black hover:text-black"
                     }`}
                   >
                     <span className="shop-sidebar-preset-btn">{preset.label}</span>
@@ -296,8 +296,8 @@ const ShopFilterSidebar = ({
                   onClick={() => toggleArrayFilter("sizes", sz)}
                   className={`w-10 h-10 flex items-center justify-center border font-bold uppercase transition-all ${
                     isSelected
-                      ? "bg-white text-black border-white shadow-lg"
-                      : "bg-transparent text-white/45 border-white/10 hover:border-white/30 hover:text-white"
+                      ? "bg-black text-white border-black shadow"
+                      : "bg-white text-zinc-600 border-zinc-300 hover:border-black hover:text-black"
                   }`}
                 >
                   <span className="shop-sidebar-label">{sz}</span>
@@ -329,13 +329,13 @@ const ShopFilterSidebar = ({
                     onClick={() => toggleArrayFilter("colors", colorName)}
                     className={`group relative w-7 h-7 rounded-full flex items-center justify-center transition-transform hover:scale-110 ${
                       isSelected
-                        ? "ring-2 ring-offset-2 ring-[#c9a962] ring-offset-[#0a0a0a] scale-110"
+                        ? "ring-2 ring-offset-2 ring-[#b8860b] ring-offset-white scale-110"
                         : "opacity-70 hover:opacity-100"
                     }`}
                     style={{ backgroundColor: hexColor }}
                   >
                     {isWhite && (
-                      <span className="absolute inset-0 rounded-full border border-white/20" />
+                      <span className="absolute inset-0 rounded-full border border-zinc-300" />
                     )}
                     {isSelected && (
                       <Check
@@ -363,13 +363,13 @@ const ShopFilterSidebar = ({
                 return (
                   <label
                     key={mat}
-                    className="flex items-center gap-2.5 text-white/60 hover:text-white cursor-pointer py-1 uppercase tracking-wider"
+                    className="flex items-center gap-2.5 text-zinc-600 hover:text-black cursor-pointer py-1 uppercase tracking-wider"
                   >
                     <input
                       type="checkbox"
                       checked={isSelected}
                       onChange={() => toggleArrayFilter("materials", mat)}
-                      className="w-3.5 h-3.5 accent-[#c9a962] bg-[#141414] border-white/20 rounded-sm"
+                      className="w-3.5 h-3.5 accent-[#b8860b] bg-white border-zinc-300 rounded-sm"
                     />
                     <span className="shop-sidebar-label">{mat}</span>
                   </label>
@@ -386,7 +386,7 @@ const ShopFilterSidebar = ({
           activeCount={(filters.inStockOnly ? 1 : 0) + (filters.onSaleOnly ? 1 : 0)}
         >
           <div className="space-y-2">
-            <label className="flex items-center justify-between text-white/70 uppercase tracking-wider cursor-pointer hover:text-white py-1">
+            <label className="flex items-center justify-between text-zinc-600 uppercase tracking-wider cursor-pointer hover:text-black py-1">
               <span className="shop-sidebar-label">In Stock Only</span>
               <input
                 type="checkbox"
@@ -394,11 +394,11 @@ const ShopFilterSidebar = ({
                 onChange={e =>
                   setFilters(prev => ({ ...prev, inStockOnly: e.target.checked }))
                 }
-                className="w-4 h-4 accent-[#c9a962] bg-[#141414] border-white/20"
+                className="w-4 h-4 accent-[#b8860b] bg-white border-zinc-300"
               />
             </label>
 
-            <label className="flex items-center justify-between text-white/70 uppercase tracking-wider cursor-pointer hover:text-white py-1">
+            <label className="flex items-center justify-between text-zinc-600 uppercase tracking-wider cursor-pointer hover:text-black py-1">
               <span className="shop-sidebar-label">On Sale / Discounted</span>
               <input
                 type="checkbox"
@@ -406,7 +406,7 @@ const ShopFilterSidebar = ({
                 onChange={e =>
                   setFilters(prev => ({ ...prev, onSaleOnly: e.target.checked }))
                 }
-                className="w-4 h-4 accent-[#c9a962] bg-[#141414] border-white/20"
+                className="w-4 h-4 accent-[#b8860b] bg-white border-zinc-300"
               />
             </label>
           </div>
@@ -433,15 +433,15 @@ const ShopFilterSidebar = ({
                   }
                   className={`w-full flex items-center justify-between py-2 px-3 uppercase transition-colors rounded-sm ${
                     isSelected
-                      ? "bg-white/10 text-white font-bold"
-                      : "text-white/50 hover:text-white"
+                      ? "bg-zinc-100 text-zinc-900 font-bold"
+                      : "text-zinc-600 hover:text-black hover:bg-zinc-50"
                   }`}
                 >
-                  <div className="flex items-center gap-1.5 text-[#c9a962]">
+                  <div className="flex items-center gap-1.5 text-[#b8860b]">
                     <Star size={12} fill="currentColor" />
                     <span className="shop-sidebar-label">{stars} & Above</span>
                   </div>
-                  {isSelected && <Check size={13} className="text-[#c9a962] shrink-0" />}
+                  {isSelected && <Check size={13} className="text-[#b8860b] shrink-0" />}
                 </button>
               );
             })}
@@ -469,7 +469,7 @@ const ShopFilterSidebar = ({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={onClose}
-              className="fixed inset-0 bg-black/80 backdrop-blur-md"
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm"
             />
 
             {/* Slide Drawer */}
@@ -478,16 +478,16 @@ const ShopFilterSidebar = ({
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative w-full max-w-xs sm:max-w-sm bg-[#0c0c0c] border-r border-white/10 h-full p-6 flex flex-col justify-between shadow-2xl z-10"
+              className="relative w-full max-w-xs sm:max-w-sm bg-[#faf9f5] border-r border-zinc-200 h-full p-6 flex flex-col justify-between shadow-2xl z-10 text-zinc-900"
             >
-              <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
-                <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#c9a962]">
+              <div className="flex items-center justify-between pb-4 border-b border-zinc-200">
+                <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#b8860b]">
                   Filter Products
                 </span>
                 <button
                   type="button"
                   onClick={onClose}
-                  className="p-1 text-white/50 hover:text-white"
+                  className="p-1 text-zinc-400 hover:text-black"
                 >
                   <X size={18} />
                 </button>
@@ -496,21 +496,21 @@ const ShopFilterSidebar = ({
               {sidebarContent}
 
               {/* Mobile Drawer Bottom Actions */}
-              <div className="pt-4 border-t border-white/[0.08] flex items-center gap-3">
+              <div className="pt-4 border-t border-zinc-200 flex items-center gap-3">
                 <button
                   type="button"
                   onClick={() => {
                     resetFilters();
                     onClose();
                   }}
-                  className="w-1/3 py-3 border border-white/20 text-[10px] font-bold uppercase tracking-widest text-white/60 hover:text-white"
+                  className="w-1/3 py-3 border border-zinc-300 text-[10px] font-bold uppercase tracking-widest text-zinc-600 hover:text-black"
                 >
                   Reset
                 </button>
                 <button
                   type="button"
                   onClick={onClose}
-                  className="w-2/3 py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest hover:bg-white/85 transition-all"
+                  className="w-2/3 py-3 bg-black text-white text-[10px] font-black uppercase tracking-widest hover:bg-zinc-800 transition-all"
                 >
                   Show ({totalResults})
                 </button>

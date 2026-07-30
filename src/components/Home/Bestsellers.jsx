@@ -55,18 +55,18 @@ const ProductCard = ({ product, idx, triggerToast }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => navigate(`/product/${product.id}`)}
-      className="group relative cursor-pointer flex flex-col bg-[#0f0f0f] border border-white/[0.04] transition-all duration-500 hover:border-white/10 w-full"
+      className="group relative cursor-pointer flex flex-col bg-white border border-zinc-200 transition-all duration-500 hover:border-black/30 w-full"
     >
       {/* Product Image Area */}
-      <div className="relative w-full aspect-[3/4] overflow-hidden bg-[#131313] flex items-center justify-center">
+      <div className="relative w-full aspect-[3/4] overflow-hidden bg-zinc-100 flex items-center justify-center">
         <img
           src={displayedImage}
           alt={product.name}
           className="w-full h-full object-cover transition-transform duration-700 ease-out"
         />
 
-        {/* Dark subtle overlay */}
-        <div className="absolute inset-0 bg-black/[0.02] pointer-events-none" />
+        {/* Subtle overlay */}
+        <div className="absolute inset-0 bg-black/[0.01] pointer-events-none" />
 
         {/* Out of Stock Overlay */}
         {isOutOfStock && (
@@ -89,13 +89,13 @@ const ProductCard = ({ product, idx, triggerToast }) => {
         {/* Wishlist Heart Icon */}
         <button
           onClick={(e) => handleAction(e, 'wishlist')}
-          className="absolute top-3.5 right-3.5 z-30 text-white hover:scale-110 transition-transform duration-300 pointer-events-auto cursor-pointer"
+          className="absolute top-3.5 right-3.5 z-30 text-zinc-700 hover:text-black hover:scale-110 transition-all duration-300 pointer-events-auto cursor-pointer"
         >
           <Heart
             size={16}
             strokeWidth={1.8}
             fill={isWishlisted ? "#e53e3e" : "none"}
-            stroke={isWishlisted ? "#e53e3e" : "#ffffff"}
+            stroke={isWishlisted ? "#e53e3e" : "currentColor"}
           />
         </button>
 
@@ -104,9 +104,9 @@ const ProductCard = ({ product, idx, triggerToast }) => {
           <div className="absolute bottom-0 inset-x-0 z-20 overflow-hidden h-10 pointer-events-auto">
             <button
               onClick={(e) => handleAction(e, 'cart')}
-              className={`w-full h-full bg-[#111111] text-white text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 flex items-center justify-center ${
+              className={`w-full h-full bg-black text-white text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 flex items-center justify-center ${
                 isHovered ? 'translate-y-0' : 'translate-y-full'
-              } hover:bg-white hover:text-black`}
+              } hover:bg-zinc-800`}
             >
               {isInCart ? 'IN BAG' : 'ADD TO CART'}
             </button>
@@ -115,14 +115,14 @@ const ProductCard = ({ product, idx, triggerToast }) => {
       </div>
 
       {/* Info Area (Text displays below product) */}
-      <div className="pt-4 pb-5 px-1 flex flex-col text-left">
-        <h3 className="text-xs md:text-sm font-bold text-white uppercase tracking-wider line-clamp-1 leading-snug mb-1">
+      <div className="pt-4 pb-5 px-3 flex flex-col text-left bg-white">
+        <h3 className="text-xs md:text-sm font-bold text-zinc-900 uppercase tracking-wider line-clamp-1 leading-snug mb-1">
           {product.name}
         </h3>
         
         {/* Prices */}
         <div className="flex items-baseline gap-2.5">
-          <span className="text-xs text-zinc-500 line-through">
+          <span className="text-xs text-zinc-400 line-through">
             Rs.{originalPrice?.toLocaleString('en-IN')}.00
           </span>
           <span className="text-sm font-bold text-[#e53e3e]">
@@ -171,20 +171,20 @@ const BestsellerProducts = () => {
 
   if (loading) {
     return (
-      <section className="py-16 md:py-24 bg-[#080808]">
+      <section className="py-8 md:py-12 bg-[#faf9f5]">
         <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-10">
             <div>
-              <div className="h-3 w-24 bg-white/5 mb-4 animate-pulse" />
-              <div className="h-8 w-52 bg-white/10 animate-pulse" />
+              <div className="h-3 w-24 bg-zinc-200 mb-4 animate-pulse" />
+              <div className="h-8 w-52 bg-zinc-200 animate-pulse" />
             </div>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="space-y-3">
-                <div className="aspect-[3/4] bg-white/5 animate-pulse" />
-                <div className="h-3 bg-white/5 animate-pulse w-2/3" />
-                <div className="h-3 bg-white/5 animate-pulse w-1/3" />
+                <div className="aspect-[3/4] bg-zinc-200 animate-pulse" />
+                <div className="h-3 bg-zinc-200 animate-pulse w-2/3" />
+                <div className="h-3 bg-zinc-200 animate-pulse w-1/3" />
               </div>
             ))}
           </div>
@@ -194,37 +194,37 @@ const BestsellerProducts = () => {
   }
 
   return (
-    <section className="py-16 md:py-24 bg-[#080808] overflow-hidden">
+    <section className="py-8 md:py-12 bg-[#faf9f5] overflow-hidden border-t border-zinc-200">
       <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Premium Header Layout */}
-        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="flex-1 flex flex-col md:flex-row md:items-end gap-6 md:gap-12">
             <div>
               <p className="text-[10px] sm:text-xs tracking-[0.3em] text-zinc-500 uppercase mb-2 font-medium">
                 NEW ARRIVALS
               </p>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extralight tracking-[0.15em] text-white uppercase whitespace-nowrap leading-none">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extralight tracking-[0.15em] text-zinc-900 uppercase whitespace-nowrap leading-none">
                 FRESH DROPS
               </h2>
             </div>
-            <div className="hidden md:block flex-1 h-[1px] bg-zinc-800/80 mb-3" />
+            <div className="hidden md:block flex-1 h-[1px] bg-zinc-200 mb-3" />
           </div>
           
           <div className="flex items-center gap-6 self-start md:self-auto">
-            <p className="text-zinc-400 text-xs sm:text-sm tracking-wide max-w-[280px] font-light leading-relaxed text-left md:text-right">
+            <p className="text-zinc-600 text-xs sm:text-sm tracking-wide max-w-[280px] font-light leading-relaxed text-left md:text-right">
               The latest arrivals crafted for those who set the trend.
             </p>
             <div className="flex gap-2.5">
               <button 
                 onClick={() => swiperRef.current?.slidePrev()}
-                className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white transition-all duration-300 cursor-pointer"
+                className="w-10 h-10 rounded-full border border-zinc-300 flex items-center justify-center text-zinc-700 hover:text-black hover:border-black transition-all duration-300 cursor-pointer"
               >
                 &larr;
               </button>
               <button 
                 onClick={() => swiperRef.current?.slideNext()}
-                className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white transition-all duration-300 cursor-pointer"
+                className="w-10 h-10 rounded-full border border-zinc-300 flex items-center justify-center text-zinc-700 hover:text-black hover:border-black transition-all duration-300 cursor-pointer"
               >
                 &rarr;
               </button>

@@ -139,57 +139,57 @@ const Checkout = () => {
     }
   };
 
-  const inputClass = "w-full bg-[#0a0a0a] border border-white/10 px-4 py-3 text-sm text-white outline-none focus:border-white/30 transition-colors placeholder:text-white/20";
+  const inputClass = "w-full bg-white border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none focus:border-zinc-500 transition-colors placeholder:text-zinc-400";
 
   if (loading) return <MiniLoader message="Preparing Checkout" />;
 
   if (!user) return (
-    <div className="min-h-screen bg-[#0a0a0a]">
+    <div className="min-h-screen bg-[#faf9f5]">
       <PageHeader title="Checkout" subtitle="Secure your order" breadcrumbItems={[{ label: "Home", path: "/" }, { label: "Checkout" }]} />
       <div className="flex flex-col items-center justify-center py-28 px-6 text-center">
-        <div className="w-16 h-16 border border-white/10 flex items-center justify-center mb-5">
-          <ShieldCheck size={26} strokeWidth={1.2} className="text-white/30" />
+        <div className="w-16 h-16 border border-zinc-300 flex items-center justify-center mb-5 bg-white shadow-sm">
+          <ShieldCheck size={26} strokeWidth={1.2} className="text-zinc-500" />
         </div>
-        <h2 className="text-xl font-light text-white tracking-widest uppercase mb-2">Sign in Required</h2>
-        <p className="text-[13px] text-white/35 max-w-xs mb-6 leading-relaxed">Please sign in to proceed with your order.</p>
-        <Link to="/login?redirect=checkout" className="px-8 py-3.5 bg-white text-black font-semibold text-[11px] uppercase tracking-[0.2em] hover:bg-white/85 transition-all">Sign In</Link>
+        <h2 className="text-xl font-light text-zinc-900 tracking-widest uppercase mb-2">Sign in Required</h2>
+        <p className="text-[13px] text-zinc-500 max-w-xs mb-6 leading-relaxed">Please sign in to proceed with your order.</p>
+        <Link to="/login?redirect=checkout" className="px-8 py-3.5 bg-black text-white font-semibold text-[11px] uppercase tracking-[0.2em] hover:bg-zinc-800 transition-all shadow-sm">Sign In</Link>
       </div>
     </div>
   );
 
   if (orderStatus === "success") return (
-    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-6">
-      <div className="max-w-md text-center py-20">
+    <div className="min-h-screen bg-[#faf9f5] flex items-center justify-center px-6">
+      <div className="max-w-md text-center py-20 bg-white border border-zinc-200 p-8 shadow-sm">
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-          className="w-20 h-20 border border-white/10 flex items-center justify-center mx-auto mb-6"
+          className="w-20 h-20 border border-zinc-300 flex items-center justify-center mx-auto mb-6 bg-zinc-50"
         >
-          <CheckCircle size={36} className="text-white/60" />
+          <CheckCircle size={36} className="text-emerald-600" />
         </motion.div>
-        <h2 className="text-3xl font-light text-white tracking-widest uppercase mb-3">Order Confirmed!</h2>
-        <p className="text-[14px] text-white/35 mb-8 leading-relaxed">Thank you. We're preparing your order for shipment.</p>
+        <h2 className="text-3xl font-light text-zinc-900 tracking-widest uppercase mb-3">Order Confirmed!</h2>
+        <p className="text-[14px] text-zinc-600 mb-8 leading-relaxed">Thank you. We're preparing your order for shipment.</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link to="/orders" className="px-6 py-3.5 bg-white text-black font-semibold text-[10px] uppercase tracking-[0.2em] hover:bg-white/85 transition-all">View Orders</Link>
-          <Link to="/shop" className="px-6 py-3.5 bg-transparent border border-white/15 text-white/60 font-semibold text-[10px] uppercase tracking-[0.2em] hover:border-white/35 hover:text-white transition-all">Continue Shopping</Link>
+          <Link to="/orders" className="px-6 py-3.5 bg-black text-white font-semibold text-[10px] uppercase tracking-[0.2em] hover:bg-zinc-800 transition-all shadow-sm">View Orders</Link>
+          <Link to="/shop" className="px-6 py-3.5 bg-white border border-zinc-300 text-zinc-700 font-semibold text-[10px] uppercase tracking-[0.2em] hover:border-black hover:text-black transition-all shadow-sm">Continue Shopping</Link>
         </div>
       </div>
     </div>
   );
 
   if (orderStatus === "failed") return (
-    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-6">
-      <div className="max-w-md text-center py-20">
-        <div className="w-20 h-20 border border-red-800/30 flex items-center justify-center mx-auto mb-6">
-          <X size={36} className="text-red-400" />
+    <div className="min-h-screen bg-[#faf9f5] flex items-center justify-center px-6">
+      <div className="max-w-md text-center py-20 bg-white border border-zinc-200 p-8 shadow-sm">
+        <div className="w-20 h-20 border border-red-300 bg-red-50 flex items-center justify-center mx-auto mb-6">
+          <X size={36} className="text-red-600" />
         </div>
-        <h2 className="text-3xl font-light text-white tracking-widest uppercase mb-3">Payment Failed</h2>
-        <p className="text-[14px] text-white/35 mb-8 leading-relaxed">The transaction could not be completed. Please try again.</p>
-        <button onClick={() => setOrderStatus(null)} className="px-8 py-3.5 bg-white text-black font-semibold text-[10px] uppercase tracking-widest hover:bg-white/85 transition-all">Try Again</button>
+        <h2 className="text-3xl font-light text-zinc-900 tracking-widest uppercase mb-3">Payment Failed</h2>
+        <p className="text-[14px] text-zinc-600 mb-8 leading-relaxed">The transaction could not be completed. Please try again.</p>
+        <button onClick={() => setOrderStatus(null)} className="px-8 py-3.5 bg-black text-white font-semibold text-[10px] uppercase tracking-widest hover:bg-zinc-800 transition-all shadow-sm">Try Again</button>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]">
+    <div className="min-h-screen bg-[#faf9f5]">
       <PageHeader title="Checkout" subtitle="Complete your purchase" breadcrumbItems={[{ label: "Home", path: "/" }, { label: "Cart", path: "/cart" }, { label: "Checkout" }]} />
 
       <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14 py-10 md:py-14">
@@ -201,19 +201,19 @@ const Checkout = () => {
 
               {/* Shipping */}
               <section className="space-y-5">
-                <div className="flex items-center gap-3 pb-4 border-b border-white/[0.06]">
-                  <div className="w-9 h-9 border border-white/10 text-white/30 flex items-center justify-center"><MapPin size={15} /></div>
-                  <h2 className="text-[13px] font-light text-white uppercase tracking-widest">Shipping Address</h2>
+                <div className="flex items-center gap-3 pb-4 border-b border-zinc-200">
+                  <div className="w-9 h-9 border border-zinc-300 text-zinc-600 flex items-center justify-center bg-white"><MapPin size={15} /></div>
+                  <h2 className="text-[13px] font-light text-zinc-900 uppercase tracking-widest">Shipping Address</h2>
                 </div>
 
                 {/* SAVED ADDRESS SELECTOR */}
                 {savedAddresses.length > 0 && (
-                  <div className="space-y-3 mb-6 bg-[#0c0c0c] border border-white/[0.08] p-4 rounded">
+                  <div className="space-y-3 mb-6 bg-white border border-zinc-200 p-4 rounded shadow-sm">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-[#c9a962] uppercase tracking-widest">
+                      <span className="text-[10px] font-bold text-[#b8860b] uppercase tracking-widest">
                         Choose Saved Shipping Address
                       </span>
-                      <Link to="/account" className="text-[9px] text-white/40 hover:text-white uppercase tracking-wider underline">
+                      <Link to="/account" className="text-[9px] text-zinc-500 hover:text-black uppercase tracking-wider underline">
                         Manage Addresses
                       </Link>
                     </div>
@@ -239,27 +239,27 @@ const Checkout = () => {
                             }}
                             className={`p-3.5 border cursor-pointer transition-all relative rounded ${
                               isSelected
-                                ? 'border-white bg-white/[0.08] shadow-md'
-                                : 'border-white/10 bg-[#0a0a0a] hover:border-white/25'
+                                ? 'border-black bg-zinc-50 shadow-sm'
+                                : 'border-zinc-200 bg-white hover:border-zinc-400'
                             }`}
                           >
                             {addr.isDefault && (
-                              <span className="absolute top-2 right-2 px-2 py-0.5 bg-[#c9a962]/15 border border-[#c9a962]/30 text-[#c9a962] text-[8px] font-bold uppercase tracking-wider">
+                              <span className="absolute top-2 right-2 px-2 py-0.5 bg-[#b8860b]/15 border border-[#b8860b]/30 text-[#b8860b] text-[8px] font-bold uppercase tracking-wider">
                                 Default
                               </span>
                             )}
                             <div className="flex items-start gap-2.5">
                               <div className={`w-4 h-4 rounded-full border flex items-center justify-center mt-0.5 shrink-0 ${
-                                isSelected ? 'border-white bg-white text-black' : 'border-white/30'
+                                isSelected ? 'border-black bg-black text-white' : 'border-zinc-400'
                               }`}>
-                                {isSelected && <div className="w-1.5 h-1.5 bg-black rounded-full" />}
+                                {isSelected && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
                               </div>
                               <div className="space-y-1 text-xs pr-10">
-                                <p className="font-bold text-white uppercase tracking-wide">{addr.name}</p>
-                                <p className="text-white/40 text-[11px] leading-relaxed line-clamp-2">
+                                <p className="font-bold text-zinc-900 uppercase tracking-wide">{addr.name}</p>
+                                <p className="text-zinc-500 text-[11px] leading-relaxed line-clamp-2">
                                   {addr.address}, {addr.city}, {addr.state} - {addr.pincode}
                                 </p>
-                                <p className="text-[10px] text-[#c9a962] font-semibold">Ph: {addr.phone}</p>
+                                <p className="text-[10px] text-[#b8860b] font-semibold">Ph: {addr.phone}</p>
                               </div>
                             </div>
                           </div>
@@ -279,12 +279,12 @@ const Checkout = () => {
                         }}
                         className={`p-3.5 border cursor-pointer transition-all flex items-center justify-center gap-2 rounded ${
                           selectedAddressId === "custom"
-                            ? 'border-white bg-white/[0.08]'
-                            : 'border-dashed border-white/15 bg-[#0a0a0a] hover:border-white/30'
+                            ? 'border-black bg-zinc-50'
+                            : 'border-dashed border-zinc-300 bg-white hover:border-zinc-400'
                         }`}
                       >
-                        <Plus size={14} className="text-white/40" />
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-white/60">
+                        <Plus size={14} className="text-zinc-500" />
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-700">
                           + Enter Custom Address
                         </span>
                       </div>
@@ -293,26 +293,26 @@ const Checkout = () => {
                 )}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25">Full Name</label>
-                    <div className="relative"><User size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20" /><input type="text" name="name" required value={formData.name} onChange={handleInputChange} className={`${inputClass} pl-10`} placeholder="Your name" /></div>
+                    <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500">Full Name</label>
+                    <div className="relative"><User size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" /><input type="text" name="name" required value={formData.name} onChange={handleInputChange} className={`${inputClass} pl-10`} placeholder="Your name" /></div>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25">Email</label>
-                    <div className="relative"><Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20" /><input type="email" name="email" required value={formData.email} onChange={handleInputChange} className={`${inputClass} pl-10`} placeholder="email@example.com" /></div>
+                    <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500">Email</label>
+                    <div className="relative"><Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" /><input type="email" name="email" required value={formData.email} onChange={handleInputChange} className={`${inputClass} pl-10`} placeholder="email@example.com" /></div>
                   </div>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25">Phone Number</label>
-                  <div className="relative"><Phone size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20" /><input type="tel" name="phone" required value={formData.phone} onChange={handleInputChange} className={`${inputClass} pl-10`} placeholder="+91 00000 00000" /></div>
+                  <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500">Phone Number</label>
+                  <div className="relative"><Phone size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" /><input type="tel" name="phone" required value={formData.phone} onChange={handleInputChange} className={`${inputClass} pl-10`} placeholder="+91 00000 00000" /></div>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25">Full Address</label>
+                  <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500">Full Address</label>
                   <textarea name="address" required rows={3} value={formData.address} onChange={handleInputChange} className={`${inputClass} resize-none`} placeholder="Street, house number, area" />
                 </div>
                 <div className="grid grid-cols-3 gap-4">
                   {["city", "state", "pincode"].map((field) => (
                     <div key={field} className="space-y-1.5">
-                      <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25 capitalize">{field}</label>
+                      <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500 capitalize">{field}</label>
                       <input type="text" name={field} required value={formData[field]} onChange={handleInputChange} className={inputClass} placeholder={field === 'pincode' ? "000000" : ""} />
                     </div>
                   ))}
@@ -320,10 +320,10 @@ const Checkout = () => {
               </section>
 
               {/* Payment */}
-              <section className="space-y-5 pt-6 border-t border-white/[0.06]">
-                <div className="flex items-center gap-3 pb-4 border-b border-white/[0.06]">
-                  <div className="w-9 h-9 border border-white/10 text-white/30 flex items-center justify-center"><CreditCard size={15} /></div>
-                  <h2 className="text-[13px] font-light text-white uppercase tracking-widest">Payment Method</h2>
+              <section className="space-y-5 pt-6 border-t border-zinc-200">
+                <div className="flex items-center gap-3 pb-4 border-b border-zinc-200">
+                  <div className="w-9 h-9 border border-zinc-300 text-zinc-600 flex items-center justify-center bg-white"><CreditCard size={15} /></div>
+                  <h2 className="text-[13px] font-light text-zinc-900 uppercase tracking-widest">Payment Method</h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {[
@@ -334,12 +334,12 @@ const Checkout = () => {
                     const active = formData.paymentMethod === method.id;
                     return (
                       <button key={method.id} type="button" onClick={() => setFormData(p => ({ ...p, paymentMethod: method.id }))}
-                        className={`p-4 border-2 transition-all flex items-start gap-3 text-left ${active ? 'border-white bg-white/5' : 'border-white/10 hover:border-white/25'}`}
+                        className={`p-4 border-2 transition-all flex items-start gap-3 text-left ${active ? 'border-black bg-zinc-50' : 'border-zinc-200 bg-white hover:border-zinc-400'}`}
                       >
-                        <div className={`w-9 h-9 flex items-center justify-center shrink-0 border ${active ? 'bg-white text-black border-white' : 'text-white/30 border-white/10'}`}><Icon size={15} /></div>
+                        <div className={`w-9 h-9 flex items-center justify-center shrink-0 border ${active ? 'bg-black text-white border-black' : 'text-zinc-500 border-zinc-300 bg-white'}`}><Icon size={15} /></div>
                         <div>
-                          <p className={`text-[11px] font-semibold uppercase tracking-wider ${active ? 'text-white' : 'text-white/35'}`}>{method.label}</p>
-                          <p className="text-[10px] text-white/25 mt-0.5">{method.desc}</p>
+                          <p className={`text-[11px] font-semibold uppercase tracking-wider ${active ? 'text-zinc-900' : 'text-zinc-600'}`}>{method.label}</p>
+                          <p className="text-[10px] text-zinc-400 mt-0.5">{method.desc}</p>
                         </div>
                       </button>
                     );
@@ -348,40 +348,40 @@ const Checkout = () => {
               </section>
 
               <button type="submit" disabled={isProcessing}
-                className="w-full py-4 bg-white hover:bg-white/85 text-black font-semibold text-[11px] uppercase tracking-[0.2em] transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2.5"
+                className="w-full py-4 bg-black hover:bg-zinc-800 text-white font-semibold text-[11px] uppercase tracking-[0.2em] transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2.5"
               >
-                {isProcessing ? <><div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />Processing...</> : <>Place Order</>}
+                {isProcessing ? <><div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />Processing...</> : <>Place Order</>}
               </button>
             </form>
           </div>
 
           {/* Summary */}
           <div className="lg:col-span-5">
-            <div className="bg-[#0c0c0c] border border-white/[0.06] p-6 sticky top-28">
-              <h3 className="text-[10px] font-semibold text-white/30 uppercase tracking-[0.25em] mb-5 pb-4 border-b border-white/[0.06]">Order Summary</h3>
+            <div className="bg-white border border-zinc-200 p-6 sticky top-28 shadow-sm">
+              <h3 className="text-[10px] font-semibold text-zinc-500 uppercase tracking-[0.25em] mb-5 pb-4 border-b border-zinc-200">Order Summary</h3>
               <div className="space-y-4 mb-6 max-h-[300px] overflow-auto pr-1">
                 {items.map((item) => (
                   <div key={item.id} className="flex gap-3">
-                    <div className="w-16 h-16 bg-[#1a1a1a] shrink-0 border border-white/[0.06] p-1.5">
+                    <div className="w-16 h-16 bg-zinc-100 shrink-0 border border-zinc-200 p-1.5">
                       <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
                     </div>
                     <div className="flex-1 py-0.5">
-                      <h4 className="text-[12px] font-bold text-white/80 line-clamp-1">{item.name}</h4>
-                      {item.size && <p className="text-[10px] text-white/30 uppercase tracking-wider mt-0.5">Size: {item.size}</p>}
+                      <h4 className="text-[12px] font-bold text-zinc-900 line-clamp-1">{item.name}</h4>
+                      {item.size && <p className="text-[10px] text-zinc-500 uppercase tracking-wider mt-0.5">Size: {item.size}</p>}
                       <div className="flex justify-between items-center mt-1.5">
-                        <span className="text-[12px] font-bold text-white">₹{item.price}</span>
-                        <span className="text-[9px] text-white/25 bg-white/5 border border-white/10 px-1.5 py-0.5">×{item.quantity || 1}</span>
+                        <span className="text-[12px] font-bold text-zinc-900">₹{item.price}</span>
+                        <span className="text-[9px] text-zinc-600 bg-zinc-100 border border-zinc-200 px-1.5 py-0.5">×{item.quantity || 1}</span>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="space-y-2.5 pt-4 border-t border-white/[0.06]">
-                <div className="flex justify-between text-[12px]"><span className="text-white/35">Subtotal</span><span className="font-bold text-white">₹{total}</span></div>
-                <div className="flex justify-between text-[12px]"><span className="text-white/35">Delivery</span><span className="text-white font-bold">Free</span></div>
-                <div className="flex justify-between pt-4 border-t border-dashed border-white/[0.08] items-baseline">
-                  <span className="text-[10px] font-semibold text-white/30 uppercase tracking-[0.2em]">Total</span>
-                  <span className="text-2xl font-light text-white tracking-widest font-heading font-light">₹{total}</span>
+              <div className="space-y-2.5 pt-4 border-t border-zinc-200">
+                <div className="flex justify-between text-[12px]"><span className="text-zinc-600">Subtotal</span><span className="font-bold text-zinc-900">₹{total}</span></div>
+                <div className="flex justify-between text-[12px]"><span className="text-zinc-600">Delivery</span><span className="text-zinc-900 font-bold">Free</span></div>
+                <div className="flex justify-between pt-4 border-t border-dashed border-zinc-300 items-baseline">
+                  <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-[0.2em]">Total</span>
+                  <span className="text-2xl font-light text-zinc-900 tracking-widest font-heading">₹{total}</span>
                 </div>
               </div>
             </div>
@@ -393,7 +393,7 @@ const Checkout = () => {
       <AnimatePresence>
         {feedbackMessage && (
           <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-white text-black px-5 py-3 shadow-2xl flex items-center gap-3"
+            className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-black text-white px-5 py-3 shadow-2xl flex items-center gap-3"
           >
             <p className="text-[11px] font-semibold uppercase tracking-wider whitespace-nowrap">{feedbackMessage}</p>
             <button onClick={() => setFeedbackMessage(null)} className="opacity-40 hover:opacity-100 ml-1"><X size={13} /></button>

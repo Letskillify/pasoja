@@ -28,8 +28,8 @@ const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const RouteLoader = () => (
-  <div className="min-h-[60vh] flex items-center justify-center bg-[#0a0a0a]">
-    <div className="w-8 h-8 border border-[#c9a962]/20 border-t-[#c9a962] animate-spin" />
+  <div className="min-h-[60vh] flex items-center justify-center bg-[#faf9f5]">
+    <div className="w-8 h-8 border border-zinc-300 border-t-black animate-spin" />
   </div>
 );
 
@@ -79,6 +79,8 @@ const AppRoutes = () => {
   );
 };
 
+import PromoPopup from "./components/PromoPopup";
+
 function App() {
   const [isPreloaderDone, setIsPreloaderDone] = useState(false);
 
@@ -89,6 +91,7 @@ function App() {
         <StoreProvider>
           <BrowserRouter>
             <AppRoutes />
+            <PromoPopup />
           </BrowserRouter>
         </StoreProvider>
       </AuthProvider>

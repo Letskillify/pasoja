@@ -90,10 +90,10 @@ const GallerySwiper = () => {
   const currentSlide = slides[activeIndex] || {};
 
   return (
-    <section className="py-10 bg-[#0a0a0a] overflow-x-hidden relative border-t border-white/[0.03]">
+    <section className="pt-2 pb-6 md:pt-4 md:pb-8 bg-[#faf9f5] overflow-x-hidden relative border-t border-zinc-200">
       {/* Premium ambient decorative elements */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,#fff/[0.01],transparent_40%)] pointer-events-none" />
-      <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-white/[0.005] rounded-full blur-[160px] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,#000/[0.01],transparent_40%)] pointer-events-none" />
+      <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-black/[0.005] rounded-full blur-[160px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14">
 
@@ -103,7 +103,7 @@ const GallerySwiper = () => {
           description="Explore recently uploaded designer details, highlighting structured cuts and signature fits."
         />
 
-        <div className="relative w-full py-8 gallery-swiper overflow-x-hidden">
+        <div className="relative w-full py-2 gallery-swiper overflow-x-hidden">
           <Swiper
             effect={'coverflow'}
             grabCursor={true}
@@ -139,7 +139,7 @@ const GallerySwiper = () => {
               <SwiperSlide
                 key={idx}
                 onClick={() => slide.isProduct && navigate(`/product/${slide.id}`)}
-                className="relative rounded-none overflow-hidden border border-white/[0.05] bg-[#0c0c0c] shadow-2xl cursor-pointer group"
+                className="relative rounded-none overflow-hidden border border-zinc-200 bg-white shadow-lg cursor-pointer group"
               >
                 {/* Image */}
                 <img
@@ -149,7 +149,7 @@ const GallerySwiper = () => {
                 />
 
                 {/* Dark Vignette Wash */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/25 to-black/10 z-10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -167,27 +167,27 @@ const GallerySwiper = () => {
             {/* Left Scroller Button */}
             <button
               onClick={() => swiperRef.current?.slidePrev()}
-              className="text-white hover:text-[#c9a962] transition-colors p-1 cursor-pointer"
+              className="text-zinc-700 hover:text-[#b8860b] transition-colors p-1 cursor-pointer"
             >
               <span className="text-base select-none">&larr;</span>
             </button>
 
             {/* Slide Title */}
-            <h4 className="text-sm md:text-base font-bold text-white tracking-wider uppercase leading-snug line-clamp-1 flex-1">
+            <h4 className="text-sm md:text-base font-bold text-zinc-900 tracking-wider uppercase leading-snug line-clamp-1 flex-1">
               {currentSlide.title || 'Loading...'}
             </h4>
 
             {/* Right Scroller Button */}
             <button
               onClick={() => swiperRef.current?.slideNext()}
-              className="text-white hover:text-[#c9a962] transition-colors p-1 cursor-pointer"
+              className="text-zinc-700 hover:text-[#b8860b] transition-colors p-1 cursor-pointer"
             >
               <span className="text-base select-none">&rarr;</span>
             </button>
           </div>
 
           {currentSlide.price !== undefined && currentSlide.price !== null && (
-            <span className="text-xs font-semibold text-zinc-400 tracking-widest mt-2 block">
+            <span className="text-xs font-semibold text-zinc-600 tracking-widest mt-2 block">
               INR {Number(currentSlide.price).toLocaleString("en-IN")}.00
             </span>
           )}
@@ -203,8 +203,8 @@ const GallerySwiper = () => {
           .gallery-swiper .swiper-slide {
             width: 260px;
             height: 380px;
-            opacity: 0.6;
-            filter: brightness(0.6);
+            opacity: 0.7;
+            filter: brightness(0.85);
             transform: scale(0.9);
             transition: all 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           }
@@ -216,10 +216,10 @@ const GallerySwiper = () => {
           }
           .gallery-swiper .swiper-slide-active {
             opacity: 1;
-            filter: brightness(1.05);
+            filter: brightness(1);
             transform: scale(1.05);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.8), 0 0 50px rgba(255,255,255,0.05);
+            border-color: rgba(0, 0, 0, 0.3);
+            box-shadow: 0 30px 60px -15px rgba(0,0,0,0.15);
             z-index: 10;
           }
         `

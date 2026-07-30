@@ -52,23 +52,20 @@ const CategorySection = () => {
   if (loading || banners.length === 0) return null;
 
   return (
-    <section className="py-12 md:py-24 bg-[#0a0a0a] overflow-hidden relative border-t border-white/[0.03]">
-      {/* Ambient lighting backdrop */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/[0.01] rounded-full blur-[140px] pointer-events-none" />
-
+    <section className="py-8 md:py-12 bg-[#faf9f5] overflow-hidden relative border-t border-zinc-200">
       {/* Header Container */}
-      <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 mb-10 md:mb-16">
-        <p className="text-[10px] sm:text-xs tracking-[0.3em] text-zinc-500 uppercase mb-2 font-medium">
+      <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 mb-6 md:mb-8">
+        <p className="text-[10px] sm:text-xs tracking-[0.3em] text-[#b8860b] uppercase mb-2 font-bold">
           THE COLLECTION
         </p>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-8">
           <div className="flex items-center flex-1 min-w-0">
-            <h2 className="text-xl sm:text-3xl lg:text-4xl font-extralight tracking-[0.15em] text-white uppercase whitespace-nowrap">
+            <h2 className="text-xl sm:text-3xl lg:text-4xl font-extralight tracking-[0.15em] text-zinc-900 uppercase whitespace-nowrap">
               SHOP BY CATEGORY
             </h2>
-            <div className="hidden md:block flex-1 h-[1px] bg-zinc-800/80 ml-8 mr-4 self-center mt-1" />
+            <div className="hidden md:block flex-1 h-[1px] bg-zinc-200 ml-8 mr-4 self-center mt-1" />
           </div>
-          <div className="text-zinc-400 text-xs sm:text-sm tracking-wide max-w-[320px] text-left md:text-right font-light leading-relaxed">
+          <div className="text-zinc-600 text-xs sm:text-sm tracking-wide max-w-[320px] text-left md:text-right font-light leading-relaxed">
             Curated separates crafted for uncompromising quality and fit.
           </div>
         </div>

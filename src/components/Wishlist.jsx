@@ -53,17 +53,17 @@ const Wishlist = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+      <div className="min-h-screen bg-[#faf9f5] flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 border border-white/10 border-t-white rounded-full animate-spin" />
-          <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/25">Loading wishlist...</p>
+          <div className="w-8 h-8 border border-zinc-300 border-t-black rounded-full animate-spin" />
+          <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-zinc-500">Loading wishlist...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]">
+    <div className="min-h-screen bg-[#faf9f5]">
       <PageHeader
         title="Wishlist"
         subtitle="Your saved favourites"
@@ -72,20 +72,20 @@ const Wishlist = () => {
 
       <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14 py-10 md:py-14">
         {wishlist.length === 0 ? (
-          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="text-center py-20 max-w-md mx-auto">
-            <div className="w-16 h-16 border border-white/10 flex items-center justify-center text-white/25 mx-auto mb-5">
+          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="text-center py-20 max-w-md mx-auto bg-white border border-zinc-200 p-8 shadow-sm">
+            <div className="w-16 h-16 border border-zinc-300 flex items-center justify-center text-zinc-400 mx-auto mb-5">
               <Heart size={24} strokeWidth={1.5} />
             </div>
-            <h3 className="text-xl font-light text-white tracking-widest uppercase mb-2">Your wishlist is empty</h3>
-            <p className="text-[13px] text-white/35 leading-relaxed mb-6">Save items you love and come back to them anytime.</p>
-            <Link to="/shop" className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-white text-black font-semibold text-[10px] uppercase tracking-[0.2em] hover:bg-white/85 transition-all">
+            <h3 className="text-xl font-light text-zinc-900 tracking-widest uppercase mb-2">Your wishlist is empty</h3>
+            <p className="text-[13px] text-zinc-500 leading-relaxed mb-6">Save items you love and come back to them anytime.</p>
+            <Link to="/shop" className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-black text-white font-semibold text-[10px] uppercase tracking-[0.2em] hover:bg-zinc-800 transition-all">
               Explore Collection <ArrowRight size={13} />
             </Link>
           </motion.div>
         ) : (
           <div className="space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-white/[0.06]">
-              <h2 className="text-[10px] font-semibold uppercase tracking-[0.25em] text-white/30">
+            <div className="flex items-center justify-between pb-4 border-b border-zinc-200">
+              <h2 className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-500">
                 {wishlist.length} {wishlist.length === 1 ? 'Item' : 'Items'} Saved
               </h2>
             </div>
@@ -95,11 +95,11 @@ const Wishlist = () => {
                   key={`${item.id}-${idx}`}
                   initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.04, duration: 0.4 }}
-                  className="group relative flex flex-col"
+                  className="group relative flex flex-col bg-white border border-zinc-200 p-3 shadow-sm hover:border-black/30 transition-all"
                 >
                   <button
                     onClick={() => { removeFromWishlist(item.id); triggerToast("Removed from wishlist"); }}
-                    className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm text-white/40 hover:bg-red-900/50 hover:text-red-400 flex items-center justify-center transition-all duration-300"
+                    className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-white/80 border border-zinc-200 text-zinc-500 hover:bg-red-50 hover:text-red-600 flex items-center justify-center transition-all duration-300"
                   >
                     <X size={13} strokeWidth={2} />
                   </button>
@@ -111,7 +111,7 @@ const Wishlist = () => {
 
                       return (
                         <>
-                          <div onClick={() => navigate(`/product/${item.id}`)} className="relative w-full aspect-[3/4] overflow-hidden bg-[#1a1a1a] cursor-pointer">
+                          <div onClick={() => navigate(`/product/${item.id}`)} className="relative w-full aspect-[3/4] overflow-hidden bg-zinc-100 cursor-pointer border border-zinc-200">
                             <img src={item.image} alt={item.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                             {isOutOfStock && (
                               <div className="absolute inset-0 z-20 bg-black/60 flex items-center justify-center">
@@ -123,19 +123,19 @@ const Wishlist = () => {
                           </div>
 
                           <div className="pt-3 flex-grow flex flex-col">
-                            {item.category && <span className="text-[9px] uppercase tracking-[0.2em] text-white/30 font-bold mb-1">{item.category}</span>}
+                            {item.category && <span className="text-[9px] uppercase tracking-[0.2em] text-[#b8860b] font-bold mb-1">{item.category}</span>}
                             <h3 onClick={() => navigate(`/product/${item.id}`)}
-                              className="text-[13px] sm:text-sm font-semibold text-white/80 leading-snug mb-2 group-hover:text-white transition-colors cursor-pointer line-clamp-2"
+                              className="text-[13px] sm:text-sm font-semibold text-zinc-900 leading-snug mb-2 group-hover:text-[#b8860b] transition-colors cursor-pointer line-clamp-2"
                             >{item.name}</h3>
-                            <div className="flex items-center justify-between mt-auto">
-                              <span className="text-sm font-bold text-white">₹{Number(item.price).toLocaleString("en-IN")}</span>
+                            <div className="flex items-center justify-between mt-auto pt-2 border-t border-zinc-200">
+                              <span className="text-sm font-bold text-zinc-900">₹{Number(item.price).toLocaleString("en-IN")}</span>
                               <button 
                                 onClick={() => !isOutOfStock && handleMoveToCart(item)}
                                 disabled={isOutOfStock}
                                 className={`w-9 h-9 flex items-center justify-center transition-all ${
                                   isOutOfStock 
-                                    ? 'bg-[#1a1a1a] text-white/20 border border-white/5 cursor-not-allowed' 
-                                    : 'bg-white text-black hover:bg-white/85'
+                                    ? 'bg-zinc-100 text-zinc-300 border border-zinc-200 cursor-not-allowed' 
+                                    : 'bg-black text-white hover:bg-zinc-800'
                                 }`}
                               >
                                 <ShoppingBag size={14} strokeWidth={2} />
@@ -156,7 +156,7 @@ const Wishlist = () => {
       <AnimatePresence>
         {feedbackMessage && (
           <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-white text-black px-5 py-3 shadow-2xl flex items-center gap-3"
+            className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-black text-white px-5 py-3 shadow-2xl flex items-center gap-3"
           >
             <p className="text-[11px] font-semibold uppercase tracking-wider whitespace-nowrap">{feedbackMessage}</p>
             <button onClick={() => setFeedbackMessage(null)} className="opacity-40 hover:opacity-100 ml-1"><X size={13} /></button>

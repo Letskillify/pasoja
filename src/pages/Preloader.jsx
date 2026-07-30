@@ -49,7 +49,7 @@ const Preloader = ({ onComplete, label = 'Loading', isDataReady }) => {
       <div className="absolute inset-0 flex flex-col">
         {/* Top curtain */}
         <div
-          className="w-full h-1/2 bg-[#080808]"
+          className="w-full h-1/2 bg-[#faf9f5]"
           style={{
             transform: isExiting ? 'translateY(-100%)' : 'translateY(0%)',
             transition: 'transform 800ms cubic-bezier(0.85, 0, 0.15, 1)',
@@ -57,7 +57,7 @@ const Preloader = ({ onComplete, label = 'Loading', isDataReady }) => {
         />
         {/* Bottom curtain */}
         <div
-          className="w-full h-1/2 bg-[#080808]"
+          className="w-full h-1/2 bg-[#faf9f5]"
           style={{
             transform: isExiting ? 'translateY(100%)' : 'translateY(0%)',
             transition: 'transform 800ms cubic-bezier(0.85, 0, 0.15, 1)',
@@ -68,7 +68,7 @@ const Preloader = ({ onComplete, label = 'Loading', isDataReady }) => {
       {/* Thin horizontal progress bar — top edge */}
       <div className="absolute top-0 left-0 right-0 h-[1px] z-30">
         <div
-          className="h-full bg-white transition-all duration-150 ease-out"
+          className="h-full bg-black transition-all duration-150 ease-out"
           style={{ width: `${displayProgress}%` }}
         />
       </div>
@@ -77,10 +77,10 @@ const Preloader = ({ onComplete, label = 'Loading', isDataReady }) => {
       <div className="absolute inset-5 md:inset-8 pointer-events-none z-20"
         style={{ opacity: isExiting ? 0 : 1, transition: 'opacity 500ms ease' }}
       >
-        <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-white/10" />
-        <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-white/10" />
-        <div className="absolute bottom-0 left-0 w-8 h-8 border-b border-l border-white/10" />
-        <div className="absolute bottom-0 right-0 w-8 h-8 border-b border-r border-white/10" />
+        <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-black/10" />
+        <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-black/10" />
+        <div className="absolute bottom-0 left-0 w-8 h-8 border-b border-l border-black/10" />
+        <div className="absolute bottom-0 right-0 w-8 h-8 border-b border-r border-black/10" />
       </div>
 
       {/* Central content */}
@@ -96,7 +96,7 @@ const Preloader = ({ onComplete, label = 'Loading', isDataReady }) => {
           <img
             src="https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/p3jd3nuet4vkqbfd5qaz.png"
             alt="Pasoja"
-            className="h-14 md:h-16 object-contain brightness-0 invert opacity-90"
+            className="h-14 md:h-16 object-contain brightness-0 opacity-90"
           />
         </div>
 
@@ -105,13 +105,13 @@ const Preloader = ({ onComplete, label = 'Loading', isDataReady }) => {
           <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
             <circle
               cx="50" cy="50" r="44"
-              stroke="rgba(255,255,255,0.06)"
+              stroke="rgba(0,0,0,0.08)"
               strokeWidth="1"
               fill="none"
             />
             <circle
               cx="50" cy="50" r="44"
-              stroke="rgba(255,255,255,0.9)"
+              stroke="rgba(0,0,0,0.9)"
               strokeWidth="1"
               fill="none"
               strokeLinecap="square"
@@ -120,7 +120,7 @@ const Preloader = ({ onComplete, label = 'Loading', isDataReady }) => {
               style={{ transition: 'stroke-dashoffset 120ms ease-out' }}
             />
           </svg>
-          <span className="text-[22px] font-black text-white tabular-nums leading-none tracking-tight">
+          <span className="text-[22px] font-black text-zinc-900 tabular-nums leading-none tracking-tight">
             {displayProgress}
           </span>
         </div>
@@ -130,7 +130,7 @@ const Preloader = ({ onComplete, label = 'Loading', isDataReady }) => {
           <span
             className="block text-[10px] font-black uppercase tracking-[0.35em] transition-all duration-500"
             style={{
-              color: phase === 'ready' ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.3)',
+              color: phase === 'ready' ? '#111111' : '#666666',
             }}
           >
             {phase === 'ready' ? 'Ready' : label}
@@ -143,7 +143,7 @@ const Preloader = ({ onComplete, label = 'Loading', isDataReady }) => {
             {[0, 1, 2].map((i) => (
               <div
                 key={i}
-                className="w-1 h-1 bg-white/20 rounded-full"
+                className="w-1 h-1 bg-black/30 rounded-full"
                 style={{
                   animation: `preloader-pulse 1.2s ease-in-out ${i * 0.2}s infinite`,
                 }}

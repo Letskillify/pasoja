@@ -98,12 +98,12 @@ const Testimonials = () => {
   if (loading || !settings.is_active) return null;
 
   return (
-    <section className="py-16 md:py-24 bg-[#0a0a0a] overflow-hidden relative border-t border-white/[0.03]">
+    <section className="py-8 md:py-12 bg-[#faf9f5] overflow-hidden relative border-t border-zinc-200">
       <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Mobile Header (block md:hidden) - Screenshot 3 Style */}
         <div className="block md:hidden mb-6">
-          <h2 className="text-xl font-bold tracking-[0.05em] text-white uppercase font-sans">
+          <h2 className="text-xl font-bold tracking-[0.05em] text-zinc-900 uppercase font-sans">
             #SEENONFEED
           </h2>
         </div>
@@ -112,31 +112,31 @@ const Testimonials = () => {
         <div className="hidden md:flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div className="flex-1 flex flex-col md:flex-row md:items-end gap-6 md:gap-12">
             <div>
-              <p className="text-[10px] sm:text-xs tracking-[0.3em] text-zinc-500 uppercase mb-2 font-medium">
+              <p className="text-[10px] sm:text-xs tracking-[0.3em] text-[#b8860b] uppercase mb-2 font-bold">
                 {settings.eyebrow}
               </p>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extralight tracking-[0.15em] text-white uppercase whitespace-nowrap leading-none">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extralight tracking-[0.15em] text-zinc-900 uppercase whitespace-nowrap leading-none">
                 {settings.heading}
               </h2>
             </div>
-            <div className="hidden md:block flex-1 h-[1px] bg-zinc-800/80 mb-2" />
+            <div className="hidden md:block flex-1 h-[1px] bg-zinc-200 mb-2" />
           </div>
           
           <div className="flex items-center gap-6 self-start md:self-auto">
-            <div className="text-zinc-400 text-xs sm:text-sm tracking-wide max-w-[280px] font-light leading-relaxed text-left md:text-right">
+            <div className="text-zinc-600 text-xs sm:text-sm tracking-wide max-w-[280px] font-light leading-relaxed text-left md:text-right">
               <p>{settings.description_line_1}</p>
               <p>{settings.description_line_2}</p>
             </div>
             <div className="flex gap-2.5">
               <button 
                 onClick={() => swiperRef.current?.slidePrev()}
-                className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white transition-all duration-300 cursor-pointer"
+                className="w-10 h-10 rounded-full border border-zinc-300 bg-white flex items-center justify-center text-zinc-600 hover:text-black hover:border-black transition-all duration-300 cursor-pointer shadow-sm"
               >
                 &larr;
               </button>
               <button 
                 onClick={() => swiperRef.current?.slideNext()}
-                className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white transition-all duration-300 cursor-pointer"
+                className="w-10 h-10 rounded-full border border-zinc-300 bg-white flex items-center justify-center text-zinc-600 hover:text-black hover:border-black transition-all duration-300 cursor-pointer shadow-sm"
               >
                 &rarr;
               </button>
@@ -145,7 +145,7 @@ const Testimonials = () => {
         </div>
 
         {/* Separator under header - Desktop only */}
-        <div className="hidden md:block w-full h-[1px] bg-white/[0.04] mb-10" />
+        <div className="hidden md:block w-full h-[1px] bg-zinc-200 mb-10" />
 
         {/* Gallery Carousel */}
         <div className="w-full mb-16">
@@ -186,12 +186,12 @@ const Testimonials = () => {
                 <SwiperSlide key={item.id}>
                   <ImageComponent
                     {...componentProps}
-                    className="relative group block overflow-hidden bg-[#111] aspect-[3/4] sm:aspect-[3/5] w-full border border-white/[0.03] rounded-none"
+                    className="relative group block overflow-hidden bg-zinc-100 aspect-[3/4] sm:aspect-[3/5] w-full border border-zinc-200 shadow-sm rounded-none"
                   >
                     <img
                       src={item.image}
                       alt="Community look"
-                      className="absolute inset-0 w-full h-full object-cover transition-all duration-[600ms] ease-out group-hover:scale-[1.03] group-hover:brightness-[1.05]"
+                      className="absolute inset-0 w-full h-full object-cover transition-all duration-[600ms] ease-out group-hover:scale-[1.03]"
                       loading="lazy"
                     />
                   </ImageComponent>
@@ -202,28 +202,7 @@ const Testimonials = () => {
         </div>
 
         {/* Social Proof Statistics Row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 pt-8 border-t border-white/[0.04]">
-          {stats.map((stat, idx) => {
-            const IconComponent = IconMap[stat.icon] || Star;
-            return (
-              <div 
-                key={stat.id} 
-                className={`flex items-center gap-4 ${
-                  idx > 0 ? 'md:border-l md:border-white/[0.06] md:pl-8' : ''
-                }`}
-              >
-                <div className="text-zinc-500">
-                  <IconComponent size={20} strokeWidth={1.5} className="text-zinc-400" />
-                </div>
-                <div>
-                  <h4 className="text-xl font-bold tracking-tight text-white">{stat.value}</h4>
-                  <p className="text-[10px] sm:text-xs tracking-wider text-zinc-500 uppercase font-medium mt-0.5">{stat.label}</p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
+        
       </div>
     </section>
   );

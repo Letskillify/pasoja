@@ -46,7 +46,7 @@ const Benefits = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-transparent pt-32 lg:pt-48 pb-32 text-[#1C2B21] relative selection:bg-[#6b4f3] selection:text-white">
+    <div className="min-h-screen bg-[#faf9f5] pt-32 lg:pt-48 pb-32 text-[#1C2B21] relative selection:bg-[#6b4f3] selection:text-white">
       {/* Light Luxury Geometric Dot Mesh Overlay */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:32px_32px]"></div>
 
