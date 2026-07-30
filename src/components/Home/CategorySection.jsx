@@ -5,10 +5,10 @@ import { db } from '../../components/Firebase';
 import { collection, getDocs, query, orderBy, setDoc, doc } from 'firebase/firestore';
 
 const mobileCategories = [
-  { id: 'm_1', title: 'OVERSIZED T-SHIRT', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=600&auto=format&fit=crop', link: '/shop?category=tshirts' },
-  { id: 'm_2', title: 'SHIRTS', image: 'https://images.unsplash.com/photo-1596755094514-f87e32f85e2c?q=80&w=600&auto=format&fit=crop', link: '/shop?category=shirts' },
-  { id: 'm_3', title: 'WAFFLE KNIT', image: 'https://images.unsplash.com/photo-1614975058789-41316d0e2e9c?q=80&w=600&auto=format&fit=crop', link: '/shop?category=sweaters' },
-  { id: 'm_4', title: 'QUARTER ZIP', image: 'https://res.cloudinary.com/duzwys877/image/upload/v1783595079/ChatGPT_Image_Jul_9_2026_04_33_24_PM_nudlxb.png', link: '/shop?category=jackets' }
+  { id: 'm_1', title: 'OVERSIZED T-SHIRT', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=600&auto=format&fit=crop', link: '/shop?category=T-Shirts' },
+  { id: 'm_2', title: 'SHIRTS', image: 'https://images.unsplash.com/photo-1596755094514-f87e32f85e2c?q=80&w=600&auto=format&fit=crop', link: '/shop?category=Shirts' },
+  { id: 'm_3', title: 'WAFFLE KNIT', image: 'https://images.unsplash.com/photo-1614975058789-41316d0e2e9c?q=80&w=600&auto=format&fit=crop', link: '/shop?category=Sweaters' },
+  { id: 'm_4', title: 'QUARTER ZIP', image: 'https://res.cloudinary.com/duzwys877/image/upload/v1783595079/ChatGPT_Image_Jul_9_2026_04_33_24_PM_nudlxb.png', link: '/shop?category=Jackets' }
 ];
 
 const CategorySection = () => {
@@ -22,8 +22,8 @@ const CategorySection = () => {
         const snap = await getDocs(q);
         if (snap.empty) {
           const defaults = [
-            { id: 'cat_1', title: 'MENS', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/aksfxvhby4udttszyk8u.jpg', link: '/shop?category=Men', sort_order: 1, is_active: true, position: 'left' },
-            { id: 'cat_2', title: 'WOMENS', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317405/jmm894vjineywo4jlbkm.jpg', link: '/shop?category=Women', sort_order: 2, is_active: true, position: 'right' }
+            { id: 'cat_1', title: 'MENS', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/aksfxvhby4udttszyk8u.jpg', link: '/shop?gender=Men', sort_order: 1, is_active: true, position: 'left' },
+            { id: 'cat_2', title: 'WOMENS', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317405/jmm894vjineywo4jlbkm.jpg', link: '/shop?gender=Women', sort_order: 2, is_active: true, position: 'right' }
           ];
           for (const item of defaults) {
             await setDoc(doc(db, 'shop_by_category', item.id), item);

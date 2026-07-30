@@ -200,7 +200,13 @@ const Shop = () => {
     const newFilters = { ...INITIAL_FILTERS };
 
     const cat = searchParams.get("category");
-    if (cat) newFilters.category = cat;
+    if (cat) {
+      if (["men", "women", "unisex"].includes(cat.toLowerCase())) {
+        newFilters.gender = cat.charAt(0).toUpperCase() + cat.slice(1).toLowerCase();
+      } else {
+        newFilters.category = cat;
+      }
+    }
 
     const gender = searchParams.get("gender");
     if (gender) newFilters.gender = gender;
@@ -233,8 +239,7 @@ const Shop = () => {
     if (sort) setSortBy(sort);
 
     setFilters(newFilters);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -326,12 +331,46 @@ const Shop = () => {
           return false;
         }
 
-        // Category
-        if (
-          filters.category !== "All" &&
-          p.category?.toLowerCase() !== filters.category.toLowerCase()
-        ) {
-          return false;
+        // Category matching with normalization & name fallback
+        if (filters.category !== "All") {
+          const normalizeCategory = (str) => {
+            if (!str) return "";
+            let norm = str.toLowerCase().replace(/[^a-z0-9]/g, "");
+            if (norm.endsWith("s") && norm.length > 3) {
+              norm = norm.slice(0, -1);
+            }
+            return norm;
+          };
+
+          const fNorm = normalizeCategory(filters.category);
+          const pNorm = normalizeCategory(p.category);
+          const pNameNorm = normalizeCategory(p.name);
+          const pTagNorm = normalizeCategory(p.tag);
+
+          const matchesCat = (() => {
+            if (!pNorm) return false;
+            if (fNorm === pNorm) return true;
+            // Prevent "shirt" from matching "tshirt" or "t-shirt"
+            if (fNorm === "shirt" && pNorm.includes("tshirt")) return false;
+            if (pNorm === "shirt" && fNorm.includes("tshirt")) return false;
+            return pNorm.includes(fNorm) || fNorm.includes(pNorm);
+          })();
+
+          const matchesName = (() => {
+            if (!pNameNorm) return false;
+            if (fNorm === "shirt" && (pNameNorm.includes("tshirt") || pNameNorm.includes("t-shirt"))) return false;
+            return pNameNorm.includes(fNorm);
+          })();
+
+          const matchesTag = (() => {
+            if (!pTagNorm) return false;
+            if (fNorm === "shirt" && (pTagNorm.includes("tshirt") || pTagNorm.includes("t-shirt"))) return false;
+            return pTagNorm.includes(fNorm);
+          })();
+
+          if (!matchesCat && !matchesName && !matchesTag) {
+            return false;
+          }
         }
 
         // Gender

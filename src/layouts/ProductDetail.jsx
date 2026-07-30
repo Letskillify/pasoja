@@ -163,27 +163,27 @@ const ProductDetail = () => {
           <div className="flex flex-col space-y-6">
             <div>
               <div className="flex flex-wrap gap-2 mb-4">
-                <span className="text-[9px] tracking-widest font-black uppercase px-2.5 py-1 bg-zinc-100 border border-zinc-200 text-zinc-600">Natural Fabrics</span>
-                <span className="text-[9px] tracking-widest font-black uppercase px-2.5 py-1 bg-zinc-100 border border-zinc-200 text-zinc-600 flex items-center gap-1">
+                <span className="text-[10px] tracking-[0.25em] font-bold uppercase px-2.5 py-1 bg-zinc-100 border border-zinc-200 text-zinc-600">Natural Fabrics</span>
+                <span className="text-[10px] tracking-[0.25em] font-bold uppercase px-2.5 py-1 bg-zinc-100 border border-zinc-200 text-zinc-600 flex items-center gap-1">
                   <Star size={9} fill="currentColor" strokeWidth={0} className="text-[#b8860b]" /> 4.8 Studio Choice
                 </span>
               </div>
-              <h1 className="text-2xl md:text-3xl font-light tracking-widest text-zinc-900 uppercase mb-4">{product.name}</h1>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extralight tracking-[0.15em] text-zinc-900 uppercase mb-4 leading-tight">{product.name}</h1>
               <div className="flex items-baseline gap-3.5">
-                <span className="text-2xl font-light tracking-widest text-zinc-900">
+                <span className="text-2xl font-light tracking-[0.15em] text-zinc-900">
                   ₹{(selectedSize?.price || product.price)?.toLocaleString()}
                 </span>
                 {(selectedSize?.original_price || product.original_price) && (
-                  <span className="text-sm text-zinc-400 line-through">
+                  <span className="text-sm text-zinc-400 line-through font-light">
                     ₹{(selectedSize?.original_price || product.original_price)?.toLocaleString()}
                   </span>
                 )}
               </div>
-              <p className="text-[11px] text-zinc-500 tracking-wide mt-1.5">Tax included. Free shipping protected.</p>
+              <p className="text-xs text-zinc-500 tracking-wide font-light mt-1.5 leading-relaxed">Tax included. Free shipping protected.</p>
               
               {/* Stock Status Badge */}
               <div className="mt-3 flex items-center gap-3">
-                <span className={`text-[10px] tracking-widest font-black uppercase px-2.5 py-1 rounded-sm border ${
+                <span className={`text-[10px] tracking-[0.2em] font-bold uppercase px-2.5 py-1 rounded-sm border ${
                   isOutOfStock 
                     ? 'bg-red-500/10 border-red-500/20 text-red-600' 
                     : (product.stock <= 5 || product.stock_status === 'Low Stock')
@@ -198,7 +198,7 @@ const ProductDetail = () => {
                   }
                 </span>
                 {product.stock !== undefined && product.stock > 0 && (
-                  <span className="text-[11px] text-zinc-500 font-medium">
+                  <span className="text-xs text-zinc-500 font-light">
                     ({product.stock} items available)
                   </span>
                 )}
@@ -209,16 +209,16 @@ const ProductDetail = () => {
             {product.size_prices && product.size_prices.length > 0 && (
               <div className="border-t border-zinc-200 pt-5">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-[10px] uppercase tracking-widest font-black text-zinc-500">Select Size</span>
-                  <button className="text-[10px] text-zinc-500 hover:text-black flex items-center gap-1 transition-colors">
+                  <span className="text-xs uppercase tracking-[0.2em] font-bold text-zinc-600">Select Size</span>
+                  <button className="text-xs text-zinc-500 hover:text-black flex items-center gap-1 transition-colors font-light">
                     <Ruler size={11} />
-                    <span className="underline underline-offset-4">Size Guide</span>
+                    <span className="underline underline-offset-4 tracking-wider">Size Guide</span>
                   </button>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {product.size_prices.map((sp, idx) => (
                     <button key={idx} onClick={() => setSelectedSize(sp)}
-                      className={`w-12 h-11 flex items-center justify-center border text-[11px] font-semibold tracking-wider transition-all duration-200 ${
+                      className={`w-12 h-11 flex items-center justify-center border text-xs font-semibold tracking-[0.15em] uppercase transition-all duration-200 ${
                         selectedSize?.size === sp.size
                            ? 'border-black bg-black text-white'
                            : 'border-zinc-300 bg-white text-zinc-700 hover:border-black hover:text-black'
@@ -242,7 +242,7 @@ const ProductDetail = () => {
                   >
                     <Minus size={12} />
                   </button>
-                  <span className="text-[12px] font-bold text-zinc-900 w-5 text-center tabular-nums">
+                  <span className="text-xs font-bold text-zinc-900 w-5 text-center tabular-nums">
                     {quantity}
                   </span>
                   <button 
@@ -259,14 +259,14 @@ const ProductDetail = () => {
                 <button onClick={() => addToCollection('wishlist')}
                   className="flex-1 h-11 flex items-center justify-center border border-zinc-300 hover:border-black bg-white transition-all"
                 >
-                  <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest font-black text-zinc-700">
+                  <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-bold text-zinc-700">
                     <Heart size={13} fill={isWishlisted ? '#111111' : 'none'} className={isWishlisted ? 'text-black' : 'text-zinc-500'} />
                     {isWishlisted ? 'Wishlisted' : 'Add to Wishlist'}
                   </div>
                 </button>
               </div>
 
-              <div className="flex items-center gap-2 text-[11px] text-zinc-500">
+              <div className="flex items-center gap-2 text-xs text-zinc-500 font-light tracking-wide">
                 <Truck size={13} className="text-zinc-500 shrink-0" />
                 <span>Delivery: Priority transit (Est. 3–5 working days)</span>
               </div>
@@ -275,7 +275,7 @@ const ProductDetail = () => {
                 <button 
                   onClick={() => !isOutOfStock && addToCollection('cart')}
                   disabled={isOutOfStock}
-                  className={`w-full h-12 border-2 text-[10px] font-semibold uppercase tracking-widest transition-all duration-300 ${
+                  className={`w-full h-12 border-2 text-xs font-semibold uppercase tracking-[0.2em] transition-all duration-300 ${
                     isOutOfStock
                       ? 'border-zinc-200 text-zinc-400 bg-transparent cursor-not-allowed'
                       : 'border-black text-black bg-transparent hover:bg-black hover:text-white'
@@ -296,7 +296,7 @@ const ProductDetail = () => {
                         navigate('/checkout');
                       }
                     }}
-                    className="w-full h-12 bg-black text-white font-semibold text-[10px] uppercase tracking-widest hover:bg-zinc-800 transition-all duration-300"
+                    className="w-full h-12 bg-black text-white font-bold text-xs uppercase tracking-[0.2em] hover:bg-zinc-800 transition-all duration-300"
                   >
                     Buy it Now
                   </button>
@@ -311,7 +311,7 @@ const ProductDetail = () => {
                   <button onClick={() => setActiveAccordion(activeAccordion === acc.id ? null : acc.id)}
                     className="w-full flex items-center justify-between py-4 text-left group"
                   >
-                    <span className="text-[10px] font-black uppercase tracking-widest text-zinc-600 group-hover:text-black transition-colors">{acc.label}</span>
+                    <span className="text-xs font-bold uppercase tracking-[0.2em] text-zinc-700 group-hover:text-black transition-colors">{acc.label}</span>
                     <ChevronRight size={12} className={`text-zinc-400 transition-transform duration-300 ease-out ${activeAccordion === acc.id ? 'rotate-90 text-black' : ''}`} />
                   </button>
                   <AnimatePresence initial={false}>
@@ -320,10 +320,10 @@ const ProductDetail = () => {
                         initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.2, ease: 'easeInOut' }} className="overflow-hidden"
                       >
-                        <div className="pb-5 pt-1 text-[12px] text-zinc-600 leading-relaxed space-y-1">
+                        <div className="pb-5 pt-1 text-xs text-zinc-600 font-light leading-relaxed space-y-1">
                           {acc.id === 'description' && <p>{product.description || 'Premium quality apparel constructed with precise detailing for supreme comfort.'}</p>}
                           {acc.id === 'size' && <p>Fits accurate to standard premium metrics. We recommend checking the size chart before ordering.</p>}
-                          {acc.id === 'spec' && <div><p><strong className="text-zinc-800">Material:</strong> {product.material || 'Premium Eco Blend'}</p><p><strong className="text-zinc-800">Care:</strong> Machine gentle, cold wash.</p></div>}
+                          {acc.id === 'spec' && <div><p><strong className="font-semibold text-zinc-800">Material:</strong> {product.material || 'Premium Eco Blend'}</p><p><strong className="font-semibold text-zinc-800">Care:</strong> Machine gentle, cold wash.</p></div>}
                           {acc.id === 'style' && <p>Crafted to transition elegantly from refined daywear into sophisticated evening looks.</p>}
                           {acc.id === 'shipping' && <p>Free shipping on orders over ₹1,999. Priority delivery in 3–5 working days.</p>}
                           {acc.id === 'return' && <p>30-day return window. Initiate returns directly from your account dashboard.</p>}
@@ -341,8 +341,8 @@ const ProductDetail = () => {
         {relatedProducts.length > 0 && (
           <div className="mt-24 border-t border-zinc-200 pt-16">
             <div className="pb-10 mb-10">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-zinc-500 block mb-3">You May Also Like</span>
-              <h2 className="text-3xl font-light text-zinc-900 uppercase tracking-widest">Complete The Collection</h2>
+              <span className="text-xs font-bold uppercase tracking-[0.3em] text-[#b8860b] block mb-2">You May Also Like</span>
+              <h2 className="text-xl sm:text-3xl lg:text-4xl font-extralight text-zinc-900 uppercase tracking-[0.15em]">Complete The Collection</h2>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {relatedProducts.map((item) => {
@@ -359,14 +359,14 @@ const ProductDetail = () => {
                       />
                       {itemDiscount > 0 && (
                         <div className="absolute top-2 left-2">
-                          <span className="bg-black text-white text-[9px] font-black uppercase tracking-wider px-2 py-0.5">-{itemDiscount}%</span>
+                          <span className="bg-black text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5">-{itemDiscount}%</span>
                         </div>
                       )}
                     </div>
-                    <h3 className="text-[11px] font-bold tracking-wide uppercase text-zinc-700 truncate mb-1 group-hover:text-black transition-colors">{item.name}</h3>
+                    <h3 className="text-xs font-bold tracking-wider uppercase text-zinc-900 truncate mb-1 group-hover:text-[#b8860b] transition-colors">{item.name}</h3>
                     <div className="flex items-center gap-2">
-                      <span className="text-[12px] font-black text-zinc-900">₹{item.price?.toLocaleString()}</span>
-                      {item.original_price && <span className="text-[11px] text-zinc-400 line-through">₹{item.original_price?.toLocaleString()}</span>}
+                      <span className="text-sm font-semibold tracking-wide text-zinc-900">₹{item.price?.toLocaleString()}</span>
+                      {item.original_price && <span className="text-xs text-zinc-400 line-through font-light">₹{item.original_price?.toLocaleString()}</span>}
                     </div>
                   </Link>
                 );
