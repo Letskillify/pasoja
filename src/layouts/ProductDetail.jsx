@@ -147,7 +147,7 @@ const ProductDetail = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#faf9f5] text-zinc-900 pt-[88px] sm:pt-[96px] pb-24 md:pb-20 selection:bg-black selection:text-white">
+    <div className="min-h-screen bg-[#faf9f5] text-zinc-900 pt-[131px] sm:pt-[96px] pb-24 md:pb-20 selection:bg-black selection:text-white">
       {/* Toast Notification */}
       <AnimatePresence>
         {feedbackMessage && (
