@@ -37,12 +37,34 @@ const Header = () => {
   const [isMobileCollectionsOpen, setIsMobileCollectionsOpen] = useState(false);
   const [collections, setCollections] = useState(DEFAULT_COLLECTIONS);
   const [allProducts, setAllProducts] = useState([]);
+  const [showSearchBar, setShowSearchBar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { cart, wishlist } = useStore();
   const { scrollY } = useScroll();
+
+  // Hide search bar on scroll down, show on scroll up
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY <= 25) {
+        setShowSearchBar(true);
+      } else {
+        if (currentScrollY > lastScrollY + 5) {
+          setShowSearchBar(false);
+        } else if (currentScrollY < lastScrollY - 5) {
+          setShowSearchBar(true);
+        }
+      }
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   const cartCount = cart.length;
   const wishlistCount = wishlist.length;
@@ -335,36 +357,46 @@ const Header = () => {
         </motion.nav>
 
         {/* ── MOBILE HEADER BOTTOM BAR (FULL-WIDTH SEARCH) ── */}
-        <div className="block md:hidden bg-[#faf9f5]/95 backdrop-blur-md px-4 py-2.5 border-b border-zinc-200 w-full">
-          <form onSubmit={handleSearchSubmit} className="relative flex items-center w-full">
-            <div className="relative w-full flex items-center bg-white border border-zinc-300 rounded-full px-3.5 py-2 focus-within:border-[#c9a962] focus-within:ring-1 focus-within:ring-[#c9a962]/40 transition-all duration-300 shadow-sm">
-              <Search size={16} className="text-[#b8860b] shrink-0 mr-2.5" strokeWidth={2} />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  if (!isSearchActive && e.target.value.trim().length > 0) {
-                    setIsSearchActive(true);
-                  }
-                }}
-                onFocus={() => setIsSearchActive(true)}
-                placeholder="Search apparel, categories..."
-                className="w-full bg-transparent text-zinc-900 placeholder-zinc-400 outline-none font-normal text-xs tracking-wide"
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery('')}
-                  className="p-1 text-zinc-400 hover:text-black transition-colors"
-                  aria-label="Clear search"
-                >
-                  <X size={14} />
-                </button>
-              )}
-            </div>
-          </form>
-        </div>
+        <motion.div
+          initial={false}
+          animate={{
+            height: (showSearchBar || isSearchActive) ? 'auto' : 0,
+            opacity: (showSearchBar || isSearchActive) ? 1 : 0,
+          }}
+          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          className="overflow-hidden block md:hidden bg-[#faf9f5]/95 backdrop-blur-md border-b border-zinc-200 w-full"
+        >
+          <div className="px-4 py-2.5">
+            <form onSubmit={handleSearchSubmit} className="relative flex items-center w-full">
+              <div className="relative w-full flex items-center bg-white border border-zinc-300 rounded-full px-3.5 py-2 focus-within:border-[#c9a962] focus-within:ring-1 focus-within:ring-[#c9a962]/40 transition-all duration-300 shadow-sm">
+                <Search size={16} className="text-[#b8860b] shrink-0 mr-2.5" strokeWidth={2} />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    if (!isSearchActive && e.target.value.trim().length > 0) {
+                      setIsSearchActive(true);
+                    }
+                  }}
+                  onFocus={() => setIsSearchActive(true)}
+                  placeholder="Search apparel, categories..."
+                  className="w-full bg-transparent text-zinc-900 placeholder-zinc-400 outline-none font-normal text-xs tracking-wide"
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery('')}
+                    className="p-1 text-zinc-400 hover:text-black transition-colors"
+                    aria-label="Clear search"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
+              </div>
+            </form>
+          </div>
+        </motion.div>
 
         {/* ── FULL FUNCTIONAL LIVE SEARCH OVERLAY ── */}
         <AnimatePresence>

@@ -6,6 +6,7 @@ import ShopTheLook from '../Home/ShopTheLook';
 import BenefitsStrip from '../Home/BenefitsStrip';
 import GallerySwiper from '../Home/GallerySwiper';
 import Testimonials from '../Home/Testimonials';
+import RandomProducts from '../Home/RandomProducts';
 import { db } from '../Firebase';
 import { doc, updateDoc } from 'firebase/firestore';
 
@@ -72,6 +73,7 @@ const Home = () => {
       <Bestsellers />
       <ShopTheLook />
       <Testimonials />
+      <RandomProducts />
     </main>
   );
 };

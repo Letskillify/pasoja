@@ -74,98 +74,89 @@ const ProductCard = ({ product, idx, triggerToast }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => navigate(`/product/${product.id}`)}
-      className="group relative cursor-pointer flex flex-col bg-white border border-zinc-200 transition-all duration-300 hover:border-black/30"
+      className="group relative cursor-pointer flex flex-col bg-transparent w-full"
     >
-      {/* Image */}
-      <div className="relative w-full aspect-[3/4] overflow-hidden bg-zinc-100 border-b border-zinc-200">
+      {/* Full-bleed Product Image */}
+      <div className="relative w-full aspect-[3/4] overflow-hidden bg-zinc-100 mb-2.5 rounded-none">
         <img
           src={displayedImage}
           alt={product.name}
           className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          loading="lazy"
         />
 
         {/* Out of Stock Overlay */}
         {isOutOfStock && (
-          <div className="absolute inset-0 z-20 bg-black/60 flex items-center justify-center">
-            <span className="bg-white text-black font-bold uppercase text-[9px] tracking-[0.2em] px-3.5 py-2">
+          <div className="absolute inset-0 z-20 bg-black/65 flex items-center justify-center">
+            <span className="bg-white text-black font-extrabold uppercase text-[9px] tracking-[0.2em] px-3.5 py-2">
               Out of Stock
             </span>
           </div>
         )}
 
-        {/* Top-left Badge */}
-        <div className="absolute top-2.5 left-2.5 z-10">
-          <span className="bg-black text-white font-extrabold uppercase text-[8px] tracking-[0.18em] px-2.5 py-1 shadow-sm">
-            {badgeText}
-          </span>
-        </div>
+        {/* Top-left Save Percentage Badge (Screenshot 2 Style) */}
+        {savingsPercent > 0 && !isOutOfStock && (
+          <div className="absolute top-2.5 left-2.5 z-10">
+            <span className="bg-[#d92323] text-white font-extrabold uppercase text-[8px] sm:text-[9px] tracking-wider px-2.5 py-1 rounded-sm shadow-sm">
+              SAVE {savingsPercent}%
+            </span>
+          </div>
+        )}
+        {!savingsPercent && badgeText && !isOutOfStock && (
+          <div className="absolute top-2.5 left-2.5 z-10">
+            <span className="bg-black text-white font-extrabold uppercase text-[8px] tracking-[0.18em] px-2.5 py-1 shadow-sm">
+              {badgeText}
+            </span>
+          </div>
+        )}
 
-        {/* Wishlist */}
+        {/* Top-right Wishlist Heart */}
         <button
           type="button"
           onClick={e => handleAction(e, "wishlist")}
-          className="absolute top-2.5 right-2.5 z-30 text-zinc-700 hover:text-black hover:scale-110 drop-shadow-sm transition-all duration-300 pointer-events-auto cursor-pointer"
+          className="absolute top-2.5 right-2.5 z-30 p-1.5 bg-white/80 backdrop-blur-sm rounded-full text-zinc-700 hover:text-black hover:scale-110 drop-shadow-sm transition-all duration-300 pointer-events-auto cursor-pointer"
         >
           <Heart
             size={15}
-            strokeWidth={2}
-            fill={isWishlisted ? "#ef4444" : "none"}
-            stroke={isWishlisted ? "#ef4444" : "currentColor"}
+            strokeWidth={1.8}
+            fill={isWishlisted ? "#d92323" : "none"}
+            stroke={isWishlisted ? "#d92323" : "currentColor"}
             className="transition-colors duration-300"
           />
         </button>
+
+        {/* Add to Cart Hover Button */}
+        {!isOutOfStock && (
+          <div className="absolute bottom-0 inset-x-0 z-20 overflow-hidden h-9 pointer-events-auto hidden sm:block">
+            <button
+              type="button"
+              onClick={e => handleAction(e, "cart")}
+              className={`w-full h-full bg-black text-white text-[9px] font-bold tracking-[0.2em] uppercase transition-all duration-300 flex items-center justify-center ${
+                isHovered ? 'translate-y-0' : 'translate-y-full'
+              } hover:bg-zinc-800`}
+            >
+              {isInCart ? 'IN BAG' : 'ADD TO CART'}
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Info */}
-      <div className="pt-3.5 pb-4 px-3 flex flex-col flex-grow bg-white">
-        {product.category && (
-          <span className="text-[9px] uppercase tracking-[0.2em] text-[#b8860b] font-semibold mb-1">
-            {product.category}
-          </span>
-        )}
-        <h3 className="text-[12px] font-bold text-zinc-900 uppercase tracking-wider mb-1 line-clamp-1 group-hover:text-[#b8860b] transition-colors duration-300">
+      {/* Info Area below Image (Screenshot 2 Typography) */}
+      <div className="flex flex-col text-left px-0.5">
+        <h3 className="text-[11px] sm:text-xs font-bold text-zinc-900 uppercase tracking-wider mb-1 line-clamp-1 group-hover:text-black transition-colors duration-300">
           {product.name}
         </h3>
 
-        {/* Stars */}
-        <div className="flex items-center gap-1 mb-2.5 text-[10px] text-zinc-500">
-          <span className="text-[#b8860b]">★</span>
-          <span className="font-semibold">{rating.toFixed(1)}</span>
-        </div>
-
-        {/* Price & Cart row */}
-        <div className="flex items-center justify-between mt-auto pt-2 border-t border-zinc-200">
-          <div className="flex items-baseline gap-2">
-            <span className="text-sm font-semibold tracking-wide text-zinc-900">
-              ₹{displayPrice?.toLocaleString("en-IN")}
+        {/* Prices */}
+        <div className="flex items-baseline gap-2">
+          {originalPrice && originalPrice > displayPrice && (
+            <span className="text-xs text-zinc-400 line-through font-normal">
+              Rs.{originalPrice?.toLocaleString("en-IN")}.00
             </span>
-            {originalPrice !== displayPrice && (
-              <span className="text-[11px] text-zinc-400 line-through">
-                ₹{originalPrice?.toLocaleString("en-IN")}
-              </span>
-            )}
-            {savingsPercent > 0 && (
-              <span className="hidden md:inline text-red-600 text-[9px] font-bold">
-                ({savingsPercent}% OFF)
-              </span>
-            )}
-          </div>
-
-          {/* Cart Icon Button */}
-          <button
-            type="button"
-            onClick={e => handleAction(e, "cart")}
-            disabled={isOutOfStock}
-            className={`w-9 h-9 border flex items-center justify-center transition-all duration-300 z-30 cursor-pointer relative pointer-events-auto ${
-              isOutOfStock
-                ? "bg-transparent text-zinc-300 border-zinc-200 cursor-not-allowed"
-                : isInCart
-                ? "bg-black text-white border-black"
-                : "bg-white text-zinc-800 border-zinc-300 hover:bg-black hover:text-white hover:border-black"
-            }`}
-          >
-            <ShoppingCart size={13} strokeWidth={2} />
-          </button>
+          )}
+          <span className="text-xs sm:text-sm font-bold text-[#d92323]">
+            Rs.{displayPrice?.toLocaleString("en-IN")}.00
+          </span>
         </div>
       </div>
     </motion.div>
