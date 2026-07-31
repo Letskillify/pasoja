@@ -2,6 +2,7 @@ import React from 'react';
 import {
   LayoutDashboard,
   BarChart3,
+  BookOpen,
   ClipboardList,
   Package,
   Grid,
@@ -15,8 +16,9 @@ import {
   Percent,
   Layout,
   Image,
-  BookOpen,
   FileText,
+  Printer,
+  User,
   Star,
   Heart,
   Mail,
@@ -57,6 +59,7 @@ const sidebarSections = [
     title: "SALES",
     items: [
       { name: "Orders", icon: ShoppingCart },
+      { name: "Billing & Invoices", icon: Printer },
       { name: "Returns / Refunds", icon: Undo2 },
       { name: "Customers", icon: Users },
       { name: "Coupons / Offers", icon: Percent }
@@ -85,24 +88,8 @@ const sidebarSections = [
   {
     title: "SETTINGS",
     items: [
-      { name: "Store Settings", icon: Settings },
-      { name: "Payment Settings", icon: CreditCard },
-      { name: "Shipping Settings", icon: Truck },
-      { name: "Tax Settings", icon: Landmark },
-      { name: "Users & Roles", icon: ShieldAlert },
-      { name: "SEO Settings", icon: Globe }
-    ]
-  },
-  {
-    title: "SYSTEM",
-    items: [
-      { name: "Activity Logs", icon: History }
-    ]
-  },
-  {
-    title: "SUPPORT",
-    items: [
-      { name: "Help / Documentation", icon: HelpCircle }
+      { name: "Profile Settings", icon: User },
+      { name: "Store Settings", icon: Settings }
     ]
   }
 ];

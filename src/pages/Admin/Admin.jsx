@@ -33,6 +33,8 @@ import {
   Shirt, AlertCircle, Mail, Lock, ArrowRight
 } from "lucide-react";
 
+import { useSearchParams } from "react-router-dom";
+
 // Import components
 import AdminSidebar from "./components/AdminSidebar";
 import AdminHeader from "./components/AdminHeader";
@@ -41,6 +43,13 @@ import ProductsTable from "./components/ProductsTable";
 import OrdersTable from "./components/OrdersTable";
 import UsersTable from "./components/UsersTable";
 import ClothingProductForm from "./components/ProductForm";
+import AnalyticsView from "./components/AnalyticsView";
+import ReportsView from "./components/ReportsView";
+import InventoryView from "./components/InventoryView";
+import ReturnsRefundsManager from "./components/ReturnsRefundsManager";
+
+import BillingSystem from "./components/BillingSystem";
+import AdminProfileSettings from "./components/AdminProfileSettings";
 
 export const uploadToCloudinary = async (file) => {
   const data = new FormData();
@@ -51,6 +60,44 @@ export const uploadToCloudinary = async (file) => {
     data
   );
   return res.data.secure_url;
+};
+
+// Default Seed Data for Firebase Firestore
+const DEFAULT_SEED_DATA = {
+  categories: [
+    { id: 'cat_tshirts', name: 'T-Shirts', slug: 't-shirts', description: 'Graphic & Solid Tees', is_active: true, sort_order: 1 },
+    { id: 'cat_shirts', name: 'Shirts', slug: 'shirts', description: 'Casual & Formal Shirts', is_active: true, sort_order: 2 },
+    { id: 'cat_jeans', name: 'Jeans', slug: 'jeans', description: 'Slim & Relaxed Fit Denim', is_active: true, sort_order: 3 },
+    { id: 'cat_jackets', name: 'Jackets', slug: 'jackets', description: 'Coats & Outerwear', is_active: true, sort_order: 4 },
+    { id: 'cat_sweaters', name: 'Sweaters', slug: 'sweaters', description: 'Knitwear & Hoodies', is_active: true, sort_order: 5 },
+    { id: 'cat_shorts', name: 'Shorts', slug: 'shorts', description: 'Casual Shorts & Athleisure', is_active: true, sort_order: 6 },
+    { id: 'cat_accessories', name: 'Accessories', slug: 'accessories', description: 'Hats, Caps & Belts', is_active: true, sort_order: 7 }
+  ],
+  subcategories: [
+    { id: 'sub_oversized', name: 'Oversized Tees', slug: 'oversized-tees', parent_category: 'T-Shirts', is_active: true, sort_order: 1 },
+    { id: 'sub_graphic', name: 'Graphic Tees', slug: 'graphic-tees', parent_category: 'T-Shirts', is_active: true, sort_order: 2 },
+    { id: 'sub_casualshirts', name: 'Casual Shirts', slug: 'casual-shirts', parent_category: 'Shirts', is_active: true, sort_order: 3 },
+    { id: 'sub_formalshirts', name: 'Formal Shirts', slug: 'formal-shirts', parent_category: 'Shirts', is_active: true, sort_order: 4 },
+    { id: 'sub_cargo', name: 'Cargo Pants', slug: 'cargo-pants', parent_category: 'Jeans', is_active: true, sort_order: 5 },
+    { id: 'sub_denimjackets', name: 'Denim Jackets', slug: 'denim-jackets', parent_category: 'Jackets', is_active: true, sort_order: 6 }
+  ],
+  collections: [
+    { id: 'col_new', name: 'New Arrivals', slug: 'new-arrivals', description: 'Fresh drops for the new season', is_active: true, sort_order: 1 },
+    { id: 'col_bestsellers', name: 'Bestsellers', slug: 'bestsellers', description: 'Most loved styles by community', is_active: true, sort_order: 2 },
+    { id: 'col_artisan', name: 'The Artisan Edit', slug: 'the-artisan-edit', description: 'Limited handcrafted exclusives', is_active: true, sort_order: 3 },
+    { id: 'col_summer', name: 'Summer Edition', slug: 'summer-edition', description: 'Lightweight breathable fits', is_active: true, sort_order: 4 }
+  ],
+  attributes: [
+    { id: 'attr_size', name: 'Size', values: 'S, M, L, XL, XXL, 28, 30, 32, 34, 36', is_active: true, sort_order: 1 },
+    { id: 'attr_color', name: 'Color', values: 'Black, White, Beige, Red, Blue, Green, Brown, Grey', is_active: true, sort_order: 2 },
+    { id: 'attr_material', name: 'Material', values: '100% Cotton, Denim, Fleece, Poly Blend, Linen, Wool', is_active: true, sort_order: 3 }
+  ],
+  shop_by_category: [
+    { id: 'cat_sbc_1', name: 'OVERSIZED T-SHIRT', title: 'OVERSIZED T-SHIRT', slug: 'oversized-t-shirt', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop', link: '/shop?category=T-Shirts', sort_order: 1, is_active: true },
+    { id: 'cat_sbc_2', name: 'SHIRTS', title: 'SHIRTS', slug: 'shirts', image: 'https://images.unsplash.com/photo-1596755094514-f87e32f85e2c?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Shirts', sort_order: 2, is_active: true },
+    { id: 'cat_sbc_3', name: 'WAFFLE KNIT', title: 'WAFFLE KNIT', slug: 'waffle-knit', image: 'https://images.unsplash.com/photo-1614975058789-41316d0e2e9c?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Sweaters', sort_order: 3, is_active: true },
+    { id: 'cat_sbc_4', name: 'QUARTER ZIP', title: 'QUARTER ZIP', slug: 'quarter-zip', image: 'https://images.unsplash.com/photo-1578587018452-892bacefd3f2?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Jackets', sort_order: 4, is_active: true }
+  ]
 };
 
 // Generic CMS Manager helper
@@ -67,9 +114,17 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
     try {
       const q = query(collection(db, collectionName));
       const snap = await getDocs(q);
-      setItems(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      if (snap.empty && DEFAULT_SEED_DATA[collectionName]) {
+        const seedItems = DEFAULT_SEED_DATA[collectionName];
+        for (const item of seedItems) {
+          await setDoc(doc(db, collectionName, item.id), item);
+        }
+        setItems(seedItems);
+      } else {
+        setItems(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      }
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching or seeding collection:", err);
     } finally {
       setLoading(false);
     }
@@ -78,6 +133,23 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
   useEffect(() => {
     fetchItems();
   }, [collectionName]);
+
+  const handleInputChange = (fieldKey, value) => {
+    setFormData(prev => {
+      const updated = { ...prev, [fieldKey]: value };
+      const hasSlug = fields.some(f => f.key === 'slug');
+      if ((fieldKey === 'name' || fieldKey === 'title' || fieldKey === 'code') && hasSlug) {
+        const generatedSlug = value
+          .toLowerCase()
+          .trim()
+          .replace(/[^a-z0-9\s-]/g, '')
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-');
+        updated.slug = generatedSlug;
+      }
+      return updated;
+    });
+  };
 
   const handleEdit = (item) => {
     setEditingItem(item);
@@ -215,9 +287,12 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
                       <input
                         type="file"
                         accept="image/*"
-                        onChange={e => handleFileUpload(e, f.key)}
+                        onChange={e => e.target.files?.[0] && handleImageUpload(e.target.files[0], f.key)}
                         className="w-full text-xs text-zinc-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-zinc-100 file:text-zinc-900 hover:file:bg-zinc-200 cursor-pointer"
                       />
+                      {uploading && (
+                        <p className="text-[10px] text-[#b8860b] font-bold animate-pulse">Uploading image...</p>
+                      )}
                     </div>
                   ) : f.type === 'boolean' ? (
                     <select
@@ -231,7 +306,7 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
                   ) : f.type === 'textarea' ? (
                     <textarea
                       value={formData[f.key] || ''}
-                      onChange={(e) => setFormData(prev => ({ ...prev, [f.key]: e.target.value }))}
+                      onChange={(e) => handleInputChange(f.key, e.target.value)}
                       rows={3}
                       className="w-full px-3 py-2 bg-zinc-50 border border-zinc-300 rounded-lg text-xs text-zinc-900 focus:bg-white focus:border-black outline-none transition-all"
                     />
@@ -239,7 +314,7 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
                     <input
                       type={f.type || 'text'}
                       value={formData[f.key] || ''}
-                      onChange={(e) => setFormData(prev => ({ ...prev, [f.key]: e.target.value }))}
+                      onChange={(e) => handleInputChange(f.key, e.target.value)}
                       className="w-full px-3 py-2 bg-zinc-50 border border-zinc-300 rounded-lg text-xs text-zinc-900 focus:bg-white focus:border-black outline-none transition-all"
                     />
                   )}
@@ -808,7 +883,23 @@ const Admin = () => {
     }
   };
 
-  const [activeItem, setActiveItem] = useState("Overview");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabFromUrl = searchParams.get("tab") || "Overview";
+  const [activeItem, setActiveItemState] = useState(tabFromUrl);
+
+  useEffect(() => {
+    const currentTab = searchParams.get("tab");
+    if (currentTab && currentTab !== activeItem) {
+      setActiveItemState(currentTab);
+    } else if (!currentTab && activeItem !== "Overview") {
+      setActiveItemState("Overview");
+    }
+  }, [searchParams]);
+
+  const setActiveItem = (newItem) => {
+    setActiveItemState(newItem);
+    setSearchParams({ tab: newItem });
+  };
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [searchVal, setSearchVal] = useState("");
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
@@ -1052,6 +1143,18 @@ const Admin = () => {
 
   const renderMainContent = () => {
     switch (activeItem) {
+      case "Analytics":
+        return <AnalyticsView />;
+      case "Reports":
+        return <ReportsView />;
+      case "Inventory":
+        return <InventoryView />;
+      case "Returns / Refunds":
+        return <ReturnsRefundsManager />;
+      case "Billing & Invoices":
+        return <BillingSystem />;
+      case "Profile Settings":
+        return <AdminProfileSettings />;
       case "Products":
         return (
           <>
@@ -1179,15 +1282,16 @@ const Admin = () => {
         return (
           <GenericCRUDManager
             collectionName="shop_by_category"
-            title="Shop By Category Banner CRUD"
+            title="Shop By Category (Home Page Grid)"
             fields={[
-              { key: 'image', label: 'Banner Image', type: 'image' },
-              { key: 'title', label: 'Category Title' },
-              { key: 'link', label: 'Shop Link Route' },
+              { key: 'image', label: 'Category Card Image', type: 'image' },
+              { key: 'name', label: 'Category Name / Title' },
+              { key: 'slug', label: 'Slug' },
+              { key: 'link', label: 'Destination Route / Link' },
               { key: 'sort_order', label: 'Sort Order', type: 'number' },
               { key: 'is_active', label: 'Status', type: 'boolean' }
             ]}
-            defaultItem={{ image: '', title: 'NEW CATEGORY', link: '/shop?category=Men', sort_order: 1, is_active: true }}
+            defaultItem={{ image: '', name: 'OVERSIZED T-SHIRT', slug: 'oversized-t-shirt', link: '/shop?category=T-Shirts', sort_order: 1, is_active: true }}
           />
         );
       case "Shop The Look":
@@ -1282,50 +1386,84 @@ const Admin = () => {
 
   if (!isAdminLoggedIn) {
     return (
-      <div className="min-h-screen bg-[#faf9f5] flex flex-col justify-center items-center px-5 font-['Inter',sans-serif]">
-        <div className="w-full max-w-md border border-zinc-200 bg-white p-8 md:p-10 shadow-2xl rounded-2xl space-y-6">
-          <div className="text-center">
-            <div className="h-12 w-12 rounded-xl bg-black text-white flex items-center justify-center shadow-md mx-auto mb-4">
-              <Shirt size={22} strokeWidth={2.5} />
+      <div className="min-h-screen w-full bg-[#faf9f5] flex items-center justify-center p-4 sm:p-6 relative overflow-hidden font-['Inter',sans-serif]">
+        {/* Subtle Ambient Background Elements */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#c9a962]/10 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-10 right-10 w-72 h-72 bg-black/[0.03] blur-2xl rounded-full pointer-events-none" />
+
+        {/* Centered Admin Card Container */}
+        <div className="w-full max-w-md bg-white/95 backdrop-blur-xl border border-zinc-200/90 p-8 sm:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.08)] rounded-3xl relative z-10 space-y-7 transition-all duration-500">
+          
+          {/* Header */}
+          <div className="text-center space-y-2">
+            <div className="w-14 h-14 rounded-2xl bg-black text-white flex items-center justify-center shadow-xl shadow-black/10 ring-4 ring-black/5 mx-auto mb-4 transform hover:scale-105 transition-transform duration-300">
+              <Shirt size={26} strokeWidth={2} />
             </div>
-            <h1 className="text-lg font-poppins font-bold tracking-widest text-zinc-900 uppercase">PASOJA ADMIN</h1>
-            <p className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1 font-semibold">ATELIER CONTROL CENTRE</p>
+            <h1 className="text-xl font-poppins font-extrabold tracking-[0.2em] text-zinc-900 uppercase">
+              PASOJA ADMIN
+            </h1>
+            <p className="text-[10px] text-[#b8860b] uppercase tracking-[0.3em] font-extrabold">
+              ATELIER CONTROL CENTRE
+            </p>
           </div>
 
           {loginError && (
-            <div className="p-3.5 bg-red-50 border border-red-200 rounded-lg text-red-700 text-[11px] font-medium flex items-center gap-2">
-              <AlertCircle size={14} className="shrink-0" />
+            <div className="p-3.5 bg-red-500/10 border border-red-500/20 rounded-xl text-red-700 text-[11px] font-bold flex items-center gap-2.5">
+              <AlertCircle size={15} className="shrink-0 text-red-600" />
               <span>{loginError}</span>
             </div>
           )}
 
-          <form onSubmit={handleAdminLogin} className="space-y-4">
+          <form onSubmit={handleAdminLogin} className="space-y-5">
             <div className="space-y-1.5">
-              <label className="text-[9px] font-bold uppercase tracking-[0.25em] text-zinc-500">Admin ID</label>
+              <label className="text-[9px] font-bold uppercase tracking-[0.25em] text-zinc-500 block pl-0.5">
+                Admin ID
+              </label>
               <div className="relative">
-                <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
-                <input type="email" value={adminEmail} onChange={(e) => setAdminEmail(e.target.value)} placeholder="super@pasoja.in" required
-                  className="w-full pl-10 pr-4 py-3 bg-zinc-50 border border-zinc-300 rounded-lg text-xs text-zinc-900 outline-none focus:border-black focus:bg-white transition-all duration-300 placeholder:text-zinc-400"
+                <Mail size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
+                <input
+                  type="email"
+                  value={adminEmail}
+                  onChange={(e) => setAdminEmail(e.target.value)}
+                  placeholder="super@pasoja.in"
+                  required
+                  className="w-full pl-11 pr-4 py-3.5 bg-zinc-50/80 border border-zinc-300 rounded-xl text-xs font-medium text-zinc-900 outline-none focus:border-black focus:bg-white focus:ring-2 focus:ring-black/10 transition-all duration-300 placeholder:text-zinc-400 shadow-inner"
                 />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[9px] font-bold uppercase tracking-[0.25em] text-zinc-500">Security Password</label>
+              <label className="text-[9px] font-bold uppercase tracking-[0.25em] text-zinc-500 block pl-0.5">
+                Security Password
+              </label>
               <div className="relative">
-                <Lock size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
-                <input type="password" value={adminPassword} onChange={(e) => setAdminPassword(e.target.value)} placeholder="••••••••" required
-                  className="w-full pl-10 pr-4 py-3 bg-zinc-50 border border-zinc-300 rounded-lg text-xs text-zinc-900 outline-none focus:border-black focus:bg-white transition-all duration-300 placeholder:text-zinc-400"
+                <Lock size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
+                <input
+                  type="password"
+                  value={adminPassword}
+                  onChange={(e) => setAdminPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  className="w-full pl-11 pr-4 py-3.5 bg-zinc-50/80 border border-zinc-300 rounded-xl text-xs font-medium text-zinc-900 outline-none focus:border-black focus:bg-white focus:ring-2 focus:ring-black/10 transition-all duration-300 placeholder:text-zinc-400 shadow-inner"
                 />
               </div>
             </div>
 
-            <button type="submit"
-              className="w-full py-3.5 bg-black text-white font-bold text-[10px] uppercase tracking-[0.2em] transition-all duration-300 hover:bg-zinc-800 flex items-center justify-center gap-2 cursor-pointer shadow-sm rounded-lg"
+            <button
+              type="submit"
+              className="w-full py-4 bg-black text-white font-extrabold text-[11px] uppercase tracking-[0.2em] transition-all duration-300 hover:bg-zinc-800 active:scale-[0.98] flex items-center justify-center gap-2.5 cursor-pointer shadow-lg shadow-black/10 rounded-xl mt-2"
             >
-              Authenticate Admin <ArrowRight size={13} />
+              <span>Authenticate Admin</span>
+              <ArrowRight size={14} />
             </button>
           </form>
+
+          {/* Card Footer Badge */}
+          <div className="pt-2 text-center border-t border-zinc-100">
+            <span className="text-[9px] font-semibold text-zinc-400 uppercase tracking-widest">
+              Secured Atelier Gateway • Pasoja Luxury
+            </span>
+          </div>
         </div>
       </div>
     );

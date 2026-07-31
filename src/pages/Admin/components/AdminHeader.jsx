@@ -1,6 +1,26 @@
+import React, { useState, useEffect } from 'react';
 import { CheckCircle2, Search, Bell, Sun, Menu } from 'lucide-react';
 
 const AdminHeader = ({ activeItem, searchVal, setSearchVal, onMenuClick }) => {
+  const [profile, setProfile] = useState(() => {
+    const cached = localStorage.getItem("pasoja_admin_profile");
+    return cached ? JSON.parse(cached) : {
+      name: "Admin",
+      role: "Super Admin",
+      image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150&auto=format&fit=crop"
+    };
+  });
+
+  useEffect(() => {
+    const updateProfile = () => {
+      const cached = localStorage.getItem("pasoja_admin_profile");
+      if (cached) setProfile(JSON.parse(cached));
+    };
+
+    window.addEventListener("adminProfileUpdated", updateProfile);
+    return () => window.removeEventListener("adminProfileUpdated", updateProfile);
+  }, []);
+
   return (
     <header className="flex items-center justify-between pb-5 border-b border-zinc-200 mb-8 bg-[#faf9f5]">
       <div className="flex items-center gap-3 md:gap-6 flex-1 max-w-lg">
@@ -44,11 +64,11 @@ const AdminHeader = ({ activeItem, searchVal, setSearchVal, onMenuClick }) => {
 
         <div className="flex items-center gap-3 pl-3 border-l border-zinc-200">
           <div className="w-8 h-8 rounded-full bg-zinc-200 border border-zinc-300 flex items-center justify-center text-xs font-bold text-zinc-900 uppercase overflow-hidden shadow-sm">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150&auto=format&fit=crop" className="w-full h-full object-cover" alt="Profile" />
+            <img src={profile.image} className="w-full h-full object-cover" alt="Profile" />
           </div>
           <div className="hidden md:block">
-            <p className="text-xs font-bold text-zinc-900 leading-none">Admin</p>
-            <p className="text-[9px] text-zinc-500 uppercase tracking-widest mt-0.5">Super Admin</p>
+            <p className="text-xs font-bold text-zinc-900 leading-none">{profile.name}</p>
+            <p className="text-[9px] text-zinc-500 uppercase tracking-widest mt-0.5 max-w-[120px] truncate">{profile.role}</p>
           </div>
         </div>
       </div>

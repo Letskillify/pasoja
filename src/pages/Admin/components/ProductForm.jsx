@@ -1,11 +1,67 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { uploadToCloudinary } from "../Admin";
+import { db } from "../../../components/Firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
   // Initialize size_prices from existing product or default with empty array
   const initialSizePrices = product?.size_prices || [];
   const [sizePrices, setSizePrices] = useState(initialSizePrices.length > 0 ? initialSizePrices : [{ size: "", price: 0, original_price: 0 }]);
+
+  // Live dynamic catalog data from Firestore
+  const [dbCategories, setDbCategories] = useState([]);
+  const [dbSubcategories, setDbSubcategories] = useState([]);
+  const [dbCollections, setDbCollections] = useState([]);
+  const [dbAttributes, setDbAttributes] = useState([]);
+
+  useEffect(() => {
+    const fetchCatalogData = async () => {
+      try {
+        const catSnap = await getDocs(collection(db, "categories"));
+        if (!catSnap.empty) {
+          setDbCategories(catSnap.docs.map(doc => doc.data().name).filter(Boolean));
+        } else {
+          setDbCategories(["T-Shirts", "Shirts", "Jeans", "Jackets", "Sweaters", "Shorts", "Accessories"]);
+        }
+
+        const subSnap = await getDocs(collection(db, "subcategories"));
+        if (!subSnap.empty) {
+          setDbSubcategories(subSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        } else {
+          setDbSubcategories([
+            { name: "Oversized Tees", parent_category: "T-Shirts" },
+            { name: "Graphic Tees", parent_category: "T-Shirts" },
+            { name: "Casual Shirts", parent_category: "Shirts" },
+            { name: "Formal Shirts", parent_category: "Shirts" },
+            { name: "Cargo Pants", parent_category: "Jeans" },
+            { name: "Denim Jackets", parent_category: "Jackets" }
+          ]);
+        }
+
+        const colSnap = await getDocs(collection(db, "collections"));
+        if (!colSnap.empty) {
+          setDbCollections(colSnap.docs.map(doc => doc.data().name).filter(Boolean));
+        } else {
+          setDbCollections(["New Arrivals", "Bestsellers", "The Artisan Edit", "Summer Edition"]);
+        }
+
+        const attrSnap = await getDocs(collection(db, "attributes"));
+        if (!attrSnap.empty) {
+          setDbAttributes(attrSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        } else {
+          setDbAttributes([
+            { name: "Size", values: "S, M, L, XL, XXL, 28, 30, 32, 34, 36" },
+            { name: "Color", values: "Black, White, Beige, Red, Blue, Green, Brown, Grey" },
+            { name: "Material", values: "100% Cotton, Denim, Fleece, Poly Blend, Linen, Wool" }
+          ]);
+        }
+      } catch (err) {
+        console.error("Error fetching catalog data for product form:", err);
+      }
+    };
+    fetchCatalogData();
+  }, []);
 
   const getInitialImages = () => {
     if (product) {
@@ -29,6 +85,8 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
     defaultValues: {
       name: product?.name || "",
       category: product?.category || "",
+      subcategory: product?.subcategory || "",
+      collection: product?.collection || "",
       gender: product?.gender || "Unisex",
       description: product?.description || "",
       price: product?.price || 0,
@@ -43,8 +101,13 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
   });
 
   const stockValue = watch("stock");
+  const selectedCategory = watch("category");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const filteredSubcategories = dbSubcategories.filter(
+    sub => !selectedCategory || !sub.parent_category || sub.parent_category === selectedCategory
+  );
 
   useEffect(() => {
     if (product) {
@@ -62,6 +125,8 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
       reset({
         name: product.name || "",
         category: product.category || "",
+        subcategory: product.subcategory || "",
+        collection: product.collection || "",
         gender: product.gender || "Unisex",
         description: product.description || "",
         price: product.price || 0,
@@ -82,6 +147,8 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
       reset({
         name: "",
         category: "",
+        subcategory: "",
+        collection: "",
         gender: "Unisex",
         description: "",
         price: 0,
@@ -133,20 +200,8 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
     setPrimaryIndex(idx);
   };
 
-  const categories = [
-    "T-Shirts",
-    "Shirts",
-    "Jeans",
-    "Jackets",
-    "Dresses",
-    "Skirts",
-    "Shorts",
-    "Sweaters",
-    "Accessories"
-  ];
-
-  const addSizePrice = () => {
-    setSizePrices([...sizePrices, { size: "", price: 0, original_price: 0 }]);
+  const addSizePrice = (sizeName = "") => {
+    setSizePrices(prev => [...prev, { size: sizeName, price: 0, original_price: 0 }]);
   };
 
   const removeSizePrice = (index) => {
@@ -173,7 +228,6 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         }
       }
 
-      // Upload model image if selected (Optional - 1 Image)
       let modelImageUrl = product?.model_image || "";
       if (modelImageFile) {
         modelImageUrl = await uploadToCloudinary(modelImageFile);
@@ -181,7 +235,6 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         modelImageUrl = "";
       }
 
-      // Re-order the images array so that the primary image is first!
       let orderedUrls = [...uploadUrls];
       if (uploadUrls.length > 0) {
         const primaryUrl = uploadUrls[primaryIndex] || uploadUrls[0];
@@ -189,10 +242,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         orderedUrls = [primaryUrl, ...remainingUrls];
       }
 
-      // Process size_prices - filter out empty sizes
       const validSizePrices = sizePrices.filter(sp => sp.size.trim() !== "");
-      
-      // Use the first size price as default price if available
       const defaultPrice = validSizePrices.length > 0 ? validSizePrices[0].price : Number(values.price) || 0;
       const defaultOriginalPrice = validSizePrices.length > 0 ? validSizePrices[0].original_price : Number(values.original_price) || 0;
 
@@ -202,6 +252,8 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
       const docData = {
         name: values.name,
         category: values.category,
+        subcategory: values.subcategory || "",
+        collection: values.collection || "",
         gender: values.gender || "Unisex",
         description: values.description,
         price: defaultPrice,
@@ -233,44 +285,90 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
     }
   };
 
+  const sizeAttr = dbAttributes.find(a => a.name?.toLowerCase() === 'size')?.values || "S, M, L, XL, XXL, 28, 30, 32, 34, 36";
+  const colorAttr = dbAttributes.find(a => a.name?.toLowerCase() === 'color')?.values || "Black, White, Beige, Red, Blue, Green, Brown, Grey";
+  const materialAttr = dbAttributes.find(a => a.name?.toLowerCase() === 'material')?.values || "100% Cotton, Denim, Fleece, Poly Blend, Linen, Wool";
+
+  const availableSizes = sizeAttr.split(',').map(s => s.trim()).filter(Boolean);
+  const availableColors = colorAttr.split(',').map(c => c.trim()).filter(Boolean);
+  const availableMaterials = materialAttr.split(',').map(m => m.trim()).filter(Boolean);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="space-y-1.5 md:col-span-1">
-          <label className="text-sm font-semibold text-[#71717b] uppercase tracking-wide">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+        
+        {/* Product Name */}
+        <div className="space-y-1.5 md:col-span-2">
+          <label className="text-xs font-bold text-zinc-600 uppercase tracking-wide">
             Product Name
           </label>
           <input
-            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-[#c9a962] focus:ring-1 focus:ring-[#c9a962] outline-none transition-all text-sm bg-white"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-[#c9a962] focus:ring-1 focus:ring-[#c9a962] outline-none transition-all text-sm bg-white"
             placeholder="e.g. Premium Cotton T-Shirt"
             {...register("name", { required: true })}
           />
         </div>
+
+        {/* Category (Dynamic from Firestore) */}
         <div className="space-y-1.5">
-          <label className="text-sm font-semibold text-[#71717b] uppercase tracking-wide">
+          <label className="text-xs font-bold text-zinc-600 uppercase tracking-wide">
             Category
           </label>
           <select
-            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-[#c9a962] focus:ring-1 focus:ring-[#c9a962] outline-none transition-all text-sm bg-white"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-[#c9a962] focus:ring-1 focus:ring-[#c9a962] outline-none transition-all text-sm bg-white cursor-pointer"
             {...register("category", { required: true })}
           >
             <option value="">Select Category</option>
-            {categories.map((cat) => (
+            {dbCategories.map((cat) => (
               <option key={cat} value={cat}>{cat}</option>
             ))}
           </select>
         </div>
+
+        {/* Subcategory (Dynamic & Filtered from Firestore) */}
         <div className="space-y-1.5">
-          <label className="text-sm font-semibold text-[#71717b] uppercase tracking-wide">
+          <label className="text-xs font-bold text-zinc-600 uppercase tracking-wide">
+            Subcategory
+          </label>
+          <select
+            className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-[#c9a962] focus:ring-1 focus:ring-[#c9a962] outline-none transition-all text-sm bg-white cursor-pointer"
+            {...register("subcategory")}
+          >
+            <option value="">Select Subcategory</option>
+            {filteredSubcategories.map((sub) => (
+              <option key={sub.id || sub.name} value={sub.name}>{sub.name}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Gender */}
+        <div className="space-y-1.5">
+          <label className="text-xs font-bold text-zinc-600 uppercase tracking-wide">
             Gender
           </label>
           <select
-            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-[#c9a962] focus:ring-1 focus:ring-[#c9a962] outline-none transition-all text-sm bg-white"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-[#c9a962] focus:ring-1 focus:ring-[#c9a962] outline-none transition-all text-sm bg-white cursor-pointer"
             {...register("gender")}
           >
             <option value="Unisex">Unisex</option>
             <option value="Men">Men</option>
             <option value="Women">Women</option>
+          </select>
+        </div>
+
+        {/* Collection (Dynamic from Firestore) */}
+        <div className="space-y-1.5 md:col-span-2 lg:col-span-2">
+          <label className="text-xs font-bold text-zinc-600 uppercase tracking-wide">
+            Collection Tag
+          </label>
+          <select
+            className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-[#c9a962] focus:ring-1 focus:ring-[#c9a962] outline-none transition-all text-sm bg-white cursor-pointer"
+            {...register("collection")}
+          >
+            <option value="">Select Collection (Optional)</option>
+            {dbCollections.map((col) => (
+              <option key={col} value={col}>{col}</option>
+            ))}
           </select>
         </div>
       </div>
@@ -289,17 +387,34 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
 
       {/* Size-Price Pairs Section */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <label className="text-sm font-semibold text-[#71717b] uppercase tracking-wide">
             Size & Price
           </label>
-          <button
-            type="button"
-            onClick={addSizePrice}
-            className="px-4 py-2 bg-[#c9a962]/10 text-[#c9a962] text-sm font-bold rounded-lg hover:bg-[#c9a962]/20 transition-colors"
-          >
-            + Add Size
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => addSizePrice("")}
+              className="px-4 py-2 bg-[#c9a962]/10 text-[#c9a962] text-sm font-bold rounded-lg hover:bg-[#c9a962]/20 transition-colors"
+            >
+              + Add Size
+            </button>
+          </div>
+        </div>
+
+        {/* Quick Size Pills */}
+        <div className="flex flex-wrap gap-1.5 items-center">
+          <span className="text-[10px] text-zinc-400 font-bold uppercase mr-1">Quick Add Attribute Sizes:</span>
+          {availableSizes.map(sz => (
+            <button
+              key={sz}
+              type="button"
+              onClick={() => addSizePrice(sz)}
+              className="px-2 py-1 bg-zinc-100 hover:bg-black hover:text-white text-[11px] font-semibold text-zinc-700 rounded-md transition-all cursor-pointer border border-zinc-200"
+            >
+              + {sz}
+            </button>
+          ))}
         </div>
 
         {sizePrices.map((sp, index) => (
@@ -376,6 +491,23 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
             placeholder="e.g. Black, White, Blue"
             {...register("colors")}
           />
+          <div className="flex flex-wrap gap-1 pt-1">
+            <span className="text-[10px] text-zinc-400 font-bold uppercase self-center mr-1">Suggested:</span>
+            {availableColors.map(col => (
+              <button
+                key={col}
+                type="button"
+                onClick={() => {
+                  const current = watch("colors") || "";
+                  const updated = current ? `${current}, ${col}` : col;
+                  setValue("colors", updated);
+                }}
+                className="px-2 py-0.5 bg-zinc-100 hover:bg-black hover:text-white text-[10px] font-semibold text-zinc-700 rounded transition-all cursor-pointer border border-zinc-200"
+              >
+                + {col}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -389,6 +521,19 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
             placeholder="e.g. 100% Cotton"
             {...register("material")}
           />
+          <div className="flex flex-wrap gap-1 pt-1">
+            <span className="text-[10px] text-zinc-400 font-bold uppercase self-center mr-1">Suggested:</span>
+            {availableMaterials.map(mat => (
+              <button
+                key={mat}
+                type="button"
+                onClick={() => setValue("material", mat)}
+                className="px-2 py-0.5 bg-zinc-100 hover:bg-black hover:text-white text-[10px] font-semibold text-zinc-700 rounded transition-all cursor-pointer border border-zinc-200"
+              >
+                {mat}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

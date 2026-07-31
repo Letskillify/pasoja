@@ -22,8 +22,10 @@ const CategorySection = () => {
         const snap = await getDocs(q);
         if (snap.empty) {
           const defaults = [
-            { id: 'cat_1', title: 'MENS', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/aksfxvhby4udttszyk8u.jpg', link: '/shop?gender=Men', sort_order: 1, is_active: true, position: 'left' },
-            { id: 'cat_2', title: 'WOMENS', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317405/jmm894vjineywo4jlbkm.jpg', link: '/shop?gender=Women', sort_order: 2, is_active: true, position: 'right' }
+            { id: 'cat_sbc_1', name: 'OVERSIZED T-SHIRT', title: 'OVERSIZED T-SHIRT', slug: 'oversized-t-shirt', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop', link: '/shop?category=T-Shirts', sort_order: 1, is_active: true, position: 'left' },
+            { id: 'cat_sbc_2', name: 'SHIRTS', title: 'SHIRTS', slug: 'shirts', image: 'https://images.unsplash.com/photo-1596755094514-f87e32f85e2c?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Shirts', sort_order: 2, is_active: true, position: 'right' },
+            { id: 'cat_sbc_3', name: 'WAFFLE KNIT', title: 'WAFFLE KNIT', slug: 'waffle-knit', image: 'https://images.unsplash.com/photo-1614975058789-41316d0e2e9c?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Sweaters', sort_order: 3, is_active: true, position: 'left' },
+            { id: 'cat_sbc_4', name: 'QUARTER ZIP', title: 'QUARTER ZIP', slug: 'quarter-zip', image: 'https://images.unsplash.com/photo-1578587018452-892bacefd3f2?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Jackets', sort_order: 4, is_active: true, position: 'right' }
           ];
           for (const item of defaults) {
             await setDoc(doc(db, 'shop_by_category', item.id), item);
@@ -71,24 +73,27 @@ const CategorySection = () => {
         </div>
       </div>
 
-      {/* Mobile Grid View (lg:hidden) - Zero borders, subtle overlays, centered text at bottom */}
+      {/* Mobile Grid View (lg:hidden) - Dynamic Live Data */}
       <div className="lg:hidden w-full px-4">
-        <div className="grid grid-cols-2 gap-2">
-          {mobileCategories.map((cat) => (
+        <div className="grid grid-cols-2 gap-2.5">
+          {banners.map((cat) => (
             <Link
               key={cat.id}
-              to={cat.link}
-              className="relative group block overflow-hidden bg-[#111] aspect-[3/4] w-full"
+              to={cat.link || '/shop'}
+              className="relative group block overflow-hidden bg-[#111] aspect-[3/4] w-full rounded-xl shadow-sm"
             >
               <img
                 src={cat.image}
-                alt={cat.title}
-                className="absolute inset-0 w-full h-full object-cover opacity-80"
+                alt={cat.name || cat.title}
+                className="absolute inset-0 w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
-              <div className="absolute bottom-5 left-0 right-0 z-20 text-center pointer-events-none px-2">
-                <span className="text-[10px] sm:text-xs tracking-[0.15em] text-white uppercase font-bold">
-                  {cat.title}
+              <div className="absolute bottom-4 left-0 right-0 z-20 text-center pointer-events-none px-2">
+                <span className="text-[11px] tracking-[0.15em] text-white uppercase font-extrabold block">
+                  {cat.name || cat.title}
+                </span>
+                <span className="text-[9px] tracking-[0.2em] text-[#c9a962] uppercase font-semibold mt-0.5 block">
+                  SHOP NOW &rarr;
                 </span>
               </div>
             </Link>
@@ -96,7 +101,7 @@ const CategorySection = () => {
         </div>
       </div>
 
-      {/* Desktop Grid View (hidden lg:grid) - Full Width Edge-to-Edge with 0 Gap */}
+      {/* Desktop Grid View (hidden lg:grid) - Full Width Edge-to-Edge */}
       <div className="hidden lg:grid grid-cols-2 gap-0 w-full max-w-none">
         {banners.map((banner, index) => (
           <motion.div
@@ -108,13 +113,13 @@ const CategorySection = () => {
             className="relative w-full"
           >
             <Link
-              to={banner.link}
+              to={banner.link || '/shop'}
               className="relative group block overflow-hidden bg-[#111] w-full aspect-[1.35/1] border-none rounded-none"
             >
               {/* Hero Product Image */}
               <img
                 src={banner.image}
-                alt={`${banner.title} collection`}
+                alt={`${banner.name || banner.title} collection`}
                 className="absolute inset-0 w-full h-full object-cover opacity-75 transition-all duration-[700ms] ease-out group-hover:scale-[1.04] group-hover:brightness-[1.08] group-hover:opacity-90"
               />
 
@@ -156,7 +161,7 @@ const CategorySection = () => {
               {/* Bottom Left Content */}
               <div className="absolute bottom-6 left-6 sm:bottom-8 sm:left-8 z-20 flex flex-col items-start pointer-events-none">
                 <h3 className="text-2xl sm:text-3xl md:text-4xl font-light text-white uppercase tracking-[0.15em] leading-none mb-3">
-                  {banner.title}
+                  {banner.name || banner.title}
                 </h3>
                 <div className="flex items-center gap-2.5">
                   <span className="text-[9px] sm:text-[10px] tracking-[0.25em] text-white uppercase font-semibold border-b border-white/60 pb-0.5">
