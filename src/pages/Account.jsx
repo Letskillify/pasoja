@@ -447,7 +447,7 @@ const Account = () => {
       {toastMessage && (
         <div className="fixed bottom-8 right-8 z-[100] bg-black text-white px-6 py-3.5 shadow-2xl flex items-center gap-3 border border-zinc-800 animate-bounce">
           <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
-          <p className="text-[11px] font-bold uppercase tracking-wider">{toastMessage}</p>
+          <p className="text-[11px]   uppercase tracking-wider">{toastMessage}</p>
         </div>
       )}
 
@@ -483,7 +483,7 @@ const Account = () => {
                   </h1>
                   <span className="px-2.5 py-0.5 bg-[#b8860b]/10 border border-[#b8860b]/30 text-[#b8860b] text-[8px] font-black uppercase tracking-widest">Client Member</span>
                 </div>
-                <p className="text-xs text-zinc-500">{user?.email}</p>
+                <p className="text-[12px] text-zinc-500">{user?.email}</p>
                 {phone && (
                   <p className="text-[11px] text-[#b8860b] flex items-center justify-center md:justify-start gap-1 font-semibold">
                     <Phone size={10} /> {phone}
@@ -495,12 +495,12 @@ const Account = () => {
 
             <div className="flex items-center gap-3">
               {activeTab !== "overview" && (
-                <button onClick={() => setActiveTab("overview")} className="h-10 px-5 border border-zinc-300 text-zinc-700 text-[10px] font-bold uppercase tracking-wider hover:border-black hover:text-black transition-all bg-white">
+                <button onClick={() => setActiveTab("overview")} className="h-10 px-5 border border-zinc-300 text-zinc-700 text-[10px]   uppercase tracking-wider hover:border-black hover:text-black transition-all bg-white">
                   Overview
                 </button>
               )}
               <button onClick={handleLogout}
-                className="h-10 px-5 bg-zinc-100 border border-zinc-300 text-zinc-700 font-bold text-[10px] uppercase tracking-[0.2em] hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center gap-2"
+                className="h-10 px-5 bg-zinc-100 border border-zinc-300 text-zinc-700   text-[10px] uppercase tracking-[0.2em] hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center gap-2"
               >
                 <LogOut size={12} strokeWidth={2} />
                 Logout
@@ -521,7 +521,7 @@ const Account = () => {
                   <ShoppingBag size={13} strokeWidth={1.5} />
                 </div>
                 <p className="text-xl font-light text-zinc-900 tracking-wider">{stats.cart}</p>
-                <p className="text-[8px] font-bold text-zinc-500 uppercase tracking-widest mt-0.5">In Cart</p>
+                <p className="text-[8px]   text-zinc-500 uppercase tracking-widest mt-0.5">In Cart</p>
               </Link>
 
               <Link to="/wishlist" className="group bg-white border border-zinc-200 p-4 hover:border-black/30 transition-all text-center sm:text-left shadow-sm">
@@ -529,7 +529,7 @@ const Account = () => {
                   <Heart size={13} strokeWidth={1.5} />
                 </div>
                 <p className="text-xl font-light text-zinc-900 tracking-wider">{stats.wishlist}</p>
-                <p className="text-[8px] font-bold text-zinc-500 uppercase tracking-widest mt-0.5">Wishlist</p>
+                <p className="text-[8px]   text-zinc-500 uppercase tracking-widest mt-0.5">Wishlist</p>
               </Link>
 
               <button onClick={() => setActiveTab("orders")} className="group bg-white border border-zinc-200 p-4 hover:border-black/30 transition-all text-center sm:text-left shadow-sm">
@@ -537,13 +537,13 @@ const Account = () => {
                   <Package size={13} strokeWidth={1.5} />
                 </div>
                 <p className="text-xl font-light text-zinc-900 tracking-wider">{stats.orders}</p>
-                <p className="text-[8px] font-bold text-zinc-500 uppercase tracking-widest mt-0.5">Orders</p>
+                <p className="text-[8px]   text-zinc-500 uppercase tracking-widest mt-0.5">Orders</p>
               </button>
             </div>
 
             {/* Nav Menu */}
             <div className="bg-white border border-zinc-200 p-1.5 shadow-sm">
-              <span className="block px-3 py-2 text-[9px] font-bold text-zinc-400 uppercase tracking-[0.3em]">Account Panel</span>
+              <span className="block px-3 py-2 text-[9px]   text-zinc-400 uppercase tracking-[0.3em]">Account Panel</span>
               {[
                 { id: "profile", icon: Settings, label: "Profile & Phone" },
                 { id: "orders", icon: Package, label: "Orders & Invoices" },
@@ -599,7 +599,7 @@ const Account = () => {
                               <Package size={16} strokeWidth={1.5} />
                             </div>
                             <div>
-                              <p className="text-[13px] font-bold text-zinc-800 group-hover:text-black transition-colors">
+                              <p className="text-[13px]   text-zinc-800 group-hover:text-black transition-colors">
                                 #{order.id.slice(0, 10).toUpperCase()}
                               </p>
                               <p className="text-[11px] text-zinc-500">
@@ -610,18 +610,17 @@ const Account = () => {
 
                           <div className="w-full sm:w-auto flex sm:flex-row items-center justify-between sm:justify-end gap-3">
                             <div className="text-right">
-                              <p className="text-sm font-bold text-zinc-900">₹{order.total?.toLocaleString()}</p>
-                              <span className={`inline-block px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider border ${
-                                order.status === 'confirmed' || order.status === 'delivered' ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                              <p className="text-sm   text-zinc-900">₹{order.total?.toLocaleString()}</p>
+                              <span className={`inline-block px-2 py-0.5 text-[8px]   uppercase tracking-wider border ${order.status === 'confirmed' || order.status === 'delivered' ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
                                 : order.status === 'failed' ? 'bg-red-50 text-red-700 border-red-300'
-                                : 'bg-amber-50 text-amber-700 border-amber-300'
-                              }`}>{order.status || 'Confirmed'}</span>
+                                  : 'bg-amber-50 text-amber-700 border-amber-300'
+                                }`}>{order.status || 'Confirmed'}</span>
                             </div>
 
                             <div className="flex gap-2">
                               <button
                                 onClick={() => setSelectedOrder(order)}
-                                className="px-3 py-2 bg-zinc-100 border border-zinc-300 text-zinc-800 text-[9px] font-bold uppercase tracking-wider hover:bg-black hover:text-white transition-all"
+                                className="px-3 py-2 bg-zinc-100 border border-zinc-300 text-zinc-800 text-[9px]   uppercase tracking-wider hover:bg-black hover:text-white transition-all"
                               >
                                 Details
                               </button>
@@ -644,7 +643,7 @@ const Account = () => {
                       </div>
                       <h4 className="text-sm font-light text-zinc-900 uppercase tracking-widest mb-1">No orders yet</h4>
                       <p className="text-[11px] text-zinc-500 mb-4">Start exploring the shop to place your first order.</p>
-                      <Link to="/shop" className="inline-flex items-center gap-2 px-5 py-2.5 bg-black text-white font-bold text-[9px] uppercase tracking-widest hover:bg-zinc-800 transition-all">
+                      <Link to="/shop" className="inline-flex items-center gap-2 px-5 py-2.5 bg-black text-white   text-[9px] uppercase tracking-widest hover:bg-zinc-800 transition-all">
                         Explore Shop <ChevronRight size={11} />
                       </Link>
                     </div>
@@ -656,7 +655,7 @@ const Account = () => {
                   <div className="flex items-center justify-between mb-4 pb-3 border-b border-zinc-200">
                     <div className="flex items-center gap-2">
                       <MapPin size={14} className="text-[#b8860b]" />
-                      <h4 className="text-xs font-bold text-zinc-900 uppercase tracking-widest">Primary Shipping Address</h4>
+                      <h4 className="text-[12px]   text-zinc-900 uppercase tracking-widest">Primary Shipping Address</h4>
                     </div>
                     <button onClick={() => setActiveTab("addresses")} className="text-[10px] text-[#b8860b] font-semibold hover:underline uppercase tracking-wider">
                       Manage Addresses ({addresses.length})
@@ -667,17 +666,17 @@ const Account = () => {
                     (() => {
                       const defaultAddr = addresses.find(a => a.isDefault) || addresses[0];
                       return (
-                        <div className="text-xs text-zinc-700 space-y-1">
-                          <p className="font-bold text-zinc-900 uppercase tracking-wider">{defaultAddr.name}</p>
+                        <div className="text-[12px] text-zinc-700 space-y-1">
+                          <p className="  text-zinc-900 uppercase tracking-wider">{defaultAddr.name}</p>
                           <p className="text-zinc-500">{defaultAddr.address}, {defaultAddr.city}, {defaultAddr.state} - {defaultAddr.pincode}</p>
                           <p className="text-[10px] text-[#b8860b] font-semibold">Contact: {defaultAddr.phone}</p>
                         </div>
                       );
                     })()
                   ) : (
-                    <div className="flex items-center justify-between text-xs text-zinc-500">
+                    <div className="flex items-center justify-between text-[12px] text-zinc-500">
                       <p>No saved addresses.</p>
-                      <button onClick={() => { setActiveTab("addresses"); setShowAddressForm(true); }} className="text-[10px] text-zinc-900 underline uppercase font-bold">Add Address</button>
+                      <button onClick={() => { setActiveTab("addresses"); setShowAddressForm(true); }} className="text-[10px] text-zinc-900 underline uppercase  ">Add Address</button>
                     </div>
                   )}
                 </div>
@@ -695,53 +694,53 @@ const Account = () => {
                 <form onSubmit={handleUpdateProfile} className="space-y-5">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Profile Name</label>
+                      <label className="text-[10px]   text-zinc-500 uppercase tracking-widest">Profile Name</label>
                       <input
                         type="text"
                         value={displayName}
                         onChange={(e) => setDisplayName(e.target.value)}
                         required
                         placeholder="Your Full Name"
-                        className="w-full px-4 py-3 bg-zinc-50 border border-zinc-300 text-xs text-zinc-900 focus:border-zinc-500 outline-none transition-colors"
+                        className="w-full px-4 py-3 bg-zinc-50 border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none transition-colors"
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Contact Phone Number</label>
+                      <label className="text-[10px]   text-zinc-500 uppercase tracking-widest">Contact Phone Number</label>
                       <input
                         type="text"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="+91 98765 43210"
-                        className="w-full px-4 py-3 bg-zinc-50 border border-zinc-300 text-xs text-zinc-900 focus:border-zinc-500 outline-none transition-colors"
+                        className="w-full px-4 py-3 bg-zinc-50 border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none transition-colors"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Registered Email (Read-only)</label>
+                    <label className="text-[10px]   text-zinc-400 uppercase tracking-widest">Registered Email (Read-only)</label>
                     <input
                       type="email"
                       value={user?.email || ""}
                       disabled
-                      className="w-full px-4 py-3 bg-zinc-100 border border-zinc-200 text-xs text-zinc-500 cursor-not-allowed outline-none"
+                      className="w-full px-4 py-3 bg-zinc-100 border border-zinc-200 text-[12px] text-zinc-500 cursor-not-allowed outline-none"
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Short Bio</label>
+                    <label className="text-[10px]   text-zinc-500 uppercase tracking-widest">Short Bio</label>
                     <textarea
                       value={bio}
                       onChange={(e) => setBio(e.target.value)}
                       placeholder="Share your fashion preferences..."
                       rows={3}
-                      className="w-full px-4 py-3 bg-zinc-50 border border-zinc-300 text-xs text-zinc-900 focus:border-zinc-500 outline-none transition-colors resize-none"
+                      className="w-full px-4 py-3 bg-zinc-50 border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none transition-colors resize-none"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={savingProfile}
-                    className="px-8 py-3.5 bg-black text-white text-[10px] font-bold uppercase tracking-widest hover:bg-zinc-800 transition-colors disabled:opacity-50"
+                    className="px-8 py-3.5 bg-black text-white text-[10px]   uppercase tracking-widest hover:bg-zinc-800 transition-colors disabled:opacity-50"
                   >
                     {savingProfile ? "Saving Details..." : "Save Profile Changes"}
                   </button>
@@ -770,18 +769,17 @@ const Account = () => {
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-zinc-200">
                           <div>
                             <span className="text-[9px] text-[#b8860b] font-black uppercase tracking-widest">Order Reference</span>
-                            <h4 className="text-xs font-bold text-zinc-900 uppercase tracking-wider">#{order.id.slice(0, 14).toUpperCase()}</h4>
+                            <h4 className="text-[12px]   text-zinc-900 uppercase tracking-wider">#{order.id.slice(0, 14).toUpperCase()}</h4>
                           </div>
                           <div className="flex items-center gap-3">
-                            <span className={`px-2.5 py-0.5 text-[8px] font-bold uppercase tracking-widest border ${
-                              order.status === 'confirmed' || order.status === 'delivered' ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                            <span className={`px-2.5 py-0.5 text-[8px]   uppercase tracking-widest border ${order.status === 'confirmed' || order.status === 'delivered' ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
                               : order.status === 'failed' ? 'bg-red-50 text-red-700 border-red-300'
-                              : 'bg-amber-50 text-amber-700 border-amber-300'
-                            }`}>{order.status || 'Confirmed'}</span>
+                                : 'bg-amber-50 text-amber-700 border-amber-300'
+                              }`}>{order.status || 'Confirmed'}</span>
 
                             <button
                               onClick={() => handleDownloadInvoice(order)}
-                              className="px-3 py-1 bg-white border border-zinc-300 hover:bg-[#b8860b] hover:text-white text-[#b8860b] text-[9px] font-bold uppercase tracking-wider transition-all flex items-center gap-1.5"
+                              className="px-3 py-1 bg-white border border-zinc-300 hover:bg-[#b8860b] hover:text-white text-[#b8860b] text-[9px]   uppercase tracking-wider transition-all flex items-center gap-1.5"
                             >
                               <Download size={11} /> Invoice
                             </button>
@@ -790,19 +788,19 @@ const Account = () => {
 
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-[11px] text-zinc-600">
                           <div>
-                            <span className="block text-[8px] uppercase tracking-wider text-zinc-500 font-bold mb-0.5">Date Placed</span>
+                            <span className="block text-[8px] uppercase tracking-wider text-zinc-500   mb-0.5">Date Placed</span>
                             <span className="text-zinc-900">{order.createdAt?.toDate ? order.createdAt.toDate().toLocaleDateString('en-IN') : 'Recent'}</span>
                           </div>
                           <div>
-                            <span className="block text-[8px] uppercase tracking-wider text-zinc-500 font-bold mb-0.5">Total Amount</span>
-                            <span className="text-zinc-900 font-bold">₹{order.total?.toLocaleString()}</span>
+                            <span className="block text-[8px] uppercase tracking-wider text-zinc-500   mb-0.5">Total Amount</span>
+                            <span className="text-zinc-900  ">₹{order.total?.toLocaleString()}</span>
                           </div>
                           <div>
-                            <span className="block text-[8px] uppercase tracking-wider text-zinc-500 font-bold mb-0.5">Payment Method</span>
+                            <span className="block text-[8px] uppercase tracking-wider text-zinc-500   mb-0.5">Payment Method</span>
                             <span className="text-zinc-900 uppercase">{order.paymentMethod || 'Online'}</span>
                           </div>
                           <div>
-                            <span className="block text-[8px] uppercase tracking-wider text-zinc-500 font-bold mb-0.5">Items</span>
+                            <span className="block text-[8px] uppercase tracking-wider text-zinc-500   mb-0.5">Items</span>
                             <span className="text-zinc-900">{order.items?.length || 1} Item(s)</span>
                           </div>
                         </div>
@@ -810,7 +808,7 @@ const Account = () => {
                         <div className="pt-2 flex justify-end">
                           <button
                             onClick={() => setSelectedOrder(order)}
-                            className="text-[10px] text-zinc-600 hover:text-black font-bold uppercase tracking-widest flex items-center gap-1 transition-colors"
+                            className="text-[10px] text-zinc-600 hover:text-black   uppercase tracking-widest flex items-center gap-1 transition-colors"
                           >
                             Track & View Full Order Details <ChevronRight size={11} />
                           </button>
@@ -820,8 +818,8 @@ const Account = () => {
                   </div>
                 ) : (
                   <div className="text-center py-16">
-                    <p className="text-zinc-500 text-xs uppercase tracking-widest mb-3">No order history available.</p>
-                    <Link to="/shop" className="px-6 py-3 bg-black text-white font-bold text-[10px] uppercase tracking-widest hover:bg-zinc-800 transition-all inline-block">
+                    <p className="text-zinc-500 text-[12px] uppercase tracking-widest mb-3">No order history available.</p>
+                    <Link to="/shop" className="px-6 py-3 bg-black text-white   text-[10px] uppercase tracking-widest hover:bg-zinc-800 transition-all inline-block">
                       Browse Shop
                     </Link>
                   </div>
@@ -842,7 +840,7 @@ const Account = () => {
                       if (showAddressForm) resetAddressForm();
                       else setShowAddressForm(true);
                     }}
-                    className="h-9 px-4 border border-zinc-300 text-[9px] font-bold text-[#b8860b] uppercase tracking-widest hover:bg-black hover:text-white hover:border-black transition-all flex items-center gap-1.5"
+                    className="h-9 px-4 border border-zinc-300 text-[9px]   text-[#b8860b] uppercase tracking-widest hover:bg-black hover:text-white hover:border-black transition-all flex items-center gap-1.5"
                   >
                     <Plus size={12} /> {showAddressForm ? "Cancel" : "Add New Address"}
                   </button>
@@ -851,72 +849,72 @@ const Account = () => {
                 {/* ADDRESS FORM */}
                 {showAddressForm && (
                   <form onSubmit={handleSaveAddress} className="bg-zinc-50 border border-zinc-200 p-6 space-y-4 rounded">
-                    <h4 className="text-xs font-bold uppercase tracking-widest text-[#b8860b] mb-2">
+                    <h4 className="text-[12px]   uppercase tracking-widest text-[#b8860b] mb-2">
                       {editingAddressId ? "Edit Address" : "New Address Details"}
                     </h4>
-                    
+
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Contact Person Name</label>
+                        <label className="text-[9px]   text-zinc-500 uppercase tracking-wider">Contact Person Name</label>
                         <input
                           type="text"
                           value={addressForm.name}
                           onChange={(e) => setAddressForm({ ...addressForm, name: e.target.value })}
                           required
                           placeholder="John Doe"
-                          className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-xs text-zinc-900 focus:border-zinc-500 outline-none"
+                          className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none"
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Contact Phone Number</label>
+                        <label className="text-[9px]   text-zinc-500 uppercase tracking-wider">Contact Phone Number</label>
                         <input
                           type="text"
                           value={addressForm.phone}
                           onChange={(e) => setAddressForm({ ...addressForm, phone: e.target.value })}
                           required
                           placeholder="+91 98765 43210"
-                          className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-xs text-zinc-900 focus:border-zinc-500 outline-none"
+                          className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none"
                         />
                       </div>
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Street Address / House No / Area</label>
+                      <label className="text-[9px]   text-zinc-500 uppercase tracking-wider">Street Address / House No / Area</label>
                       <input
                         type="text"
                         value={addressForm.address}
                         onChange={(e) => setAddressForm({ ...addressForm, address: e.target.value })}
                         required
                         placeholder="Apartment, Street Name, Landmark"
-                        className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-xs text-zinc-900 focus:border-zinc-500 outline-none"
+                        className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none"
                       />
                     </div>
 
                     <div className="grid grid-cols-3 gap-3">
                       <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">City</label>
+                        <label className="text-[9px]   text-zinc-500 uppercase tracking-wider">City</label>
                         <input
                           type="text"
                           value={addressForm.city}
                           onChange={(e) => setAddressForm({ ...addressForm, city: e.target.value })}
                           required
                           placeholder="City"
-                          className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-xs text-zinc-900 focus:border-zinc-500 outline-none"
+                          className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none"
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">State</label>
+                        <label className="text-[9px]   text-zinc-500 uppercase tracking-wider">State</label>
                         <input
                           type="text"
                           value={addressForm.state}
                           onChange={(e) => setAddressForm({ ...addressForm, state: e.target.value })}
                           required
                           placeholder="State"
-                          className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-xs text-zinc-900 focus:border-zinc-500 outline-none"
+                          className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none"
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Pincode</label>
+                        <label className="text-[9px]   text-zinc-500 uppercase tracking-wider">Pincode</label>
                         <input
                           type="text"
                           value={addressForm.pincode}
@@ -924,13 +922,13 @@ const Account = () => {
                           required
                           maxLength={6}
                           placeholder="6-digit Pincode"
-                          className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-xs text-zinc-900 focus:border-zinc-500 outline-none"
+                          className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none"
                         />
                       </div>
                     </div>
 
                     <div className="flex items-center gap-4 pt-2">
-                      <label className="flex items-center gap-2 cursor-pointer text-xs text-zinc-700">
+                      <label className="flex items-center gap-2 cursor-pointer text-[12px] text-zinc-700">
                         <input
                           type="checkbox"
                           checked={addressForm.isDefault}
@@ -942,10 +940,10 @@ const Account = () => {
                     </div>
 
                     <div className="flex gap-2 pt-2">
-                      <button type="submit" className="px-5 py-2.5 bg-black text-white text-[9px] font-bold uppercase tracking-wider hover:bg-zinc-800 transition-colors">
+                      <button type="submit" className="px-5 py-2.5 bg-black text-white text-[9px]   uppercase tracking-wider hover:bg-zinc-800 transition-colors">
                         {editingAddressId ? "Update Address" : "Save Address"}
                       </button>
-                      <button type="button" onClick={resetAddressForm} className="px-5 py-2.5 border border-zinc-300 text-zinc-600 text-[9px] font-bold uppercase tracking-wider hover:text-black transition-colors">
+                      <button type="button" onClick={resetAddressForm} className="px-5 py-2.5 border border-zinc-300 text-zinc-600 text-[9px]   uppercase tracking-wider hover:text-black transition-colors">
                         Cancel
                       </button>
                     </div>
@@ -957,13 +955,13 @@ const Account = () => {
                   {addresses.map((a) => (
                     <div key={a.id} className={`p-5 bg-zinc-50 border ${a.isDefault ? 'border-[#b8860b]' : 'border-zinc-200'} rounded flex flex-col justify-between space-y-4 relative`}>
                       {a.isDefault && (
-                        <span className="absolute top-3 right-3 px-2 py-0.5 bg-[#b8860b]/10 border border-[#b8860b]/30 text-[#b8860b] text-[8px] font-bold uppercase tracking-wider">
+                        <span className="absolute top-3 right-3 px-2 py-0.5 bg-[#b8860b]/10 border border-[#b8860b]/30 text-[#b8860b] text-[8px]   uppercase tracking-wider">
                           Default
                         </span>
                       )}
 
-                      <div className="space-y-2 text-xs">
-                        <h4 className="font-bold text-zinc-900 tracking-wide uppercase pr-16">{a.name}</h4>
+                      <div className="space-y-2 text-[12px]">
+                        <h4 className="  text-zinc-900 tracking-wide uppercase pr-16">{a.name}</h4>
                         <p className="text-zinc-600 leading-relaxed">{a.address}, {a.city}, {a.state} - {a.pincode}</p>
                         <p className="text-[10px] text-[#b8860b] font-semibold flex items-center gap-1 pt-1">
                           <Phone size={10} /> Phone: {a.phone}
@@ -974,7 +972,7 @@ const Account = () => {
                         {!a.isDefault ? (
                           <button
                             onClick={() => handleSetDefaultAddress(a.id)}
-                            className="text-[9px] text-zinc-500 hover:text-[#b8860b] uppercase tracking-wider transition-colors font-bold"
+                            className="text-[9px] text-zinc-500 hover:text-[#b8860b] uppercase tracking-wider transition-colors  "
                           >
                             Set Default
                           </button>
@@ -1003,10 +1001,10 @@ const Account = () => {
                   {addresses.length === 0 && !showAddressForm && (
                     <div className="col-span-2 text-center py-12 border border-dashed border-zinc-300 rounded">
                       <MapPin size={24} className="mx-auto text-zinc-400 mb-2" />
-                      <p className="text-zinc-500 text-xs uppercase tracking-widest mb-3">No saved addresses found.</p>
+                      <p className="text-zinc-500 text-[12px] uppercase tracking-widest mb-3">No saved addresses found.</p>
                       <button
                         onClick={() => setShowAddressForm(true)}
-                        className="px-4 py-2 border border-zinc-400 text-zinc-900 text-[9px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all"
+                        className="px-4 py-2 border border-zinc-400 text-zinc-900 text-[9px]   uppercase tracking-widest hover:bg-black hover:text-white transition-all"
                       >
                         Add Your First Address
                       </button>
@@ -1026,7 +1024,7 @@ const Account = () => {
                   </div>
                   <button
                     onClick={() => setShowCardForm(!showCardForm)}
-                    className="h-8 px-4 border border-zinc-300 text-[9px] font-bold text-[#b8860b] uppercase tracking-widest hover:bg-black hover:text-white hover:border-black transition-all flex items-center gap-1.5"
+                    className="h-8 px-4 border border-zinc-300 text-[9px]   text-[#b8860b] uppercase tracking-widest hover:bg-black hover:text-white hover:border-black transition-all flex items-center gap-1.5"
                   >
                     <Plus size={11} /> {showCardForm ? "Cancel" : "Add Card"}
                   </button>
@@ -1036,18 +1034,18 @@ const Account = () => {
                   <form onSubmit={handleAddCard} className="bg-zinc-50 border border-zinc-200 p-5 space-y-4 rounded">
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Cardholder Name</label>
+                        <label className="text-[9px]   text-zinc-500 uppercase tracking-wider">Cardholder Name</label>
                         <input
                           type="text"
                           value={newCard.cardHolder}
                           onChange={(e) => setNewCard({ ...newCard, cardHolder: e.target.value })}
                           required
                           placeholder="John Doe"
-                          className="w-full px-3 py-2 bg-white border border-zinc-300 text-xs text-zinc-900 focus:border-zinc-500 outline-none"
+                          className="w-full px-3 py-2 bg-white border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none"
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Card Number</label>
+                        <label className="text-[9px]   text-zinc-500 uppercase tracking-wider">Card Number</label>
                         <input
                           type="text"
                           value={newCard.cardNumber}
@@ -1055,13 +1053,13 @@ const Account = () => {
                           required
                           maxLength={16}
                           placeholder="4242 4242 4242 4242"
-                          className="w-full px-3 py-2 bg-white border border-zinc-300 text-xs text-zinc-900 focus:border-zinc-500 outline-none"
+                          className="w-full px-3 py-2 bg-white border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none"
                         />
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Expiry Date</label>
+                        <label className="text-[9px]   text-zinc-500 uppercase tracking-wider">Expiry Date</label>
                         <input
                           type="text"
                           value={newCard.expiry}
@@ -1069,15 +1067,15 @@ const Account = () => {
                           required
                           placeholder="MM/YY"
                           maxLength={5}
-                          className="w-full px-3 py-2 bg-white border border-zinc-300 text-xs text-zinc-900 focus:border-zinc-500 outline-none"
+                          className="w-full px-3 py-2 bg-white border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none"
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Card Network</label>
+                        <label className="text-[9px]   text-zinc-500 uppercase tracking-wider">Card Network</label>
                         <select
                           value={newCard.brand}
                           onChange={(e) => setNewCard({ ...newCard, brand: e.target.value })}
-                          className="w-full px-3 py-2 bg-white border border-zinc-300 text-xs text-zinc-900 focus:border-zinc-500 outline-none"
+                          className="w-full px-3 py-2 bg-white border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none"
                         >
                           <option value="Visa">Visa</option>
                           <option value="Mastercard">Mastercard</option>
@@ -1087,10 +1085,10 @@ const Account = () => {
                       </div>
                     </div>
                     <div className="flex gap-2 pt-2">
-                      <button type="submit" className="px-4 py-2 bg-black text-white text-[9px] font-bold uppercase tracking-wider hover:bg-zinc-800 transition-colors">
+                      <button type="submit" className="px-4 py-2 bg-black text-white text-[9px]   uppercase tracking-wider hover:bg-zinc-800 transition-colors">
                         Save Card
                       </button>
-                      <button type="button" onClick={() => setShowCardForm(false)} className="px-4 py-2 border border-zinc-300 text-zinc-600 text-[9px] font-bold uppercase tracking-wider hover:text-black transition-colors">
+                      <button type="button" onClick={() => setShowCardForm(false)} className="px-4 py-2 border border-zinc-300 text-zinc-600 text-[9px]   uppercase tracking-wider hover:text-black transition-colors">
                         Cancel
                       </button>
                     </div>
@@ -1101,7 +1099,7 @@ const Account = () => {
                   {payments.map((p) => (
                     <div key={p.id} className="p-5 bg-gradient-to-br from-zinc-900 to-black text-white border border-zinc-800 rounded relative overflow-hidden flex flex-col justify-between h-40 shadow-md">
                       <div className="flex justify-between items-start">
-                        <span className="text-[10px] font-bold text-[#c9a962] tracking-[0.25em] uppercase">{p.brand}</span>
+                        <span className="text-[10px]   text-[#c9a962] tracking-[0.25em] uppercase">{p.brand}</span>
                         <div className="flex items-center gap-2">
                           <CreditCard size={18} strokeWidth={1.2} className="text-white/40" />
                           <button onClick={() => handleDeleteCard(p.id)} className="text-white/40 hover:text-red-400 transition-colors">
@@ -1113,12 +1111,12 @@ const Account = () => {
                         <p className="text-sm font-mono tracking-widest text-white">{p.cardNumber}</p>
                         <div className="flex justify-between items-end">
                           <div>
-                            <span className="block text-[7px] uppercase tracking-wider text-zinc-400 font-bold">Holder</span>
-                            <span className="text-[10px] font-bold text-white/80">{p.cardHolder}</span>
+                            <span className="block text-[7px] uppercase tracking-wider text-zinc-400  ">Holder</span>
+                            <span className="text-[10px]   text-white/80">{p.cardHolder}</span>
                           </div>
                           <div>
-                            <span className="block text-[7px] uppercase tracking-wider text-zinc-400 font-bold">Expiry</span>
-                            <span className="text-[10px] font-mono font-bold text-white/80">{p.expiry}</span>
+                            <span className="block text-[7px] uppercase tracking-wider text-zinc-400  ">Expiry</span>
+                            <span className="text-[10px] font-mono   text-white/80">{p.expiry}</span>
                           </div>
                         </div>
                       </div>
@@ -1145,7 +1143,7 @@ const Account = () => {
                   ].map((notif) => (
                     <div key={notif.key} className="flex justify-between items-center p-4 bg-zinc-50 border border-zinc-200 rounded">
                       <div className="max-w-[80%] space-y-0.5">
-                        <h4 className="text-xs font-bold text-zinc-900 uppercase tracking-wider">{notif.title}</h4>
+                        <h4 className="text-[12px]   text-zinc-900 uppercase tracking-wider">{notif.title}</h4>
                         <p className="text-[10px] text-zinc-500 leading-relaxed">{notif.sub}</p>
                       </div>
                       <input
@@ -1171,19 +1169,19 @@ const Account = () => {
       {selectedOrder && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="bg-white border border-zinc-200 max-w-2xl w-full max-h-[90vh] overflow-y-auto rounded shadow-2xl text-zinc-900">
-            
+
             {/* Modal Header */}
             <div className="px-6 py-5 border-b border-zinc-200 flex items-center justify-between sticky top-0 bg-white z-10">
               <div>
                 <span className="text-[9px] text-[#b8860b] font-black uppercase tracking-widest">Order Details & Tracking</span>
-                <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-900 mt-0.5">
+                <h3 className="text-[12px]   uppercase tracking-widest text-zinc-900 mt-0.5">
                   Order #{selectedOrder.id.slice(0, 16).toUpperCase()}
                 </h3>
               </div>
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => handleDownloadInvoice(selectedOrder)}
-                  className="px-3 py-1.5 bg-black text-white text-[9px] font-bold uppercase tracking-wider hover:bg-zinc-800 transition-all flex items-center gap-1.5"
+                  className="px-3 py-1.5 bg-black text-white text-[9px]   uppercase tracking-wider hover:bg-zinc-800 transition-all flex items-center gap-1.5"
                 >
                   <Download size={11} /> Invoice
                 </button>
@@ -1193,11 +1191,11 @@ const Account = () => {
               </div>
             </div>
 
-            <div className="p-6 space-y-6 text-xs">
+            <div className="p-6 space-y-6 text-[12px]">
               {/* STEPPER TIMELINE */}
               <div className="space-y-4 bg-zinc-50 border border-zinc-200 p-5 rounded">
                 <div className="flex justify-between items-center">
-                  <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Shipment Status</span>
+                  <span className="text-[10px] text-zinc-500 uppercase tracking-widest  ">Shipment Status</span>
                   <span className="px-2.5 py-0.5 text-[8px] font-black uppercase tracking-wider border border-[#b8860b]/40 text-[#b8860b] bg-[#b8860b]/10 rounded">
                     {selectedOrder.status || 'Confirmed'}
                   </span>
@@ -1205,10 +1203,9 @@ const Account = () => {
 
                 <div className="relative pt-2">
                   <div className="h-1 bg-zinc-200 w-full rounded" />
-                  <div className={`absolute top-2 h-1 bg-[#b8860b] rounded transition-all duration-500 ${
-                    selectedOrder.status === 'delivered' ? 'w-full' : selectedOrder.status === 'shipped' || selectedOrder.status === 'shipping' ? 'w-2/3' : 'w-1/3'
-                  }`} />
-                  <div className="flex justify-between text-[9px] uppercase tracking-wider mt-3 text-zinc-500 font-bold">
+                  <div className={`absolute top-2 h-1 bg-[#b8860b] rounded transition-all duration-500 ${selectedOrder.status === 'delivered' ? 'w-full' : selectedOrder.status === 'shipped' || selectedOrder.status === 'shipping' ? 'w-2/3' : 'w-1/3'
+                    }`} />
+                  <div className="flex justify-between text-[9px] uppercase tracking-wider mt-3 text-zinc-500  ">
                     <span className="text-zinc-900 flex items-center gap-1"><CheckCircle2 size={10} className="text-[#b8860b]" /> Confirmed</span>
                     <span className={selectedOrder.status === 'shipped' || selectedOrder.status === 'delivered' ? 'text-zinc-900 flex items-center gap-1' : ''}>
                       <Truck size={10} /> Shipped
@@ -1222,7 +1219,7 @@ const Account = () => {
 
               {/* PURCHASED ITEMS */}
               <div className="space-y-3">
-                <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest block">Purchased Items ({selectedOrder.items?.length || 1})</span>
+                <span className="text-[9px]   text-zinc-500 uppercase tracking-widest block">Purchased Items ({selectedOrder.items?.length || 1})</span>
                 <div className="space-y-2">
                   {selectedOrder.items?.map((item, i) => (
                     <div key={i} className="flex gap-4 items-center bg-zinc-50 border border-zinc-200 p-3.5 rounded">
@@ -1230,10 +1227,10 @@ const Account = () => {
                         <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-bold text-zinc-900 truncate uppercase tracking-wider">{item.name}</h4>
+                        <h4 className="  text-zinc-900 truncate uppercase tracking-wider">{item.name}</h4>
                         <p className="text-[10px] text-zinc-500 uppercase mt-0.5">Qty: {item.quantity || 1} {item.size && `| Size: ${item.size}`}</p>
                       </div>
-                      <span className="font-bold text-zinc-900 text-sm">₹{((item.price || 0) * (item.quantity || 1)).toLocaleString()}</span>
+                      <span className="  text-zinc-900 text-sm">₹{((item.price || 0) * (item.quantity || 1)).toLocaleString()}</span>
                     </div>
                   ))}
                 </div>
@@ -1242,7 +1239,7 @@ const Account = () => {
               {/* SHIPPING & SUMMARY INFO */}
               <div className="grid sm:grid-cols-2 gap-6 pt-4 border-t border-zinc-200">
                 <div className="space-y-1.5">
-                  <span className="block text-[8px] uppercase tracking-wider text-zinc-500 font-bold">Shipping Destination</span>
+                  <span className="block text-[8px] uppercase tracking-wider text-zinc-500  ">Shipping Destination</span>
                   <p className="text-zinc-700 leading-relaxed">
                     <strong>{selectedOrder.shipping?.name || displayName || 'Valued Customer'}</strong><br />
                     {selectedOrder.shipping?.address}, {selectedOrder.shipping?.city}, {selectedOrder.shipping?.state} - {selectedOrder.shipping?.pincode}<br />
@@ -1251,12 +1248,12 @@ const Account = () => {
                 </div>
                 <div className="space-y-2 text-right">
                   <div>
-                    <span className="block text-[8px] uppercase tracking-wider text-zinc-500 font-bold">Payment Status</span>
-                    <span className="text-emerald-700 font-bold uppercase">PAID ({selectedOrder.paymentMethod || 'Online'})</span>
+                    <span className="block text-[8px] uppercase tracking-wider text-zinc-500  ">Payment Status</span>
+                    <span className="text-emerald-700   uppercase">PAID ({selectedOrder.paymentMethod || 'Online'})</span>
                   </div>
                   <div>
-                    <span className="block text-[8px] uppercase tracking-wider text-zinc-500 font-bold">Grand Total</span>
-                    <span className="text-lg font-bold text-zinc-900">₹{(selectedOrder.total || 0).toLocaleString()}</span>
+                    <span className="block text-[8px] uppercase tracking-wider text-zinc-500  ">Grand Total</span>
+                    <span className="text-lg   text-zinc-900">₹{(selectedOrder.total || 0).toLocaleString()}</span>
                   </div>
                 </div>
               </div>
@@ -1264,7 +1261,7 @@ const Account = () => {
               <div className="pt-2 flex justify-end">
                 <button
                   onClick={() => handleDownloadInvoice(selectedOrder)}
-                  className="w-full py-3 bg-black text-white font-bold text-[10px] uppercase tracking-widest hover:bg-zinc-800 transition-all flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-black text-white   text-[10px] uppercase tracking-widest hover:bg-zinc-800 transition-all flex items-center justify-center gap-2"
                 >
                   <Download size={13} /> Print / Download Tax Invoice
                 </button>

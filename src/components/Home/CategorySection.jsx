@@ -57,7 +57,7 @@ const CategorySection = () => {
     <section className="py-8 md:py-12 bg-[#faf9f5] overflow-hidden relative border-t border-zinc-200">
       {/* Header Container */}
       <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 mb-6 md:mb-8">
-        <p className="text-[10px] sm:text-xs tracking-[0.3em] text-[#b8860b] uppercase mb-2 font-bold">
+        <p className="text-[10px] sm:text-xs tracking-[0.3em] text-[#b8860b] uppercase mb-2  ">
           THE COLLECTION
         </p>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-8">
@@ -66,9 +66,6 @@ const CategorySection = () => {
               SHOP BY CATEGORY
             </h2>
             <div className="hidden md:block flex-1 h-[1px] bg-zinc-200 ml-8 mr-4 self-center mt-1" />
-          </div>
-          <div className="text-zinc-600 text-xs sm:text-sm tracking-wide max-w-[320px] text-left md:text-right font-light leading-relaxed">
-            Curated separates crafted for uncompromising quality and fit.
           </div>
         </div>
       </div>

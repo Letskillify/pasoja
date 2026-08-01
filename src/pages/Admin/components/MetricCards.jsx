@@ -89,13 +89,13 @@ const MetricCards = () => {
               <div className={`w-12 h-12 rounded-xl ${card.bg} ${card.color} flex items-center justify-center mb-4 group-hover:scale-105 transition-transform`}>
                 <Icon size={24} strokeWidth={2} />
               </div>
-              <p className="text-xs font-bold tracking-wider text-zinc-500 uppercase mb-1">
+              <p className="text-[12px]   tracking-wider text-zinc-500 uppercase mb-1">
                 {card.label}
               </p>
               <p className="text-3xl font-poppins font-extrabold text-zinc-900 mb-1">
                 {card.value}
               </p>
-              <p className="text-xs font-medium text-zinc-500">
+              <p className="text-[12px] font-medium text-zinc-500">
                 {card.hint}
               </p>
             </div>

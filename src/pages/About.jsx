@@ -25,7 +25,7 @@ const About = () => {
 
       {/* HERO EDITORIAL */}
       <section className="py-16 md:py-24 bg-[#faf9f5]">
-        <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14">
+        <div className="max-w-7xl py-3 mx-auto px-5 md:px-10 lg:px-14">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             {/* Image Grid */}
             <motion.div {...fadeUp} className="grid grid-cols-12 gap-3 sm:gap-4">
@@ -48,7 +48,7 @@ const About = () => {
             {/* Content */}
             <div className="space-y-7 lg:pl-4">
               <motion.div {...fadeUp}>
-                <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-zinc-500 block mb-4">Our Philosophy</span>
+                <span className="text-[10px]   tracking-[0.3em] uppercase text-zinc-500 block mb-4">Our Philosophy</span>
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-zinc-900 leading-[1.1] tracking-widest uppercase">
                   Fashion That<br />Speaks to Your Soul
                 </h2>
@@ -66,11 +66,11 @@ const About = () => {
               >
                 <div>
                   <span className="text-4xl font-light text-zinc-900 tracking-widest">500+</span>
-                  <p className="text-[10px] uppercase tracking-[0.25em] text-zinc-500 font-bold mt-1">Curated Designs</p>
+                  <p className="text-[10px] uppercase tracking-[0.25em] text-zinc-500   mt-1">Curated Designs</p>
                 </div>
                 <div>
                   <span className="text-4xl font-light text-zinc-900 tracking-widest">10K+</span>
-                  <p className="text-[10px] uppercase tracking-[0.25em] text-zinc-500 font-bold mt-1">Happy Customers</p>
+                  <p className="text-[10px] uppercase tracking-[0.25em] text-zinc-500   mt-1">Happy Customers</p>
                 </div>
               </motion.div>
 
@@ -91,9 +91,9 @@ const About = () => {
 
       {/* VALUES */}
       <section className="py-16 md:py-20 bg-[#faf9f5]">
-        <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14">
+        <div className="max-w-7xl py-3 mx-auto px-5 md:px-10 lg:px-14">
           <div className="pb-10 border-b border-zinc-200 mb-12">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold block mb-3">What Defines Us</span>
+            <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-500   block mb-3">What Defines Us</span>
             <h2 className="text-3xl md:text-4xl font-light text-zinc-900 uppercase tracking-widest">Our Core Values</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
@@ -140,7 +140,7 @@ const About = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
-            <p className="text-white/70 text-[10px] uppercase tracking-[0.4em] font-bold mb-4">Our Promise</p>
+            <p className="text-white/70 text-[10px] uppercase tracking-[0.4em]   mb-4">Our Promise</p>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-light text-white max-w-2xl leading-[1.1] tracking-widest uppercase">
               Designed to Inspire.<br />Built to Last.
             </h2>
@@ -152,7 +152,7 @@ const About = () => {
       <section className="py-16 md:py-24 bg-[#faf9f5]">
         <div className="max-w-4xl mx-auto px-5 md:px-10 lg:px-14">
           <div className="pb-10 border-b border-zinc-200 mb-12">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold block mb-3">Our Journey</span>
+            <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-500   block mb-3">Our Journey</span>
             <h2 className="text-3xl font-light text-zinc-900 uppercase tracking-widest">Milestones That Define Us</h2>
           </div>
           <div className="space-y-0">
@@ -176,7 +176,7 @@ const About = () => {
                   </span>
                 </div>
                 <div>
-                  <h3 className="text-[15px] sm:text-base font-bold text-zinc-900 mb-1 group-hover:text-[#b8860b] transition-colors">{milestone.title}</h3>
+                  <h3 className="text-[15px] sm:text-base   text-zinc-900 mb-1 group-hover:text-[#b8860b] transition-colors">{milestone.title}</h3>
                   <p className="text-[13px] text-zinc-500 leading-relaxed">{milestone.desc}</p>
                 </div>
               </motion.div>

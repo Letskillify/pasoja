@@ -63,7 +63,7 @@ const Benefits = () => {
           >
             <div className="flex items-center gap-2.5 text-[#D9A036]">
               <Sparkles size={12} strokeWidth={1.5} />
-              <span className="text-[14px] font-bold uppercase tracking-[0.35em]">The Physiological Ledger</span>
+              <span className="text-[14px]   uppercase tracking-[0.35em]">The Physiological Ledger</span>
             </div>
 
             <h1 className="text-[11vw] sm:text-[8vw] lg:text-[6vw] font-poppins font-light text-[#1C2B21] leading-[0.95] tracking-tighter">
@@ -84,7 +84,7 @@ const Benefits = () => {
             <span className="text-[120px] font-poppins font-light text-[#6b4f3]/10 leading-none select-none pointer-events-none">
               01
             </span>
-            <p className="text-[14px] font-bold uppercase tracking-widest text-[#9A8F80] mt-2">
+            <p className="text-[14px]   uppercase tracking-widest text-[#9A8F80] mt-2">
               Clinical Integrity Verified
             </p>
           </div>
@@ -96,7 +96,7 @@ const Benefits = () => {
           {/* Navigation Track */}
           <div className="lg:col-span-5 flex flex-col justify-between gap-8">
             <div className="space-y-4">
-              <p className="text-[14px] font-bold uppercase tracking-[0.25em] text-[#9A8F80]">Biological Vectors</p>
+              <p className="text-[14px]   uppercase tracking-[0.25em] text-[#9A8F80]">Biological Vectors</p>
               <h2 className="text-2xl font-poppins font-light tracking-tight text-[#1C2B21]">The Three Structural Pillars</h2>
             </div>
 
@@ -106,8 +106,8 @@ const Benefits = () => {
                   key={idx}
                   onClick={() => setActiveMetric(idx)}
                   className={`w-full text-left p-6 rounded-xl border transition-all duration-500 flex items-center justify-between group ${activeMetric === idx
-                      ? 'bg-white border-[#6b4f3]/30 shadow-[0_20px_50px_rgba(28,43,33,0.04)]'
-                      : 'bg-transparent border-[#EAE6DF] hover:border-[#9A8F80]/50'
+                    ? 'bg-white border-[#6b4f3]/30 shadow-[0_20px_50px_rgba(28,43,33,0.04)]'
+                    : 'bg-transparent border-[#EAE6DF] hover:border-[#9A8F80]/50'
                     }`}
                 >
                   <div className="flex items-center gap-4">
@@ -116,7 +116,7 @@ const Benefits = () => {
                       {item.icon}
                     </div>
                     <div>
-                      <h3 className="text-sm font-poppins font-bold text-[#1C2B21] tracking-tight">{item.title}</h3>
+                      <h3 className="text-sm font-poppins   text-[#1C2B21] tracking-tight">{item.title}</h3>
                       <p className="text-[14px] text-[#9A8F80] tracking-wide mt-0.5">{item.metric}</p>
                     </div>
                   </div>
@@ -147,7 +147,7 @@ const Benefits = () => {
                     <span className="text-5xl sm:text-6xl font-poppins font-light text-[#6b4f3] tracking-tight">
                       {biologicalMetrics[activeMetric].value}
                     </span>
-                    <span className="text-sm uppercase tracking-widest font-bold text-[#D9A036]">
+                    <span className="text-sm uppercase tracking-widest   text-[#D9A036]">
                       {biologicalMetrics[activeMetric].metric}
                     </span>
                   </div>
@@ -161,7 +161,7 @@ const Benefits = () => {
                 <div className="pt-8 border-t border-[#F9F8F6] grid grid-cols-2 gap-6">
                   {biologicalMetrics[activeMetric].stats.map((stat, sIdx) => (
                     <div key={sIdx} className="space-y-1">
-                      <span className="text-[14px] font-bold uppercase tracking-widest text-[#9A8F80] block">
+                      <span className="text-[14px]   uppercase tracking-widest text-[#9A8F80] block">
                         {stat.label}
                       </span>
                       <span className="text-lg font-poppins font-light text-[#1C2B21]">
@@ -206,7 +206,7 @@ const Benefits = () => {
               <div className="w-10 h-10 rounded-lg bg-[#F9F8F6] border border-[#EAE6DF] flex items-center justify-center text-[#6b4f3]">
                 {benefit.icon}
               </div>
-              <h3 className="text-base font-poppins font-bold text-[#1C2B21] tracking-tight">{benefit.title}</h3>
+              <h3 className="text-base font-poppins   text-[#1C2B21] tracking-tight">{benefit.title}</h3>
               <p className="text-sm text-[#5C665E] font-light leading-relaxed">{benefit.desc}</p>
             </motion.div>
           ))}
@@ -226,7 +226,7 @@ const Benefits = () => {
           <div className="relative z-10 max-w-4xl space-y-10">
             <div className="flex items-center gap-3">
               <div className="w-8 h-[1px] bg-[#D9A036]" />
-              <span className="text-[14px] font-bold uppercase tracking-[0.35em] text-[#D9A036]">Biological Charter</span>
+              <span className="text-[14px]   uppercase tracking-[0.35em] text-[#D9A036]">Biological Charter</span>
             </div>
 
             <h2 className="text-2xl sm:text-4xl md:text-5xl font-poppins font-light leading-[1.25] tracking-tight text-white">
@@ -238,7 +238,7 @@ const Benefits = () => {
                 <span className="flex items-center gap-1.5"><Compass size={11} /> Earth Born Real</span>
                 <span className="flex items-center gap-1.5"><LineChart size={11} /> Glycemic Balance Verified</span>
               </div>
-              <span className="text-[14px] font-bold uppercase tracking-widest text-[#D9A036]">
+              <span className="text-[14px]   uppercase tracking-widest text-[#D9A036]">
                 Maison de la Santé // Established Heritage
               </span>
             </div>

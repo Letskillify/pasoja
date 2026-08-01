@@ -43,10 +43,10 @@ const BillingSystem = () => {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm print:hidden">
         <div>
-          <h2 className="text-xl font-bold font-poppins text-zinc-900 uppercase tracking-wider flex items-center gap-2">
+          <h2 className="text-xl   font-poppins text-zinc-900 uppercase tracking-wider flex items-center gap-2">
             <FileText className="text-[#b8860b]" size={22} /> Customer Billing & Tax Invoice System
           </h2>
-          <p className="text-xs text-zinc-500 mt-1">View, search, and print official Tax Invoices for all completed customer store orders.</p>
+          <p className="text-[12px] text-zinc-500 mt-1">View, search, and print official Tax Invoices for all completed customer store orders.</p>
         </div>
       </div>
 
@@ -59,7 +59,7 @@ const BillingSystem = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search bills by customer name, email, phone number, or order ID..."
-            className="w-full pl-10 pr-4 py-2.5 bg-zinc-50 border border-zinc-300 rounded-xl text-xs outline-none focus:border-black focus:bg-white transition-all"
+            className="w-full pl-10 pr-4 py-2.5 bg-zinc-50 border border-zinc-300 rounded-xl text-[12px] outline-none focus:border-black focus:bg-white transition-all"
           />
         </div>
       </div>
@@ -67,12 +67,12 @@ const BillingSystem = () => {
       {/* Customer Orders / Bills Table */}
       <div className="bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm print:hidden">
         {loading ? (
-          <div className="py-12 text-center text-xs text-zinc-500">Loading customer billing records...</div>
+          <div className="py-12 text-center text-[12px] text-zinc-500">Loading customer billing records...</div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse">
+            <table className="w-full text-left text-[12px] border-collapse">
               <thead>
-                <tr className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 border-b border-zinc-200">
+                <tr className="text-[10px]   uppercase tracking-widest text-zinc-400 border-b border-zinc-200">
                   <th className="py-3 px-3">Invoice #</th>
                   <th className="py-3 px-3">Customer Name</th>
                   <th className="py-3 px-3">Contact Email & Phone</th>
@@ -89,16 +89,16 @@ const BillingSystem = () => {
                   const phone = o.phone || o.shippingAddress?.phone || 'N/A';
                   const total = o.total || o.grandTotal || o.totalPrice || 0;
                   const dateStr = o.createdAt ? new Date(o.createdAt.seconds ? o.createdAt.seconds * 1000 : o.createdAt).toLocaleDateString('en-IN') : new Date().toLocaleDateString('en-IN');
-                  
+
                   return (
                     <tr key={o.id} className="hover:bg-zinc-50/80 transition-colors">
-                      <td className="py-3.5 px-3 font-mono font-bold text-zinc-900">
+                      <td className="py-3.5 px-3 font-mono   text-zinc-900">
                         INV-{o.id?.slice(0, 8).toUpperCase()}
                       </td>
                       <td className="py-3.5 px-3">
                         <button
                           onClick={() => setSelectedOrder(o)}
-                          className="font-bold text-black hover:text-[#b8860b] underline text-left transition-colors cursor-pointer"
+                          className="  text-black hover:text-[#b8860b] underline text-left transition-colors cursor-pointer"
                         >
                           {customer}
                         </button>
@@ -113,7 +113,7 @@ const BillingSystem = () => {
                       <td className="py-3.5 px-3 text-right">
                         <button
                           onClick={() => setSelectedOrder(o)}
-                          className="px-3.5 py-1.5 bg-black hover:bg-zinc-800 text-white font-bold text-xs rounded-lg shadow-sm transition-all flex items-center gap-1.5 ml-auto cursor-pointer"
+                          className="px-3.5 py-1.5 bg-black hover:bg-zinc-800 text-white   text-[12px] rounded-lg shadow-sm transition-all flex items-center gap-1.5 ml-auto cursor-pointer"
                         >
                           <Printer size={13} />
                           <span>View & Print Bill</span>
@@ -124,7 +124,7 @@ const BillingSystem = () => {
                 })}
                 {filteredOrders.length === 0 && (
                   <tr>
-                    <td colSpan={7} className="py-8 text-center text-zinc-500 text-xs">No billing records found.</td>
+                    <td colSpan={7} className="py-8 text-center text-zinc-500 text-[12px]">No billing records found.</td>
                   </tr>
                 )}
               </tbody>
@@ -137,16 +137,16 @@ const BillingSystem = () => {
       {selectedOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 overflow-y-auto print:p-0 print:static print:bg-white print:backdrop-none">
           <div className="bg-white border border-zinc-200 rounded-2xl max-w-2xl w-full p-8 shadow-2xl space-y-6 relative print:border-none print:shadow-none print:max-w-none print:w-full print:p-0">
-            
+
             {/* Modal Close & Print Buttons Header (Hidden during printing) */}
             <div className="flex justify-between items-center border-b border-zinc-200 pb-4 print:hidden">
-              <span className="text-xs font-extrabold uppercase tracking-widest text-[#b8860b]">
+              <span className="text-[12px] font-extrabold uppercase tracking-widest text-[#b8860b]">
                 Tax Invoice Preview
               </span>
               <div className="flex items-center gap-2">
                 <button
                   onClick={handlePrint}
-                  className="px-4 py-2 bg-black hover:bg-zinc-800 text-white font-bold text-xs rounded-xl shadow transition-all flex items-center gap-2 cursor-pointer"
+                  className="px-4 py-2 bg-black hover:bg-zinc-800 text-white   text-[12px] rounded-xl shadow transition-all flex items-center gap-2 cursor-pointer"
                 >
                   <Printer size={15} /> Print Invoice
                 </button>
@@ -161,42 +161,42 @@ const BillingSystem = () => {
 
             {/* TAX INVOICE CONTENT DOCUMENT */}
             <div className="space-y-6 text-zinc-900" id="printable-invoice">
-              
+
               {/* Store & Invoice Header */}
               <div className="flex justify-between items-start border-b border-zinc-200 pb-6">
                 <div>
                   <h1 className="text-xl font-poppins font-extrabold tracking-widest text-black uppercase">
                     PASOJA LUXURY ATELIER
                   </h1>
-                  <p className="text-[10px] text-zinc-500 uppercase tracking-widest mt-0.5 font-bold">
+                  <p className="text-[10px] text-zinc-500 uppercase tracking-widest mt-0.5  ">
                     Official Tax Invoice & Sales Receipt
                   </p>
-                  <p className="text-xs text-zinc-600 mt-2 font-medium">
+                  <p className="text-[12px] text-zinc-600 mt-2 font-medium">
                     34 Atelier Boulevard, CP, New Delhi - 110001
                   </p>
-                  <p className="text-xs text-zinc-500">GSTIN: 07AAACP1234F1Z9 | support@pasoja.in</p>
+                  <p className="text-[12px] text-zinc-500">GSTIN: 07AAACP1234F1Z9 | support@pasoja.in</p>
                 </div>
                 <div className="text-right">
                   <span className="px-3 py-1 bg-black text-white text-[10px] font-extrabold uppercase tracking-widest rounded-md inline-block mb-2">
                     TAX INVOICE
                   </span>
-                  <p className="text-xs font-bold text-zinc-900">Invoice #: INV-{selectedOrder.id?.slice(0, 8).toUpperCase()}</p>
-                  <p className="text-xs text-zinc-500">
+                  <p className="text-[12px]   text-zinc-900">Invoice #: INV-{selectedOrder.id?.slice(0, 8).toUpperCase()}</p>
+                  <p className="text-[12px] text-zinc-500">
                     Date: {selectedOrder.createdAt ? new Date(selectedOrder.createdAt.seconds ? selectedOrder.createdAt.seconds * 1000 : selectedOrder.createdAt).toLocaleDateString('en-IN') : new Date().toLocaleDateString('en-IN')}
                   </p>
                 </div>
               </div>
 
               {/* Billed To Details */}
-              <div className="grid grid-cols-2 gap-6 bg-zinc-50 p-4 rounded-xl border border-zinc-200 text-xs">
+              <div className="grid grid-cols-2 gap-6 bg-zinc-50 p-4 rounded-xl border border-zinc-200 text-[12px]">
                 <div className="space-y-1">
-                  <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Billed To (Customer):</p>
-                  <p className="font-bold text-zinc-900 text-sm">{selectedOrder.customerName || selectedOrder.shippingAddress?.fullName || 'Valued Customer'}</p>
+                  <p className="text-[10px]   text-zinc-400 uppercase tracking-widest">Billed To (Customer):</p>
+                  <p className="  text-zinc-900 text-sm">{selectedOrder.customerName || selectedOrder.shippingAddress?.fullName || 'Valued Customer'}</p>
                   <p className="text-zinc-600">{selectedOrder.customerEmail || selectedOrder.shippingAddress?.email || 'customer@email.com'}</p>
                   <p className="text-zinc-600">{selectedOrder.phone || selectedOrder.shippingAddress?.phone || '+91 98765 43210'}</p>
                 </div>
                 <div className="space-y-1 text-right">
-                  <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Shipping Address:</p>
+                  <p className="text-[10px]   text-zinc-400 uppercase tracking-widest">Shipping Address:</p>
                   <p className="text-zinc-800 font-medium">
                     {selectedOrder.shippingAddress?.street || selectedOrder.address || 'Standard Delivery Address'}
                   </p>
@@ -209,9 +209,9 @@ const BillingSystem = () => {
 
               {/* Invoice Items Table */}
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs border-collapse">
+                <table className="w-full text-left text-[12px] border-collapse">
                   <thead>
-                    <tr className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 border-b border-zinc-300">
+                    <tr className="text-[10px]   uppercase tracking-widest text-zinc-500 border-b border-zinc-300">
                       <th className="py-2.5 px-2">Item Description</th>
                       <th className="py-2.5 px-2">Size</th>
                       <th className="py-2.5 px-2 text-center">Qty</th>
@@ -227,11 +227,11 @@ const BillingSystem = () => {
                       const price = parseFloat(item.price || 1999);
                       return (
                         <tr key={idx}>
-                          <td className="py-3 px-2 font-bold text-zinc-900">{item.name || item.title || "Luxury Garment"}</td>
+                          <td className="py-3 px-2   text-zinc-900">{item.name || item.title || "Luxury Garment"}</td>
                           <td className="py-3 px-2 text-zinc-600">{item.size || "Free Size"}</td>
                           <td className="py-3 px-2 text-center font-semibold text-zinc-800">{qty}</td>
                           <td className="py-3 px-2 text-right font-medium text-zinc-700">₹{price.toLocaleString('en-IN')}</td>
-                          <td className="py-3 px-2 text-right font-bold text-zinc-900">₹{(price * qty).toLocaleString('en-IN')}</td>
+                          <td className="py-3 px-2 text-right   text-zinc-900">₹{(price * qty).toLocaleString('en-IN')}</td>
                         </tr>
                       );
                     })}
@@ -241,7 +241,7 @@ const BillingSystem = () => {
 
               {/* Total Summary */}
               <div className="border-t border-zinc-300 pt-4 flex justify-end">
-                <div className="w-64 space-y-2 text-xs">
+                <div className="w-64 space-y-2 text-[12px]">
                   <div className="flex justify-between text-zinc-600">
                     <span>Subtotal:</span>
                     <span className="font-semibold text-zinc-900">₹{Number(selectedOrder.total || selectedOrder.grandTotal || 1999).toLocaleString('en-IN')}</span>
@@ -252,7 +252,7 @@ const BillingSystem = () => {
                   </div>
                   <div className="flex justify-between text-zinc-600">
                     <span>Shipping Fee:</span>
-                    <span className="font-bold text-emerald-600">FREE</span>
+                    <span className="  text-emerald-600">FREE</span>
                   </div>
                   <div className="flex justify-between text-sm font-extrabold text-black border-t border-zinc-300 pt-2">
                     <span>Grand Total:</span>

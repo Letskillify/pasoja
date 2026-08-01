@@ -18,7 +18,7 @@ const NotFound = () => {
             404
           </span>
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-xs uppercase tracking-[0.4em] font-extrabold text-[#b8860b] bg-[#faf9f5] px-4 py-1 border border-[#b8860b]/40 shadow-sm">
+            <span className="text-[12px] uppercase tracking-[0.4em] font-extrabold text-[#b8860b] bg-[#faf9f5] px-4 py-1 border border-[#b8860b]/40 shadow-sm">
               Page Not Found
             </span>
           </div>
@@ -34,7 +34,7 @@ const NotFound = () => {
           <h1 className="text-2xl md:text-3xl font-light tracking-widest uppercase text-zinc-900">
             Lost In Silhouette
           </h1>
-          <p className="text-xs md:text-sm text-zinc-500 leading-relaxed font-light max-w-sm mx-auto">
+          <p className="text-[12px] md:text-sm text-zinc-500 leading-relaxed font-light max-w-sm mx-auto">
             The requested page does not exist or has been relocated to another collection.
           </p>
         </motion.div>

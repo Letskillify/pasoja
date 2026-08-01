@@ -36,14 +36,14 @@ const OrdersTable = () => {
     <section className="bg-white rounded-2xl border border-zinc-200 shadow-sm overflow-hidden">
       <div className="px-6 py-5 flex items-center justify-between border-b border-zinc-200">
         <div>
-          <h2 className="text-lg font-poppins font-bold text-zinc-900">Recent Orders</h2>
-          <p className="text-xs text-zinc-500 mt-0.5">Latest customer transactions</p>
+          <h2 className="text-lg font-poppins   text-zinc-900">Recent Orders</h2>
+          <p className="text-[12px] text-zinc-500 mt-0.5">Latest customer transactions</p>
         </div>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full text-left text-sm">
           <thead className="bg-zinc-100">
-            <tr className="text-[11px] font-bold text-zinc-700 uppercase tracking-widest">
+            <tr className="text-[11px]   text-zinc-700 uppercase tracking-widest">
               <th className="px-6 py-3.5">ID</th>
               <th className="px-6 py-3.5">Customer</th>
               <th className="px-6 py-3.5">Total</th>
@@ -59,18 +59,18 @@ const OrdersTable = () => {
             ) : orders.length > 0 ? (
               orders.map((order) => (
                 <tr key={order.id} className="hover:bg-zinc-50/80 transition-colors font-sans">
-                  <td className="px-6 py-4 font-bold text-zinc-900">
+                  <td className="px-6 py-4   text-zinc-900">
                     #{order.id.slice(0, 6).toUpperCase()}
                   </td>
                   <td className="px-6 py-4">
                     <p className="text-zinc-900 font-semibold">{order.shipping?.name || "Member"}</p>
                     <p className="text-[11px] text-zinc-500">{order.userEmail}</p>
                   </td>
-                  <td className="px-6 py-4 text-zinc-900 font-bold text-[14px]">₹{order.total}</td>
-                  <td className="px-6 py-4 text-zinc-600 uppercase text-[11px] font-bold tracking-wider">{order.paymentMethod}</td>
+                  <td className="px-6 py-4 text-zinc-900   text-[14px]">₹{order.total}</td>
+                  <td className="px-6 py-4 text-zinc-600 uppercase text-[11px]   tracking-wider">{order.paymentMethod}</td>
                   <td className="px-6 py-4">
                     <span
-                      className={`inline-flex items-center px-3 py-1 rounded-md border text-[11px] font-bold uppercase tracking-wider ${statusBadgeClasses(order.status)}`}
+                      className={`inline-flex items-center px-3 py-1 rounded-md border text-[11px]   uppercase tracking-wider ${statusBadgeClasses(order.status)}`}
                     >
                       {order.status}
                     </span>

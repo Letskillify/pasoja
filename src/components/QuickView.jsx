@@ -20,9 +20,8 @@ const QuickView = ({ product, onClose }) => {
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 z-[999] transition-opacity duration-300 ${
-          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
+        className={`fixed inset-0 z-[999] transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
         style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         onClick={handleClose}
       />
@@ -30,9 +29,8 @@ const QuickView = ({ product, onClose }) => {
       {/* Modal */}
       <div className={`fixed inset-0 z-[10000] flex items-center justify-center p-4 pointer-events-none mt-10`}>
         <div
-          className={`bg-white rounded-3xl shadow-2xl max-w-4xl w-full overflow-hidden pointer-events-auto transform transition-all duration-300 ${
-            isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"
-          }`}
+          className={`bg-white rounded-none shadow-2xl max-w-4xl w-full overflow-hidden pointer-events-auto transform transition-all duration-300 ${isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"
+            }`}
         >
           {/* Header */}
           <div className="flex justify-between items-center px-8 py-6 border-b border-[#E6CCB2]/50 bg-gradient-to-r from-[#C6A664]/5 to-[#4A4A4A]/5">
@@ -42,7 +40,7 @@ const QuickView = ({ product, onClose }) => {
             <button
               type="button"
               onClick={handleClose}
-              className="p-2 rounded-full hover:bg-[#FDFBF7] transition-colors text-[#4A4A4A]"
+              className="p-2 hover:bg-[#FDFBF7] transition-colors text-[#4A4A4A]"
             >
               <X size={24} />
             </button>
@@ -52,11 +50,11 @@ const QuickView = ({ product, onClose }) => {
           <div className="grid md:grid-cols-2 gap-8 p-8">
             {/* Image Section */}
             <div className="flex items-center justify-center">
-              <div className="bg-gradient-to-br from-[#FDFBF7] to-[#E6CCB2]/20 rounded-3xl flex items-center justify-center w-full aspect-square relative overflow-hidden group">
+              <div className="bg-gradient-to-br from-[#FDFBF7] to-[#E6CCB2]/20 rounded-none flex items-center justify-center w-full aspect-square relative overflow-hidden group">
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-full object-contain p-8 group-hover:scale-110 transition-transform duration-300"
+                  className="w-full h-full object-cover p-8 group-hover:scale-110 transition-transform duration-300"
                 />
                 {product.original_price && product.original_price > product.price && (
                   <div className="absolute top-4 right-4 bg-[#C6A664] text-white px-4 py-2 rounded-full text-sm font-black">
@@ -90,7 +88,7 @@ const QuickView = ({ product, onClose }) => {
                       ₹{product.price}.00
                     </span>
                     {product.original_price && product.original_price > product.price && (
-                      <span className="text-lg font-bold text-[#4A4A4A]/30 line-through">
+                      <span className="text-lg   text-[#4A4A4A]/30 line-through">
                         ₹{product.original_price}.00
                       </span>
                     )}
@@ -106,7 +104,7 @@ const QuickView = ({ product, onClose }) => {
 
                 {/* Suitable For */}
                 {product.suitable_for && (
-                  <div className="bg-[#FDFBF7] rounded-xl p-4 border border-[#E6CCB2]/30">
+                  <div className="bg-[#FDFBF7] rounded-none p-4 border border-[#E6CCB2]/30">
                     <p className="text-sm font-black text-[#4A4A4A]/40 uppercase tracking-wider mb-1">
                       Suitable for
                     </p>
@@ -122,7 +120,7 @@ const QuickView = ({ product, onClose }) => {
                 {/* Quantity Selector */}
                 <div className="flex items-center gap-4">
                   <span className="text-sm font-black text-[#4A4A4A]/60 uppercase tracking-wider">Quantity</span>
-                  <div className="flex items-center border border-[#E6CCB2] rounded-xl overflow-hidden">
+                  <div className="flex items-center border border-[#E6CCB2] rounded-none overflow-hidden">
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
                       className="px-4 py-2 text-[#4A4A4A] hover:bg-[#FDFBF7] transition-colors font-black"
@@ -145,19 +143,19 @@ const QuickView = ({ product, onClose }) => {
                 <div className="flex gap-4">
                   <button
                     onClick={() => navigate(`/product/${product.id}`)}
-                    className="flex-1 px-6 py-4 rounded-2xl bg-[#4A4A4A] text-white font-black uppercase tracking-wider hover:bg-[#2A2A2A] transition-all transform active:scale-95 shadow-lg shadow-[#4A4A4A]/20"
+                    className="flex-1 px-6 py-4 rounded-none bg-[#4A4A4A] text-white font-black uppercase tracking-wider hover:bg-[#2A2A2A] transition-all transform active:scale-95 shadow-lg shadow-[#4A4A4A]/20"
                   >
                     View Full Details
                   </button>
                   <button
-                    className="px-6 py-4 rounded-2xl bg-[#FDFBF7] border border-[#E6CCB2] text-[#C6A664] font-black hover:bg-[#E6CCB2]/10 transition-colors"
+                    className="px-6 py-4 rounded-none bg-[#FDFBF7] border border-[#E6CCB2] text-[#C6A664] font-black hover:bg-[#E6CCB2]/10 transition-colors"
                   >
                     <Heart size={20} />
                   </button>
                 </div>
 
                 {/* Add to Cart */}
-                <button className="w-full px-6 py-4 rounded-2xl bg-[#C6A664] text-white font-black uppercase tracking-wider hover:bg-[#B59553] transition-all transform active:scale-95 shadow-lg shadow-[#C6A664]/20 flex items-center justify-center gap-2">
+                <button className="w-full px-6 py-4 rounded-none bg-[#C6A664] text-white font-black uppercase tracking-wider hover:bg-[#B59553] transition-all transform active:scale-95 shadow-lg shadow-[#C6A664]/20 flex items-center justify-center gap-2">
                   <ShoppingBag size={20} />
                   Add to Cart
                 </button>

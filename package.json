@@ -16,6 +16,7 @@
     "@react-three/fiber": "^9.6.1",
     "@studio-freight/lenis": "^1.0.42",
     "@tailwindcss/vite": "^4.1.18",
+    "@tinymce/tinymce-react": "^6.3.0",
     "axios": "^1.13.5",
     "chart.js": "^4.5.1",
     "clsx": "^2.1.1",

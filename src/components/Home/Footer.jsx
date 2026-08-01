@@ -19,52 +19,52 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#0c0c0c] pt-20 lg:pt-28 pb-10 overflow-hidden border-t border-zinc-800 text-white">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
+    <footer className="bg-[#0a0a0a] pt-16 md:pt-24 pb-10 overflow-hidden border-t border-zinc-800 text-white font-['Inter',sans-serif]">
+      <div className="max-w-7xl mx-auto px-5 md:px-12">
 
-        {/* ── BRAND STATEMENT ── */}
-        <div className="mb-16 pb-12 border-b border-zinc-800">
+        {/* ── BRAND STATEMENT & NEWSLETTER ── */}
+        <div className="mb-14 pb-10 border-b border-zinc-800/80">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
             <div>
               <Link to="/">
                 <img
                   src="https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/p3jd3nuet4vkqbfd5qaz.png"
                   alt="Pasoja"
-                  className="h-14 md:h-18 object-contain brightness-0 invert mb-5"
+                  className="h-12 md:h-16 object-cover brightness-0 invert mb-4"
                 />
               </Link>
-              <p className="text-zinc-300 text-sm leading-relaxed max-w-xs font-normal">
-                Elevate your style with our curated collection of premium, ethically-made apparel.
+              <p className="text-zinc-300 text-[12px] sm:text-sm leading-relaxed max-w-sm font-normal">
+                Elevate your daily style with our curated collection of luxury, ethically-crafted apparel and modern silhouettes.
               </p>
             </div>
 
             {/* Newsletter */}
-            <div className="max-w-sm w-full">
-              <h5 className="text-xs uppercase tracking-[0.3em] text-[#b8860b] font-bold mb-4">Join The List</h5>
+            <div className="max-w-md w-full">
+              <h5 className="text-[12px] uppercase tracking-[0.25em] text-[#b8860b]   mb-3">Join The Inner Circle</h5>
               <div className="flex gap-0">
                 <input
                   type="email"
-                  placeholder="Your email address"
-                  className="flex-1 px-4 py-3.5 bg-zinc-900 border border-zinc-700 text-white placeholder-zinc-400 text-sm outline-none focus:border-zinc-400 transition-colors"
+                  placeholder="Enter your email address"
+                  className="flex-1 px-4 py-3 bg-zinc-900 border border-zinc-700 text-white placeholder-zinc-400 text-[12px] outline-none focus:border-zinc-400 transition-colors rounded-none"
                 />
-                <button className="bg-white text-black px-6 py-3.5 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-[#b8860b] hover:text-white transition-all duration-300 shrink-0">
-                  Join
+                <button className="bg-white text-black px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-[#b8860b] hover:text-white transition-all duration-300 shrink-0 rounded-none cursor-pointer">
+                  Subscribe
                 </button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* ── MAIN GRID ── */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
+        {/* ── MAIN NAVIGATION & CONTACT GRID ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 mb-14">
 
           {/* Shop */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-[0.3em] text-[#b8860b] mb-6">Shop</h4>
-            <ul className="flex flex-col gap-3">
+            <h4 className="text-[12px]   uppercase tracking-[0.25em] text-[#b8860b] mb-5">Shop</h4>
+            <ul className="flex flex-col gap-2.5">
               {['New Arrivals', 'Best Sellers', 'Men', 'Women', 'Accessories', 'Sale'].map((item) => (
                 <li key={item}>
-                  <Link to="/shop" className="text-sm text-zinc-300 hover:text-white transition-colors duration-300 font-medium">
+                  <Link to="/shop" className="text-[12px] sm:text-sm text-zinc-300 hover:text-white transition-colors duration-300 font-medium">
                     {item}
                   </Link>
                 </li>
@@ -74,8 +74,8 @@ const Footer = () => {
 
           {/* Help */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-[0.3em] text-[#b8860b] mb-6">Help</h4>
-            <ul className="flex flex-col gap-3">
+            <h4 className="text-[12px]   uppercase tracking-[0.25em] text-[#b8860b] mb-5">Help</h4>
+            <ul className="flex flex-col gap-2.5">
               {[
                 { label: 'My Account', path: '/account' },
                 { label: 'Track Order', path: '/orders' },
@@ -84,7 +84,7 @@ const Footer = () => {
                 { label: 'Contact Us', path: '/contact' },
               ].map((item) => (
                 <li key={item.label}>
-                  <Link to={item.path} className="text-sm text-zinc-300 hover:text-white transition-colors duration-300 font-medium">
+                  <Link to={item.path} className="text-[12px] sm:text-sm text-zinc-300 hover:text-white transition-colors duration-300 font-medium">
                     {item.label}
                   </Link>
                 </li>
@@ -94,8 +94,8 @@ const Footer = () => {
 
           {/* Company */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-[0.3em] text-[#b8860b] mb-6">Company</h4>
-            <ul className="flex flex-col gap-3">
+            <h4 className="text-[12px]   uppercase tracking-[0.25em] text-[#b8860b] mb-5">Company</h4>
+            <ul className="flex flex-col gap-2.5">
               {[
                 { label: 'Our Story', path: '/about' },
                 { label: 'Contact', path: '/contact' },
@@ -103,7 +103,7 @@ const Footer = () => {
                 { label: 'Privacy Policy', path: '/privacy' }
               ].map((item) => (
                 <li key={item.label}>
-                  <Link to={item.path} className="text-sm text-zinc-300 hover:text-white transition-colors duration-300 font-medium">
+                  <Link to={item.path} className="text-[12px] sm:text-sm text-zinc-300 hover:text-white transition-colors duration-300 font-medium">
                     {item.label}
                   </Link>
                 </li>
@@ -111,33 +111,33 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Contact - Clean Single Line Address */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-[0.3em] text-[#b8860b] mb-6">Contact</h4>
-            <div className="flex flex-col gap-4 mb-8">
-              <div className="flex items-start gap-3">
-                <MapPin size={16} className="text-[#b8860b] flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-zinc-300 leading-snug">123 Fashion Street, Mumbai 400001</p>
+            <h4 className="text-[12px]   uppercase tracking-[0.25em] text-[#b8860b] mb-5">Contact</h4>
+            <div className="flex flex-col gap-3.5 mb-6">
+              <div className="flex items-center gap-3">
+                <MapPin size={16} className="text-[#b8860b] flex-shrink-0" />
+                <p className="text-[12px] sm:text-sm text-zinc-300 font-medium whitespace-nowrap">123 Fashion Street, Mumbai 400001</p>
               </div>
               <div className="flex items-center gap-3">
                 <Phone size={16} className="text-[#b8860b] flex-shrink-0" />
-                <p className="text-sm text-zinc-300 font-mono">+91 98765 43210</p>
+                <p className="text-[12px] sm:text-sm text-zinc-300 font-mono">+91 98765 43210</p>
               </div>
               <div className="flex items-center gap-3">
                 <Mail size={16} className="text-[#b8860b] flex-shrink-0" />
-                <p className="text-sm text-zinc-300 font-medium">hello@pasoja.com</p>
+                <p className="text-[12px] sm:text-sm text-zinc-300 font-medium">hello@pasoja.com</p>
               </div>
             </div>
 
             {/* Socials */}
-            <div className="flex gap-2.5">
+            <div className="flex gap-2">
               {[Instagram, Facebook, Youtube, Twitter].map((Icon, i) => (
                 <a
                   key={i}
                   href="#"
-                  className="w-10 h-10 border border-zinc-700 bg-zinc-900 flex items-center justify-center text-zinc-300 hover:text-black hover:bg-white hover:border-white transition-all duration-300"
+                  className="w-9 h-9 border border-zinc-800 bg-zinc-900/80 flex items-center justify-center text-zinc-300 hover:text-black hover:bg-white hover:border-white transition-all duration-300 rounded-none"
                 >
-                  <Icon size={16} strokeWidth={1.75} />
+                  <Icon size={15} strokeWidth={1.75} />
                 </a>
               ))}
             </div>
@@ -145,43 +145,53 @@ const Footer = () => {
         </div>
 
         {/* ── BENEFITS STRIP ── */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 py-10 border-y border-zinc-800 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 py-8 border-y border-zinc-800/80 mb-10">
           {[
             { icon: Truck, title: 'Free Shipping', sub: 'On all orders over ₹1999' },
             { icon: Zap, title: 'Fast Delivery', sub: 'Delivered in 3–5 working days' },
             { icon: RotateCcw, title: 'Easy Returns', sub: '30-day hassle-free returns' },
             { icon: ShieldCheck, title: 'Secure Checkout', sub: 'Encrypted payment gateway' },
           ].map(({ icon: Icon, title, sub }) => (
-            <div key={title} className="flex items-start gap-3.5 p-4 bg-zinc-900/60 border border-zinc-800/80 rounded-sm">
-              <div className="p-2 border border-zinc-700 bg-zinc-800 text-[#b8860b] shrink-0">
+            <div key={title} className="flex items-center gap-3.5 p-4 bg-zinc-900/40 border border-zinc-800/80 rounded-none hover:border-zinc-700 transition-colors">
+              <div className="p-2.5 border border-zinc-700/60 bg-zinc-800/80 text-[#b8860b] shrink-0">
                 <Icon size={18} strokeWidth={1.75} />
               </div>
               <div>
-                <h4 className="text-[13px] font-bold text-white mb-0.5">{title}</h4>
-                <p className="text-[11px] text-zinc-400">{sub}</p>
+                <h4 className="text-[12px]   text-white uppercase tracking-wider mb-0.5">{title}</h4>
+                <p className="text-[11px] text-zinc-400 font-light">{sub}</p>
               </div>
             </div>
           ))}
         </div>
 
-        {/* ── BOTTOM BAR ── */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-5">
-          <p className="text-zinc-400 text-xs tracking-wide text-center md:text-left">
+        {/* ── BOTTOM LEGAL & DESIGNED BY CREDIT ── */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-5 pt-2">
+          <p className="text-zinc-400 text-[12px] tracking-wide text-center md:text-left">
             © {currentYear} Pasoja. All rights reserved.
           </p>
 
-          <div className="flex flex-wrap justify-center gap-6 text-xs">
+          <div className="flex flex-wrap justify-center items-center gap-4 text-[12px]">
             <Link to="/privacy" className="text-zinc-400 hover:text-white transition-colors font-medium tracking-wide">
               Privacy Policy
             </Link>
+            <span className="text-zinc-700">•</span>
             <Link to="/terms" className="text-zinc-400 hover:text-white transition-colors font-medium tracking-wide">
               Terms of Service
             </Link>
+            <span className="text-zinc-700">•</span>
+            <a
+              href="https://www.letskillify.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#b8860b] hover:underline font-semibold tracking-wide transition-colors"
+            >
+              Designed by LetSkillify
+            </a>
           </div>
 
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="w-10 h-10 border border-zinc-700 bg-zinc-900 text-zinc-300 flex items-center justify-center hover:bg-white hover:text-black hover:border-white transition-all duration-300 order-first md:order-last cursor-pointer"
+            className="w-10 h-10 border border-zinc-700 bg-zinc-900 text-zinc-300 flex items-center justify-center hover:bg-white hover:text-black hover:border-white transition-all duration-300 order-first md:order-last cursor-pointer rounded-none"
             aria-label="Scroll to top"
           >
             <ChevronUp size={18} strokeWidth={2} />

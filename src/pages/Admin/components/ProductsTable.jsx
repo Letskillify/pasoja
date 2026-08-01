@@ -17,19 +17,19 @@ const ProductsTable = ({ products, onEdit, onDelete }) => {
     <section className="bg-white rounded-2xl border border-zinc-200 shadow-sm overflow-hidden">
       <div className="px-6 py-5 flex items-center justify-between border-b border-zinc-200">
         <div>
-          <h2 className="text-lg font-poppins font-bold text-zinc-900">Clothing Products</h2>
-          <p className="text-xs text-zinc-500 mt-0.5">
+          <h2 className="text-lg font-poppins   text-zinc-900">Clothing Products</h2>
+          <p className="text-[12px] text-zinc-500 mt-0.5">
             Manage your clothing catalog
           </p>
         </div>
-        <span className="px-3.5 py-1.5 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-800 text-xs font-bold">
+        <span className="px-3.5 py-1.5 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-800 text-[12px]  ">
           {products.length} Products
         </span>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full text-left text-sm">
           <thead className="bg-zinc-100">
-            <tr className="text-[11px] font-bold text-zinc-700 uppercase tracking-widest">
+            <tr className="text-[11px]   text-zinc-700 uppercase tracking-widest">
               <th className="px-6 py-3.5">Product</th>
               <th className="px-6 py-3.5">Category</th>
               <th className="px-6 py-3.5">Gender</th>
@@ -58,7 +58,7 @@ const ProductsTable = ({ products, onEdit, onDelete }) => {
                     <div>
                       <span className="font-semibold text-zinc-900 block">{row.name}</span>
                       {row.model_image && (
-                        <span className="text-[10px] text-[#b8860b] font-bold uppercase tracking-wider block">
+                        <span className="text-[10px] text-[#b8860b]   uppercase tracking-wider block">
                           ✦ Model Photo
                         </span>
                       )}
@@ -69,23 +69,22 @@ const ProductsTable = ({ products, onEdit, onDelete }) => {
                   {row.category || "-"}
                 </td>
                 <td className="px-6 py-4">
-                  <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold ${
-                    row.gender === 'Men' ? 'bg-blue-50 text-blue-700 border border-blue-200' :
+                  <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-[12px]   ${row.gender === 'Men' ? 'bg-blue-50 text-blue-700 border border-blue-200' :
                     row.gender === 'Women' ? 'bg-pink-50 text-pink-700 border border-pink-200' :
-                    'bg-zinc-100 text-zinc-700 border border-zinc-200'
-                  }`}>
+                      'bg-zinc-100 text-zinc-700 border border-zinc-200'
+                    }`}>
                     {row.gender || "Unisex"}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-zinc-900 font-bold">
+                <td className="px-6 py-4 text-zinc-900  ">
                   ₹{Number(row.price || 0).toFixed(0)}
                 </td>
-                <td className="px-6 py-4 text-zinc-900 font-bold tabular-nums">
+                <td className="px-6 py-4 text-zinc-900   tabular-nums">
                   {row.stock ?? '—'}
                 </td>
                 <td className="px-6 py-4">
                   <span
-                    className={`inline-flex items-center px-3 py-1 rounded-full border text-xs font-bold ${statusBadgeClasses(row.stock_status || "In Stock")}`}
+                    className={`inline-flex items-center px-3 py-1 rounded-full border text-[12px]   ${statusBadgeClasses(row.stock_status || "In Stock")}`}
                   >
                     {row.stock_status || "In Stock"}
                   </span>

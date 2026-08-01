@@ -5,17 +5,17 @@ const UsersTable = ({ users }) => {
     <section className="bg-white rounded-2xl border border-zinc-200 shadow-sm overflow-hidden">
       <div className="px-6 py-5 flex items-center justify-between border-b border-zinc-200">
         <div>
-          <h2 className="text-lg font-poppins font-bold text-zinc-900">Registered Users</h2>
-          <p className="text-xs text-zinc-500 mt-0.5">All customers and their details</p>
+          <h2 className="text-lg font-poppins   text-zinc-900">Registered Users</h2>
+          <p className="text-[12px] text-zinc-500 mt-0.5">All customers and their details</p>
         </div>
-        <span className="px-3.5 py-1.5 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-800 text-xs font-bold">
+        <span className="px-3.5 py-1.5 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-800 text-[12px]  ">
           {users.length} Users
         </span>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full text-left text-sm">
           <thead className="bg-zinc-100">
-            <tr className="text-[11px] font-bold text-zinc-700 uppercase tracking-widest">
+            <tr className="text-[11px]   text-zinc-700 uppercase tracking-widest">
               <th className="px-6 py-3.5">Name</th>
               <th className="px-6 py-3.5">Email</th>
               <th className="px-6 py-3.5">Phone</th>
@@ -34,7 +34,7 @@ const UsersTable = ({ users }) => {
                 <td className="px-6 py-4 text-zinc-600">
                   {user.phone || "-"}
                 </td>
-                <td className="px-6 py-4 text-zinc-500 text-xs">
+                <td className="px-6 py-4 text-zinc-500 text-[12px]">
                   {user.createdAt ? new Date(user.createdAt.toDate?.() || user.createdAt).toLocaleDateString() : "-"}
                 </td>
               </tr>

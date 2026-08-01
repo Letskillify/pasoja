@@ -79,35 +79,35 @@ const AdminProfileSettings = () => {
       {/* Header */}
       <div className="bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold font-poppins text-zinc-900 uppercase tracking-wider flex items-center gap-2">
+          <h2 className="text-xl   font-poppins text-zinc-900 uppercase tracking-wider flex items-center gap-2">
             <User className="text-[#b8860b]" size={22} /> Administrator Profile Settings
           </h2>
-          <p className="text-xs text-zinc-500 mt-1">Manage your administrative name, profile photo, credentials, and bio details.</p>
+          <p className="text-[12px] text-zinc-500 mt-1">Manage your administrative name, profile photo, credentials, and bio details.</p>
         </div>
       </div>
 
       {loading ? (
-        <div className="py-12 text-center text-xs text-zinc-500">Loading administrator profile...</div>
+        <div className="py-12 text-center text-[12px] text-zinc-500">Loading administrator profile...</div>
       ) : (
         <form onSubmit={handleSaveProfile} className="space-y-6">
           <div className="bg-white p-6 sm:p-8 rounded-2xl border border-zinc-200 shadow-sm space-y-6">
-            
+
             {/* Profile Avatar Upload */}
             <div className="flex flex-col sm:flex-row items-center gap-6 border-b border-zinc-100 pb-6">
               <div className="relative group">
                 <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-zinc-300 shadow-md bg-zinc-100">
                   <img src={profile.image} alt={profile.name} className="w-full h-full object-cover" />
                 </div>
-                <label className="absolute inset-0 bg-black/50 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-xs font-bold gap-1">
+                <label className="absolute inset-0 bg-black/50 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-[12px]   gap-1">
                   <Camera size={16} />
                   <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
                 </label>
               </div>
               <div className="text-center sm:text-left space-y-1">
-                <h3 className="text-base font-bold text-zinc-900">{profile.name}</h3>
+                <h3 className="text-base   text-zinc-900">{profile.name}</h3>
                 <p className="text-[10px] font-extrabold text-[#b8860b] uppercase tracking-widest">{profile.role}</p>
                 <div className="pt-1">
-                  <label className="inline-block px-4 py-1.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 text-xs font-bold rounded-lg cursor-pointer transition-colors border border-zinc-300">
+                  <label className="inline-block px-4 py-1.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 text-[12px]   rounded-lg cursor-pointer transition-colors border border-zinc-300">
                     {uploading ? "Uploading Photo..." : "Change Profile Photo"}
                     <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
                   </label>
@@ -116,9 +116,9 @@ const AdminProfileSettings = () => {
             </div>
 
             {/* Profile Input Fields */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-[12px]">
               <div className="space-y-1.5">
-                <label className="font-bold text-zinc-500 uppercase tracking-wider block">Administrator Name</label>
+                <label className="  text-zinc-500 uppercase tracking-wider block">Administrator Name</label>
                 <input
                   type="text"
                   value={profile.name}
@@ -129,7 +129,7 @@ const AdminProfileSettings = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="font-bold text-zinc-500 uppercase tracking-wider block">Role / Title</label>
+                <label className="  text-zinc-500 uppercase tracking-wider block">Role / Title</label>
                 <input
                   type="text"
                   value={profile.role}
@@ -140,7 +140,7 @@ const AdminProfileSettings = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="font-bold text-zinc-500 uppercase tracking-wider block">Email Address / Admin ID</label>
+                <label className="  text-zinc-500 uppercase tracking-wider block">Email Address / Admin ID</label>
                 <input
                   type="email"
                   value={profile.email}
@@ -151,7 +151,7 @@ const AdminProfileSettings = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="font-bold text-zinc-500 uppercase tracking-wider block">Phone Number</label>
+                <label className="  text-zinc-500 uppercase tracking-wider block">Phone Number</label>
                 <input
                   type="text"
                   value={profile.phone}
@@ -161,7 +161,7 @@ const AdminProfileSettings = () => {
               </div>
 
               <div className="space-y-1.5 sm:col-span-2">
-                <label className="font-bold text-zinc-500 uppercase tracking-wider block">Bio / Information</label>
+                <label className="  text-zinc-500 uppercase tracking-wider block">Bio / Information</label>
                 <textarea
                   value={profile.bio}
                   onChange={(e) => setProfile(prev => ({ ...prev, bio: e.target.value }))}
@@ -174,7 +174,7 @@ const AdminProfileSettings = () => {
             {/* Save Button */}
             <div className="flex items-center justify-between pt-4 border-t border-zinc-100">
               {savedSuccess ? (
-                <div className="flex items-center gap-2 text-emerald-600 text-xs font-bold animate-pulse">
+                <div className="flex items-center gap-2 text-emerald-600 text-[12px]   animate-pulse">
                   <CheckCircle2 size={16} /> Profile Saved Successfully!
                 </div>
               ) : <div />}
@@ -182,7 +182,7 @@ const AdminProfileSettings = () => {
               <button
                 type="submit"
                 disabled={saving || uploading}
-                className="px-6 py-3.5 bg-black hover:bg-zinc-800 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer ml-auto"
+                className="px-6 py-3.5 bg-black hover:bg-zinc-800 text-white font-extrabold text-[12px] uppercase tracking-wider rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer ml-auto"
               >
                 <Save size={15} />
                 <span>{saving ? "Saving Profile..." : "Save Profile Changes"}</span>

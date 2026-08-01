@@ -58,7 +58,7 @@ const ProductCard = ({ product, idx, triggerToast }) => {
       className="group relative cursor-pointer flex flex-col bg-white border border-zinc-200 transition-all duration-500 hover:border-black/30 w-full"
     >
       {/* Product Image Area */}
-      <div className="relative w-full aspect-[3/4] overflow-hidden bg-zinc-100 flex items-center justify-center">
+      <div className="relative w-full aspect-[3/4] overflow-hidden bg-[#fff] flex items-center justify-center">
         <img
           src={displayedImage}
           alt={product.name}
@@ -80,7 +80,7 @@ const ProductCard = ({ product, idx, triggerToast }) => {
         {/* Top-left Save Percentage Badge */}
         {savingsPercent > 0 && !isOutOfStock && (
           <div className="absolute top-3.5 left-3.5 z-10">
-            <span className="bg-[#cc2222] text-white font-bold uppercase text-[8px] tracking-wider px-2 py-0.5 rounded-sm">
+            <span className="bg-[#cc2222] text-white   uppercase text-[14px] tracking-wider px-2 py-0.5 rounded-none">
               SAVE {savingsPercent}%
             </span>
           </div>
@@ -104,9 +104,8 @@ const ProductCard = ({ product, idx, triggerToast }) => {
           <div className="absolute bottom-0 inset-x-0 z-20 overflow-hidden h-10 pointer-events-auto">
             <button
               onClick={(e) => handleAction(e, 'cart')}
-              className={`w-full h-full bg-black text-white text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 flex items-center justify-center ${
-                isHovered ? 'translate-y-0' : 'translate-y-full'
-              } hover:bg-zinc-800`}
+              className={`w-full h-full bg-black text-white text-[10px]   tracking-[0.2em] uppercase transition-all duration-300 flex items-center justify-center ${isHovered ? 'translate-y-0' : 'translate-y-full'
+                } hover:bg-zinc-800`}
             >
               {isInCart ? 'IN BAG' : 'ADD TO CART'}
             </button>
@@ -116,16 +115,16 @@ const ProductCard = ({ product, idx, triggerToast }) => {
 
       {/* Info Area (Text displays below product) */}
       <div className="pt-4 pb-5 px-3 flex flex-col text-left bg-white">
-        <h3 className="text-xs md:text-sm font-bold text-zinc-900 uppercase tracking-wider line-clamp-1 leading-snug mb-1">
+        <h3 className="text-[12px] md:text-sm   text-zinc-900 uppercase tracking-wider line-clamp-1 leading-snug mb-1">
           {product.name}
         </h3>
-        
+
         {/* Prices */}
         <div className="flex items-baseline gap-2.5">
-          <span className="text-xs text-zinc-400 line-through">
+          <span className="text-[12px] text-zinc-400 line-through">
             Rs.{originalPrice?.toLocaleString('en-IN')}.00
           </span>
-          <span className="text-sm font-bold text-[#e53e3e]">
+          <span className="text-sm   text-[#e53e3e]">
             Rs.{displayPrice?.toLocaleString('en-IN')}.00
           </span>
         </div>
@@ -201,28 +200,25 @@ const BestsellerProducts = () => {
         <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="flex-1 flex flex-col md:flex-row md:items-end gap-6 md:gap-12">
             <div>
-              <p className="text-[10px] sm:text-xs tracking-[0.3em] text-zinc-500 uppercase mb-2 font-medium">
+              <p className="text-[10px] sm:text-[12px] tracking-[0.3em] text-zinc-500 uppercase mb-2 font-medium">
                 NEW ARRIVALS
               </p>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extralight tracking-[0.15em] text-zinc-900 uppercase whitespace-nowrap leading-none">
+              <h2 className="text-xl sm:text-3xl lg:text-4xl font-extralight tracking-[0.15em] text-zinc-900 uppercase whitespace-nowrap">
                 FRESH DROPS
               </h2>
             </div>
             <div className="hidden md:block flex-1 h-[1px] bg-zinc-200 mb-3" />
           </div>
-          
+
           <div className="flex items-center gap-6 self-start md:self-auto">
-            <p className="text-zinc-600 text-xs sm:text-sm tracking-wide max-w-[280px] font-light leading-relaxed text-left md:text-right">
-              The latest arrivals crafted for those who set the trend.
-            </p>
             <div className="flex gap-2.5">
-              <button 
+              <button
                 onClick={() => swiperRef.current?.slidePrev()}
                 className="w-10 h-10 rounded-full border border-zinc-300 flex items-center justify-center text-zinc-700 hover:text-black hover:border-black transition-all duration-300 cursor-pointer"
               >
                 &larr;
               </button>
-              <button 
+              <button
                 onClick={() => swiperRef.current?.slideNext()}
                 className="w-10 h-10 rounded-full border border-zinc-300 flex items-center justify-center text-zinc-700 hover:text-black hover:border-black transition-all duration-300 cursor-pointer"
               >
@@ -268,10 +264,10 @@ const BestsellerProducts = () => {
         </div>
 
         {/* Centered Outlined CTA */}
-        <div className="mt-16 flex justify-center">
+        <div className="md:mt-16 mt-6 flex justify-center">
           <Link
             to="/shop"
-            className="group flex items-center justify-center gap-3 px-10 h-[54px] border border-white/20 bg-transparent text-white text-[11px] font-semibold uppercase tracking-[0.27em] transition-all duration-300 hover:bg-white hover:text-black hover:border-white rounded-none"
+            className="group flex items-center justify-center gap-3 px-10 h-[54px] border border-white/20 bg-[#000] text-white text-[11px] font-semibold uppercase tracking-[0.27em] transition-all duration-300 hover:bg-white hover:text-black hover:border-white rounded-none"
           >
             View All New Arrivals
             <span className="transform group-hover:translate-x-1.5 transition-transform duration-300">&rarr;</span>

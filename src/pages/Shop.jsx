@@ -62,8 +62,8 @@ const ProductCard = ({ product, idx, triggerToast }) => {
     isHovered && product.images && product.images.length > 1
       ? product.images[1]
       : product.image ||
-        product.images?.[0] ||
-        "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?q=80&w=800&auto=format&fit=crop";
+      product.images?.[0] ||
+      "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?q=80&w=800&auto=format&fit=crop";
 
   return (
     <motion.div
@@ -97,9 +97,7 @@ const ProductCard = ({ product, idx, triggerToast }) => {
         {/* Top-left Save Percentage Badge (Screenshot 2 Style) */}
         {savingsPercent > 0 && !isOutOfStock && (
           <div className="absolute top-2.5 left-2.5 z-10">
-            <span className="bg-[#d92323] text-white font-extrabold uppercase text-[8px] sm:text-[9px] tracking-wider px-2.5 py-1 rounded-sm shadow-sm">
-              SAVE {savingsPercent}%
-            </span>
+           
           </div>
         )}
         {!savingsPercent && badgeText && !isOutOfStock && (
@@ -131,9 +129,8 @@ const ProductCard = ({ product, idx, triggerToast }) => {
             <button
               type="button"
               onClick={e => handleAction(e, "cart")}
-              className={`w-full h-full bg-black text-white text-[9px] font-bold tracking-[0.2em] uppercase transition-all duration-300 flex items-center justify-center ${
-                isHovered ? 'translate-y-0' : 'translate-y-full'
-              } hover:bg-zinc-800`}
+              className={`w-full h-full bg-black text-white text-[9px]   tracking-[0.2em] uppercase transition-all duration-300 flex items-center justify-center ${isHovered ? 'translate-y-0' : 'translate-y-full'
+                } hover:bg-zinc-800`}
             >
               {isInCart ? 'IN BAG' : 'ADD TO CART'}
             </button>
@@ -143,18 +140,13 @@ const ProductCard = ({ product, idx, triggerToast }) => {
 
       {/* Info Area below Image (Screenshot 2 Typography) */}
       <div className="flex flex-col text-left px-0.5">
-        <h3 className="text-[11px] sm:text-xs font-bold text-zinc-900 uppercase tracking-wider mb-1 line-clamp-1 group-hover:text-black transition-colors duration-300">
+        <h3 className="text-[11px] sm:text-[12px]   text-zinc-900 uppercase tracking-wider mb-1 line-clamp-1 group-hover:text-black transition-colors duration-300">
           {product.name}
         </h3>
 
         {/* Prices */}
         <div className="flex items-baseline gap-2">
-          {originalPrice && originalPrice > displayPrice && (
-            <span className="text-xs text-zinc-400 line-through font-normal">
-              Rs.{originalPrice?.toLocaleString("en-IN")}.00
-            </span>
-          )}
-          <span className="text-xs sm:text-sm font-bold text-[#d92323]">
+          <span className="text-[12px] sm:text-sm">
             Rs.{displayPrice?.toLocaleString("en-IN")}.00
           </span>
         </div>
@@ -458,11 +450,10 @@ const Shop = () => {
     <div className="min-h-screen bg-[#faf9f5]">
       <PageHeader
         title="Shop Collection"
-        subtitle="Explore our luxury attire crafted with precision"
         breadcrumbItems={[{ label: "Home", path: "/" }, { label: "Shop" }]}
       />
 
-      <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14 pb-20 md:pb-24 pt-8 md:pt-12">
+      <div className="max-w-7xl py-3 mx-auto px-2 md:px-10 lg:px-14 pb-20 md:pb-24 pt-8 md:pt-12">
         {/* Top Control Bar: Search, Sort, Mobile Filter Trigger */}
         <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between mb-8 pb-6 border-b border-zinc-200">
           {/* Search bar */}
@@ -474,7 +465,7 @@ const Shop = () => {
             <input
               type="text"
               placeholder="Search by name, fabric, or style..."
-              className="w-full bg-white border border-zinc-300 pl-10 pr-9 py-3 text-xs text-zinc-900 outline-none focus:border-zinc-500 transition-colors placeholder:text-zinc-400"
+              className="w-full bg-white border border-zinc-300 pl-10 pr-9 py-3 text-[12px] text-zinc-900 outline-none focus:border-zinc-500 transition-colors placeholder:text-zinc-400"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
             />
@@ -495,7 +486,7 @@ const Shop = () => {
               <select
                 value={sortBy}
                 onChange={e => setSortBy(e.target.value)}
-                className="appearance-none bg-white border border-zinc-300 px-4 py-3 pr-9 text-[10px] font-bold uppercase tracking-wider text-zinc-800 outline-none focus:border-zinc-500 transition-colors cursor-pointer w-full sm:w-auto"
+                className="appearance-none bg-white border border-zinc-300 px-4 py-3 pr-9 text-[10px]   uppercase tracking-wider text-zinc-800 outline-none focus:border-zinc-500 transition-colors cursor-pointer w-full sm:w-auto"
               >
                 <option value="newest">Sort: Newest First</option>
                 <option value="price-low">Sort: Price (Low to High)</option>
@@ -512,7 +503,7 @@ const Shop = () => {
             <button
               type="button"
               onClick={() => setShowMobileFilters(true)}
-              className="lg:hidden flex items-center justify-center gap-2 bg-white border border-zinc-300 px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-zinc-800 hover:bg-zinc-100 transition-all"
+              className="lg:hidden flex items-center justify-center gap-2 bg-white border border-zinc-300 px-4 py-3 text-[10px]   uppercase tracking-widest text-zinc-800 hover:bg-zinc-100 transition-all"
             >
               <SlidersHorizontal size={13} className="text-[#b8860b]" />
               <span>Filters</span>
@@ -528,12 +519,12 @@ const Shop = () => {
         {/* Applied Active Filter Pills Bar */}
         {activeFiltersCount > 0 && (
           <div className="flex flex-wrap items-center gap-2 mb-8 bg-white p-3 border border-zinc-200 shadow-sm">
-            <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mr-1">
+            <span className="text-[9px]   uppercase tracking-widest text-zinc-500 mr-1">
               Active Filters:
             </span>
 
             {filters.category !== "All" && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px] font-bold uppercase tracking-wider border border-zinc-300">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px]   uppercase tracking-wider border border-zinc-300">
                 Category: {filters.category}
                 <button
                   type="button"
@@ -546,7 +537,7 @@ const Shop = () => {
             )}
 
             {filters.gender !== "All" && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px] font-bold uppercase tracking-wider border border-zinc-300">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px]   uppercase tracking-wider border border-zinc-300">
                 Gender: {filters.gender}
                 <button
                   type="button"
@@ -559,7 +550,7 @@ const Shop = () => {
             )}
 
             {(filters.minPrice > 0 || filters.maxPrice < maxPriceLimit) && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px] font-bold uppercase tracking-wider border border-zinc-300">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px]   uppercase tracking-wider border border-zinc-300">
                 Max ₹{filters.maxPrice.toLocaleString("en-IN")}
                 <button
                   type="button"
@@ -574,7 +565,7 @@ const Shop = () => {
             {filters.sizes.map(sz => (
               <span
                 key={sz}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px] font-bold uppercase tracking-wider border border-zinc-300"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px]   uppercase tracking-wider border border-zinc-300"
               >
                 Size: {sz}
                 <button
@@ -592,7 +583,7 @@ const Shop = () => {
             {filters.colors.map(col => (
               <span
                 key={col}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px] font-bold uppercase tracking-wider border border-zinc-300"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px]   uppercase tracking-wider border border-zinc-300"
               >
                 Color: {col}
                 <button
@@ -608,7 +599,7 @@ const Shop = () => {
             ))}
 
             {filters.inStockOnly && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px] font-bold uppercase tracking-wider border border-zinc-300">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px]   uppercase tracking-wider border border-zinc-300">
                 In Stock Only
                 <button
                   type="button"
@@ -621,7 +612,7 @@ const Shop = () => {
             )}
 
             {filters.onSaleOnly && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px] font-bold uppercase tracking-wider border border-zinc-300">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-800 text-[9px]   uppercase tracking-wider border border-zinc-300">
                 On Sale
                 <button
                   type="button"
@@ -636,7 +627,7 @@ const Shop = () => {
             <button
               type="button"
               onClick={resetFilters}
-              className="text-[9px] font-bold uppercase tracking-widest text-[#b8860b] hover:underline ml-auto"
+              className="text-[9px]   uppercase tracking-widest text-[#b8860b] hover:underline ml-auto"
             >
               Clear All
             </button>
@@ -677,7 +668,7 @@ const Shop = () => {
                 ))}
               </div>
             ) : filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-6 md:gap-x-5 md:gap-y-8">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-x-1 gap-y-6 md:gap-x-2 md:gap-y-8">
                 {filteredProducts.map((product, idx) => (
                   <ProductCard
                     key={product.id}

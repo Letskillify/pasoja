@@ -78,7 +78,7 @@ const Checkout = () => {
         shipping: formData, paymentMethod: formData.paymentMethod,
         paymentId, status, paymentStatus, createdAt: serverTimestamp(),
       });
-      if (status === "confirmed") { 
+      if (status === "confirmed") {
         // Update product stocks
         for (const item of items) {
           try {
@@ -91,7 +91,7 @@ const Checkout = () => {
                 const currentStock = Number(productSnap.data().stock) || 0;
                 const quantityPurchased = Number(item.quantity) || 1;
                 const newStock = Math.max(0, currentStock - quantityPurchased);
-                
+
                 // Set matching status
                 let newStatus = "In Stock";
                 if (newStock === 0) {
@@ -110,8 +110,8 @@ const Checkout = () => {
             console.error("Failed to update stock for item", item.id, stockErr);
           }
         }
-        await clearCart(); 
-        setOrderStatus("success"); 
+        await clearCart();
+        setOrderStatus("success");
       }
       else { setOrderStatus("failed"); }
     } catch (error) { console.error("Error saving order:", error); triggerToast("Order save failed. Please contact support."); }
@@ -192,7 +192,7 @@ const Checkout = () => {
     <div className="min-h-screen bg-[#faf9f5]">
       <PageHeader title="Checkout" subtitle="Complete your purchase" breadcrumbItems={[{ label: "Home", path: "/" }, { label: "Cart", path: "/cart" }, { label: "Checkout" }]} />
 
-      <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14 py-10 md:py-14">
+      <div className="max-w-7xl py-3 mx-auto px-5 md:px-10 lg:px-14 py-10 md:py-14">
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
 
           {/* Form */}
@@ -210,7 +210,7 @@ const Checkout = () => {
                 {savedAddresses.length > 0 && (
                   <div className="space-y-3 mb-6 bg-white border border-zinc-200 p-4 rounded shadow-sm">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-[#b8860b] uppercase tracking-widest">
+                      <span className="text-[10px]   text-[#b8860b] uppercase tracking-widest">
                         Choose Saved Shipping Address
                       </span>
                       <Link to="/account" className="text-[9px] text-zinc-500 hover:text-black uppercase tracking-wider underline">
@@ -237,25 +237,23 @@ const Checkout = () => {
                               }));
                               triggerToast(`Selected: ${addr.name}`);
                             }}
-                            className={`p-3.5 border cursor-pointer transition-all relative rounded ${
-                              isSelected
-                                ? 'border-black bg-zinc-50 shadow-sm'
-                                : 'border-zinc-200 bg-white hover:border-zinc-400'
-                            }`}
+                            className={`p-3.5 border cursor-pointer transition-all relative rounded ${isSelected
+                              ? 'border-black bg-zinc-50 shadow-sm'
+                              : 'border-zinc-200 bg-white hover:border-zinc-400'
+                              }`}
                           >
                             {addr.isDefault && (
-                              <span className="absolute top-2 right-2 px-2 py-0.5 bg-[#b8860b]/15 border border-[#b8860b]/30 text-[#b8860b] text-[8px] font-bold uppercase tracking-wider">
+                              <span className="absolute top-2 right-2 px-2 py-0.5 bg-[#b8860b]/15 border border-[#b8860b]/30 text-[#b8860b] text-[8px]   uppercase tracking-wider">
                                 Default
                               </span>
                             )}
                             <div className="flex items-start gap-2.5">
-                              <div className={`w-4 h-4 rounded-full border flex items-center justify-center mt-0.5 shrink-0 ${
-                                isSelected ? 'border-black bg-black text-white' : 'border-zinc-400'
-                              }`}>
+                              <div className={`w-4 h-4 rounded-full border flex items-center justify-center mt-0.5 shrink-0 ${isSelected ? 'border-black bg-black text-white' : 'border-zinc-400'
+                                }`}>
                                 {isSelected && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
                               </div>
-                              <div className="space-y-1 text-xs pr-10">
-                                <p className="font-bold text-zinc-900 uppercase tracking-wide">{addr.name}</p>
+                              <div className="space-y-1 text-[12px] pr-10">
+                                <p className="  text-zinc-900 uppercase tracking-wide">{addr.name}</p>
                                 <p className="text-zinc-500 text-[11px] leading-relaxed line-clamp-2">
                                   {addr.address}, {addr.city}, {addr.state} - {addr.pincode}
                                 </p>
@@ -277,14 +275,13 @@ const Checkout = () => {
                             pincode: ""
                           }));
                         }}
-                        className={`p-3.5 border cursor-pointer transition-all flex items-center justify-center gap-2 rounded ${
-                          selectedAddressId === "custom"
-                            ? 'border-black bg-zinc-50'
-                            : 'border-dashed border-zinc-300 bg-white hover:border-zinc-400'
-                        }`}
+                        className={`p-3.5 border cursor-pointer transition-all flex items-center justify-center gap-2 rounded ${selectedAddressId === "custom"
+                          ? 'border-black bg-zinc-50'
+                          : 'border-dashed border-zinc-300 bg-white hover:border-zinc-400'
+                          }`}
                       >
                         <Plus size={14} className="text-zinc-500" />
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-700">
+                        <span className="text-[10px]   uppercase tracking-wider text-zinc-700">
                           + Enter Custom Address
                         </span>
                       </div>
@@ -363,13 +360,13 @@ const Checkout = () => {
                 {items.map((item) => (
                   <div key={item.id} className="flex gap-3">
                     <div className="w-16 h-16 bg-zinc-100 shrink-0 border border-zinc-200 p-1.5">
-                      <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
+                      <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                     </div>
                     <div className="flex-1 py-0.5">
-                      <h4 className="text-[12px] font-bold text-zinc-900 line-clamp-1">{item.name}</h4>
+                      <h4 className="text-[12px]   text-zinc-900 line-clamp-1">{item.name}</h4>
                       {item.size && <p className="text-[10px] text-zinc-500 uppercase tracking-wider mt-0.5">Size: {item.size}</p>}
                       <div className="flex justify-between items-center mt-1.5">
-                        <span className="text-[12px] font-bold text-zinc-900">₹{item.price}</span>
+                        <span className="text-[12px]   text-zinc-900">₹{item.price}</span>
                         <span className="text-[9px] text-zinc-600 bg-zinc-100 border border-zinc-200 px-1.5 py-0.5">×{item.quantity || 1}</span>
                       </div>
                     </div>
@@ -377,8 +374,8 @@ const Checkout = () => {
                 ))}
               </div>
               <div className="space-y-2.5 pt-4 border-t border-zinc-200">
-                <div className="flex justify-between text-[12px]"><span className="text-zinc-600">Subtotal</span><span className="font-bold text-zinc-900">₹{total}</span></div>
-                <div className="flex justify-between text-[12px]"><span className="text-zinc-600">Delivery</span><span className="text-zinc-900 font-bold">Free</span></div>
+                <div className="flex justify-between text-[12px]"><span className="text-zinc-600">Subtotal</span><span className="  text-zinc-900">₹{total}</span></div>
+                <div className="flex justify-between text-[12px]"><span className="text-zinc-600">Delivery</span><span className="text-zinc-900  ">Free</span></div>
                 <div className="flex justify-between pt-4 border-t border-dashed border-zinc-300 items-baseline">
                   <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-[0.2em]">Total</span>
                   <span className="text-2xl font-light text-zinc-900 tracking-widest font-heading">₹{total}</span>

@@ -58,7 +58,7 @@ const Cart = () => {
       <div className="min-h-screen bg-[#faf9f5] flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 border border-zinc-300 border-t-black rounded-full animate-spin" />
-          <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-zinc-500">Loading your bag...</p>
+          <p className="text-[10px]   uppercase tracking-[0.25em] text-zinc-500">Loading your bag...</p>
         </div>
       </div>
     );
@@ -72,7 +72,7 @@ const Cart = () => {
         breadcrumbItems={[{ label: 'Home', path: '/' }, { label: 'Shop', path: '/shop' }, { label: 'Cart' }]}
       />
 
-      <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14 py-10 md:py-14">
+      <div className="max-w-7xl py-3 mx-auto px-5 md:px-10 lg:px-14 py-10 md:py-14">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
 
           {/* Cart Items */}
@@ -104,58 +104,58 @@ const Cart = () => {
 
                         return (
                           <motion.div
-                          key={`${item.cartId || item.id}-${idx}`}
-                          layout
-                          initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -30 }}
-                          transition={{ duration: 0.4 }}
-                          className="group bg-white border border-zinc-200 p-4 flex flex-col sm:flex-row items-center gap-4 hover:border-black/30 transition-all shadow-sm"
-                        >
-                          <Link to={`/product/${item.id}`} className="w-20 h-24 bg-zinc-100 shrink-0 overflow-hidden border border-zinc-200">
-                            <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
-                          </Link>
-                          <div className="flex-1 text-center sm:text-left space-y-0.5">
-                            {item.category && <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#b8860b]">{item.category}</span>}
-                            <h3 className="text-sm font-bold text-zinc-900 group-hover:text-black transition-colors leading-tight">{item.name}</h3>
-                            {item.size && <p className="text-[11px] font-medium text-zinc-500 uppercase tracking-wider">Size: {item.size}</p>}
-                            <div className="flex flex-wrap items-center gap-2 mt-1 sm:justify-start justify-center">
-                              <p className="text-sm font-bold text-zinc-900">₹{Number(item.price).toLocaleString("en-IN")}</p>
-                              {isOutOfStock ? (
-                                <span className="bg-red-500/10 border border-red-500/20 text-red-600 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider">Out of Stock</span>
-                              ) : item.quantity > stockInfo.stock ? (
-                                <span className="bg-amber-500/10 border border-amber-500/20 text-amber-700 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider">Only {stockInfo.stock} left</span>
-                              ) : null}
-                            </div>
-                          </div>
-                          <div className="flex items-center bg-zinc-50 border border-zinc-300 h-9">
-                            <button 
-                              onClick={() => updateQuantity(item.cartId || item.id, -1)} 
-                              disabled={item.quantity <= 1}
-                              className="w-8 h-full flex items-center justify-center text-zinc-500 hover:text-black transition-colors text-sm font-bold disabled:opacity-20"
-                            >
-                              −
-                            </button>
-                            <span className="w-7 text-center text-[13px] font-bold text-zinc-900">{item.quantity || 1}</span>
-                            <button 
-                              onClick={() => {
-                                if (item.quantity < stockInfo.stock) {
-                                  updateQuantity(item.cartId || item.id, 1);
-                                }
-                              }} 
-                              disabled={isOutOfStock || item.quantity >= stockInfo.stock}
-                              className="w-8 h-full flex items-center justify-center text-zinc-500 hover:text-black transition-colors text-sm font-bold disabled:opacity-20"
-                            >
-                              +
-                            </button>
-                          </div>
-                          <button onClick={() => removeFromCart(item.cartId || item.id)}
-                            className="p-2.5 bg-zinc-100 text-zinc-500 border border-zinc-300 hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all"
-                            aria-label="Remove item"
+                            key={`${item.cartId || item.id}-${idx}`}
+                            layout
+                            initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -30 }}
+                            transition={{ duration: 0.4 }}
+                            className="group bg-white border border-zinc-200 p-4 flex flex-col sm:flex-row items-center gap-4 hover:border-black/30 transition-all shadow-sm"
                           >
-                            <Trash2 size={14} strokeWidth={1.5} />
-                          </button>
-                        </motion.div>
-                      );
-                    })}
+                            <Link to={`/product/${item.id}`} className="w-20 h-24 bg-zinc-100 shrink-0 overflow-hidden border border-zinc-200">
+                              <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                            </Link>
+                            <div className="flex-1 text-center sm:text-left space-y-0.5">
+                              {item.category && <span className="text-[9px]   uppercase tracking-[0.2em] text-[#b8860b]">{item.category}</span>}
+                              <h3 className="text-sm   text-zinc-900 group-hover:text-black transition-colors leading-tight">{item.name}</h3>
+                              {item.size && <p className="text-[11px] font-medium text-zinc-500 uppercase tracking-wider">Size: {item.size}</p>}
+                              <div className="flex flex-wrap items-center gap-2 mt-1 sm:justify-start justify-center">
+                                <p className="text-sm   text-zinc-900">₹{Number(item.price).toLocaleString("en-IN")}</p>
+                                {isOutOfStock ? (
+                                  <span className="bg-red-500/10 border border-red-500/20 text-red-600 px-2 py-0.5 rounded text-[8px]   uppercase tracking-wider">Out of Stock</span>
+                                ) : item.quantity > stockInfo.stock ? (
+                                  <span className="bg-amber-500/10 border border-amber-500/20 text-amber-700 px-2 py-0.5 rounded text-[8px]   uppercase tracking-wider">Only {stockInfo.stock} left</span>
+                                ) : null}
+                              </div>
+                            </div>
+                            <div className="flex items-center bg-zinc-50 border border-zinc-300 h-9">
+                              <button
+                                onClick={() => updateQuantity(item.cartId || item.id, -1)}
+                                disabled={item.quantity <= 1}
+                                className="w-8 h-full flex items-center justify-center text-zinc-500 hover:text-black transition-colors text-sm   disabled:opacity-20"
+                              >
+                                −
+                              </button>
+                              <span className="w-7 text-center text-[13px]   text-zinc-900">{item.quantity || 1}</span>
+                              <button
+                                onClick={() => {
+                                  if (item.quantity < stockInfo.stock) {
+                                    updateQuantity(item.cartId || item.id, 1);
+                                  }
+                                }}
+                                disabled={isOutOfStock || item.quantity >= stockInfo.stock}
+                                className="w-8 h-full flex items-center justify-center text-zinc-500 hover:text-black transition-colors text-sm   disabled:opacity-20"
+                              >
+                                +
+                              </button>
+                            </div>
+                            <button onClick={() => removeFromCart(item.cartId || item.id)}
+                              className="p-2.5 bg-zinc-100 text-zinc-500 border border-zinc-300 hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all"
+                              aria-label="Remove item"
+                            >
+                              <Trash2 size={14} strokeWidth={1.5} />
+                            </button>
+                          </motion.div>
+                        );
+                      })}
                     </AnimatePresence>
                   </motion.div>
                 </div>
@@ -171,7 +171,7 @@ const Cart = () => {
                 <div className="space-y-3 mb-5">
                   <div className="flex justify-between text-[12px] text-zinc-600">
                     <span>Subtotal</span>
-                    <span className="font-bold text-zinc-900">₹{total.toLocaleString("en-IN")}</span>
+                    <span className="  text-zinc-900">₹{total.toLocaleString("en-IN")}</span>
                   </div>
                   <div className="flex justify-between text-[12px] text-zinc-600">
                     <span>Shipping</span>
@@ -179,7 +179,7 @@ const Cart = () => {
                   </div>
                   <div className="flex justify-between text-[12px] text-zinc-600">
                     <span>GST (Included)</span>
-                    <span className="font-bold text-zinc-900">₹0</span>
+                    <span className="  text-zinc-900">₹0</span>
                   </div>
 
                   {/* Gift Note */}
@@ -208,14 +208,13 @@ const Cart = () => {
                   </div>
                 </div>
 
-                <button 
+                <button
                   onClick={() => !hasOutOfStockItem && handleCheckout()}
                   disabled={hasOutOfStockItem}
-                  className={`w-full py-4 font-semibold text-[11px] uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2 mb-5 ${
-                    hasOutOfStockItem
-                      ? 'bg-zinc-200 text-zinc-400 cursor-not-allowed'
-                      : 'bg-black hover:bg-zinc-800 text-white'
-                  }`}
+                  className={`w-full py-4 font-semibold text-[11px] uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2 mb-5 ${hasOutOfStockItem
+                    ? 'bg-zinc-200 text-zinc-400 cursor-not-allowed'
+                    : 'bg-black hover:bg-zinc-800 text-white'
+                    }`}
                 >
                   {hasOutOfStockItem ? 'Remove Out of Stock Items' : 'Checkout'} <ChevronRight size={14} />
                 </button>
@@ -231,7 +230,7 @@ const Cart = () => {
                         <Icon size={13} strokeWidth={1.5} />
                       </div>
                       <div>
-                        <p className="text-[10px] font-bold text-zinc-800 uppercase tracking-wide">{title}</p>
+                        <p className="text-[10px]   text-zinc-800 uppercase tracking-wide">{title}</p>
                         <p className="text-[10px] text-zinc-500">{sub}</p>
                       </div>
                     </div>

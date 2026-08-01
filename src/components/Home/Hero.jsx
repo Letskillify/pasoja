@@ -179,7 +179,7 @@ const Hero = () => {
                 className="flex items-center gap-3 mb-4 lg:mb-6"
               >
                 <span className="w-8 h-[1px] bg-white/70" />
-                <span className="text-[10px] font-bold tracking-[0.4em] uppercase text-white/70">
+                <span className="text-[10px]   tracking-[0.4em] uppercase text-white/70">
                   {slide.tag}
                 </span>
               </motion.div>

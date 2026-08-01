@@ -49,13 +49,13 @@ const Orders = () => {
           const timeA = a.createdAt?.toMillis
             ? a.createdAt.toMillis()
             : a.createdAt?.toDate
-            ? a.createdAt.toDate().getTime()
-            : 0;
+              ? a.createdAt.toDate().getTime()
+              : 0;
           const timeB = b.createdAt?.toMillis
             ? b.createdAt.toMillis()
             : b.createdAt?.toDate
-            ? b.createdAt.toDate().getTime()
-            : 0;
+              ? b.createdAt.toDate().getTime()
+              : 0;
           return timeB - timeA;
         });
         setOrders(ordersList);
@@ -257,12 +257,12 @@ const Orders = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <Link
             to="/account"
-            className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-semibold text-zinc-500 hover:text-black transition-colors"
+            className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.2em] font-semibold text-zinc-500 hover:text-black transition-colors"
           >
             <ArrowLeft size={14} /> Back to Dashboard
           </Link>
 
-          <span className="text-xs uppercase tracking-widest text-[#b8860b] font-mono font-bold">
+          <span className="text-[12px] uppercase tracking-widest text-[#b8860b] font-mono  ">
             Total Orders: {orders.length}
           </span>
         </div>
@@ -281,11 +281,10 @@ const Orders = () => {
                 key={tab.id}
                 type="button"
                 onClick={() => setStatusFilter(tab.id)}
-                className={`px-4 py-2 text-[10px] font-extrabold uppercase tracking-widest transition-all rounded-sm ${
-                  statusFilter === tab.id
-                    ? "bg-black text-white font-black"
-                    : "bg-zinc-100 text-zinc-600 border border-zinc-200 hover:text-black hover:bg-zinc-200"
-                }`}
+                className={`px-4 py-2 text-[10px] font-extrabold uppercase tracking-widest transition-all rounded-sm ${statusFilter === tab.id
+                  ? "bg-black text-white font-black"
+                  : "bg-zinc-100 text-zinc-600 border border-zinc-200 hover:text-black hover:bg-zinc-200"
+                  }`}
               >
                 {tab.label}
               </button>
@@ -300,7 +299,7 @@ const Orders = () => {
               placeholder="Search by Order ID or item..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full bg-zinc-50 border border-zinc-300 pl-9 pr-8 py-2 text-xs text-zinc-900 outline-none focus:border-zinc-500 transition-colors placeholder:text-zinc-400"
+              className="w-full bg-zinc-50 border border-zinc-300 pl-9 pr-8 py-2 text-[12px] text-zinc-900 outline-none focus:border-zinc-500 transition-colors placeholder:text-zinc-400"
             />
             {searchQuery && (
               <button
@@ -323,7 +322,7 @@ const Orders = () => {
             <h3 className="text-lg font-light text-zinc-900 tracking-widest uppercase mb-2">
               No Orders Found
             </h3>
-            <p className="text-xs text-zinc-500 leading-relaxed mb-6">
+            <p className="text-[12px] text-zinc-500 leading-relaxed mb-6">
               {searchQuery || statusFilter !== "all"
                 ? "No orders match your filter criteria."
                 : "You haven't placed any orders yet."}
@@ -340,17 +339,17 @@ const Orders = () => {
             {filteredOrders.map(order => {
               const formattedDate = order.createdAt?.toDate
                 ? order.createdAt.toDate().toLocaleDateString("en-IN", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric"
-                  })
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric"
+                })
                 : order.createdAt?.toMillis
-                ? new Date(order.createdAt.toMillis()).toLocaleDateString("en-IN", {
+                  ? new Date(order.createdAt.toMillis()).toLocaleDateString("en-IN", {
                     day: "numeric",
                     month: "short",
                     year: "numeric"
                   })
-                : "Recently";
+                  : "Recently";
 
               const items = order.items || [];
 
@@ -369,7 +368,7 @@ const Orders = () => {
                         <span className="text-[9px] font-black uppercase tracking-[0.25em] text-[#b8860b]">
                           Order Reference
                         </span>
-                        <h3 className="text-sm font-bold text-zinc-900 uppercase tracking-wider font-mono">
+                        <h3 className="text-sm   text-zinc-900 uppercase tracking-wider font-mono">
                           #{order.id.slice(0, 14).toUpperCase()}
                         </h3>
                       </div>
@@ -380,17 +379,16 @@ const Orders = () => {
                         <span className="text-[9px] font-extrabold uppercase tracking-widest text-zinc-400 block">
                           Placed On
                         </span>
-                        <span className="text-xs text-zinc-700">{formattedDate}</span>
+                        <span className="text-[12px] text-zinc-700">{formattedDate}</span>
                       </div>
 
                       <span
-                        className={`px-3 py-1 text-[9px] font-extrabold uppercase tracking-widest border flex items-center gap-1.5 ${
-                          order.status === "confirmed" || order.status === "delivered"
-                            ? "bg-emerald-50 text-emerald-700 border-emerald-300"
-                            : order.status === "failed"
+                        className={`px-3 py-1 text-[9px] font-extrabold uppercase tracking-widest border flex items-center gap-1.5 ${order.status === "confirmed" || order.status === "delivered"
+                          ? "bg-emerald-50 text-emerald-700 border-emerald-300"
+                          : order.status === "failed"
                             ? "bg-red-50 text-red-700 border-red-300"
                             : "bg-amber-50 text-amber-700 border-amber-300"
-                        }`}
+                          }`}
                       >
                         {order.status === "confirmed" || order.status === "delivered" ? (
                           <CheckCircle2 size={11} />
@@ -446,7 +444,7 @@ const Orders = () => {
                               />
                             </div>
                             <div>
-                              <h4 className="text-xs font-bold text-zinc-900 uppercase tracking-wider line-clamp-1">
+                              <h4 className="text-[12px]   text-zinc-900 uppercase tracking-wider line-clamp-1">
                                 {item.name}
                               </h4>
                               <div className="flex items-center gap-3 text-[11px] text-zinc-500 mt-1">
@@ -457,7 +455,7 @@ const Orders = () => {
                           </div>
 
                           <div className="text-right shrink-0">
-                            <span className="text-xs font-semibold text-zinc-900">
+                            <span className="text-[12px] font-semibold text-zinc-900">
                               ₹{((item.price || 0) * (item.quantity || 1)).toLocaleString("en-IN")}
                             </span>
                           </div>
@@ -467,16 +465,16 @@ const Orders = () => {
                   </div>
 
                   {/* Order Summary Bottom Bar */}
-                  <div className="pt-4 border-t border-zinc-200 flex items-center justify-between text-xs">
+                  <div className="pt-4 border-t border-zinc-200 flex items-center justify-between text-[12px]">
                     <div className="text-zinc-500 text-[11px]">
                       <span>Payment: <strong className="text-zinc-900 uppercase">{order.paymentMethod || "Online"}</strong></span>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className="text-zinc-500 uppercase text-[10px] tracking-wider font-bold">
+                      <span className="text-zinc-500 uppercase text-[10px] tracking-wider  ">
                         Grand Total:
                       </span>
-                      <span className="text-sm font-bold text-zinc-900 font-mono">
+                      <span className="text-sm   text-zinc-900 font-mono">
                         ₹{(order.total || 0).toLocaleString("en-IN")}
                       </span>
                     </div>
@@ -512,7 +510,7 @@ const Orders = () => {
                   <span className="text-[9px] font-black uppercase tracking-[0.25em] text-[#b8860b]">
                     Order Specification
                   </span>
-                  <h3 className="text-base font-bold text-zinc-900 uppercase tracking-wider font-mono">
+                  <h3 className="text-base   text-zinc-900 uppercase tracking-wider font-mono">
                     #{selectedOrder.id.slice(0, 14).toUpperCase()}
                   </h3>
                 </div>
@@ -526,12 +524,12 @@ const Orders = () => {
               </div>
 
               {/* Shipping & Payment Details */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-zinc-50 p-4 border border-zinc-200 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-zinc-50 p-4 border border-zinc-200 text-[12px]">
                 <div className="space-y-1">
-                  <div className="flex items-center gap-1.5 text-[#b8860b] font-bold uppercase tracking-wider text-[10px] mb-1">
+                  <div className="flex items-center gap-1.5 text-[#b8860b]   uppercase tracking-wider text-[10px] mb-1">
                     <MapPin size={12} /> Shipping Address
                   </div>
-                  <p className="font-bold text-zinc-900 uppercase">{selectedOrder.shipping?.name || user?.displayName}</p>
+                  <p className="  text-zinc-900 uppercase">{selectedOrder.shipping?.name || user?.displayName}</p>
                   <p className="text-zinc-600">{selectedOrder.shipping?.address}</p>
                   <p className="text-zinc-600">
                     {selectedOrder.shipping?.city}, {selectedOrder.shipping?.state} - {selectedOrder.shipping?.pincode}
@@ -540,7 +538,7 @@ const Orders = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <div className="flex items-center gap-1.5 text-[#b8860b] font-bold uppercase tracking-wider text-[10px] mb-1">
+                  <div className="flex items-center gap-1.5 text-[#b8860b]   uppercase tracking-wider text-[10px] mb-1">
                     <CreditCard size={12} /> Payment Info
                   </div>
                   <p className="text-zinc-700">Method: <strong className="text-zinc-900 uppercase">{selectedOrder.paymentMethod || 'Online'}</strong></p>
@@ -551,7 +549,7 @@ const Orders = () => {
 
               {/* Purchased Items List */}
               <div className="space-y-3">
-                <h4 className="text-xs font-bold uppercase tracking-widest text-zinc-500">
+                <h4 className="text-[12px]   uppercase tracking-widest text-zinc-500">
                   Itemized Summary
                 </h4>
                 <div className="divide-y divide-zinc-200 bg-zinc-50 p-4 border border-zinc-200">
@@ -564,13 +562,13 @@ const Orders = () => {
                           className="w-12 h-14 object-cover bg-zinc-100 border border-zinc-200 shrink-0"
                         />
                         <div>
-                          <p className="text-xs font-bold text-zinc-900 uppercase">{item.name}</p>
+                          <p className="text-[12px]   text-zinc-900 uppercase">{item.name}</p>
                           <p className="text-[11px] text-zinc-500">
                             {item.size ? `Size: ${item.size} • ` : ""}Qty: {item.quantity || 1}
                           </p>
                         </div>
                       </div>
-                      <span className="text-xs font-bold text-zinc-900 font-mono">
+                      <span className="text-[12px]   text-zinc-900 font-mono">
                         ₹{((item.price || 0) * (item.quantity || 1)).toLocaleString("en-IN")}
                       </span>
                     </div>
@@ -579,16 +577,16 @@ const Orders = () => {
               </div>
 
               {/* Total Calculation */}
-              <div className="bg-zinc-50 p-4 border border-zinc-200 space-y-2 text-xs">
+              <div className="bg-zinc-50 p-4 border border-zinc-200 space-y-2 text-[12px]">
                 <div className="flex justify-between text-zinc-500">
                   <span>Subtotal</span>
                   <span>₹{(selectedOrder.total || 0).toLocaleString("en-IN")}</span>
                 </div>
                 <div className="flex justify-between text-zinc-500">
                   <span>Express Shipping</span>
-                  <span className="text-emerald-700 font-bold">FREE</span>
+                  <span className="text-emerald-700  ">FREE</span>
                 </div>
-                <div className="flex justify-between text-zinc-900 text-sm font-bold pt-2 border-t border-zinc-200 font-mono">
+                <div className="flex justify-between text-zinc-900 text-sm   pt-2 border-t border-zinc-200 font-mono">
                   <span>Grand Total</span>
                   <span>₹{(selectedOrder.total || 0).toLocaleString("en-IN")}</span>
                 </div>
@@ -606,7 +604,7 @@ const Orders = () => {
                 <button
                   type="button"
                   onClick={() => setSelectedOrder(null)}
-                  className="px-6 py-3 border border-zinc-300 text-zinc-700 font-bold text-[10px] uppercase tracking-widest hover:text-black hover:border-black"
+                  className="px-6 py-3 border border-zinc-300 text-zinc-700   text-[10px] uppercase tracking-widest hover:text-black hover:border-black"
                 >
                   Close
                 </button>

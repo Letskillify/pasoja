@@ -31,7 +31,7 @@ const GenderBanner = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: idx * 0.15 }}
-              className="relative group overflow-hidden rounded-xs bg-[#111]"
+              className="relative group overflow-hidden rounded-none bg-[#111]"
             >
               <Link to={banner.path} className="block relative w-full h-[520px] sm:h-[620px] md:h-[680px] lg:h-[760px]">
                 {/* Background Image */}
@@ -49,7 +49,7 @@ const GenderBanner = () => {
                   <h2 className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-black tracking-tight text-white uppercase mb-4 drop-shadow-md">
                     {banner.title}
                   </h2>
-                  <div className="px-6 py-2 sm:px-7 sm:py-2.5 rounded-full border border-white text-white text-xs sm:text-sm font-bold uppercase tracking-widest bg-black/20 backdrop-blur-xs transition-all duration-300 group-hover:bg-white group-hover:text-black group-hover:border-white shadow-md">
+                  <div className="px-6 py-2 sm:px-7 sm:py-2.5 rounded-full border border-white text-white text-[12px] sm:text-sm   uppercase tracking-widest bg-black/20 backdrop-blur-xs transition-all duration-300 group-hover:bg-white group-hover:text-black group-hover:border-white shadow-md">
                     {banner.buttonText}
                   </div>
                 </div>

@@ -11,7 +11,7 @@ const SectionHeader = ({ subtitle, title, description, action, border = true, ce
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-[10px] uppercase tracking-[0.3em] text-[#b8860b] font-bold block mb-2"
+            className="text-[10px] uppercase tracking-[0.3em] text-[#b8860b]   block mb-2"
           >
             {subtitle}
           </motion.span>
@@ -27,7 +27,7 @@ const SectionHeader = ({ subtitle, title, description, action, border = true, ce
         </motion.h2>
       </div>
       {(description || action) && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -35,7 +35,7 @@ const SectionHeader = ({ subtitle, title, description, action, border = true, ce
           className={`flex flex-col ${center ? 'items-center mt-4 text-center' : 'md:items-end md:mt-0 mt-4'} max-w-sm`}
         >
           {description && (
-            <p className="text-zinc-600 text-xs md:text-sm font-light leading-relaxed mb-4 md:mb-0 md:text-right">
+            <p className="text-zinc-600 text-[12px] md:text-sm font-light leading-relaxed mb-4 md:mb-0 md:text-right">
               {description}
             </p>
           )}

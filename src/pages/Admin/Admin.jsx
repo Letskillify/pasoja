@@ -15,20 +15,20 @@ import {
   where,
   limit
 } from "firebase/firestore";
-import { 
-  ResponsiveContainer, 
-  AreaChart, 
-  Area, 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  Tooltip, 
-  Legend 
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend
 } from "recharts";
-import { 
-  X, Plus, Edit2, Trash2, CheckCircle2, AlertTriangle, 
-  User, Calendar, DollarSign, ShoppingBag, Eye, Printer, 
+import {
+  X, Plus, Edit2, Trash2, CheckCircle2, AlertTriangle,
+  User, Calendar, DollarSign, ShoppingBag, Eye, Printer,
   Download, PlusCircle, Check, HelpCircle, FileText,
   Shirt, AlertCircle, Mail, Lock, ArrowRight
 } from "lucide-react";
@@ -97,6 +97,17 @@ const DEFAULT_SEED_DATA = {
     { id: 'cat_sbc_2', name: 'SHIRTS', title: 'SHIRTS', slug: 'shirts', image: 'https://images.unsplash.com/photo-1596755094514-f87e32f85e2c?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Shirts', sort_order: 2, is_active: true },
     { id: 'cat_sbc_3', name: 'WAFFLE KNIT', title: 'WAFFLE KNIT', slug: 'waffle-knit', image: 'https://images.unsplash.com/photo-1614975058789-41316d0e2e9c?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Sweaters', sort_order: 3, is_active: true },
     { id: 'cat_sbc_4', name: 'QUARTER ZIP', title: 'QUARTER ZIP', slug: 'quarter-zip', image: 'https://images.unsplash.com/photo-1578587018452-892bacefd3f2?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Jackets', sort_order: 4, is_active: true }
+  ],
+  mobile_categories: [
+    { id: 'm_cat_1', name: 'SHIRTS', title: 'SHIRTS', badge: '', image: 'https://images.unsplash.com/photo-1596755094514-f87e32f85e2c?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Shirts', sort_order: 1, is_active: true },
+    { id: 'm_cat_2', name: 'TROUSERS', title: 'TROUSERS', badge: '', image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Trousers', sort_order: 2, is_active: true },
+    { id: 'm_cat_3', name: 'POLOS', title: 'POLOS', badge: '', image: 'https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Polos', sort_order: 3, is_active: true },
+    { id: 'm_cat_4', name: 'JEANS', title: 'JEANS', badge: '', image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Jeans', sort_order: 4, is_active: true },
+    { id: 'm_cat_5', name: 'CARGOS', title: 'CARGOS', badge: '', image: 'https://images.unsplash.com/photo-1517445312882-bc9910d016b7?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Cargos', sort_order: 5, is_active: true },
+    { id: 'm_cat_6', name: 'T-SHIRTS', title: 'T-SHIRTS', badge: '', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop', link: '/shop?category=T-Shirts', sort_order: 6, is_active: true },
+    { id: 'm_cat_7', name: 'SHORTS', title: 'SHORTS', badge: '', image: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Shorts', sort_order: 7, is_active: true },
+    { id: 'm_cat_8', name: 'PLUS SIZE', title: 'PLUS SIZE', badge: '3XL TO 6XL', image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Plus-Size', sort_order: 8, is_active: true },
+    { id: 'm_cat_9', name: 'SHOES', title: 'SHOES', badge: 'JUST LAUNCHED', image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Shoes', sort_order: 9, is_active: true }
   ]
 };
 
@@ -209,20 +220,20 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
   return (
     <div className="bg-white border border-zinc-200 rounded-xl p-6 text-zinc-900 shadow-sm">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-lg font-bold text-zinc-900 uppercase tracking-wider">{title}</h2>
+        <h2 className="text-lg   text-zinc-900 uppercase tracking-wider">{title}</h2>
         <button
           onClick={handleCreateNew}
-          className="flex items-center gap-2 px-4 py-2 bg-black text-white text-xs font-bold rounded-lg hover:bg-zinc-800 transition-all shadow-sm cursor-pointer"
+          className="flex items-center gap-2 px-4 py-2 bg-black text-white text-[12px]   rounded-lg hover:bg-zinc-800 transition-all shadow-sm cursor-pointer"
         >
           <Plus size={14} /> Add New
         </button>
       </div>
 
       {loading ? (
-        <div className="py-8 text-center text-zinc-500 text-xs">Loading items...</div>
+        <div className="py-8 text-center text-zinc-500 text-[12px]">Loading items...</div>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
+          <table className="w-full text-left text-[12px] border-collapse">
             <thead>
               <tr className="border-b border-zinc-200 text-zinc-500 uppercase tracking-widest text-[10px]">
                 {fields.map(f => (
@@ -239,7 +250,7 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
                       {f.type === 'image' ? (
                         <img src={item[f.key]} className="w-10 h-10 object-cover rounded bg-zinc-100 border border-zinc-200" alt="thumb" />
                       ) : f.type === 'boolean' ? (
-                        <span className={`px-2 py-0.5 rounded text-[9px] font-bold ${item[f.key] ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-red-100 text-red-800 border border-red-200'}`}>
+                        <span className={`px-2 py-0.5 rounded text-[9px]   ${item[f.key] ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-red-100 text-red-800 border border-red-200'}`}>
                           {item[f.key] ? 'ACTIVE' : 'INACTIVE'}
                         </span>
                       ) : (
@@ -269,7 +280,7 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <form onSubmit={handleSubmit} className="bg-white border border-zinc-200 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
             <div className="flex justify-between items-center border-b border-zinc-200 pb-3">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-900">{editingItem ? "Edit Item" : "Create Item"}</h3>
+              <h3 className="text-sm   uppercase tracking-wider text-zinc-900">{editingItem ? "Edit Item" : "Create Item"}</h3>
               <button type="button" onClick={() => setIsModalOpen(false)} className="text-zinc-400 hover:text-black p-1 rounded-full hover:bg-zinc-100">
                 <X size={16} />
               </button>
@@ -278,7 +289,7 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
             <div className="space-y-3 max-h-[65vh] overflow-y-auto pr-1">
               {fields.map(f => (
                 <div key={f.key} className="space-y-1">
-                  <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">{f.label}</label>
+                  <label className="text-[10px]   text-zinc-500 uppercase tracking-wider block">{f.label}</label>
                   {f.type === 'image' ? (
                     <div className="space-y-2">
                       {formData[f.key] && (
@@ -288,17 +299,17 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
                         type="file"
                         accept="image/*"
                         onChange={e => e.target.files?.[0] && handleImageUpload(e.target.files[0], f.key)}
-                        className="w-full text-xs text-zinc-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-zinc-100 file:text-zinc-900 hover:file:bg-zinc-200 cursor-pointer"
+                        className="w-full text-[12px] text-zinc-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-[12px] file:font-semibold file:bg-zinc-100 file:text-zinc-900 hover:file:bg-zinc-200 cursor-pointer"
                       />
                       {uploading && (
-                        <p className="text-[10px] text-[#b8860b] font-bold animate-pulse">Uploading image...</p>
+                        <p className="text-[10px] text-[#b8860b]   animate-pulse">Uploading image...</p>
                       )}
                     </div>
                   ) : f.type === 'boolean' ? (
                     <select
                       value={formData[f.key] ? 'true' : 'false'}
                       onChange={(e) => setFormData(prev => ({ ...prev, [f.key]: e.target.value === 'true' }))}
-                      className="w-full px-3 py-2 bg-zinc-50 border border-zinc-300 rounded-lg text-xs text-zinc-900 focus:bg-white focus:border-black outline-none transition-all"
+                      className="w-full px-3 py-2 bg-zinc-50 border border-zinc-300 rounded-lg text-[12px] text-zinc-900 focus:bg-white focus:border-black outline-none transition-all"
                     >
                       <option value="true">Active</option>
                       <option value="false">Inactive</option>
@@ -308,14 +319,14 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
                       value={formData[f.key] || ''}
                       onChange={(e) => handleInputChange(f.key, e.target.value)}
                       rows={3}
-                      className="w-full px-3 py-2 bg-zinc-50 border border-zinc-300 rounded-lg text-xs text-zinc-900 focus:bg-white focus:border-black outline-none transition-all"
+                      className="w-full px-3 py-2 bg-zinc-50 border border-zinc-300 rounded-lg text-[12px] text-zinc-900 focus:bg-white focus:border-black outline-none transition-all"
                     />
                   ) : (
                     <input
                       type={f.type || 'text'}
                       value={formData[f.key] || ''}
                       onChange={(e) => handleInputChange(f.key, e.target.value)}
-                      className="w-full px-3 py-2 bg-zinc-50 border border-zinc-300 rounded-lg text-xs text-zinc-900 focus:bg-white focus:border-black outline-none transition-all"
+                      className="w-full px-3 py-2 bg-zinc-50 border border-zinc-300 rounded-lg text-[12px] text-zinc-900 focus:bg-white focus:border-black outline-none transition-all"
                     />
                   )}
                 </div>
@@ -326,14 +337,14 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="px-4 py-2 border border-zinc-300 text-zinc-700 text-xs font-bold rounded-lg hover:bg-zinc-100"
+                className="px-4 py-2 border border-zinc-300 text-zinc-700 text-[12px]   rounded-lg hover:bg-zinc-100"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={uploading}
-                className="px-5 py-2 bg-black text-white text-xs font-bold rounded-lg hover:bg-zinc-800 disabled:opacity-50 shadow-sm cursor-pointer"
+                className="px-5 py-2 bg-black text-white text-[12px]   rounded-lg hover:bg-zinc-800 disabled:opacity-50 shadow-sm cursor-pointer"
               >
                 {uploading ? "Uploading..." : "Save Changes"}
               </button>
@@ -348,7 +359,7 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
 // Testimonials Manager
 const CommunityManager = () => {
   const [subTab, setSubTab] = useState("settings");
-  
+
   const [settings, setSettings] = useState({
     eyebrow: "",
     heading: "",
@@ -501,29 +512,29 @@ const CommunityManager = () => {
 
   return (
     <div className="bg-white border border-zinc-200 rounded-xl p-6 text-zinc-900 shadow-sm">
-      <div className="flex border-b border-zinc-200 mb-6 text-xs">
+      <div className="flex border-b border-zinc-200 mb-6 text-[12px]">
         <button
           onClick={() => setSubTab("settings")}
-          className={`px-4 py-2 font-bold border-b-2 transition-all ${subTab === "settings" ? "border-black text-zinc-900 font-extrabold" : "border-transparent text-zinc-500 hover:text-black"}`}
+          className={`px-4 py-2   border-b-2 transition-all ${subTab === "settings" ? "border-black text-zinc-900 font-extrabold" : "border-transparent text-zinc-500 hover:text-black"}`}
         >
           Section Settings
         </button>
         <button
           onClick={() => setSubTab("gallery")}
-          className={`px-4 py-2 font-bold border-b-2 transition-all ${subTab === "gallery" ? "border-black text-zinc-900 font-extrabold" : "border-transparent text-zinc-500 hover:text-black"}`}
+          className={`px-4 py-2   border-b-2 transition-all ${subTab === "gallery" ? "border-black text-zinc-900 font-extrabold" : "border-transparent text-zinc-500 hover:text-black"}`}
         >
           Gallery Images
         </button>
         <button
           onClick={() => setSubTab("stats")}
-          className={`px-4 py-2 font-bold border-b-2 transition-all ${subTab === "stats" ? "border-black text-zinc-900 font-extrabold" : "border-transparent text-zinc-500 hover:text-black"}`}
+          className={`px-4 py-2   border-b-2 transition-all ${subTab === "stats" ? "border-black text-zinc-900 font-extrabold" : "border-transparent text-zinc-500 hover:text-black"}`}
         >
           Social Proof Stats
         </button>
       </div>
 
       {subTab === "settings" && !settingsLoading && (
-        <div className="max-w-xl space-y-4 text-xs">
+        <div className="max-w-xl space-y-4 text-[12px]">
           <div className="flex items-center gap-2 pb-2">
             <input
               type="checkbox"
@@ -532,10 +543,10 @@ const CommunityManager = () => {
               onChange={(e) => setSettings(prev => ({ ...prev, is_active: e.target.checked }))}
               className="rounded text-black focus:ring-black accent-black w-4 h-4 cursor-pointer"
             />
-            <label htmlFor="settings-active" className="font-bold text-zinc-800 cursor-pointer">Section Active</label>
+            <label htmlFor="settings-active" className="  text-zinc-800 cursor-pointer">Section Active</label>
           </div>
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">Eyebrow</label>
+            <label className="text-[10px]   text-zinc-500 uppercase tracking-wider block">Eyebrow</label>
             <input
               type="text"
               value={settings.eyebrow}
@@ -544,7 +555,7 @@ const CommunityManager = () => {
             />
           </div>
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">Heading</label>
+            <label className="text-[10px]   text-zinc-500 uppercase tracking-wider block">Heading</label>
             <input
               type="text"
               value={settings.heading}
@@ -553,7 +564,7 @@ const CommunityManager = () => {
             />
           </div>
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">Description Line 1</label>
+            <label className="text-[10px]   text-zinc-500 uppercase tracking-wider block">Description Line 1</label>
             <input
               type="text"
               value={settings.description_line_1}
@@ -562,7 +573,7 @@ const CommunityManager = () => {
             />
           </div>
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">Description Line 2</label>
+            <label className="text-[10px]   text-zinc-500 uppercase tracking-wider block">Description Line 2</label>
             <input
               type="text"
               value={settings.description_line_2}
@@ -573,7 +584,7 @@ const CommunityManager = () => {
           <button
             onClick={handleSaveSettings}
             disabled={settingsSaving}
-            className="px-6 py-2.5 bg-[#c9a962] text-[#090909] hover:bg-white hover:text-black rounded text-xs font-bold transition-all"
+            className="px-6 py-2.5 bg-[#c9a962] text-[#090909] hover:bg-white hover:text-black rounded text-[12px]   transition-all"
           >
             {settingsSaving ? "Saving..." : "Save Settings"}
           </button>
@@ -581,15 +592,15 @@ const CommunityManager = () => {
       )}
 
       {subTab === "gallery" && !imagesLoading && (
-        <div className="space-y-6 text-xs">
+        <div className="space-y-6 text-[12px]">
           <div className="flex justify-end">
-            <button onClick={handleAddImage} className="px-4 py-2 bg-[#c9a962] text-[#090909] hover:bg-white hover:text-black rounded font-bold transition-all">Add New Image</button>
+            <button onClick={handleAddImage} className="px-4 py-2 bg-[#c9a962] text-[#090909] hover:bg-white hover:text-black rounded   transition-all">Add New Image</button>
           </div>
           <div className="grid gap-6 md:grid-cols-2">
             {images.map((img, idx) => (
               <div key={img.id} className="border border-[#1a1a1a] rounded-xl p-5 bg-[#161616] space-y-4">
                 <div className="flex items-center justify-between border-b border-[#222] pb-3">
-                  <span className="font-bold text-zinc-300">Image #{idx + 1}</span>
+                  <span className="  text-zinc-300">Image #{idx + 1}</span>
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1">
                       <input
@@ -599,9 +610,9 @@ const CommunityManager = () => {
                         onChange={(e) => handleImageChange(img.id, 'is_active', e.target.checked)}
                         className="rounded text-[#c9a962] focus:ring-[#c9a962] w-4 h-4 cursor-pointer"
                       />
-                      <label htmlFor={`img-active-${img.id}`} className="font-bold text-zinc-400 cursor-pointer">Active</label>
+                      <label htmlFor={`img-active-${img.id}`} className="  text-zinc-400 cursor-pointer">Active</label>
                     </div>
-                    <button onClick={() => handleDeleteImage(img.id)} className="text-red-400 hover:text-red-300 font-bold">Delete</button>
+                    <button onClick={() => handleDeleteImage(img.id)} className="text-red-400 hover:text-red-300  ">Delete</button>
                   </div>
                 </div>
 
@@ -611,23 +622,23 @@ const CommunityManager = () => {
                   </div>
                   <div className="flex-1">
                     <input type="file" accept="image/*" onChange={(e) => handleImageUpload(img.id, e.target.files[0])} className="hidden" id={`gallery-file-${img.id}`} />
-                    <label htmlFor={`gallery-file-${img.id}`} className="inline-block px-3 py-1.5 border border-zinc-700 rounded font-bold text-zinc-300 bg-[#0f0f0f] hover:bg-zinc-800 cursor-pointer">
+                    <label htmlFor={`gallery-file-${img.id}`} className="inline-block px-3 py-1.5 border border-zinc-700 rounded   text-zinc-300 bg-[#0f0f0f] hover:bg-zinc-800 cursor-pointer">
                       {uploadingImgId === img.id ? "Uploading..." : "Change Image"}
                     </label>
                   </div>
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">Destination Link</label>
+                  <label className="text-[10px]   text-zinc-400 uppercase tracking-wider block">Destination Link</label>
                   <input type="text" value={img.link || ''} onChange={(e) => handleImageChange(img.id, 'link', e.target.value)} className="w-full px-3 py-2 bg-[#090909] border border-[#222] rounded text-white" />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">Sort Order</label>
+                  <label className="text-[10px]   text-zinc-400 uppercase tracking-wider block">Sort Order</label>
                   <input type="number" value={img.sort_order} onChange={(e) => handleImageChange(img.id, 'sort_order', parseInt(e.target.value) || 0)} className="w-full px-3 py-2 bg-[#090909] border border-[#222] rounded text-white" />
                 </div>
 
-                <button onClick={() => handleSaveImage(img)} disabled={savingImgId === img.id || uploadingImgId === img.id} className="w-full py-2 bg-[#c9a962] text-[#090909] hover:bg-white hover:text-black font-bold rounded">
+                <button onClick={() => handleSaveImage(img)} disabled={savingImgId === img.id || uploadingImgId === img.id} className="w-full py-2 bg-[#c9a962] text-[#090909] hover:bg-white hover:text-black   rounded">
                   {savingImgId === img.id ? "Saving..." : "Save"}
                 </button>
               </div>
@@ -637,11 +648,11 @@ const CommunityManager = () => {
       )}
 
       {subTab === "stats" && !statsLoading && (
-        <div className="grid gap-6 md:grid-cols-2 text-xs">
+        <div className="grid gap-6 md:grid-cols-2 text-[12px]">
           {stats.map((stat, idx) => (
             <div key={stat.id} className="border border-[#1a1a1a] rounded-xl p-5 bg-[#161616] space-y-4">
               <div className="flex items-center justify-between border-b border-[#222] pb-3">
-                <span className="font-bold text-zinc-300">Stat #{idx + 1}</span>
+                <span className="  text-zinc-300">Stat #{idx + 1}</span>
                 <div className="flex items-center gap-2">
                   <input
                     type="checkbox"
@@ -650,12 +661,12 @@ const CommunityManager = () => {
                     onChange={(e) => handleStatChange(stat.id, 'is_active', e.target.checked)}
                     className="rounded text-[#c9a962] focus:ring-[#c9a962] w-4 h-4 cursor-pointer"
                   />
-                  <label htmlFor={`stat-active-${stat.id}`} className="font-bold text-zinc-400 cursor-pointer">Active</label>
+                  <label htmlFor={`stat-active-${stat.id}`} className="  text-zinc-400 cursor-pointer">Active</label>
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">Icon</label>
+                <label className="text-[10px]   text-zinc-400 uppercase tracking-wider block">Icon</label>
                 <select value={stat.icon} onChange={(e) => handleStatChange(stat.id, 'icon', e.target.value)} className="w-full px-3 py-2 bg-[#090909] border border-[#222] rounded text-white">
                   <option value="Star">Star (Rating)</option>
                   <option value="Award">Award (Badge)</option>
@@ -666,21 +677,21 @@ const CommunityManager = () => {
               </div>
 
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">Primary Value</label>
+                <label className="text-[10px]   text-zinc-400 uppercase tracking-wider block">Primary Value</label>
                 <input type="text" value={stat.value} onChange={(e) => handleStatChange(stat.id, 'value', e.target.value)} className="w-full px-3 py-2 bg-[#090909] border border-[#222] rounded text-white" />
               </div>
 
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">Label</label>
+                <label className="text-[10px]   text-zinc-400 uppercase tracking-wider block">Label</label>
                 <input type="text" value={stat.label} onChange={(e) => handleStatChange(stat.id, 'label', e.target.value)} className="w-full px-3 py-2 bg-[#090909] border border-[#222] rounded text-white" />
               </div>
 
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">Sort Order</label>
+                <label className="text-[10px]   text-zinc-400 uppercase tracking-wider block">Sort Order</label>
                 <input type="number" value={stat.sort_order} onChange={(e) => handleStatChange(stat.id, 'sort_order', parseInt(e.target.value) || 0)} className="w-full px-3 py-2 bg-[#090909] border border-[#222] rounded text-white" />
               </div>
 
-              <button onClick={() => handleSaveStat(stat)} disabled={savingStatId === stat.id} className="w-full py-2 bg-[#c9a962] text-[#090909] hover:bg-white hover:text-black font-bold rounded">
+              <button onClick={() => handleSaveStat(stat)} disabled={savingStatId === stat.id} className="w-full py-2 bg-[#c9a962] text-[#090909] hover:bg-white hover:text-black   rounded">
                 {savingStatId === stat.id ? "Saving..." : "Save"}
               </button>
             </div>
@@ -755,17 +766,17 @@ const CMSManager = ({ collectionName, title }) => {
   };
 
   if (loading) {
-    return <div className="p-8 text-center text-zinc-500 text-xs">Loading CMS data...</div>;
+    return <div className="p-8 text-center text-zinc-500 text-[12px]">Loading CMS data...</div>;
   }
 
   return (
-    <div className="bg-[#121212] border border-[#1a1a1a] rounded-xl p-6 text-white text-xs">
-      <h2 className="text-base font-bold text-white mb-6 uppercase tracking-wider">{title}</h2>
+    <div className="bg-[#121212] border border-[#1a1a1a] rounded-xl p-6 text-white text-[12px]">
+      <h2 className="text-base   text-white mb-6 uppercase tracking-wider">{title}</h2>
       <div className="grid gap-8 md:grid-cols-2">
         {items.map((item, index) => (
           <div key={item.id} className="border border-[#1a1a1a] rounded-xl p-5 bg-[#161616] space-y-4">
             <div className="flex items-center justify-between border-b border-[#222] pb-3">
-              <span className="font-bold text-zinc-300">Panel 0{index + 1} ({item.id})</span>
+              <span className="  text-zinc-300">Panel 0{index + 1} ({item.id})</span>
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
@@ -774,19 +785,19 @@ const CMSManager = ({ collectionName, title }) => {
                   onChange={(e) => handleChange(item.id, 'is_active', e.target.checked)}
                   className="rounded text-[#c9a962] focus:ring-[#c9a962] w-4 h-4 cursor-pointer"
                 />
-                <label htmlFor={`active-${item.id}`} className="font-bold text-zinc-400 cursor-pointer">Active</label>
+                <label htmlFor={`active-${item.id}`} className="  text-zinc-400 cursor-pointer">Active</label>
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">Image</label>
+              <label className="text-[10px]   text-zinc-400 uppercase tracking-wider block">Image</label>
               <div className="flex gap-4 items-center">
                 <div className="w-24 h-24 bg-[#090909] border border-[#222] rounded overflow-hidden flex items-center justify-center">
                   {item.image ? <img src={item.image} alt={item.title} className="w-full h-full object-cover" /> : <span className="text-[10px] text-zinc-600">No Image</span>}
                 </div>
                 <div className="flex-1 space-y-2">
                   <input type="file" accept="image/*" onChange={(e) => handleImageUpload(item.id, e.target.files[0])} className="hidden" id={`file-input-${item.id}`} />
-                  <label htmlFor={`file-input-${item.id}`} className="inline-block px-3 py-1.5 border border-zinc-700 rounded font-bold text-zinc-300 bg-[#090909] hover:bg-zinc-800 cursor-pointer">
+                  <label htmlFor={`file-input-${item.id}`} className="inline-block px-3 py-1.5 border border-zinc-700 rounded   text-zinc-300 bg-[#090909] hover:bg-zinc-800 cursor-pointer">
                     {uploadingId === item.id ? "Uploading..." : "Change Image"}
                   </label>
                 </div>
@@ -794,21 +805,21 @@ const CMSManager = ({ collectionName, title }) => {
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">Title</label>
+              <label className="text-[10px]   text-zinc-400 uppercase tracking-wider block">Title</label>
               <input type="text" value={item.title} onChange={(e) => handleChange(item.id, 'title', e.target.value)} className="w-full px-3 py-2 bg-[#090909] border border-[#222] rounded text-white" />
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">Destination Link</label>
+              <label className="text-[10px]   text-zinc-400 uppercase tracking-wider block">Destination Link</label>
               <input type="text" value={item.link} onChange={(e) => handleChange(item.id, 'link', e.target.value)} className="w-full px-3 py-2 bg-[#090909] border border-[#222] rounded text-white" />
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">Sort Order</label>
+              <label className="text-[10px]   text-zinc-400 uppercase tracking-wider block">Sort Order</label>
               <input type="number" value={item.sort_order} onChange={(e) => handleChange(item.id, 'sort_order', parseInt(e.target.value) || 0)} className="w-full px-3 py-2 bg-[#090909] border border-[#222] rounded text-white" />
             </div>
 
-            <button onClick={() => handleSave(item)} disabled={savingId === item.id || uploadingId === item.id} className="w-full py-2 bg-[#c9a962] text-[#090909] hover:bg-white hover:text-black font-bold rounded">
+            <button onClick={() => handleSave(item)} disabled={savingId === item.id || uploadingId === item.id} className="w-full py-2 bg-[#c9a962] text-[#090909] hover:bg-white hover:text-black   rounded">
               {savingId === item.id ? "Saving..." : "Save Changes"}
             </button>
           </div>
@@ -842,14 +853,14 @@ const ActivityLogsView = () => {
   }, []);
 
   return (
-    <div className="bg-[#121212] border border-[#1a1a1a] rounded-xl p-6 text-white text-xs">
-      <h2 className="text-base font-bold text-white mb-6 uppercase tracking-wider">System Activity Logs</h2>
+    <div className="bg-[#121212] border border-[#1a1a1a] rounded-xl p-6 text-white text-[12px]">
+      <h2 className="text-base   text-white mb-6 uppercase tracking-wider">System Activity Logs</h2>
       {loading ? <div className="text-zinc-500">Loading...</div> : (
         <div className="space-y-3.5">
           {logs.map(log => (
             <div key={log.id} className="p-3 bg-[#161616] border border-[#222] rounded flex justify-between items-center">
               <div>
-                <p className="font-bold text-[#c9a962]">{log.action}</p>
+                <p className="  text-[#c9a962]">{log.action}</p>
                 <p className="text-zinc-400 text-[10px] mt-0.5">Admin: {log.admin} | target: {log.entity}</p>
               </div>
               <span className="text-[10px] text-zinc-500">
@@ -996,12 +1007,12 @@ const Admin = () => {
   };
 
   // Filtered lists
-  const filteredProducts = products.filter(p => 
+  const filteredProducts = products.filter(p =>
     p.name?.toLowerCase().includes(searchVal.toLowerCase()) ||
     p.category?.toLowerCase().includes(searchVal.toLowerCase())
   );
 
-  const filteredOrders = orders.filter(o => 
+  const filteredOrders = orders.filter(o =>
     o.id?.toLowerCase().includes(searchVal.toLowerCase()) ||
     o.customerName?.toLowerCase().includes(searchVal.toLowerCase())
   );
@@ -1022,14 +1033,14 @@ const Admin = () => {
       <div className="grid gap-6 md:grid-cols-2 mt-8">
         {/* Revenue Chart */}
         <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-4">Revenue Overview</h3>
+          <h3 className="text-[12px]   uppercase tracking-wider text-zinc-500 mb-4">Revenue Overview</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartData}>
                 <defs>
                   <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#b8860b" stopOpacity={0.2}/>
-                    <stop offset="95%" stopColor="#b8860b" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#b8860b" stopOpacity={0.2} />
+                    <stop offset="95%" stopColor="#b8860b" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <XAxis dataKey="name" stroke="#a1a1aa" fontSize={10} />
@@ -1043,7 +1054,7 @@ const Admin = () => {
 
         {/* Orders Chart */}
         <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-4">Orders Overview</h3>
+          <h3 className="text-[12px]   uppercase tracking-wider text-zinc-500 mb-4">Orders Overview</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData}>
@@ -1065,24 +1076,24 @@ const Admin = () => {
         {/* KPI Row */}
         <div className="grid gap-5 grid-cols-2 lg:grid-cols-4">
           <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm">
-            <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Total Revenue</p>
-            <h3 className="text-xl font-bold text-zinc-900 mt-1">₹{statsSummary.revenue.toLocaleString('en-IN')}</h3>
-            <span className="text-[10px] text-emerald-600 font-bold block mt-1">+18.5% vs last month</span>
+            <p className="text-[10px]   text-zinc-500 uppercase tracking-wider">Total Revenue</p>
+            <h3 className="text-xl   text-zinc-900 mt-1">₹{statsSummary.revenue.toLocaleString('en-IN')}</h3>
+            <span className="text-[10px] text-emerald-600   block mt-1">+18.5% vs last month</span>
           </div>
           <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm">
-            <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Total Orders</p>
-            <h3 className="text-xl font-bold text-zinc-900 mt-1">{statsSummary.orders}</h3>
-            <span className="text-[10px] text-emerald-600 font-bold block mt-1">+22.4% vs last month</span>
+            <p className="text-[10px]   text-zinc-500 uppercase tracking-wider">Total Orders</p>
+            <h3 className="text-xl   text-zinc-900 mt-1">{statsSummary.orders}</h3>
+            <span className="text-[10px] text-emerald-600   block mt-1">+22.4% vs last month</span>
           </div>
           <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm">
-            <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Total Customers</p>
-            <h3 className="text-xl font-bold text-zinc-900 mt-1">{statsSummary.customers}</h3>
-            <span className="text-[10px] text-emerald-600 font-bold block mt-1">+15.3% vs last month</span>
+            <p className="text-[10px]   text-zinc-500 uppercase tracking-wider">Total Customers</p>
+            <h3 className="text-xl   text-zinc-900 mt-1">{statsSummary.customers}</h3>
+            <span className="text-[10px] text-emerald-600   block mt-1">+15.3% vs last month</span>
           </div>
           <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm">
-            <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Total Products</p>
-            <h3 className="text-xl font-bold text-zinc-900 mt-1">{statsSummary.products}</h3>
-            <span className="text-[10px] text-zinc-500 font-bold block mt-1">Flat stock index</span>
+            <p className="text-[10px]   text-zinc-500 uppercase tracking-wider">Total Products</p>
+            <h3 className="text-xl   text-zinc-900 mt-1">{statsSummary.products}</h3>
+            <span className="text-[10px] text-zinc-500   block mt-1">Flat stock index</span>
           </div>
         </div>
 
@@ -1091,8 +1102,8 @@ const Admin = () => {
         {/* Dynamic widgets */}
         <div className="grid gap-6 md:grid-cols-3 mt-8">
           {/* Low Stock Alerts */}
-          <div className="bg-white border border-zinc-200 p-5 rounded-xl text-xs space-y-4 shadow-sm">
-            <h4 className="font-bold text-zinc-500 uppercase tracking-wider">Low Stock Alerts</h4>
+          <div className="bg-white border border-zinc-200 p-5 rounded-xl text-[12px] space-y-4 shadow-sm">
+            <h4 className="  text-zinc-500 uppercase tracking-wider">Low Stock Alerts</h4>
             <div className="space-y-3">
               {products.filter(p => (parseInt(p.stock) || 0) <= 5).slice(0, 3).map(p => (
                 <div key={p.id} className="flex justify-between items-center border-b border-zinc-100 pb-2">
@@ -1100,7 +1111,7 @@ const Admin = () => {
                     <p className="font-semibold text-zinc-900">{p.name}</p>
                     <p className="text-[10px] text-zinc-500">Category: {p.category}</p>
                   </div>
-                  <span className="text-red-600 font-bold">Stock: {p.stock || 0}</span>
+                  <span className="text-red-600  ">Stock: {p.stock || 0}</span>
                 </div>
               ))}
               {products.filter(p => (parseInt(p.stock) || 0) <= 5).length === 0 && (
@@ -1110,8 +1121,8 @@ const Admin = () => {
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-white border border-zinc-200 p-5 rounded-xl text-xs space-y-4 shadow-sm">
-            <h4 className="font-bold text-zinc-500 uppercase tracking-wider">Quick Actions</h4>
+          <div className="bg-white border border-zinc-200 p-5 rounded-xl text-[12px] space-y-4 shadow-sm">
+            <h4 className="  text-zinc-500 uppercase tracking-wider">Quick Actions</h4>
             <div className="grid grid-cols-2 gap-2">
               <button onClick={() => { setActiveItem("Products"); setIsProductModalOpen(true); }} className="p-3 bg-zinc-50 border border-zinc-200 text-zinc-700 font-semibold hover:bg-zinc-100 hover:text-black rounded-lg text-center cursor-pointer transition-all">Add Product</button>
               <button onClick={() => setActiveItem("Collections")} className="p-3 bg-zinc-50 border border-zinc-200 text-zinc-700 font-semibold hover:bg-zinc-100 hover:text-black rounded-lg text-center cursor-pointer transition-all">Add Collection</button>
@@ -1121,8 +1132,8 @@ const Admin = () => {
           </div>
 
           {/* Recent Orders */}
-          <div className="bg-white border border-zinc-200 p-5 rounded-xl text-xs space-y-4 shadow-sm">
-            <h4 className="font-bold text-zinc-500 uppercase tracking-wider">Recent Orders</h4>
+          <div className="bg-white border border-zinc-200 p-5 rounded-xl text-[12px] space-y-4 shadow-sm">
+            <h4 className="  text-zinc-500 uppercase tracking-wider">Recent Orders</h4>
             <div className="space-y-3">
               {orders.slice(0, 3).map(o => (
                 <div key={o.id} className="flex justify-between items-center border-b border-zinc-100 pb-2">
@@ -1130,7 +1141,7 @@ const Admin = () => {
                     <p className="font-semibold text-zinc-900">#{o.id?.slice(0, 8)}</p>
                     <p className="text-[10px] text-zinc-500">{o.customerName || 'Guest User'}</p>
                   </div>
-                  <span className="text-[#b8860b] font-bold">₹{(o.total || o.grandTotal || 0).toLocaleString('en-IN')}</span>
+                  <span className="text-[#b8860b]  ">₹{(o.total || o.grandTotal || 0).toLocaleString('en-IN')}</span>
                 </div>
               ))}
               {orders.length === 0 && <p className="text-zinc-500 text-center">No orders placed yet.</p>}
@@ -1264,18 +1275,21 @@ const Admin = () => {
             defaultItem={{ image: '', title: '', slug: '', excerpt: '', content: '', is_active: true }}
           />
         );
+      case "Mobile Category":
       case "Pages":
         return (
           <GenericCRUDManager
-            collectionName="pages"
-            title="Static Brand Pages"
+            collectionName="mobile_categories"
+            title="Mobile Categories (Featured 3-Column Grid)"
             fields={[
-              { key: 'title', label: 'Page Title' },
-              { key: 'slug', label: 'Slug' },
-              { key: 'content', label: 'Content', type: 'textarea' },
+              { key: 'image', label: 'Category Card Image', type: 'image' },
+              { key: 'name', label: 'Category Name / Title' },
+              { key: 'badge', label: 'Badge / Tag (e.g. 3XL TO 6XL)' },
+              { key: 'link', label: 'Destination Route / Link' },
+              { key: 'sort_order', label: 'Sort Order', type: 'number' },
               { key: 'is_active', label: 'Status', type: 'boolean' }
             ]}
-            defaultItem={{ title: '', slug: '', content: '', is_active: true }}
+            defaultItem={{ image: '', name: 'SHIRTS', badge: '', link: '/shop?category=Shirts', sort_order: 1, is_active: true }}
           />
         );
       case "Shop By Category":
@@ -1354,8 +1368,8 @@ const Admin = () => {
       case "Tax Settings":
       case "SEO Settings":
         return (
-          <div className="bg-[#121212] border border-[#1a1a1a] rounded-xl p-6 text-white text-xs max-w-lg space-y-4">
-            <h2 className="text-base font-bold uppercase tracking-wider text-[#c9a962]">{activeItem}</h2>
+          <div className="bg-[#121212] border border-[#1a1a1a] rounded-xl p-6 text-white text-[12px] max-w-lg space-y-4">
+            <h2 className="text-base   uppercase tracking-wider text-[#c9a962]">{activeItem}</h2>
             <div className="space-y-3">
               <div className="space-y-1">
                 <label className="text-zinc-500 uppercase tracking-widest text-[9px] block">Primary Parameter</label>
@@ -1369,13 +1383,13 @@ const Admin = () => {
                 </select>
               </div>
             </div>
-            <button onClick={() => alert("Settings updated!")} className="px-5 py-2.5 bg-[#c9a962] text-[#090909] font-bold rounded">Save Configuration</button>
+            <button onClick={() => alert("Settings updated!")} className="px-5 py-2.5 bg-[#c9a962] text-[#090909]   rounded">Save Configuration</button>
           </div>
         );
       case "Help / Documentation":
         return (
-          <div className="bg-white border border-zinc-200 rounded-xl p-6 text-zinc-900 text-xs space-y-4 max-w-xl shadow-sm">
-            <h2 className="text-base font-bold uppercase tracking-wider text-[#b8860b]">Pasoja Suite Help Center</h2>
+          <div className="bg-white border border-zinc-200 rounded-xl p-6 text-zinc-900 text-[12px] space-y-4 max-w-xl shadow-sm">
+            <h2 className="text-base   uppercase tracking-wider text-[#b8860b]">Pasoja Suite Help Center</h2>
             <p className="text-zinc-600 font-light leading-relaxed">This dashboard controls the storefront sections, database lists, order timelines, inventory, and promotions in real time. All changes are saved automatically to Firebase Firestore.</p>
           </div>
         );
@@ -1393,7 +1407,7 @@ const Admin = () => {
 
         {/* Centered Admin Card Container */}
         <div className="w-full max-w-md bg-white/95 backdrop-blur-xl border border-zinc-200/90 p-8 sm:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.08)] rounded-3xl relative z-10 space-y-7 transition-all duration-500">
-          
+
           {/* Header */}
           <div className="text-center space-y-2">
             <div className="w-14 h-14 rounded-2xl bg-black text-white flex items-center justify-center shadow-xl shadow-black/10 ring-4 ring-black/5 mx-auto mb-4 transform hover:scale-105 transition-transform duration-300">
@@ -1408,7 +1422,7 @@ const Admin = () => {
           </div>
 
           {loginError && (
-            <div className="p-3.5 bg-red-500/10 border border-red-500/20 rounded-xl text-red-700 text-[11px] font-bold flex items-center gap-2.5">
+            <div className="p-3.5 bg-red-500/10 border border-red-500/20 rounded-xl text-red-700 text-[11px]   flex items-center gap-2.5">
               <AlertCircle size={15} className="shrink-0 text-red-600" />
               <span>{loginError}</span>
             </div>
@@ -1416,7 +1430,7 @@ const Admin = () => {
 
           <form onSubmit={handleAdminLogin} className="space-y-5">
             <div className="space-y-1.5">
-              <label className="text-[9px] font-bold uppercase tracking-[0.25em] text-zinc-500 block pl-0.5">
+              <label className="text-[9px]   uppercase tracking-[0.25em] text-zinc-500 block pl-0.5">
                 Admin ID
               </label>
               <div className="relative">
@@ -1427,13 +1441,13 @@ const Admin = () => {
                   onChange={(e) => setAdminEmail(e.target.value)}
                   placeholder="super@pasoja.in"
                   required
-                  className="w-full pl-11 pr-4 py-3.5 bg-zinc-50/80 border border-zinc-300 rounded-xl text-xs font-medium text-zinc-900 outline-none focus:border-black focus:bg-white focus:ring-2 focus:ring-black/10 transition-all duration-300 placeholder:text-zinc-400 shadow-inner"
+                  className="w-full pl-11 pr-4 py-3.5 bg-zinc-50/80 border border-zinc-300 rounded-xl text-[12px] font-medium text-zinc-900 outline-none focus:border-black focus:bg-white focus:ring-2 focus:ring-black/10 transition-all duration-300 placeholder:text-zinc-400 shadow-inner"
                 />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[9px] font-bold uppercase tracking-[0.25em] text-zinc-500 block pl-0.5">
+              <label className="text-[9px]   uppercase tracking-[0.25em] text-zinc-500 block pl-0.5">
                 Security Password
               </label>
               <div className="relative">
@@ -1444,7 +1458,7 @@ const Admin = () => {
                   onChange={(e) => setAdminPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="w-full pl-11 pr-4 py-3.5 bg-zinc-50/80 border border-zinc-300 rounded-xl text-xs font-medium text-zinc-900 outline-none focus:border-black focus:bg-white focus:ring-2 focus:ring-black/10 transition-all duration-300 placeholder:text-zinc-400 shadow-inner"
+                  className="w-full pl-11 pr-4 py-3.5 bg-zinc-50/80 border border-zinc-300 rounded-xl text-[12px] font-medium text-zinc-900 outline-none focus:border-black focus:bg-white focus:ring-2 focus:ring-black/10 transition-all duration-300 placeholder:text-zinc-400 shadow-inner"
                 />
               </div>
             </div>
@@ -1482,7 +1496,7 @@ const Admin = () => {
               <button
                 type="button"
                 onClick={() => setIsProductModalOpen(true)}
-                className="px-6 py-3 rounded-lg bg-black text-white text-xs font-bold hover:bg-zinc-800 transition-all flex items-center gap-2 shadow-sm cursor-pointer"
+                className="px-6 py-3 rounded-lg bg-black text-white text-[12px]   hover:bg-zinc-800 transition-all flex items-center gap-2 shadow-sm cursor-pointer"
               >
                 <Plus size={14} /> Add New Product
               </button>
@@ -1498,7 +1512,7 @@ const Admin = () => {
           <div className="bg-white border border-zinc-200 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
             <div className="px-7 py-5 border-b border-zinc-200 flex items-center justify-between">
               <div>
-                <h2 className="text-base font-poppins font-bold text-zinc-900 uppercase tracking-wider">
+                <h2 className="text-base font-poppins   text-zinc-900 uppercase tracking-wider">
                   Add New Clothing Product
                 </h2>
               </div>
@@ -1524,7 +1538,7 @@ const Admin = () => {
           <div className="bg-white border border-zinc-200 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
             <div className="px-7 py-5 border-b border-zinc-200 flex items-center justify-between">
               <div>
-                <h2 className="text-base font-poppins font-bold text-zinc-900 uppercase tracking-wider">
+                <h2 className="text-base font-poppins   text-zinc-900 uppercase tracking-wider">
                   Edit Product
                 </h2>
               </div>

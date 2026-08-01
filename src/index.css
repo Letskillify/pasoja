@@ -9,7 +9,7 @@
   --color-brand-accent-light: #C87A3A;
   --color-brand-gray: #E6D8C3;
   --color-brand-gray-dark: #333333;
-  
+
   --font-serif: "Playfair Display", serif;
   --font-sans: "Nunito", sans-serif;
   --font-heading: "Instrument Sans", sans-serif;
@@ -22,13 +22,21 @@
     -moz-osx-font-smoothing: grayscale;
     overflow-x: clip;
   }
+
   body {
     @apply bg-[#faf9f5] text-[#111111] font-sans antialiased min-h-screen text-[14px];
     overflow-x: clip;
   }
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply text-[#111111] font-heading;
   }
+
   ::selection {
     background-color: #111111;
     color: #ffffff;
@@ -39,11 +47,12 @@
 .swiper-pagination-bullet {
   width: 4px !important;
   height: 4px !important;
-  background: rgba(0,0,0,0.2) !important;
+  background: rgba(0, 0, 0, 0.2) !important;
   opacity: 1 !important;
   transition: all 0.3s ease !important;
   border-radius: 2px !important;
 }
+
 .swiper-pagination-bullet-active {
   width: 20px !important;
   opacity: 1 !important;
@@ -56,9 +65,10 @@
   width: 4px !important;
   height: 4px !important;
   border-radius: 2px !important;
-  background: rgba(0,0,0,0.15) !important;
+  background: rgba(0, 0, 0, 0.15) !important;
   opacity: 1 !important;
 }
+
 .testimonial-dots .swiper-pagination-bullet-active {
   width: 20px !important;
   opacity: 1 !important;
@@ -78,27 +88,29 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
 
 /* Enforce minimum font size of 14px across all elements */
-body, body * {
+body,
+body * {
   min-height: 0;
 }
-body :is(
-  [class*="text-xxs"],
-  [class*="text-xs"],
+
+body :is([class*="text-xxs"],
+  [class*="text-[12px]"],
   [class*="text-[9px]"],
   [class*="text-[10px]"],
   [class*="text-[11px]"],
   [class*="text-[12px]"],
-  [class*="text-[13px]"]
-) {
-  font-size: 14px !important;
+  [class*="text-[13px]"]) {
+  /* font-size: 12px !important; */
 }
+
 body ::placeholder {
-  font-size: 14px !important;
+  /* font-size: 12px !important; */
 }
 
 /* Shop Sidebar Typography Overrides */
@@ -106,13 +118,15 @@ body ::placeholder {
   font-size: 10px !important;
   line-height: 1 !important;
 }
+
 .shop-sidebar-preset-btn {
-  font-size: 11px !important;
+  /* font-size: 12px !important; */
   white-space: nowrap !important;
   line-height: 1.2 !important;
 }
+
 .shop-sidebar-label {
-  font-size: 11px !important;
+  /* font-size: 12px !important; */
   letter-spacing: 0.15em !important;
 }
 
@@ -124,12 +138,14 @@ body ::placeholder {
   min-height: 55vh;
   background: #faf9f5;
 }
+
 .mini-loader-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 14px;
 }
+
 .mini-loader-ring-container {
   position: relative;
   width: 40px;
@@ -138,16 +154,20 @@ body ::placeholder {
   align-items: center;
   justify-content: center;
 }
+
 .mini-loader-ring {
   width: 40px;
   height: 40px;
 }
+
 .mini-loader-track {
   stroke: rgba(0, 0, 0, 0.08);
 }
+
 .mini-loader-arc {
   stroke: #c9a962;
 }
+
 .mini-loader-dot {
   position: absolute;
   width: 4px;
@@ -155,6 +175,7 @@ body ::placeholder {
   border-radius: 50%;
   background: #c9a962;
 }
+
 .mini-loader-label {
   font-size: 10px;
   font-weight: 700;

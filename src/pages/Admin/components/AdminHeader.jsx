@@ -40,18 +40,18 @@ const AdminHeader = ({ activeItem, searchVal, setSearchVal, onMenuClick }) => {
             placeholder="Search products, orders..."
             value={searchVal || ''}
             onChange={(e) => setSearchVal?.(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-white border border-zinc-300 rounded-lg text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-900 transition-colors shadow-sm"
+            className="w-full pl-10 pr-4 py-2 bg-white border border-zinc-300 rounded-lg text-[12px] text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-900 transition-colors shadow-sm"
           />
         </div>
       </div>
 
       <div className="flex items-center gap-4">
         {/* View Store link */}
-        <a 
-          href="/" 
-          target="_blank" 
+        <a
+          href="/"
+          target="_blank"
           rel="noopener noreferrer"
-          className="px-4 py-1.5 border border-zinc-300 bg-white text-zinc-700 hover:text-black hover:border-black text-xs font-semibold rounded-lg transition-all shadow-sm"
+          className="px-4 py-1.5 border border-zinc-300 bg-white text-zinc-700 hover:text-black hover:border-black text-[12px] font-semibold rounded-lg transition-all shadow-sm"
         >
           View Store &nearr;
         </a>
@@ -63,11 +63,11 @@ const AdminHeader = ({ activeItem, searchVal, setSearchVal, onMenuClick }) => {
         </button>
 
         <div className="flex items-center gap-3 pl-3 border-l border-zinc-200">
-          <div className="w-8 h-8 rounded-full bg-zinc-200 border border-zinc-300 flex items-center justify-center text-xs font-bold text-zinc-900 uppercase overflow-hidden shadow-sm">
+          <div className="w-8 h-8 rounded-full bg-zinc-200 border border-zinc-300 flex items-center justify-center text-[12px]   text-zinc-900 uppercase overflow-hidden shadow-sm">
             <img src={profile.image} className="w-full h-full object-cover" alt="Profile" />
           </div>
           <div className="hidden md:block">
-            <p className="text-xs font-bold text-zinc-900 leading-none">{profile.name}</p>
+            <p className="text-[12px]   text-zinc-900 leading-none">{profile.name}</p>
             <p className="text-[9px] text-zinc-500 uppercase tracking-widest mt-0.5 max-w-[120px] truncate">{profile.role}</p>
           </div>
         </div>

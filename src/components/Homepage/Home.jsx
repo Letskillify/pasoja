@@ -71,9 +71,9 @@ const Home = () => {
       <GallerySwiper />
       <CategorySection />
       <Bestsellers />
+      <RandomProducts />
       <ShopTheLook />
       <Testimonials />
-      <RandomProducts />
     </main>
   );
 };

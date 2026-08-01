@@ -13,7 +13,7 @@ const fadeUp = {
 const EditorialStory = () => {
   return (
     <section classname="py-10 md:py-28 bg-[#111111] overflow-hidden">
-      <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14">
+      <div className="max-w-7xl py-3 mx-auto px-5 md:px-10 lg:px-14">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
           {/* ── Left: Asymmetric Double Image Panel ── */}
@@ -61,7 +61,7 @@ const EditorialStory = () => {
           {/* ── Right: Narrative Copy ── */}
           <div className="space-y-7 lg:pl-4">
             <motion.div {...fadeUp}>
-              <span className="text-[10px] uppercase tracking-[0.3em] text-white/30 font-bold block mb-4">
+              <span className="text-[10px] uppercase tracking-[0.3em] text-white/30   block mb-4">
                 Our Philosophy
               </span>
               <h3 className="text-3xl sm:text-4xl lg:text-5xl font-light text-white tracking-widest uppercase mb-6">
@@ -90,11 +90,11 @@ const EditorialStory = () => {
             >
               <div>
                 <span className="block text-[9px] font-black uppercase tracking-[0.3em] text-white/25 mb-2">Traceability</span>
-                <span className="text-sm text-white font-bold">100% Verified Origins</span>
+                <span className="text-sm text-white  ">100% Verified Origins</span>
               </div>
               <div>
                 <span className="block text-[9px] font-black uppercase tracking-[0.3em] text-white/25 mb-2">Production</span>
-                <span className="text-sm text-white font-bold">Small-Batch Curated</span>
+                <span className="text-sm text-white  ">Small-Batch Curated</span>
               </div>
             </motion.div>
 

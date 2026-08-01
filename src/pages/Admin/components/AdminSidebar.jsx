@@ -74,7 +74,7 @@ const sidebarSections = [
       { name: "Community Gallery", icon: Image },
       { name: "Benefits Strip", icon: ClipboardList },
       { name: "Blogs", icon: BookOpen },
-      { name: "Pages", icon: FileText }
+      { name: "Mobile Category", icon: Grid }
     ]
   },
   {
@@ -107,7 +107,7 @@ const AdminSidebar = ({ activeItem, setActiveItem, isOpen, onClose }) => {
     <>
       {/* Mobile Drawer Backdrop */}
       {isOpen && (
-        <div 
+        <div
           onClick={onClose}
           className="fixed inset-0 bg-black/60 z-30 lg:hidden"
         />
@@ -121,15 +121,15 @@ const AdminSidebar = ({ activeItem, setActiveItem, isOpen, onClose }) => {
               <Shirt size={18} strokeWidth={2.5} />
             </div>
             <div>
-              <p className="text-sm font-poppins font-bold tracking-wider text-zinc-900 uppercase">
+              <p className="text-sm font-poppins   tracking-wider text-zinc-900 uppercase">
                 PASOJA ADMIN
               </p>
               <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-semibold">E-commerce Suite</p>
             </div>
           </div>
           {/* Close button on mobile */}
-          <button 
-            onClick={onClose} 
+          <button
+            onClick={onClose}
             className="lg:hidden p-1.5 hover:bg-zinc-100 text-zinc-500 hover:text-black rounded"
           >
             <X size={16} />
@@ -140,7 +140,7 @@ const AdminSidebar = ({ activeItem, setActiveItem, isOpen, onClose }) => {
         <nav className="flex-grow overflow-y-auto px-4 py-6 space-y-7">
           {sidebarSections.map((section) => (
             <div key={section.title} className="space-y-1.5">
-              <p className="text-[9px] font-bold text-zinc-400 tracking-[0.2em] px-3 uppercase">
+              <p className="text-[9px]   text-zinc-400 tracking-[0.2em] px-3 uppercase">
                 {section.title}
               </p>
               <div className="space-y-0.5">
@@ -155,11 +155,10 @@ const AdminSidebar = ({ activeItem, setActiveItem, isOpen, onClose }) => {
                         setActiveItem(item.name);
                         onClose();
                       }}
-                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold tracking-wide transition-all ${
-                        isActive
-                          ? "bg-black text-white shadow-sm"
-                          : "text-zinc-600 hover:bg-zinc-100 hover:text-black border border-transparent"
-                      }`}
+                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[12px] font-semibold tracking-wide transition-all ${isActive
+                        ? "bg-black text-white shadow-sm"
+                        : "text-zinc-600 hover:bg-zinc-100 hover:text-black border border-transparent"
+                        }`}
                     >
                       <Icon size={14} strokeWidth={2} />
                       <span>{item.name}</span>
@@ -175,7 +174,7 @@ const AdminSidebar = ({ activeItem, setActiveItem, isOpen, onClose }) => {
         <div className="p-4 border-t border-zinc-200 bg-zinc-50">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-bold text-red-600 hover:bg-red-50 hover:text-red-700 transition-all border border-red-200"
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-[12px]   text-red-600 hover:bg-red-50 hover:text-red-700 transition-all border border-red-200"
           >
             <LogOut size={14} />
             <span>LOGOUT</span>

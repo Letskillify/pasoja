@@ -95,12 +95,11 @@ const GallerySwiper = () => {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,#000/[0.01],transparent_40%)] pointer-events-none" />
       <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-black/[0.005] rounded-full blur-[160px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14">
+      <div className="max-w-7xl py-3 mx-auto px-5 md:px-10 lg:px-14">
 
         <SectionHeader
           subtitle="New Brand Showcase"
           title="Recent Arrivals"
-          description="Explore recently uploaded designer details, highlighting structured cuts and signature fits."
         />
 
         <div className="relative w-full py-2 gallery-swiper overflow-x-hidden">
@@ -162,7 +161,7 @@ const GallerySwiper = () => {
               {currentSlide.subtitle}
             </span>
           )}
-          
+
           <div className="flex items-center justify-center gap-6 max-w-2xl w-full">
             {/* Left Scroller Button */}
             <button
@@ -173,7 +172,7 @@ const GallerySwiper = () => {
             </button>
 
             {/* Slide Title */}
-            <h4 className="text-sm md:text-base font-bold text-zinc-900 tracking-wider uppercase leading-snug line-clamp-1 flex-1">
+            <h4 className="text-sm md:text-base   text-zinc-900 tracking-wider uppercase leading-snug line-clamp-1 flex-1">
               {currentSlide.title || 'Loading...'}
             </h4>
 
@@ -187,7 +186,7 @@ const GallerySwiper = () => {
           </div>
 
           {currentSlide.price !== undefined && currentSlide.price !== null && (
-            <span className="text-xs font-semibold text-zinc-600 tracking-widest mt-2 block">
+            <span className="text-[12px] font-semibold text-zinc-600 tracking-widest mt-2 block">
               INR {Number(currentSlide.price).toLocaleString("en-IN")}.00
             </span>
           )}

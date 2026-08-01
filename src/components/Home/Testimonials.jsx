@@ -100,10 +100,10 @@ const Testimonials = () => {
   return (
     <section className="py-8 md:py-12 bg-[#faf9f5] overflow-hidden relative border-t border-zinc-200">
       <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Mobile Header (block md:hidden) - Screenshot 3 Style */}
         <div className="block md:hidden mb-6">
-          <h2 className="text-xl font-bold tracking-[0.05em] text-zinc-900 uppercase font-sans">
+          <h2 className="text-xl   tracking-[0.05em] text-zinc-900 uppercase font-sans">
             #SEENONFEED
           </h2>
         </div>
@@ -112,29 +112,25 @@ const Testimonials = () => {
         <div className="hidden md:flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div className="flex-1 flex flex-col md:flex-row md:items-end gap-6 md:gap-12">
             <div>
-              <p className="text-[10px] sm:text-xs tracking-[0.3em] text-[#b8860b] uppercase mb-2 font-bold">
+              <p className="text-[10px] sm:text-[12px] tracking-[0.3em] text-[#b8860b] uppercase mb-2  ">
                 {settings.eyebrow}
               </p>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extralight tracking-[0.15em] text-zinc-900 uppercase whitespace-nowrap leading-none">
+              <h2 className="text-xl sm:text-3xl lg:text-4xl font-extralight tracking-[0.15em] text-zinc-900 uppercase whitespace-nowrap">
                 {settings.heading}
               </h2>
             </div>
             <div className="hidden md:block flex-1 h-[1px] bg-zinc-200 mb-2" />
           </div>
-          
+
           <div className="flex items-center gap-6 self-start md:self-auto">
-            <div className="text-zinc-600 text-xs sm:text-sm tracking-wide max-w-[280px] font-light leading-relaxed text-left md:text-right">
-              <p>{settings.description_line_1}</p>
-              <p>{settings.description_line_2}</p>
-            </div>
             <div className="flex gap-2.5">
-              <button 
+              <button
                 onClick={() => swiperRef.current?.slidePrev()}
                 className="w-10 h-10 rounded-full border border-zinc-300 bg-white flex items-center justify-center text-zinc-600 hover:text-black hover:border-black transition-all duration-300 cursor-pointer shadow-sm"
               >
                 &larr;
               </button>
-              <button 
+              <button
                 onClick={() => swiperRef.current?.slideNext()}
                 className="w-10 h-10 rounded-full border border-zinc-300 bg-white flex items-center justify-center text-zinc-600 hover:text-black hover:border-black transition-all duration-300 cursor-pointer shadow-sm"
               >
@@ -202,7 +198,7 @@ const Testimonials = () => {
         </div>
 
         {/* Social Proof Statistics Row */}
-        
+
       </div>
     </section>
   );

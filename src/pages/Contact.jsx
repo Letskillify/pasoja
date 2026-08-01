@@ -48,13 +48,13 @@ const Contact = () => {
         )}
       </AnimatePresence>
 
-      <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14 py-14 md:py-20">
+      <div className="max-w-7xl py-3 mx-auto px-5 md:px-10 lg:px-14 py-14 md:py-20">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
 
           {/* LEFT: Channels */}
           <motion.div {...fadeUp} className="lg:col-span-5 space-y-7">
             <div>
-              <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-zinc-500 block mb-4">Reach Out</span>
+              <span className="text-[10px]   tracking-[0.3em] uppercase text-zinc-500 block mb-4">Reach Out</span>
               <h2 className="text-3xl sm:text-4xl font-light text-zinc-900 tracking-widest leading-[1.05] uppercase">We're Here<br />to Help</h2>
               <p className="text-[14px] text-zinc-600 mt-4 leading-relaxed max-w-sm">
                 Whether you have a question about sizing, need styling advice, or want to discuss a bulk order — our team is ready.
@@ -77,7 +77,7 @@ const Contact = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-[9px] font-black uppercase tracking-[0.25em] text-[#b8860b] mb-0.5">{item.label}</p>
-                      <p className="text-[15px] font-bold text-zinc-900 truncate">{item.val}</p>
+                      <p className="text-[15px]   text-zinc-900 truncate">{item.val}</p>
                       <p className="text-[11px] text-zinc-500 mt-0.5">{item.desc}</p>
                     </div>
                     <ArrowUpRight size={15} className={`text-zinc-400 transition-all duration-300 shrink-0 ${activeChannel === i ? 'rotate-45 text-black' : ''}`} />
@@ -156,9 +156,9 @@ const Contact = () => {
 
       {/* MAP */}
       <section className="bg-[#faf9f5] py-14 md:py-16 border-t border-zinc-200">
-        <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14">
+        <div className="max-w-7xl py-3 mx-auto px-5 md:px-10 lg:px-14">
           <div className="mb-8 pb-8 border-b border-zinc-200">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold block mb-3">Find Us</span>
+            <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-500   block mb-3">Find Us</span>
             <h2 className="text-2xl font-light text-zinc-900 uppercase tracking-widest">Visit Our Store</h2>
           </div>
           <div className="w-full h-[280px] sm:h-[350px] bg-zinc-100 overflow-hidden border border-zinc-200 shadow-sm">

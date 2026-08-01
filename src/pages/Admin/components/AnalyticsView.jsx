@@ -42,7 +42,7 @@ const AnalyticsView = () => {
 
   const completedOrdersCount = orders.length;
   const aov = completedOrdersCount > 0 ? Math.round(totalGrossRevenue / completedOrdersCount) : 0;
-  const conversionRate = completedOrdersCount > 0 && usersCount > 0 
+  const conversionRate = completedOrdersCount > 0 && usersCount > 0
     ? ((completedOrdersCount / usersCount) * 100).toFixed(1)
     : "4.2";
 
@@ -95,17 +95,17 @@ const AnalyticsView = () => {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm">
         <div>
-          <h2 className="text-xl font-bold font-poppins text-zinc-900 uppercase tracking-wider flex items-center gap-2">
+          <h2 className="text-xl   font-poppins text-zinc-900 uppercase tracking-wider flex items-center gap-2">
             <BarChart3 className="text-[#b8860b]" size={22} /> Live Store Analytics & Performance
           </h2>
-          <p className="text-xs text-zinc-500 mt-1">Real-time revenue, conversion ratios, and transaction channel diagnostics from Firestore.</p>
+          <p className="text-[12px] text-zinc-500 mt-1">Real-time revenue, conversion ratios, and transaction channel diagnostics from Firestore.</p>
         </div>
         <div className="flex items-center gap-2">
           <Filter size={14} className="text-zinc-400" />
           <select
             value={timeRange}
             onChange={(e) => setTimeRange(e.target.value)}
-            className="px-3.5 py-2 bg-zinc-50 border border-zinc-300 rounded-xl text-xs font-semibold text-zinc-900 outline-none focus:border-black transition-all cursor-pointer"
+            className="px-3.5 py-2 bg-zinc-50 border border-zinc-300 rounded-xl text-[12px] font-semibold text-zinc-900 outline-none focus:border-black transition-all cursor-pointer"
           >
             <option value="7d">Last 7 Days</option>
             <option value="30d">Last 30 Days</option>
@@ -116,51 +116,51 @@ const AnalyticsView = () => {
       </div>
 
       {loading ? (
-        <div className="py-12 text-center text-xs text-zinc-500 font-medium">Loading live store metrics...</div>
+        <div className="py-12 text-center text-[12px] text-zinc-500 font-medium">Loading live store metrics...</div>
       ) : (
         <>
           {/* Key Metric Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-sm space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Total Gross Revenue</span>
+                <span className="text-[10px]   text-zinc-400 uppercase tracking-widest">Total Gross Revenue</span>
                 <div className="p-2 bg-emerald-50 text-emerald-600 rounded-xl"><DollarSign size={16} /></div>
               </div>
-              <h3 className="text-2xl font-bold text-zinc-900">₹{Math.round(totalGrossRevenue).toLocaleString('en-IN')}</h3>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-600">
+              <h3 className="text-2xl   text-zinc-900">₹{Math.round(totalGrossRevenue).toLocaleString('en-IN')}</h3>
+              <div className="flex items-center gap-1.5 text-[12px]   text-emerald-600">
                 <ArrowUpRight size={14} /> <span>+14.2% vs last period</span>
               </div>
             </div>
 
             <div className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-sm space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Completed Orders</span>
+                <span className="text-[10px]   text-zinc-400 uppercase tracking-widest">Completed Orders</span>
                 <div className="p-2 bg-blue-50 text-blue-600 rounded-xl"><ShoppingBag size={16} /></div>
               </div>
-              <h3 className="text-2xl font-bold text-zinc-900">{completedOrdersCount}</h3>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-600">
+              <h3 className="text-2xl   text-zinc-900">{completedOrdersCount}</h3>
+              <div className="flex items-center gap-1.5 text-[12px]   text-emerald-600">
                 <ArrowUpRight size={14} /> <span>+8.6% vs last period</span>
               </div>
             </div>
 
             <div className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-sm space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Average Order Value</span>
+                <span className="text-[10px]   text-zinc-400 uppercase tracking-widest">Average Order Value</span>
                 <div className="p-2 bg-amber-50 text-[#b8860b] rounded-xl"><TrendingUp size={16} /></div>
               </div>
-              <h3 className="text-2xl font-bold text-zinc-900">₹{aov.toLocaleString('en-IN')}</h3>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-600">
+              <h3 className="text-2xl   text-zinc-900">₹{aov.toLocaleString('en-IN')}</h3>
+              <div className="flex items-center gap-1.5 text-[12px]   text-emerald-600">
                 <ArrowUpRight size={14} /> <span>+5.1% vs last period</span>
               </div>
             </div>
 
             <div className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-sm space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Store Conversion Rate</span>
+                <span className="text-[10px]   text-zinc-400 uppercase tracking-widest">Store Conversion Rate</span>
                 <div className="p-2 bg-purple-50 text-purple-600 rounded-xl"><Users size={16} /></div>
               </div>
-              <h3 className="text-2xl font-bold text-zinc-900">{conversionRate}%</h3>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-600">
+              <h3 className="text-2xl   text-zinc-900">{conversionRate}%</h3>
+              <div className="flex items-center gap-1.5 text-[12px]   text-emerald-600">
                 <ArrowUpRight size={14} /> <span>+0.8% vs last period</span>
               </div>
             </div>
@@ -170,15 +170,15 @@ const AnalyticsView = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Channel Breakdown */}
             <div className="bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm space-y-5">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-900 border-b border-zinc-100 pb-3">
+              <h3 className="text-sm   uppercase tracking-wider text-zinc-900 border-b border-zinc-100 pb-3">
                 Payment Channel Breakdown
               </h3>
               <div className="space-y-4">
                 {channelBreakdown.map((item) => (
                   <div key={item.channel} className="space-y-1.5">
-                    <div className="flex justify-between text-xs font-semibold text-zinc-700">
+                    <div className="flex justify-between text-[12px] font-semibold text-zinc-700">
                       <span>{item.channel}</span>
-                      <span className="font-bold text-zinc-900">{item.revenue} ({item.percentage}%)</span>
+                      <span className="  text-zinc-900">{item.revenue} ({item.percentage}%)</span>
                     </div>
                     <div className="w-full h-2.5 bg-zinc-100 rounded-full overflow-hidden">
                       <div className={`h-full ${item.color} rounded-full transition-all duration-500`} style={{ width: `${Math.min(100, Math.max(5, item.percentage))}%` }} />
@@ -190,13 +190,13 @@ const AnalyticsView = () => {
 
             {/* Category Share */}
             <div className="bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm space-y-5">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-900 border-b border-zinc-100 pb-3">
+              <h3 className="text-sm   uppercase tracking-wider text-zinc-900 border-b border-zinc-100 pb-3">
                 Revenue Share by Category
               </h3>
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs border-collapse">
+                <table className="w-full text-left text-[12px] border-collapse">
                   <thead>
-                    <tr className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 border-b border-zinc-100">
+                    <tr className="text-[10px]   uppercase tracking-widest text-zinc-400 border-b border-zinc-100">
                       <th className="pb-3">Category</th>
                       <th className="pb-3">Revenue Total</th>
                       <th className="pb-3 text-right">Revenue Share</th>
@@ -206,8 +206,8 @@ const AnalyticsView = () => {
                     {categoryPerformance.map((cat) => (
                       <tr key={cat.name} className="hover:bg-zinc-50/80 transition-colors">
                         <td className="py-3 font-semibold text-zinc-900">{cat.name}</td>
-                        <td className="py-3 font-bold text-zinc-900">{cat.revenue}</td>
-                        <td className="py-3 text-right font-bold text-[#b8860b]">{cat.share}</td>
+                        <td className="py-3   text-zinc-900">{cat.revenue}</td>
+                        <td className="py-3 text-right   text-[#b8860b]">{cat.share}</td>
                       </tr>
                     ))}
                     {categoryPerformance.length === 0 && (

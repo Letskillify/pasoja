@@ -57,15 +57,12 @@ const ShopTheLook = () => {
       <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 mb-6 md:mb-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <p className="text-[10px] sm:text-xs tracking-[0.3em] text-[#b8860b] uppercase mb-2 font-bold">
+            <p className="text-[10px] sm:text-[12px] tracking-[0.3em] text-[#b8860b] uppercase mb-2  ">
               SHOP THE LOOK
             </p>
             <h2 className="text-xl sm:text-3xl lg:text-4xl font-extralight tracking-[0.15em] text-zinc-900 uppercase whitespace-nowrap leading-none">
               CURATED FITS. MADE TO STAND OUT.
             </h2>
-          </div>
-          <div className="text-zinc-600 text-xs sm:text-sm tracking-wide max-w-[280px] font-light leading-relaxed text-left md:text-right">
-            Handpicked pieces styled for impact. Explore the looks.
           </div>
         </div>
       </div>
@@ -90,10 +87,10 @@ const ShopTheLook = () => {
               <span className="text-[9px] uppercase tracking-[0.2em] font-medium text-zinc-500 mb-1.5">
                 {look.category || 'COLLECTION'}
               </span>
-              <h4 className="text-xs font-semibold text-zinc-900 tracking-wider uppercase leading-snug px-3 line-clamp-1 mb-1">
+              <h4 className="text-[12px] font-semibold text-zinc-900 tracking-wider uppercase leading-snug px-3 line-clamp-1 mb-1">
                 {look.title || 'Brand Look'}
               </h4>
-              <span className="text-[10px] font-bold text-zinc-700 tracking-widest mt-1">
+              <span className="text-[10px]   text-zinc-700 tracking-widest mt-1">
                 INR {Number(look.price || 2499).toLocaleString("en-IN")}.00
               </span>
             </div>
@@ -140,10 +137,10 @@ const ShopTheLook = () => {
                 <span className="text-[10px] uppercase tracking-[0.2em] font-medium text-zinc-500 mb-1">
                   {look.category || 'COLLECTION'}
                 </span>
-                <h5 className="text-xs sm:text-sm font-bold text-zinc-900 tracking-wider uppercase leading-snug px-1 line-clamp-1 mb-1">
+                <h5 className="text-[12px] sm:text-sm   text-zinc-900 tracking-wider uppercase leading-snug px-1 line-clamp-1 mb-1">
                   {look.title || 'Brand Look'}
                 </h5>
-                <span className="text-xs font-bold text-zinc-800 tracking-widest">
+                <span className="text-[12px]   text-zinc-800 tracking-widest">
                   INR {Number(look.price || 2499).toLocaleString("en-IN")}.00
                 </span>
               </div>

@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 
 const PageHeader = ({ title, subtitle, breadcrumbItems = [] }) => {
   return (
-    <section className="relative w-full bg-[#f4f1ea] mt-[72px] md:mt-[80px] overflow-hidden border-b border-zinc-200">
-      <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14 py-10 md:py-16">
+    <section className="relative w-full bg-[#f4f1ea] mt-[145px] md:mt-[105px] overflow-hidden border-b border-zinc-200">
+      <div className="max-w-7xl py-3 mx-auto px-5 md:px-10 lg:px-14 py-10 md:py-16">
         {/* Breadcrumbs */}
         <nav aria-label="Breadcrumb" className="flex items-center gap-2 mb-5">
           {breadcrumbItems.map((item, index) => {
@@ -15,7 +15,7 @@ const PageHeader = ({ title, subtitle, breadcrumbItems = [] }) => {
             if (isLast) {
               return (
                 <React.Fragment key={index}>
-                  <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-zinc-700">
+                  <span className="text-[10px]   uppercase tracking-[0.25em] text-zinc-700">
                     {item.label}
                   </span>
                 </React.Fragment>
@@ -42,7 +42,7 @@ const PageHeader = ({ title, subtitle, breadcrumbItems = [] }) => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-light text-zinc-900 tracking-widest leading-[1.0] uppercase"
+            className="text-xl sm:text-5xl md:text-2xl font-light text-zinc-900 tracking-widest leading-[1.0] uppercase"
           >
             {title}
           </motion.h1>

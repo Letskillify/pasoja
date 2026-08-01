@@ -29,6 +29,69 @@ const POPULAR_SEARCHES = [
   'New Season'
 ];
 
+const SEARCH_PLACEHOLDERS = [
+  'POLO SHIRTS',
+  'OVERSIZED TEES',
+  'DENIM JEANS',
+  'CARGO PANTS',
+  'CASUAL SHIRTS',
+  'SUMMER SHORTS',
+  'PLUS SIZE',
+  'SHOES'
+];
+
+const AnimatedSearchBox = ({ searchQuery, setSearchQuery, onSubmit, onFocus }) => {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % SEARCH_PLACEHOLDERS.length);
+    }, 2600);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <form onSubmit={onSubmit} className="relative flex items-center w-full">
+      <div className="relative w-full flex items-center bg-white border border-zinc-900 rounded-none px-3.5 py-2 transition-all duration-300 shadow-none">
+        <Search size={18} className="text-zinc-900 shrink-0 mr-2.5" strokeWidth={1.8} />
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onFocus={onFocus}
+          className="w-full bg-transparent text-zinc-900 outline-none font-medium text-[12px] tracking-wide z-10"
+        />
+        {!searchQuery && (
+          <div className="absolute left-10 top-1/2 -translate-y-1/2 pointer-events-none overflow-hidden h-5 flex items-center z-0">
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={index}
+                initial={{ y: 16, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -16, opacity: 0 }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className="text-zinc-500 text-[12px] tracking-wide whitespace-nowrap font-normal"
+              >
+                Search &quot;{SEARCH_PLACEHOLDERS[index]}&quot;
+              </motion.span>
+            </AnimatePresence>
+          </div>
+        )}
+        {searchQuery && (
+          <button
+            type="button"
+            onClick={() => setSearchQuery('')}
+            className="p-1 text-zinc-400 hover:text-black transition-colors z-20"
+            aria-label="Clear search"
+          >
+            <X size={14} />
+          </button>
+        )}
+      </div>
+    </form>
+  );
+};
+
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchActive, setIsSearchActive] = useState(false);
@@ -154,15 +217,15 @@ const Header = () => {
   // Filter live search matches
   const liveSearchResults = searchQuery.trim()
     ? allProducts.filter(p => {
-        const q = searchQuery.toLowerCase().trim();
-        return (
-          p.name?.toLowerCase().includes(q) ||
-          p.category?.toLowerCase().includes(q) ||
-          p.description?.toLowerCase().includes(q) ||
-          p.material?.toLowerCase().includes(q) ||
-          p.colors?.toLowerCase().includes(q)
-        );
-      })
+      const q = searchQuery.toLowerCase().trim();
+      return (
+        p.name?.toLowerCase().includes(q) ||
+        p.category?.toLowerCase().includes(q) ||
+        p.description?.toLowerCase().includes(q) ||
+        p.material?.toLowerCase().includes(q) ||
+        p.colors?.toLowerCase().includes(q)
+      );
+    })
     : [];
 
   const rightNavLinks = [
@@ -212,9 +275,8 @@ const Header = () => {
             <div className="hidden lg:flex items-center gap-9 justify-start">
               <Link
                 to="/shop"
-                className={`relative text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors duration-300 py-2 group ${
-                  location.pathname === '/shop' && !location.search ? 'text-black' : 'text-zinc-600 hover:text-black'
-                }`}
+                className={`relative text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors duration-300 py-2 group ${location.pathname === '/shop' && !location.search ? 'text-black' : 'text-zinc-600 hover:text-black'
+                  }`}
               >
                 Shop All
                 <span className={`absolute bottom-0 left-0 h-[1px] bg-black transition-all duration-400 ${location.pathname === '/shop' && !location.search ? 'w-full' : 'w-0 group-hover:w-full'}`} />
@@ -229,9 +291,8 @@ const Header = () => {
                 <button
                   type="button"
                   onClick={() => navigate('/shop')}
-                  className={`flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors duration-300 group cursor-pointer ${
-                    location.search.includes('category=') || isCollectionsDropdownOpen ? 'text-black' : 'text-zinc-600 hover:text-black'
-                  }`}
+                  className={`flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors duration-300 group cursor-pointer ${location.search.includes('category=') || isCollectionsDropdownOpen ? 'text-black' : 'text-zinc-600 hover:text-black'
+                    }`}
                 >
                   <span>Collections</span>
                   <ChevronDown size={13} className={`transition-transform duration-300 ${isCollectionsDropdownOpen ? 'rotate-180 text-black' : 'text-zinc-400'}`} />
@@ -292,7 +353,7 @@ const Header = () => {
                 <img
                   src="https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/p3jd3nuet4vkqbfd5qaz.png"
                   alt="Pasoja"
-                  className="h-10 md:h-[52px] w-auto object-contain brightness-0 transition-opacity duration-300 hover:opacity-80"
+                  className="h-12 md:h-[52px] w-auto object-cover brightness-0 transition-opacity duration-300 hover:opacity-80"
                 />
               </Link>
             </div>
@@ -356,7 +417,7 @@ const Header = () => {
           </div>
         </motion.nav>
 
-        {/* ── MOBILE HEADER BOTTOM BAR (FULL-WIDTH SEARCH) ── */}
+        {/* ── MOBILE HEADER BOTTOM BAR (SCREENSHOT 1 SEARCH BAR & PINCODE) ── */}
         <motion.div
           initial={false}
           animate={{
@@ -364,37 +425,37 @@ const Header = () => {
             opacity: (showSearchBar || isSearchActive) ? 1 : 0,
           }}
           transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="overflow-hidden block md:hidden bg-[#faf9f5]/95 backdrop-blur-md border-b border-zinc-200 w-full"
+          className="overflow-hidden block md:hidden bg-[#f8f7f4] border-b border-zinc-200 w-full"
         >
-          <div className="px-4 py-2.5">
-            <form onSubmit={handleSearchSubmit} className="relative flex items-center w-full">
-              <div className="relative w-full flex items-center bg-white border border-zinc-300 rounded-full px-3.5 py-2 focus-within:border-[#c9a962] focus-within:ring-1 focus-within:ring-[#c9a962]/40 transition-all duration-300 shadow-sm">
-                <Search size={16} className="text-[#b8860b] shrink-0 mr-2.5" strokeWidth={2} />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    if (!isSearchActive && e.target.value.trim().length > 0) {
-                      setIsSearchActive(true);
-                    }
-                  }}
-                  onFocus={() => setIsSearchActive(true)}
-                  placeholder="Search apparel, categories..."
-                  className="w-full bg-transparent text-zinc-900 placeholder-zinc-400 outline-none font-normal text-xs tracking-wide"
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setSearchQuery('')}
-                    className="p-1 text-zinc-400 hover:text-black transition-colors"
-                    aria-label="Clear search"
-                  >
-                    <X size={14} />
-                  </button>
-                )}
-              </div>
-            </form>
+          {/* Top Line: Enter Pincode - to check delivery */}
+          <div className="px-4 pt-2 pb-1 text-[11px]   text-zinc-900 flex items-center gap-1">
+            <span>Enter Pincode -</span>
+            <button
+              type="button"
+              onClick={() => {
+                const pin = prompt("Enter Pincode to check delivery availability:");
+                if (pin) alert(`Pincode ${pin}: Express delivery available!`);
+              }}
+              className="underline font-normal text-zinc-700 hover:text-black cursor-pointer"
+            >
+              to check delivery
+            </button>
+          </div>
+
+          <div className="px-4 pb-3 pt-1 flex items-center gap-2.5">
+            <div className="flex-1">
+              <AnimatedSearchBox
+                searchQuery={searchQuery}
+                setSearchQuery={(val) => {
+                  setSearchQuery(val);
+                  if (!isSearchActive && val.trim().length > 0) {
+                    setIsSearchActive(true);
+                  }
+                }}
+                onSubmit={handleSearchSubmit}
+                onFocus={() => setIsSearchActive(true)}
+              />
+            </div>
           </div>
         </motion.div>
 
@@ -417,7 +478,7 @@ const Header = () => {
                   <button
                     type="button"
                     onClick={() => setIsSearchActive(false)}
-                    className="text-[11px] uppercase tracking-[0.15em] text-zinc-500 hover:text-black font-bold transition-colors flex items-center gap-1"
+                    className="text-[11px] uppercase tracking-[0.15em] text-zinc-500 hover:text-black   transition-colors flex items-center gap-1"
                   >
                     <span>Close</span>
                     <X size={14} />
@@ -454,7 +515,7 @@ const Header = () => {
                   <button
                     type="button"
                     onClick={() => setIsSearchActive(false)}
-                    className="text-[11px] uppercase tracking-[0.2em] text-zinc-500 hover:text-black font-bold shrink-0 transition-colors pl-2"
+                    className="text-[11px] uppercase tracking-[0.2em] text-zinc-500 hover:text-black   shrink-0 transition-colors pl-2"
                   >
                     Close
                   </button>
@@ -463,7 +524,7 @@ const Header = () => {
                 {/* Popular Search Tags when query is empty */}
                 {!searchQuery.trim() && (
                   <div className="space-y-3 pt-2">
-                    <div className="flex items-center gap-2 text-zinc-400 text-[10px] font-bold uppercase tracking-[0.25em]">
+                    <div className="flex items-center gap-2 text-zinc-400 text-[10px]   uppercase tracking-[0.25em]">
                       <Tag size={12} className="text-[#b8860b]" />
                       <span>Popular Searches</span>
                     </div>
@@ -485,7 +546,7 @@ const Header = () => {
                 {/* Live Search Instant Results */}
                 {searchQuery.trim() !== '' && (
                   <div className="space-y-4 pt-2">
-                    <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-zinc-400 border-b border-zinc-200 pb-2">
+                    <div className="flex items-center justify-between text-[10px]   uppercase tracking-widest text-zinc-400 border-b border-zinc-200 pb-2">
                       <span>Products Found ({liveSearchResults.length})</span>
                       {liveSearchResults.length > 0 && (
                         <button
@@ -515,7 +576,7 @@ const Header = () => {
                                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                 />
                                 {product.stock === 0 && (
-                                  <span className="absolute top-2 left-2 bg-red-600 text-white text-[8px] font-bold uppercase tracking-wider px-2 py-0.5">
+                                  <span className="absolute top-2 left-2 bg-red-600 text-white text-[8px]   uppercase tracking-wider px-2 py-0.5">
                                     Sold Out
                                   </span>
                                 )}
@@ -527,10 +588,10 @@ const Header = () => {
                                     {product.category}
                                   </span>
                                 )}
-                                <h4 className="text-xs font-bold text-zinc-900 uppercase tracking-wide truncate group-hover:text-[#b8860b] transition-colors">
+                                <h4 className="text-[12px]   text-zinc-900 uppercase tracking-wide truncate group-hover:text-[#b8860b] transition-colors">
                                   {product.name}
                                 </h4>
-                                <p className="text-xs font-mono font-bold text-zinc-800 mt-1">
+                                <p className="text-[12px] font-mono   text-zinc-800 mt-1">
                                   ₹{product.price?.toLocaleString('en-IN')}
                                 </p>
                               </div>
@@ -571,7 +632,7 @@ const Header = () => {
                   <img
                     src="https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/p3jd3nuet4vkqbfd5qaz.png"
                     alt="Pasoja"
-                    className="h-9 w-auto object-contain brightness-0"
+                    className="h-12 w-auto object-cover brightness-0"
                   />
                 </Link>
                 <button
@@ -584,15 +645,15 @@ const Header = () => {
 
               {/* Nav Links */}
               <div className="px-8 pt-10 flex-1 overflow-y-auto pb-36">
-                <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-400 font-bold mb-8">Navigation</p>
-                
+                <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-400 mb-2">Navigation</p>
+
                 {/* Shop All */}
                 <Link
                   to="/shop"
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="flex items-center justify-between py-5 border-b border-zinc-200 group"
                 >
-                  <span className="text-2xl font-bold tracking-tight text-zinc-900 group-hover:text-zinc-600 transition-colors duration-300">
+                  <span className="text-[16px] tracking-tight text-zinc-900 group-hover:text-zinc-600 transition-colors duration-300">
                     Shop All
                   </span>
                   <ArrowRight size={20} className="text-zinc-400 group-hover:text-black group-hover:translate-x-1 transition-all duration-300" />
@@ -605,7 +666,7 @@ const Header = () => {
                     onClick={() => setIsMobileCollectionsOpen(!isMobileCollectionsOpen)}
                     className="w-full flex items-center justify-between py-5 group text-left"
                   >
-                    <span className="text-2xl font-bold tracking-tight text-zinc-900 group-hover:text-zinc-600 transition-colors duration-300">
+                    <span className="text-[14px] tracking-tight text-zinc-900 group-hover:text-zinc-600 transition-colors duration-300">
                       Collections
                     </span>
                     <ChevronDown size={20} className={`text-zinc-400 transition-transform duration-300 ${isMobileCollectionsOpen ? 'rotate-180 text-black' : ''}`} />
@@ -622,7 +683,7 @@ const Header = () => {
                         <button
                           type="button"
                           onClick={() => handleCollectionSelect('All')}
-                          className="block text-sm uppercase tracking-widest text-[#b8860b] font-bold py-1"
+                          className="block text-sm uppercase tracking-widest text-[#b8860b]   py-1"
                         >
                           All Collections →
                         </button>
@@ -654,7 +715,7 @@ const Header = () => {
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="flex items-center justify-between py-5 border-b border-zinc-200 group"
                     >
-                      <span className="text-2xl font-bold tracking-tight text-zinc-900 group-hover:text-zinc-600 transition-colors duration-300">
+                      <span className="text-[14px] tracking-tight text-zinc-900 group-hover:text-zinc-600 transition-colors duration-300">
                         {link.name}
                       </span>
                       <ArrowRight size={20} className="text-zinc-400 group-hover:text-black group-hover:translate-x-1 transition-all duration-300" />
@@ -663,7 +724,7 @@ const Header = () => {
                 ))}
 
                 <div className="pt-12 space-y-6">
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-400 font-bold mb-4">Support & Account</p>
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-400   mb-4">Support & Account</p>
                   <div className="flex items-center gap-4 text-zinc-600">
                     <User size={18} strokeWidth={1.5} />
                     <Link to="/account" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-medium hover:text-black transition-colors">My Account</Link>

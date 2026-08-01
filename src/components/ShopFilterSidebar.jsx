@@ -47,7 +47,7 @@ const FilterSection = ({ title, children, defaultOpen = true, activeCount = 0 })
         className="w-full flex items-center justify-between text-left group cursor-pointer py-1"
       >
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-900 group-hover:text-black transition-colors">
+          <span className="text-[12px]   uppercase tracking-[0.18em] text-zinc-900 group-hover:text-black transition-colors">
             {title}
           </span>
           {activeCount > 0 && (
@@ -126,7 +126,7 @@ const ShopFilterSidebar = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Filter size={15} className="text-[#b8860b]" />
-            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-zinc-900">
+            <h2 className="text-[12px]   uppercase tracking-[0.2em] text-zinc-900">
               Refine By
             </h2>
           </div>
@@ -151,7 +151,7 @@ const ShopFilterSidebar = ({
             <button
               type="button"
               onClick={resetFilters}
-              className="text-[9px] font-bold uppercase tracking-wider text-zinc-500 hover:text-black"
+              className="text-[9px]   uppercase tracking-wider text-zinc-500 hover:text-black"
             >
               Clear
             </button>
@@ -160,8 +160,8 @@ const ShopFilterSidebar = ({
       </div>
 
       {/* Filter Sections Scroll Container */}
-      <div className="flex-1 overflow-y-auto pr-1 text-xs scrollbar-hide space-y-1">
-        
+      <div className="flex-1 overflow-y-auto pr-1 text-[12px] scrollbar-hide space-y-1">
+
         {/* Category Filter */}
         <FilterSection
           title="Categories"
@@ -176,11 +176,10 @@ const ShopFilterSidebar = ({
                   key={cat}
                   type="button"
                   onClick={() => setFilters(prev => ({ ...prev, category: cat }))}
-                  className={`w-full flex items-center justify-between py-2 px-3 text-left uppercase transition-all rounded-sm ${
-                    isSelected
-                      ? "bg-zinc-100 text-zinc-900 font-bold border-l-2 border-[#b8860b]"
-                      : "text-zinc-600 hover:text-black hover:bg-zinc-50"
-                  }`}
+                  className={`w-full flex items-center justify-between py-2 px-3 text-left uppercase transition-all rounded-sm ${isSelected
+                    ? "bg-zinc-100 text-zinc-900   border-l-2 border-[#b8860b]"
+                    : "text-zinc-600 hover:text-black hover:bg-zinc-50"
+                    }`}
                 >
                   <span className="shop-sidebar-label">{cat}</span>
                   {isSelected && <Check size={13} className="text-[#b8860b] shrink-0" />}
@@ -204,11 +203,10 @@ const ShopFilterSidebar = ({
                   key={g}
                   type="button"
                   onClick={() => setFilters(prev => ({ ...prev, gender: g }))}
-                  className={`py-2 px-2 text-center border uppercase transition-all ${
-                    isSelected
-                      ? "bg-black text-white border-black font-bold"
-                      : "bg-white text-zinc-600 border-zinc-300 hover:border-black hover:text-black"
-                  }`}
+                  className={`py-2 px-2 text-center border uppercase transition-all ${isSelected
+                    ? "bg-black text-white border-black  "
+                    : "bg-white text-zinc-600 border-zinc-300 hover:border-black hover:text-black"
+                    }`}
                 >
                   <span className="shop-sidebar-label">{g}</span>
                 </button>
@@ -225,9 +223,9 @@ const ShopFilterSidebar = ({
         >
           <div className="space-y-3.5">
             {/* Price values readout */}
-            <div className="flex items-center justify-between text-xs font-mono text-zinc-700">
+            <div className="flex items-center justify-between text-[12px] font-mono text-zinc-700">
               <span>₹{filters.minPrice?.toLocaleString("en-IN")}</span>
-              <span className="text-[#b8860b] font-bold">₹{filters.maxPrice?.toLocaleString("en-IN")}</span>
+              <span className="text-[#b8860b]  ">₹{filters.maxPrice?.toLocaleString("en-IN")}</span>
             </div>
 
             {/* Slider */}
@@ -266,11 +264,10 @@ const ShopFilterSidebar = ({
                         maxPrice: preset.max
                       }))
                     }
-                    className={`py-2 px-2 border text-center uppercase transition-all rounded-sm flex items-center justify-center ${
-                      isSelected
-                        ? "border-[#b8860b] bg-[#b8860b]/10 text-[#b8860b] font-bold"
-                        : "border-zinc-300 text-zinc-600 hover:border-black hover:text-black"
-                    }`}
+                    className={`py-2 px-2 border text-center uppercase transition-all rounded-sm flex items-center justify-center ${isSelected
+                      ? "border-[#b8860b] bg-[#b8860b]/10 text-[#b8860b]  "
+                      : "border-zinc-300 text-zinc-600 hover:border-black hover:text-black"
+                      }`}
                   >
                     <span className="shop-sidebar-preset-btn">{preset.label}</span>
                   </button>
@@ -294,11 +291,10 @@ const ShopFilterSidebar = ({
                   key={sz}
                   type="button"
                   onClick={() => toggleArrayFilter("sizes", sz)}
-                  className={`w-10 h-10 flex items-center justify-center border font-bold uppercase transition-all ${
-                    isSelected
-                      ? "bg-black text-white border-black shadow"
-                      : "bg-white text-zinc-600 border-zinc-300 hover:border-black hover:text-black"
-                  }`}
+                  className={`w-10 h-10 flex items-center justify-center border   uppercase transition-all ${isSelected
+                    ? "bg-black text-white border-black shadow"
+                    : "bg-white text-zinc-600 border-zinc-300 hover:border-black hover:text-black"
+                    }`}
                 >
                   <span className="shop-sidebar-label">{sz}</span>
                 </button>
@@ -327,11 +323,10 @@ const ShopFilterSidebar = ({
                     type="button"
                     title={colorName}
                     onClick={() => toggleArrayFilter("colors", colorName)}
-                    className={`group relative w-7 h-7 rounded-full flex items-center justify-center transition-transform hover:scale-110 ${
-                      isSelected
-                        ? "ring-2 ring-offset-2 ring-[#b8860b] ring-offset-white scale-110"
-                        : "opacity-70 hover:opacity-100"
-                    }`}
+                    className={`group relative w-7 h-7 rounded-full flex items-center justify-center transition-transform hover:scale-110 ${isSelected
+                      ? "ring-2 ring-offset-2 ring-[#b8860b] ring-offset-white scale-110"
+                      : "opacity-70 hover:opacity-100"
+                      }`}
                     style={{ backgroundColor: hexColor }}
                   >
                     {isWhite && (
@@ -431,11 +426,10 @@ const ShopFilterSidebar = ({
                       minRating: isSelected ? 0 : stars
                     }))
                   }
-                  className={`w-full flex items-center justify-between py-2 px-3 uppercase transition-colors rounded-sm ${
-                    isSelected
-                      ? "bg-zinc-100 text-zinc-900 font-bold"
-                      : "text-zinc-600 hover:text-black hover:bg-zinc-50"
-                  }`}
+                  className={`w-full flex items-center justify-between py-2 px-3 uppercase transition-colors rounded-sm ${isSelected
+                    ? "bg-zinc-100 text-zinc-900  "
+                    : "text-zinc-600 hover:text-black hover:bg-zinc-50"
+                    }`}
                 >
                   <div className="flex items-center gap-1.5 text-[#b8860b]">
                     <Star size={12} fill="currentColor" />
@@ -481,7 +475,7 @@ const ShopFilterSidebar = ({
               className="relative w-full max-w-xs sm:max-w-sm bg-[#faf9f5] border-r border-zinc-200 h-full p-6 flex flex-col justify-between shadow-2xl z-10 text-zinc-900"
             >
               <div className="flex items-center justify-between pb-4 border-b border-zinc-200">
-                <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#b8860b]">
+                <span className="text-[12px]   uppercase tracking-[0.2em] text-[#b8860b]">
                   Filter Products
                 </span>
                 <button
@@ -503,7 +497,7 @@ const ShopFilterSidebar = ({
                     resetFilters();
                     onClose();
                   }}
-                  className="w-1/3 py-3 border border-zinc-300 text-[10px] font-bold uppercase tracking-widest text-zinc-600 hover:text-black"
+                  className="w-1/3 py-3 border border-zinc-300 text-[10px]   uppercase tracking-widest text-zinc-600 hover:text-black"
                 >
                   Reset
                 </button>

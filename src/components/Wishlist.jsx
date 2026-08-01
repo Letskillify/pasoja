@@ -56,7 +56,7 @@ const Wishlist = () => {
       <div className="min-h-screen bg-[#faf9f5] flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 border border-zinc-300 border-t-black rounded-full animate-spin" />
-          <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-zinc-500">Loading wishlist...</p>
+          <p className="text-[10px]   uppercase tracking-[0.25em] text-zinc-500">Loading wishlist...</p>
         </div>
       </div>
     );
@@ -70,7 +70,7 @@ const Wishlist = () => {
         breadcrumbItems={[{ label: 'Home', path: '/' }, { label: 'Shop', path: '/shop' }, { label: 'Wishlist' }]}
       />
 
-      <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14 py-10 md:py-14">
+      <div className="max-w-7xl py-3 mx-auto px-5 md:px-10 lg:px-14 py-10 md:py-14">
         {wishlist.length === 0 ? (
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="text-center py-20 max-w-md mx-auto bg-white border border-zinc-200 p-8 shadow-sm">
             <div className="w-16 h-16 border border-zinc-300 flex items-center justify-center text-zinc-400 mx-auto mb-5">
@@ -123,20 +123,19 @@ const Wishlist = () => {
                           </div>
 
                           <div className="pt-3 flex-grow flex flex-col">
-                            {item.category && <span className="text-[9px] uppercase tracking-[0.2em] text-[#b8860b] font-bold mb-1">{item.category}</span>}
+                            {item.category && <span className="text-[9px] uppercase tracking-[0.2em] text-[#b8860b]   mb-1">{item.category}</span>}
                             <h3 onClick={() => navigate(`/product/${item.id}`)}
                               className="text-[13px] sm:text-sm font-semibold text-zinc-900 leading-snug mb-2 group-hover:text-[#b8860b] transition-colors cursor-pointer line-clamp-2"
                             >{item.name}</h3>
                             <div className="flex items-center justify-between mt-auto pt-2 border-t border-zinc-200">
-                              <span className="text-sm font-bold text-zinc-900">₹{Number(item.price).toLocaleString("en-IN")}</span>
-                              <button 
+                              <span className="text-sm   text-zinc-900">₹{Number(item.price).toLocaleString("en-IN")}</span>
+                              <button
                                 onClick={() => !isOutOfStock && handleMoveToCart(item)}
                                 disabled={isOutOfStock}
-                                className={`w-9 h-9 flex items-center justify-center transition-all ${
-                                  isOutOfStock 
-                                    ? 'bg-zinc-100 text-zinc-300 border border-zinc-200 cursor-not-allowed' 
-                                    : 'bg-black text-white hover:bg-zinc-800'
-                                }`}
+                                className={`w-9 h-9 flex items-center justify-center transition-all ${isOutOfStock
+                                  ? 'bg-zinc-100 text-zinc-300 border border-zinc-200 cursor-not-allowed'
+                                  : 'bg-black text-white hover:bg-zinc-800'
+                                  }`}
                               >
                                 <ShoppingBag size={14} strokeWidth={2} />
                               </button>

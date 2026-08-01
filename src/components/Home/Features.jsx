@@ -35,11 +35,11 @@ const CollectionHighlights = () => {
 
   return (
     <section className="py-16 md:py-24 bg-[#0d0d0d] overflow-hidden">
-      <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14">
+      <div className="max-w-7xl py-3 mx-auto px-5 md:px-10 lg:px-14">
 
         {/* Header */}
         <div className="pb-10 border-b border-white/[0.06] mb-12">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-white/25 font-bold block mb-3">The Blueprint</span>
+          <span className="text-[10px] uppercase tracking-[0.3em] text-white/25   block mb-3">The Blueprint</span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase">
             Curated Collections
           </h2>
@@ -85,9 +85,8 @@ const CollectionHighlights = () => {
                 key={pillar.id}
                 onMouseEnter={() => setActiveIndex(idx)}
                 onClick={() => setActiveIndex(idx)}
-                className={`py-7 first:pt-0 last:pb-0 cursor-pointer group transition-all duration-400 ${
-                  activeIndex === idx ? 'opacity-100' : 'opacity-30 hover:opacity-60'
-                }`}
+                className={`py-7 first:pt-0 last:pb-0 cursor-pointer group transition-all duration-400 ${activeIndex === idx ? 'opacity-100' : 'opacity-30 hover:opacity-60'
+                  }`}
               >
                 <div className="flex items-start justify-between gap-6">
                   <div className="space-y-2.5 max-w-md flex-1">
@@ -115,11 +114,10 @@ const CollectionHighlights = () => {
                   </div>
 
                   {/* Arrow */}
-                  <div className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-400 shrink-0 mt-1 ${
-                    activeIndex === idx
-                      ? 'bg-white border-white text-black rotate-[-45deg]'
-                      : 'border-white/10 text-white/10'
-                  }`}>
+                  <div className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-400 shrink-0 mt-1 ${activeIndex === idx
+                    ? 'bg-white border-white text-black rotate-[-45deg]'
+                    : 'border-white/10 text-white/10'
+                    }`}>
                     <ArrowRight size={13} />
                   </div>
                 </div>

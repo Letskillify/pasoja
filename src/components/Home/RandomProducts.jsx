@@ -144,7 +144,7 @@ const RandomProductCard = ({ product, idx, triggerToast }) => {
       className="group relative cursor-pointer flex flex-col bg-white border border-zinc-200 transition-all duration-300 hover:border-black/40 hover:shadow-md"
     >
       {/* Product Image Area */}
-      <div className="relative w-full aspect-[3/4] overflow-hidden bg-zinc-100 flex items-center justify-center">
+      <div className="relative w-full aspect-[2/3] overflow-hidden bg-[#fff] flex items-center justify-center">
         <img
           src={displayedImage}
           alt={product.name}
@@ -166,7 +166,7 @@ const RandomProductCard = ({ product, idx, triggerToast }) => {
         {/* Discount Badge */}
         {savingsPercent > 0 && !isOutOfStock && (
           <div className="absolute top-3 left-3 z-10">
-            <span className="bg-black text-white font-bold uppercase text-[8px] tracking-wider px-2.5 py-1 rounded-none shadow-sm">
+            <span className="bg-black text-white   uppercase text-[8px] tracking-wider px-2.5 py-1 rounded-none shadow-sm">
               {savingsPercent}% OFF
             </span>
           </div>
@@ -191,9 +191,8 @@ const RandomProductCard = ({ product, idx, triggerToast }) => {
           <div className="absolute bottom-0 inset-x-0 z-20 overflow-hidden h-10 pointer-events-auto">
             <button
               onClick={(e) => handleAction(e, 'cart')}
-              className={`w-full h-full bg-black text-white text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 flex items-center justify-center ${
-                isHovered ? 'translate-y-0' : 'translate-y-full'
-              } hover:bg-zinc-800`}
+              className={`w-full h-full bg-black text-white text-[10px]   tracking-[0.2em] uppercase transition-all duration-300 flex items-center justify-center ${isHovered ? 'translate-y-0' : 'translate-y-full'
+                } hover:bg-zinc-800`}
             >
               {isInCart ? 'IN BAG' : 'ADD TO CART'}
             </button>
@@ -209,16 +208,16 @@ const RandomProductCard = ({ product, idx, triggerToast }) => {
               {product.category}
             </span>
           )}
-          <h3 className="text-xs sm:text-sm font-bold text-zinc-900 uppercase tracking-wider line-clamp-1 leading-snug mb-2">
+          <h3 className="text-[12px] sm:text-sm   text-zinc-900 uppercase tracking-wider line-clamp-1 leading-snug mb-2">
             {product.name}
           </h3>
         </div>
 
         <div className="flex items-baseline gap-2.5 pt-1 border-t border-zinc-100">
-          <span className="text-xs text-zinc-400 line-through">
+          <span className="text-[12px] text-zinc-400 line-through">
             Rs.{originalPrice?.toLocaleString('en-IN')}.00
           </span>
-          <span className="text-sm font-bold text-zinc-900">
+          <span className="text-sm   text-zinc-900">
             Rs.{displayPrice?.toLocaleString('en-IN')}.00
           </span>
         </div>
@@ -275,10 +274,10 @@ const RandomProducts = () => {
   if (loading) {
     return (
       <section className="py-12 bg-[#faf9f5] border-t border-zinc-200">
-        <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-[1800px] mx-auto px-1 sm:px-6 lg:px-8">
           <div className="h-4 w-32 bg-zinc-200 animate-pulse mb-3" />
           <div className="h-8 w-64 bg-zinc-200 animate-pulse mb-8" />
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-1">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="aspect-[3/4] bg-zinc-200 animate-pulse" />
             ))}
@@ -290,19 +289,18 @@ const RandomProducts = () => {
 
   return (
     <section className="py-12 md:py-16 bg-[#faf9f5] relative border-t border-zinc-200 overflow-hidden">
-      <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-[1800px] mx-auto px-1 sm:px-6 lg:px-8">
 
         {/* Section Header */}
-        <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 px-4">
           <div className="flex-1 flex flex-col md:flex-row md:items-end gap-6 md:gap-12">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <Sparkles size={14} className="text-[#b8860b]" />
-                <p className="text-[10px] sm:text-xs tracking-[0.3em] text-[#b8860b] uppercase font-bold">
+                <p className="text-[10px] sm:text-[12px] tracking-[0.3em] text-[#b8860b] uppercase  ">
                   CURATED DISCOVERIES
                 </p>
               </div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extralight tracking-[0.15em] text-zinc-900 uppercase whitespace-nowrap leading-none">
+              <h2 className="text-xl sm:text-3xl lg:text-4xl font-extralight tracking-[0.15em] text-zinc-900 uppercase whitespace-nowrap">
                 EXPLORE ALL STYLES
               </h2>
             </div>
@@ -310,14 +308,11 @@ const RandomProducts = () => {
           </div>
 
           <div className="flex items-center gap-4 self-start md:self-auto">
-            <p className="text-zinc-600 text-xs sm:text-sm tracking-wide max-w-[280px] font-light leading-relaxed text-left md:text-right hidden sm:block">
-              Discover unique pieces randomly selected from our complete catalogue.
-            </p>
             <button
               type="button"
               onClick={handleShuffle}
               disabled={isShuffling}
-              className="flex items-center gap-2 px-4 py-2.5 border border-zinc-300 bg-white text-zinc-800 hover:text-black hover:border-black transition-all duration-300 text-xs font-semibold uppercase tracking-wider shadow-sm rounded-none cursor-pointer group shrink-0"
+              className="flex items-center gap-2 px-4 py-2.5 border border-zinc-300 bg-white text-zinc-800 hover:text-black hover:border-black transition-all duration-300 text-[12px] font-semibold uppercase tracking-wider shadow-sm rounded-none cursor-pointer group shrink-0"
             >
               <Shuffle
                 size={14}
@@ -336,7 +331,7 @@ const RandomProducts = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.35, ease: 'easeOut' }}
-            className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 md:gap-6"
+            className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-1 sm:gap-5 md:gap-6"
           >
             {randomizedProducts.map((product, idx) => (
               <RandomProductCard
@@ -353,7 +348,7 @@ const RandomProducts = () => {
         <div className="mt-12 md:mt-16 flex justify-center">
           <Link
             to="/shop"
-            className="group inline-flex items-center gap-3 px-8 sm:px-12 py-3.5 sm:py-4 border border-zinc-900 bg-zinc-900 text-white text-[11px] font-bold uppercase tracking-[0.25em] transition-all duration-300 hover:bg-white hover:text-black rounded-none shadow-sm"
+            className="group inline-flex items-center gap-3 px-8 sm:px-12 py-3.5 sm:py-4 border border-zinc-900 bg-zinc-900 text-white text-[11px]   uppercase tracking-[0.25em] transition-all duration-300 hover:bg-white hover:text-black rounded-none shadow-sm"
           >
             <span>View Full Catalogue</span>
             <ArrowRight size={15} className="transform group-hover:translate-x-1.5 transition-transform duration-300" />
