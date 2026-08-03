@@ -16,6 +16,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import PageHeader from "../components/Home/PageHeader";
 import { useStore } from "../components/StoreProvider";
 import ShopFilterSidebar, { DEFAULT_CATEGORIES } from "../components/ShopFilterSidebar";
+import SEOHead from "../components/SEOHead";
 
 const ProductCard = ({ product, idx, triggerToast }) => {
   const navigate = useNavigate();
@@ -448,6 +449,12 @@ const Shop = () => {
 
   return (
     <div className="min-h-screen bg-[#faf9f5]">
+      <SEOHead
+        title={filters.category !== "All" ? `Shop ${filters.category} Collection | Pasoja` : "Shop All Apparel & Streetwear | Pasoja"}
+        description="Browse Pasoja's complete collection of premium oversized t-shirts, casual shirts, jeans, and hoodies. Filter by category, price, size, and color."
+        url="https://pasoja.in/shop"
+        keywords="Pasoja shop, Pasoja clothing collection, oversized tees online, buy streetwear India, pasoja.in shop"
+      />
       <PageHeader
         title="Shop Collection"
         breadcrumbItems={[{ label: "Home", path: "/" }, { label: "Shop" }]}

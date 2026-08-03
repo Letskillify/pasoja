@@ -1,9 +1,15 @@
 import React from 'react';
 import PageHeader from '../components/Home/PageHeader';
+import SEOHead from '../components/SEOHead';
 
 const TermsConditions = () => {
   return (
     <div className="min-h-screen bg-[#faf9f5] text-zinc-900">
+      <SEOHead
+        title="Terms & Conditions | Pasoja"
+        description="Read the official terms and conditions for using Pasoja online store and placing orders."
+        url="https://pasoja.in/terms"
+      />
       <PageHeader
         title="Terms & Conditions"
         subtitle="Please read our terms of service carefully before using our atelier services."
@@ -70,7 +76,7 @@ const TermsConditions = () => {
             6. Governing Law & Contact
           </h2>
           <p className="text-[12px] md:text-sm text-zinc-600 leading-relaxed">
-            These Terms shall be governed by and construed in accordance with the laws of India. For any inquiries regarding our terms, please contact our support team at <span className="text-zinc-900  ">support@pasoja.com</span>.
+            These Terms shall be governed by and construed in accordance with the laws of India. For any inquiries regarding our terms, please contact our support team at <a href="mailto:pasoja.help@gmail.com" className="text-zinc-900 font-semibold underline">pasoja.help@gmail.com</a>.
           </p>
         </section>
       </div>

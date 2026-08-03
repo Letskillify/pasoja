@@ -1,9 +1,15 @@
 import React from 'react';
 import PageHeader from '../components/Home/PageHeader';
+import SEOHead from '../components/SEOHead';
 
 const PrivacyPolicy = () => {
   return (
     <div className="min-h-screen bg-[#faf9f5] text-zinc-900">
+      <SEOHead
+        title="Privacy Policy | Pasoja"
+        description="Learn how Pasoja protects your personal information and data privacy."
+        url="https://pasoja.in/privacy"
+      />
       <PageHeader
         title="Privacy Policy"
         subtitle="Your privacy is paramount. Learn how we safeguard your personal information."
@@ -68,7 +74,7 @@ const PrivacyPolicy = () => {
             5. Your Rights & Contact Information
           </h2>
           <p className="text-[12px] md:text-sm text-zinc-600 leading-relaxed">
-            You have the right to access, update, or request deletion of your personal account information at any time from your Account Dashboard. If you have questions regarding this Privacy Policy, please email us at <span className="text-zinc-900  ">privacy@pasoja.com</span>.
+            You have the right to access, update, or request deletion of your personal account information at any time from your Account Dashboard. If you have questions regarding this Privacy Policy, please email us at <a href="mailto:pasoja.help@gmail.com" className="text-zinc-900 font-semibold underline">pasoja.help@gmail.com</a>.
           </p>
         </section>
       </div>

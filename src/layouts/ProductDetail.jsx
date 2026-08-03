@@ -12,6 +12,7 @@ import { Pagination, Mousewheel, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import SEOHead from '../components/SEOHead';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -239,6 +240,29 @@ const ProductDetail = () => {
           </motion.div>
         )}
       </AnimatePresence>
+      {product && (
+        <SEOHead
+          title={`${product.name} | Pasoja`}
+          description={product.description?.replace(/<[^>]*>?/gm, '').slice(0, 160) || `Buy ${product.name} online at Pasoja. Premium quality clothing.`}
+          image={images[0] || product.image}
+          url={`https://pasoja.in/product/${id}`}
+          type="product"
+          jsonLd={{
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": product.name,
+            "image": images[0] || product.image,
+            "description": product.description?.replace(/<[^>]*>?/gm, ''),
+            "offers": {
+              "@type": "Offer",
+              "priceCurrency": "INR",
+              "price": selectedSize?.price || product.price,
+              "availability": isOutOfStock ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
+              "url": `https://pasoja.in/product/${id}`
+            }
+          }}
+        />
+      )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">

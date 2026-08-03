@@ -3,6 +3,7 @@ import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "./useAuth";
 import { Mail, Lock, ArrowRight, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import SEOHead from "./SEOHead";
 
 const Login = () => {
   const { login } = useAuth();
@@ -32,6 +33,12 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-[#faf9f5] flex flex-col justify-center items-center relative overflow-hidden px-5 py-12">
+      <SEOHead
+        title="Sign In | Pasoja Account"
+        description="Sign in to your Pasoja account to view saved orders, wishlist, and profile settings."
+        robots="noindex, follow"
+        url="https://pasoja.in/login"
+      />
       {/* Back to Home Button */}
       <Link
         to="/"

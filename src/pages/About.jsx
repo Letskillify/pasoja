@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Gem, Shield, Heart, Compass, Leaf, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import PageHeader from '../components/Home/PageHeader';
+import SEOHead from '../components/SEOHead';
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -14,6 +15,12 @@ const fadeUp = {
 const About = () => {
   return (
     <div className="min-h-screen bg-[#faf9f5]">
+      <SEOHead
+        title="Our Story & Philosophy | Pasoja"
+        description="Discover the story behind Pasoja. Designed with intention, crafted with ethical luxury standards for modern streetwear enthusiasts."
+        url="https://pasoja.in/about"
+        keywords="Pasoja story, about Pasoja, luxury streetwear brand, Pasoja clothing philosophy"
+      />
       <PageHeader
         title="Our Story"
         subtitle="Crafted with intention, designed for the modern wardrobe."

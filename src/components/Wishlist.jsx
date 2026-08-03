@@ -6,6 +6,7 @@ import PageHeader from "./Home/PageHeader";
 import { useStore } from "./StoreProvider";
 import { db } from "./Firebase";
 import { doc, getDoc } from "firebase/firestore";
+import SEOHead from "./SEOHead";
 
 const Wishlist = () => {
   const { wishlist, removeFromWishlist, addToCart, loading } = useStore();
@@ -64,6 +65,12 @@ const Wishlist = () => {
 
   return (
     <div className="min-h-screen bg-[#faf9f5]">
+      <SEOHead
+        title="My Wishlist | Pasoja"
+        description="View your saved items and favorite clothing on Pasoja."
+        robots="noindex, follow"
+        url="https://pasoja.in/wishlist"
+      />
       <PageHeader
         title="Wishlist"
         subtitle="Your saved favourites"

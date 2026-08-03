@@ -6,10 +6,10 @@ import { User, Mail, Phone, ShieldCheck, Camera, Save, CheckCircle2 } from 'luci
 
 const AdminProfileSettings = () => {
   const [profile, setProfile] = useState({
-    name: "Super Admin",
+    name: "Pasoja Admin",
     role: "CHIEF EXECUTIVE ADMINISTRATOR",
-    email: "super@pasoja.in",
-    phone: "+91 98765 43210",
+    email: "pasoja.help@gmail.com",
+    phone: "+91 8959041514",
     image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150&auto=format&fit=crop",
     bio: "Chief Executive Officer & Administrator of Pasoja Luxury E-Commerce Operations."
   });

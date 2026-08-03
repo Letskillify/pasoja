@@ -172,9 +172,9 @@ const BillingSystem = () => {
                     Official Tax Invoice & Sales Receipt
                   </p>
                   <p className="text-[12px] text-zinc-600 mt-2 font-medium">
-                    34 Atelier Boulevard, CP, New Delhi - 110001
+                    Worldwide Online Store | pasoja.in
                   </p>
-                  <p className="text-[12px] text-zinc-500">GSTIN: 07AAACP1234F1Z9 | support@pasoja.in</p>
+                  <p className="text-[12px] text-zinc-500">Contact: +91 8959041514 | pasoja.help@gmail.com</p>
                 </div>
                 <div className="text-right">
                   <span className="px-3 py-1 bg-black text-white text-[10px] font-extrabold uppercase tracking-widest rounded-md inline-block mb-2">

@@ -7,6 +7,7 @@ import { useStore } from "../components/StoreProvider";
 import { useAuth } from "../components/useAuth";
 import { db } from "../components/Firebase";
 import { doc, getDoc } from "firebase/firestore";
+import SEOHead from "../components/SEOHead";
 
 const Cart = () => {
   const { cart, removeFromCart, updateQuantity, loading } = useStore();
@@ -66,6 +67,12 @@ const Cart = () => {
 
   return (
     <div className="min-h-screen bg-[#faf9f5]">
+      <SEOHead
+        title="Shopping Bag | Pasoja"
+        description="View items in your Pasoja shopping bag and proceed to checkout."
+        robots="noindex, follow"
+        url="https://pasoja.in/cart"
+      />
       <PageHeader
         title="Shopping Bag"
         subtitle="Review your selections before checkout"

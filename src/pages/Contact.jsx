@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, ArrowUpRight, X, CheckCircle, Clock, MessageSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PageHeader from '../components/Home/PageHeader';
+import SEOHead from '../components/SEOHead';
 
 const Contact = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -14,9 +15,9 @@ const Contact = () => {
   };
 
   const communicationChannels = [
-    { icon: Mail, label: 'Email Us', val: 'hello@pasoja.com', href: 'mailto:hello@pasoja.com', desc: 'We reply within 24 hours' },
-    { icon: Phone, label: 'Call Us', val: '+91 98765 43210', href: 'tel:+919876543210', desc: 'Mon–Sat, 10am – 7pm IST' },
-    { icon: MapPin, label: 'Visit Us', val: 'Mumbai, Maharashtra', href: '#', desc: '123 Fashion Street, 400001' }
+    { icon: Mail, label: 'Email Us', val: 'pasoja.help@gmail.com', href: 'mailto:pasoja.help@gmail.com', desc: 'We reply within 24 hours' },
+    { icon: Phone, label: 'Call Us', val: '+91 8959041514', href: 'tel:+918959041514', desc: 'Mon–Sat, 10am – 7pm IST' },
+    { icon: MapPin, label: 'Online Store', val: 'Worldwide Shipping', href: '#', desc: 'Completely Online & Globally Accessible' }
   ];
 
   const fadeUp = {
@@ -28,6 +29,12 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-[#faf9f5]">
+      <SEOHead
+        title="Contact Us | Pasoja Customer Support"
+        description="Have questions or need support? Contact Pasoja official support at pasoja.help@gmail.com or call +91 8959041514. Worldwide online store."
+        url="https://pasoja.in/contact"
+        keywords="Pasoja contact, Pasoja customer care, Pasoja email, Pasoja phone number, pasoja.in help"
+      />
       <PageHeader
         title="Get In Touch"
         subtitle="We'd love to hear from you. Reach out anytime."

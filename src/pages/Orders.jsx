@@ -25,6 +25,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import PageHeader from "../components/Home/PageHeader";
 import MiniLoader from "../components/MiniLoader";
+import SEOHead from "../components/SEOHead";
 
 const Orders = () => {
   const { user } = useAuth();
@@ -209,7 +210,7 @@ const Orders = () => {
             </div>
 
             <div class="footer">
-              <p>Thank you for shopping with PASOJA Couture. For support or returns, contact support@pasoja.com</p>
+              <p>Thank you for shopping with PASOJA. For support or returns, contact pasoja.help@gmail.com</p>
             </div>
           </div>
         </body>
@@ -242,6 +243,12 @@ const Orders = () => {
 
   return (
     <div className="min-h-screen bg-[#faf9f5] text-zinc-900">
+      <SEOHead
+        title="My Orders & Tracking | Pasoja"
+        description="Track your order history, shipment status, and download invoices on Pasoja."
+        robots="noindex, follow"
+        url="https://pasoja.in/orders"
+      />
       <PageHeader
         title="My Orders"
         subtitle="View your order history, track shipments, and download tax invoices"

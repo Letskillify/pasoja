@@ -117,15 +117,15 @@ const Footer = () => {
             <div className="flex flex-col gap-3.5 mb-6">
               <div className="flex items-center gap-3">
                 <MapPin size={16} className="text-[#b8860b] flex-shrink-0" />
-                <p className="text-[12px] sm:text-sm text-zinc-300 font-medium whitespace-nowrap">123 Fashion Street, Mumbai 400001</p>
+                <p className="text-[12px] sm:text-sm text-zinc-300 font-medium">Worldwide Online Store (Global Shipping)</p>
               </div>
               <div className="flex items-center gap-3">
                 <Phone size={16} className="text-[#b8860b] flex-shrink-0" />
-                <p className="text-[12px] sm:text-sm text-zinc-300 font-mono">+91 98765 43210</p>
+                <a href="tel:+918959041514" className="text-[12px] sm:text-sm text-zinc-300 font-mono hover:text-white transition-colors">+91 8959041514</a>
               </div>
               <div className="flex items-center gap-3">
                 <Mail size={16} className="text-[#b8860b] flex-shrink-0" />
-                <p className="text-[12px] sm:text-sm text-zinc-300 font-medium">hello@pasoja.com</p>
+                <a href="mailto:pasoja.help@gmail.com" className="text-[12px] sm:text-sm text-zinc-300 font-medium hover:text-white transition-colors">pasoja.help@gmail.com</a>
               </div>
             </div>
 

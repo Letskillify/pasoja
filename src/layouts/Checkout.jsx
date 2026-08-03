@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { CreditCard, MapPin, User, Phone, Mail, CheckCircle, X, ShieldCheck, Zap, Sparkles, Plus, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageHeader from "../components/Home/PageHeader";
+import SEOHead from "../components/SEOHead";
 
 const Checkout = () => {
   const { user } = useAuth();
@@ -190,6 +191,12 @@ const Checkout = () => {
 
   return (
     <div className="min-h-screen bg-[#faf9f5]">
+      <SEOHead
+        title="Checkout | Pasoja"
+        description="Complete your order securely on Pasoja."
+        robots="noindex, follow"
+        url="https://pasoja.in/checkout"
+      />
       <PageHeader title="Checkout" subtitle="Complete your purchase" breadcrumbItems={[{ label: "Home", path: "/" }, { label: "Cart", path: "/cart" }, { label: "Checkout" }]} />
 
       <div className="max-w-7xl py-3 mx-auto px-5 md:px-10 lg:px-14 py-10 md:py-14">

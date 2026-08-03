@@ -1,6 +1,6 @@
 # ==========================================================
 # PASOJA - robots.txt
-# https://pasoja.com
+# https://pasoja.in
 # ==========================================================
 
 User-agent: *
@@ -68,4 +68,4 @@ Crawl-delay: 2
 # Sitemap
 # ===========================================
 
-Sitemap: https://pasoja.com/sitemap.xml
+Sitemap: https://pasoja.in/sitemap.xml
