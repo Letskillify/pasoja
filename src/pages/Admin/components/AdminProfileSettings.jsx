@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../../components/Firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { uploadToCloudinary } from '../Admin';
+import uploadToCloudinary from '../../../utils/cloudinary';
 import { User, Mail, Phone, ShieldCheck, Camera, Save, CheckCircle2 } from 'lucide-react';
 
 const AdminProfileSettings = () => {

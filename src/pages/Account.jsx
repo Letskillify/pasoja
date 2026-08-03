@@ -12,6 +12,7 @@ import {
   ShieldCheck, Truck, RotateCcw, Download, Printer, Phone, CheckCircle2, Clock, AlertCircle
 } from "lucide-react";
 import SEOHead from "../components/SEOHead";
+import uploadToCloudinary from "../utils/cloudinary";
 
 const Account = () => {
   const { user, logout } = useAuth();
@@ -136,17 +137,7 @@ const Account = () => {
     if (!file) return;
     setUploadingAvatar(true);
     try {
-      const data = new FormData();
-      data.append("file", file);
-      data.append("upload_preset", "Mahanta_group");
-
-      const response = await fetch("https://api.cloudinary.com/v1_1/dlsbj8nug/image/upload", {
-        method: "POST",
-        body: data
-      });
-      if (!response.ok) throw new Error("Failed to upload image");
-      const resData = await response.json();
-      const imageUrl = resData.secure_url;
+      const imageUrl = await uploadToCloudinary(file);
 
       await updateProfile(auth.currentUser, { photoURL: imageUrl });
       await setDoc(doc(db, "users", user.uid), { photoURL: imageUrl }, { merge: true });

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from './Firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { X, Search, Check, Upload, Image as ImageIcon } from 'lucide-react';
-import { uploadToCloudinary } from '../pages/Admin/Admin';
+import uploadToCloudinary from '../utils/cloudinary';
 
 const CloudinaryMediaPickerModal = ({
   isOpen,

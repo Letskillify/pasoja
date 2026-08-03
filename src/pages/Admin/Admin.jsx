@@ -52,16 +52,8 @@ import BillingSystem from "./components/BillingSystem";
 import AdminProfileSettings from "./components/AdminProfileSettings";
 import CloudinaryMediaPickerModal from "../../components/CloudinaryMediaPickerModal";
 
-export const uploadToCloudinary = async (file) => {
-  const data = new FormData();
-  data.append("file", file);
-  data.append("upload_preset", "Mahanta_group");
-  const res = await axios.post(
-    "https://api.cloudinary.com/v1_1/dlsbj8nug/image/upload",
-    data
-  );
-  return res.data.secure_url;
-};
+import uploadToCloudinary from "../../utils/cloudinary";
+export { uploadToCloudinary };
 
 // Default Seed Data for Firebase Firestore
 const DEFAULT_SEED_DATA = {
