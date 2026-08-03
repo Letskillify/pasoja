@@ -132,7 +132,9 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
         }
         setItems(seedItems);
       } else {
-        setItems(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        const list = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        list.sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
+        setItems(list);
       }
     } catch (err) {
       console.error("Error fetching or seeding collection:", err);
@@ -145,12 +147,13 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
     fetchItems();
   }, [collectionName]);
 
-  const handleInputChange = (fieldKey, value) => {
+  const handleInputChange = (fieldKey, value, isNumber = false) => {
     setFormData(prev => {
-      const updated = { ...prev, [fieldKey]: value };
+      const finalVal = isNumber ? (parseFloat(value) || 0) : value;
+      const updated = { ...prev, [fieldKey]: finalVal };
       const hasSlug = fields.some(f => f.key === 'slug');
       if ((fieldKey === 'name' || fieldKey === 'title' || fieldKey === 'code') && hasSlug) {
-        const generatedSlug = value
+        const generatedSlug = String(value)
           .toLowerCase()
           .trim()
           .replace(/[^a-z0-9\s-]/g, '')
@@ -324,8 +327,8 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
                   ) : (
                     <input
                       type={f.type || 'text'}
-                      value={formData[f.key] || ''}
-                      onChange={(e) => handleInputChange(f.key, e.target.value)}
+                      value={formData[f.key] ?? ''}
+                      onChange={(e) => handleInputChange(f.key, e.target.value, f.type === 'number')}
                       className="w-full px-3 py-2 bg-zinc-50 border border-zinc-300 rounded-lg text-[12px] text-zinc-900 focus:bg-white focus:border-black outline-none transition-all"
                     />
                   )}
