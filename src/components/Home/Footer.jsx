@@ -190,7 +190,12 @@ const Footer = () => {
           </div>
 
           <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            type="button"
+            onClick={() => {
+              window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+              document.documentElement.scrollTop = 0;
+              document.body.scrollTop = 0;
+            }}
             className="w-10 h-10 border border-zinc-700 bg-zinc-900 text-zinc-300 flex items-center justify-center hover:bg-white hover:text-black hover:border-white transition-all duration-300 order-first md:order-last cursor-pointer rounded-none"
             aria-label="Scroll to top"
           >

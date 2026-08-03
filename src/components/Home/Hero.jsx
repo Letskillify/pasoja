@@ -145,14 +145,18 @@ const Hero = () => {
           transition={{ duration: 1.4, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="absolute inset-0 z-0"
         >
-          <motion.img
-            src={slide.image}
-            alt={slide.title}
-            className="h-full w-full object-cover"
-            initial={{ scale: 1.04 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 7, ease: 'linear' }}
-          />
+          <picture className="h-full w-full block">
+            {slide.mobileImage && <source media="(max-width: 639px)" srcSet={slide.mobileImage} />}
+            {slide.tabletImage && <source media="(max-width: 1023px)" srcSet={slide.tabletImage} />}
+            <motion.img
+              src={slide.image}
+              alt={slide.title}
+              className="h-full w-full object-cover"
+              initial={{ scale: 1.04 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 7, ease: 'linear' }}
+            />
+          </picture>
         </motion.div>
       </AnimatePresence>
 

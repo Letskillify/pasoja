@@ -15,7 +15,7 @@ const PageHeader = ({ title, subtitle, breadcrumbItems = [] }) => {
             if (isLast) {
               return (
                 <React.Fragment key={index}>
-                  <span className="text-[10px]   uppercase tracking-[0.25em] text-zinc-700">
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-zinc-700">
                     {item.label}
                   </span>
                 </React.Fragment>

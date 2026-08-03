@@ -30,7 +30,7 @@ import {
   X, Plus, Edit2, Trash2, CheckCircle2, AlertTriangle,
   User, Calendar, DollarSign, ShoppingBag, Eye, Printer,
   Download, PlusCircle, Check, HelpCircle, FileText,
-  Shirt, AlertCircle, Mail, Lock, ArrowRight
+  Shirt, AlertCircle, Mail, Lock, ArrowRight, Image as ImageIcon
 } from "lucide-react";
 
 import { useSearchParams } from "react-router-dom";
@@ -50,6 +50,7 @@ import ReturnsRefundsManager from "./components/ReturnsRefundsManager";
 
 import BillingSystem from "./components/BillingSystem";
 import AdminProfileSettings from "./components/AdminProfileSettings";
+import CloudinaryMediaPickerModal from "../../components/CloudinaryMediaPickerModal";
 
 export const uploadToCloudinary = async (file) => {
   const data = new FormData();
@@ -119,6 +120,8 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState(defaultItem);
   const [uploading, setUploading] = useState(false);
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const [activePickerField, setActivePickerField] = useState(null);
 
   const fetchItems = async () => {
     setLoading(true);
@@ -298,12 +301,27 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
                       {formData[f.key] && (
                         <img src={formData[f.key]} className="w-20 h-20 object-cover rounded-lg border border-zinc-200 bg-zinc-50" alt="preview" />
                       )}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={e => e.target.files?.[0] && handleImageUpload(e.target.files[0], f.key)}
-                        className="w-full text-[12px] text-zinc-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-[12px] file:font-semibold file:bg-zinc-100 file:text-zinc-900 hover:file:bg-zinc-200 cursor-pointer"
-                      />
+                      <div className="flex flex-wrap items-center gap-2">
+                        <label className="px-3 py-1.5 rounded-lg border border-zinc-300 bg-zinc-100 hover:bg-zinc-200 text-[11px] font-semibold text-zinc-900 cursor-pointer transition-all">
+                          Upload from Device
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={e => e.target.files?.[0] && handleImageUpload(e.target.files[0], f.key)}
+                            className="hidden"
+                          />
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setActivePickerField(f.key);
+                            setIsPickerOpen(true);
+                          }}
+                          className="px-3 py-1.5 rounded-lg border border-zinc-300 bg-white hover:bg-zinc-50 text-[11px] font-semibold text-zinc-900 cursor-pointer flex items-center gap-1.5 transition-all shadow-sm"
+                        >
+                          <ImageIcon size={13} className="text-[#b8860b]" /> Choose from Cloudinary
+                        </button>
+                      </div>
                       {uploading && (
                         <p className="text-[10px] text-[#b8860b]   animate-pulse">Uploading image...</p>
                       )}
@@ -355,6 +373,17 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
           </form>
         </div>
       )}
+
+      <CloudinaryMediaPickerModal
+        isOpen={isPickerOpen}
+        onClose={() => setIsPickerOpen(false)}
+        onSelect={(url) => {
+          if (activePickerField) {
+            setFormData(prev => ({ ...prev, [activePickerField]: url }));
+          }
+        }}
+        isMultiSelect={false}
+      />
     </div>
   );
 };
@@ -1337,7 +1366,9 @@ const Admin = () => {
             collectionName="hero_slides"
             title="Homepage Hero Slides CMS"
             fields={[
-              { key: 'image', label: 'Slide Image', type: 'image' },
+              { key: 'image', label: 'Desktop Banner Image', type: 'image' },
+              { key: 'tabletImage', label: 'Tablet Banner Image (Optional)', type: 'image' },
+              { key: 'mobileImage', label: 'Mobile Banner Image (Optional)', type: 'image' },
               { key: 'tag', label: 'Tag / Eyebrow' },
               { key: 'title', label: 'Title (use \\n for line breaks)' },
               { key: 'subtitle', label: 'Subtitle' },
@@ -1346,7 +1377,7 @@ const Admin = () => {
               { key: 'sort_order', label: 'Sort Order', type: 'number' },
               { key: 'is_active', label: 'Status', type: 'boolean' }
             ]}
-            defaultItem={{ image: '', tag: 'NEW IN', title: 'Brand Title', subtitle: 'Description details...', cta: 'Shop Collection', ctaLink: '/shop', sort_order: 1, is_active: true }}
+            defaultItem={{ image: '', tabletImage: '', mobileImage: '', tag: 'NEW IN', title: 'Brand Title', subtitle: 'Description details...', cta: 'Shop Collection', ctaLink: '/shop', sort_order: 1, is_active: true }}
           />
         );
       case "Benefits Strip":

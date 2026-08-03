@@ -123,7 +123,7 @@ const GallerySwiper = () => {
               stretch: -20,
               depth: 250,
               modifier: 1,
-              slideShadows: true,
+              slideShadows: false,
             }}
             onSwiper={(swiper) => {
               swiperRef.current = swiper;
@@ -138,7 +138,7 @@ const GallerySwiper = () => {
               <SwiperSlide
                 key={idx}
                 onClick={() => slide.isProduct && navigate(`/product/${slide.id}`)}
-                className="relative rounded-none overflow-hidden border border-zinc-200 bg-white shadow-lg cursor-pointer group"
+                className="relative rounded-none overflow-hidden border border-zinc-200/80 bg-white shadow-md cursor-pointer group"
               >
                 {/* Image */}
                 <img
@@ -147,8 +147,8 @@ const GallerySwiper = () => {
                   className="w-full h-full object-cover transition-transform duration-[1500ms] ease-out hover:scale-105"
                 />
 
-                {/* Dark Vignette Wash */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
+                {/* Soft Subtle Wash */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent z-10" />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -202,8 +202,8 @@ const GallerySwiper = () => {
           .gallery-swiper .swiper-slide {
             width: 260px;
             height: 380px;
-            opacity: 0.7;
-            filter: brightness(0.85);
+            opacity: 0.88;
+            filter: brightness(0.96);
             transform: scale(0.9);
             transition: all 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           }
@@ -217,8 +217,8 @@ const GallerySwiper = () => {
             opacity: 1;
             filter: brightness(1);
             transform: scale(1.05);
-            border-color: rgba(0, 0, 0, 0.3);
-            box-shadow: 0 30px 60px -15px rgba(0,0,0,0.15);
+            border-color: rgba(0, 0, 0, 0.15);
+            box-shadow: 0 15px 35px -10px rgba(0,0,0,0.1);
             z-index: 10;
           }
         `

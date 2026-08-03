@@ -70,10 +70,10 @@ const ShopTheLook = () => {
       {/* Desktop Grid View (hidden lg:grid) - Full Width Edge-to-Edge with 0 Gap */}
       <div className="hidden lg:grid grid-cols-4 gap-0 w-full max-w-none">
         {looks.map((look) => (
-          <div key={look.id} className="relative w-full flex flex-col bg-[#faf9f5]">
+          <div key={look.id} className="relative w-full flex flex-col bg-[#faf9f5] border-none outline-none">
             <Link
               to={look.link}
-              className="relative group block overflow-hidden bg-zinc-100 aspect-[3/4] w-full"
+              className="relative group block overflow-hidden bg-zinc-100 aspect-[3/4] w-full border-none outline-none"
             >
               {/* Campaign Image */}
               <img
@@ -83,7 +83,7 @@ const ShopTheLook = () => {
               />
             </Link>
             {/* Product Meta Text Content below Image */}
-            <div className="pt-5 pb-6 text-center flex flex-col items-center">
+            <div className="pt-5 pb-6 text-center flex flex-col items-center border-none">
               <span className="text-[9px] uppercase tracking-[0.2em] font-medium text-zinc-500 mb-1.5">
                 {look.category || 'COLLECTION'}
               </span>
@@ -121,10 +121,10 @@ const ShopTheLook = () => {
           className="w-full overflow-visible"
         >
           {looks.map((look) => (
-            <SwiperSlide key={look.id} className="flex flex-col bg-[#faf9f5] border-r border-zinc-200/80">
+            <SwiperSlide key={look.id} className="flex flex-col bg-[#faf9f5] border-none outline-none">
               <Link
                 to={look.link}
-                className="relative group block overflow-hidden bg-zinc-100 aspect-[3/4] w-full"
+                className="relative group block overflow-hidden bg-zinc-100 aspect-[3/4] w-full border-none outline-none"
               >
                 <img
                   src={look.image}
@@ -133,7 +133,7 @@ const ShopTheLook = () => {
                 />
               </Link>
               {/* Product Meta Text Content below Image */}
-              <div className="py-4 px-2 text-center flex flex-col items-center">
+              <div className="py-4 px-2 text-center flex flex-col items-center border-none">
                 <span className="text-[10px] uppercase tracking-[0.2em] font-medium text-zinc-500 mb-1">
                   {look.category || 'COLLECTION'}
                 </span>

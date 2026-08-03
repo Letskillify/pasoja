@@ -4,6 +4,8 @@ import { uploadToCloudinary } from "../Admin";
 import { db } from "../../../components/Firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Editor } from "@tinymce/tinymce-react";
+import { Image as ImageIcon, Upload } from "lucide-react";
+import CloudinaryMediaPickerModal from "../../../components/CloudinaryMediaPickerModal";
 
 const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
   // Initialize size_prices from existing product or default with empty array
@@ -81,6 +83,10 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
   // Model Image state (1 image)
   const [modelImagePreview, setModelImagePreview] = useState(product?.model_image || null);
   const [modelImageFile, setModelImageFile] = useState(null);
+
+  // Cloudinary Library Picker state
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const [pickerTarget, setPickerTarget] = useState("product");
 
   const { register, handleSubmit, reset, formState, setValue, watch } = useForm({
     defaultValues: {
@@ -572,17 +578,33 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
       </div>
 
       <div className="space-y-3">
-        <label className="text-sm font-semibold text-[#71717b] uppercase tracking-wide">
+        <label className="text-sm font-semibold text-[#71717b] uppercase tracking-wide block">
           Product Images (Select first image display)
         </label>
-        <div className="relative">
-          <input
-            type="file"
-            multiple
-            accept="image/*"
-            className="w-full px-4 py-3 rounded-xl border border-dashed border-zinc-300 hover:border-black transition-colors text-sm file:mr-4 file:py-2 file:px-5 file:rounded-lg file:border-0 file:text-sm file:  file:bg-zinc-100 file:text-zinc-900 cursor-pointer bg-white"
-            onChange={handleFileChange}
-          />
+        <div className="flex flex-wrap items-center gap-3">
+          <label className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-zinc-300 bg-zinc-100 hover:bg-zinc-200 text-sm font-semibold text-zinc-900 cursor-pointer transition-all">
+            <Upload size={16} />
+            <span>Upload from Gallery / Device</span>
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+          </label>
+
+          <button
+            type="button"
+            onClick={() => {
+              setPickerTarget("product");
+              setIsPickerOpen(true);
+            }}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-zinc-300 bg-white hover:bg-zinc-50 text-sm font-semibold text-zinc-900 cursor-pointer transition-all shadow-sm"
+          >
+            <ImageIcon size={16} className="text-[#b8860b]" />
+            <span>Choose from Cloudinary Library</span>
+          </button>
         </div>
 
         {/* Image previews grid */}
@@ -639,13 +661,29 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
             Optional — 1 Image for lookbook view
           </span>
         </div>
-        <div className="relative">
-          <input
-            type="file"
-            accept="image/*"
-            className="w-full px-4 py-3 rounded-xl border border-dashed border-zinc-300 hover:border-black transition-colors text-sm file:mr-4 file:py-2 file:px-5 file:rounded-lg file:border-0 file:text-sm file:  file:bg-zinc-100 file:text-zinc-900 cursor-pointer bg-white"
-            onChange={handleModelImageChange}
-          />
+        <div className="flex flex-wrap items-center gap-3">
+          <label className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-zinc-300 bg-zinc-100 hover:bg-zinc-200 text-sm font-semibold text-zinc-900 cursor-pointer transition-all">
+            <Upload size={16} />
+            <span>Upload from Gallery</span>
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleModelImageChange}
+            />
+          </label>
+
+          <button
+            type="button"
+            onClick={() => {
+              setPickerTarget("model");
+              setIsPickerOpen(true);
+            }}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-zinc-300 bg-white hover:bg-zinc-50 text-sm font-semibold text-zinc-900 cursor-pointer transition-all shadow-sm"
+          >
+            <ImageIcon size={16} className="text-[#b8860b]" />
+            <span>Choose from Cloudinary</span>
+          </button>
         </div>
 
         {/* Model Image Preview */}
@@ -702,6 +740,23 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
           ) : isEdit ? "Save Changes" : "Publish Product"}
         </button>
       </div>
+
+      <CloudinaryMediaPickerModal
+        isOpen={isPickerOpen}
+        onClose={() => setIsPickerOpen(false)}
+        isMultiSelect={pickerTarget === "product"}
+        onSelect={(selected) => {
+          if (pickerTarget === "product") {
+            const urls = Array.isArray(selected) ? selected : [selected];
+            const newItems = urls.map(url => ({ type: 'existing', url }));
+            setImagePreviews(prev => [...prev, ...newItems]);
+          } else {
+            const singleUrl = Array.isArray(selected) ? selected[0] : selected;
+            setModelImagePreview(singleUrl);
+            setModelImageFile(null);
+          }
+        }}
+      />
     </form>
   );
 };
