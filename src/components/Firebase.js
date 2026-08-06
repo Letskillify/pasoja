@@ -17,6 +17,10 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
+if (!import.meta.env.VITE_FIREBASE_API_KEY && typeof window !== "undefined") {
+  console.warn("⚠️ Firebase API Key is missing. Check Vercel Environment Variables and trigger a fresh REDEPLOY.");
+}
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
