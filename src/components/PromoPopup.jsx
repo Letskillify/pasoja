@@ -62,7 +62,7 @@ const PromoPopup = () => {
         {/* Left Column: Visual Banner Graphic */}
         <div className="md:col-span-6 relative bg-black min-h-[240px] md:min-h-[460px] flex items-center justify-center overflow-hidden group">
           <img
-            src="https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317398/yastxilcsghbsdmkcp2x.jpg"
+            src="https://res.cloudinary.com/dcjn4y284/image/upload/v1786029696/yastxilcsghbsdmkcp2x.jpg"
             alt="Pasoja Sale Campaign"
             className="absolute inset-0 w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-700"
           />

@@ -21,10 +21,10 @@ const ShopTheLook = () => {
         const snap = await getDocs(q);
         if (snap.empty) {
           const defaults = [
-            { id: 'look_1', title: 'TEES', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317398/yastxilcsghbsdmkcp2x.jpg', link: '/shop?category=T-Shirts', sort_order: 1, is_active: true, price: 2499, category: 'OVERSIZED T-SHIRT' },
-            { id: 'look_2', title: 'JEANS', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317396/kq4a9s5dkptuvp8iev2j.jpg', link: '/shop?category=Jeans', sort_order: 2, is_active: true, price: 2499, category: 'WAFFLE KNIT' },
-            { id: 'look_3', title: 'HOODIES', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317395/qegbcn6kqdrl2s44cwm0.jpg', link: '/shop?category=Hoodies', sort_order: 3, is_active: true, price: 2000, category: 'BABY TEE' },
-            { id: 'look_4', title: 'SETS', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317397/pac3lrqmjr4nsemoldna.jpg', link: '/shop?category=Sets', sort_order: 4, is_active: true, price: 2499, category: 'OVERSIZED T-SHIRT' }
+            { id: 'look_1', title: 'TEES', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029696/yastxilcsghbsdmkcp2x.jpg', link: '/shop?category=T-Shirts', sort_order: 1, is_active: true, price: 2499, category: 'OVERSIZED T-SHIRT' },
+            { id: 'look_2', title: 'JEANS', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029717/kq4a9s5dkptuvp8iev2j.jpg', link: '/shop?category=Jeans', sort_order: 2, is_active: true, price: 2499, category: 'WAFFLE KNIT' },
+            { id: 'look_3', title: 'HOODIES', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029740/qegbcn6kqdrl2s44cwm0.jpg', link: '/shop?category=Hoodies', sort_order: 3, is_active: true, price: 2000, category: 'BABY TEE' },
+            { id: 'look_4', title: 'SETS', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029769/pac3lrqmjr4nsemoldna.jpg', link: '/shop?category=Sets', sort_order: 4, is_active: true, price: 2499, category: 'OVERSIZED T-SHIRT' }
           ];
           for (const item of defaults) {
             await setDoc(doc(db, 'shop_the_look', item.id), item);

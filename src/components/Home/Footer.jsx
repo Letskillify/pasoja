@@ -28,7 +28,7 @@ const Footer = () => {
             <div>
               <Link to="/">
                 <img
-                  src="https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/p3jd3nuet4vkqbfd5qaz.png"
+                  src="https://res.cloudinary.com/dcjn4y284/image/upload/v1786029668/p3jd3nuet4vkqbfd5qaz.png"
                   alt="Pasoja"
                   className="h-12 md:h-16 object-cover brightness-0 invert mb-4"
                 />

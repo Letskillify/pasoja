@@ -53,12 +53,12 @@ const Testimonials = () => {
         const imgSnap = await getDocs(imgQuery);
         if (imgSnap.empty) {
           const defaultImages = [
-            { id: 'img_1', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317400/imjhv8luafwtxfu9iswq.jpg', link: '', sort_order: 1, is_active: true },
-            { id: 'img_2', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317401/ffl2xbtgi5vetrobuxzl.jpg', link: '', sort_order: 2, is_active: true },
-            { id: 'img_3', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317401/vuoqvdcaff3ni3jdmjkq.jpg', link: '', sort_order: 3, is_active: true },
-            { id: 'img_4', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317402/bz0d4jlszdu0ju8e0iwl.jpg', link: '', sort_order: 4, is_active: true },
-            { id: 'img_5', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317403/fc1is0gziu7rgyejzlwf.jpg', link: '', sort_order: 5, is_active: true },
-            { id: 'img_6', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317404/zikp7hjgjndo7mjvqm4f.jpg', link: '', sort_order: 6, is_active: true }
+            { id: 'img_1', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029808/imjhv8luafwtxfu9iswq.jpg', link: '', sort_order: 1, is_active: true },
+            { id: 'img_2', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029852/ffl2xbtgi5vetrobuxzl.jpg', link: '', sort_order: 2, is_active: true },
+            { id: 'img_3', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029876/vuoqvdcaff3ni3jdmjkq.jpg', link: '', sort_order: 3, is_active: true },
+            { id: 'img_4', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029891/bz0d4jlszdu0ju8e0iwl.jpg', link: '', sort_order: 4, is_active: true },
+            { id: 'img_5', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029911/fc1is0gziu7rgyejzlwf.jpg', link: '', sort_order: 5, is_active: true },
+            { id: 'img_6', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029935/zikp7hjgjndo7mjvqm4f.jpg', link: '', sort_order: 6, is_active: true }
           ];
           for (const item of defaultImages) {
             await setDoc(doc(db, 'community_images', item.id), item);

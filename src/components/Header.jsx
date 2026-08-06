@@ -351,7 +351,7 @@ const Header = () => {
             <div className="flex justify-center">
               <Link to="/" className="flex items-center">
                 <img
-                  src="https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/p3jd3nuet4vkqbfd5qaz.png"
+                  src="https://res.cloudinary.com/dcjn4y284/image/upload/v1786029668/p3jd3nuet4vkqbfd5qaz.png"
                   alt="Pasoja"
                   className="h-12 md:h-[52px] w-auto object-cover brightness-0 transition-opacity duration-300 hover:opacity-80"
                 />
@@ -630,7 +630,7 @@ const Header = () => {
               <div className="w-full px-5 h-[72px] flex items-center justify-between border-b border-zinc-200 shrink-0">
                 <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
                   <img
-                    src="https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/p3jd3nuet4vkqbfd5qaz.png"
+                    src="https://res.cloudinary.com/dcjn4y284/image/upload/v1786029668/p3jd3nuet4vkqbfd5qaz.png"
                     alt="Pasoja"
                     className="h-12 w-auto object-cover brightness-0"
                   />

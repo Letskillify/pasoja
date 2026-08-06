@@ -22,7 +22,7 @@ const Home = () => {
           "@type": "OnlineStore",
           "name": "Pasoja",
           "url": "https://pasoja.in/",
-          "logo": "https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/p3jd3nuet4vkqbfd5qaz.png",
+          "logo": "https://res.cloudinary.com/dcjn4y284/image/upload/v1786029668/p3jd3nuet4vkqbfd5qaz.png",
           "email": "pasoja.help@gmail.com",
           "telephone": "+91-8959041514",
           "description": "Pasoja is a modern luxury apparel and streetwear brand offering premium oversized t-shirts, casual shirts, jeans, and hoodies with worldwide shipping."

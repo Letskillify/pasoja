@@ -52,7 +52,7 @@ const Login = () => {
         <div className="lg:col-span-5 bg-[#f4f1ea] p-8 md:p-12 lg:p-14 flex flex-col justify-between border-r border-zinc-200 relative overflow-hidden text-zinc-900">
           <div className="relative z-10">
             <Link to="/" className="inline-block mb-10">
-              <img src="https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/p3jd3nuet4vkqbfd5qaz.png" alt="Pasoja" className="h-9 object-cover brightness-0" />
+              <img src="https://res.cloudinary.com/dcjn4y284/image/upload/v1786029668/p3jd3nuet4vkqbfd5qaz.png" alt="Pasoja" className="h-9 object-cover brightness-0" />
             </Link>
           </div>
 
