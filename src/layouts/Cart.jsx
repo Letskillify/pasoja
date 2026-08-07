@@ -8,6 +8,7 @@ import { useAuth } from "../components/useAuth";
 import { db } from "../components/Firebase";
 import { doc, getDoc } from "firebase/firestore";
 import SEOHead from "../components/SEOHead";
+import OptimizedCloudinaryImage from "../components/OptimizedCloudinaryImage";
 
 const Cart = () => {
   const { cart, removeFromCart, updateQuantity, loading } = useStore();
@@ -118,7 +119,7 @@ const Cart = () => {
                             className="group bg-white border border-zinc-200 p-4 flex flex-col sm:flex-row items-center gap-4 hover:border-black/30 transition-all shadow-sm"
                           >
                             <Link to={`/product/${item.id}`} className="w-20 h-24 bg-zinc-100 shrink-0 overflow-hidden border border-zinc-200">
-                              <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                              <OptimizedCloudinaryImage src={item.image} alt={item.name} preset="avatar" className="w-full h-full object-cover" />
                             </Link>
                             <div className="flex-1 text-center sm:text-left space-y-0.5">
                               {item.category && <span className="text-[9px]   uppercase tracking-[0.2em] text-[#b8860b]">{item.category}</span>}

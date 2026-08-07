@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Check, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import OptimizedCloudinaryImage from './OptimizedCloudinaryImage';
 
 const PromoPopup = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -61,9 +62,10 @@ const PromoPopup = () => {
 
         {/* Left Column: Visual Banner Graphic */}
         <div className="md:col-span-6 relative bg-black min-h-[240px] md:min-h-[460px] flex items-center justify-center overflow-hidden group">
-          <img
+          <OptimizedCloudinaryImage
             src="https://res.cloudinary.com/dcjn4y284/image/upload/v1786029696/yastxilcsghbsdmkcp2x.jpg"
             alt="Pasoja Sale Campaign"
+            preset="product-grid"
             className="absolute inset-0 w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-700"
           />
 

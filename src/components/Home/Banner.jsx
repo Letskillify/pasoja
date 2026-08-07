@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
+import OptimizedCloudinaryImage from '../OptimizedCloudinaryImage';
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -12,7 +13,7 @@ const fadeUp = {
 
 const EditorialStory = () => {
   return (
-    <section classname="py-10 md:py-28 bg-[#111111] overflow-hidden">
+    <section className="py-10 md:py-28 bg-[#111111] overflow-hidden">
       <div className="max-w-7xl py-3 mx-auto px-5 md:px-10 lg:px-14">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
@@ -23,9 +24,10 @@ const EditorialStory = () => {
               {...fadeUp}
               className="col-span-7 aspect-[3/4] overflow-hidden relative group"
             >
-              <img
+              <OptimizedCloudinaryImage
                 src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000&auto=format&fit=crop"
                 alt="Premium craft"
+                preset="product-grid"
                 className="w-full h-full object-cover object-center transition-transform duration-[1.5s] ease-out group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
@@ -37,9 +39,10 @@ const EditorialStory = () => {
               transition={{ ...fadeUp.transition, delay: 0.18 }}
               className="col-span-5 aspect-[3/4] overflow-hidden mt-12 sm:mt-20 relative group"
             >
-              <img
+              <OptimizedCloudinaryImage
                 src="https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=800&auto=format&fit=crop"
                 alt="Artisanal fashion"
+                preset="product-card"
                 className="w-full h-full object-cover object-center transition-transform duration-[1.5s] ease-out group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />

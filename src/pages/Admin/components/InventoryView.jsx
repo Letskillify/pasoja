@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../../../components/Firebase';
 import { collection, getDocs, doc, setDoc } from 'firebase/firestore';
 import { ClipboardCheck, Search, Plus, Minus, Save, AlertTriangle, CheckCircle, Package } from 'lucide-react';
+import OptimizedCloudinaryImage from '../../../components/OptimizedCloudinaryImage';
 
 const InventoryView = () => {
   const [products, setProducts] = useState([]);
@@ -176,7 +177,7 @@ const InventoryView = () => {
                     <tr key={p.id} className="hover:bg-zinc-50/80 transition-colors">
                       <td className="py-3.5 px-3">
                         <div className="flex items-center gap-3">
-                          <img src={p.image || p.images?.[0]} className="w-10 h-10 object-cover rounded-lg bg-zinc-100 border border-zinc-200" alt={p.name} />
+                          <OptimizedCloudinaryImage src={p.image || p.images?.[0]} preset="avatar" className="w-10 h-10 object-cover rounded-lg bg-zinc-100 border border-zinc-200" alt={p.name} />
                           <div>
                             <p className="  text-zinc-900">{p.name}</p>
                             <span className="text-[10px] text-zinc-500 font-mono">ID: #{p.id?.slice(0, 8)}</span>

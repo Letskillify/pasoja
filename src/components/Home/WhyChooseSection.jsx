@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Leaf, Sprout, Zap, Flame, Sparkles, ShieldCheck } from 'lucide-react';
+import { Leaf, Award, Compass, ShieldCheck, HeartHandshake, Zap, Flame, Sparkles, Sprout } from 'lucide-react';
+import OptimizedCloudinaryImage from '../OptimizedCloudinaryImage';
 
 const features = [
   {
@@ -102,10 +103,10 @@ const WhyChooseSection = () => {
 
       {/* Decorative Assets: Illustrated cross-hatch portraits on parchment in background space */}
       <div className="absolute left-[-15%] top-[30%] opacity-[0.06] grayscale sepia hidden xl:block pointer-events-none">
-        <img src="/img/farmer-sage-sketch.jpg" alt="Traditional Farmer Sketch" className="w-[400px] h-auto rounded-full" />
+        <OptimizedCloudinaryImage src="/img/farmer-sage-sketch.jpg" alt="Traditional Farmer Sketch" width={400} className="w-[400px] h-auto rounded-full" />
       </div>
       <div className="absolute right-[-15%] bottom-[10%] opacity-[0.06] grayscale sepia hidden xl:block pointer-events-none">
-        <img src="/img/tradition-wisdom-sketch.jpg" alt="Centuries of Wisdom Sketch" className="w-[350px] h-auto rounded-full" />
+        <OptimizedCloudinaryImage src="/img/tradition-wisdom-sketch.jpg" alt="Centuries of Wisdom Sketch" width={350} className="w-[350px] h-auto rounded-full" />
       </div>
 
       {/* Embedded CSS for custom traditional features */}

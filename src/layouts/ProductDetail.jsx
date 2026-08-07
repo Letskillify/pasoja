@@ -4,7 +4,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { db } from '../components/Firebase';
 import { doc, getDoc, collection, getDocs, query, limit } from 'firebase/firestore';
 import { useAuth } from '../components/useAuth';
-import { Heart, ShoppingBag, Minus, Plus, ChevronRight, ChevronLeft, Star, Truck, Ruler, Sparkles, Share2, Tag, Copy, X, ThumbsUp, Check, ShieldCheck, RefreshCw } from 'lucide-react';
+import { Heart, ShoppingBag, Minus, Plus, ChevronRight, ChevronLeft, Star, Truck, Ruler, Sparkles, Share2, Tag, Copy, X, ThumbsUp, Check, ShieldCheck, RefreshCw, ZoomIn } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from "../components/StoreProvider";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -13,6 +13,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import SEOHead from '../components/SEOHead';
+import OptimizedCloudinaryImage from '../components/OptimizedCloudinaryImage';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -23,6 +24,7 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
+  const [isZoomOpen, setIsZoomOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedColor, setSelectedColor] = useState(null);
   const [feedbackMessage, setFeedbackMessage] = useState(null);
@@ -282,7 +284,7 @@ const ProductDetail = () => {
                   className={`aspect-[3/4] w-full overflow-hidden transition-all duration-300 bg-zinc-100 border cursor-pointer ${selectedImage === idx ? 'border-black ring-1 ring-black opacity-100' : 'border-zinc-200 opacity-60 hover:opacity-100'
                     }`}
                 >
-                  <img src={img} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                  <OptimizedCloudinaryImage src={img} alt={`Thumbnail ${idx + 1}`} preset="avatar" className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
@@ -333,12 +335,17 @@ const ProductDetail = () => {
                 className="w-full h-full"
               >
                 {images.map((img, idx) => (
-                  <SwiperSlide key={idx} className="w-full h-full relative">
-                    <img
+                  <SwiperSlide key={idx} className="w-full h-full relative cursor-zoom-in" onClick={() => setIsZoomOpen(true)}>
+                    <OptimizedCloudinaryImage
                       src={img}
                       alt={`${product.name} view ${idx + 1}`}
+                      preset="product-details"
+                      priority={idx === 0}
                       className="w-full h-full object-cover object-center"
                     />
+                    <div className="absolute bottom-4 right-4 z-20 bg-black/60 text-white p-2 rounded-full backdrop-blur-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                      <ZoomIn size={18} />
+                    </div>
                   </SwiperSlide>
                 ))}
               </Swiper>
@@ -805,9 +812,10 @@ const ProductDetail = () => {
               {relatedProducts.map((item) => (
                 <Link key={item.id} to={`/product/${item.id}`} className="group block">
                   <div className="relative aspect-[3/4] bg-zinc-100 border border-zinc-200 mb-2.5 overflow-hidden">
-                    <img
+                    <OptimizedCloudinaryImage
                       src={item.image || item.images?.[0] || 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?q=80&w=800'}
                       alt={item.name}
+                      preset="product-card"
                       className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-500 ease-out"
                     />
                     <button
@@ -857,6 +865,33 @@ const ProductDetail = () => {
         </button>
       </div>
 
+      {/* ── HIGH-RESOLUTION ZOOM MODAL ── */}
+      <AnimatePresence>
+        {isZoomOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[500] bg-black/95 flex items-center justify-center p-4 sm:p-8"
+            onClick={() => setIsZoomOpen(false)}
+          >
+            <button
+              onClick={() => setIsZoomOpen(false)}
+              className="absolute top-6 right-6 text-white p-3 hover:bg-white/10 rounded-full transition-colors z-10 cursor-pointer"
+            >
+              <X size={28} />
+            </button>
+            <div className="relative max-w-6xl max-h-[90vh] w-full h-full flex items-center justify-center overflow-auto" onClick={(e) => e.stopPropagation()}>
+              <OptimizedCloudinaryImage
+                src={images[selectedImage]}
+                alt={product.name}
+                preset="zoom"
+                className="max-w-full max-h-full object-contain"
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

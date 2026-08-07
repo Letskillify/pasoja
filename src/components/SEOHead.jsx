@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { getOptimizedCloudinaryUrl } from '../utils/cloudinaryUtils';
 
 const SEOHead = ({
   title = "Pasoja | Premium Apparel & Modern Streetwear",
@@ -12,6 +13,7 @@ const SEOHead = ({
   jsonLd = null
 }) => {
   useEffect(() => {
+    const optimizedImage = getOptimizedCloudinaryUrl(image, { width: 1200 });
     // Title
     const fullTitle = title.includes("Pasoja") ? title : `${title} | Pasoja`;
     document.title = fullTitle;
@@ -51,7 +53,7 @@ const SEOHead = ({
     // Open Graph Tags
     updateMeta('property', 'og:title', fullTitle);
     updateMeta('property', 'og:description', description);
-    updateMeta('property', 'og:image', image);
+    updateMeta('property', 'og:image', optimizedImage);
     updateMeta('property', 'og:url', targetUrl);
     updateMeta('property', 'og:type', type);
     updateMeta('property', 'og:site_name', 'Pasoja');
@@ -60,7 +62,7 @@ const SEOHead = ({
     updateMeta('name', 'twitter:card', 'summary_large_image');
     updateMeta('name', 'twitter:title', fullTitle);
     updateMeta('name', 'twitter:description', description);
-    updateMeta('name', 'twitter:image', image);
+    updateMeta('name', 'twitter:image', optimizedImage);
 
     // Canonical Link
     updateLink('canonical', targetUrl);

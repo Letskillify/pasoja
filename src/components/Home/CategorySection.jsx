@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { db } from '../../components/Firebase';
 import { collection, getDocs, query, orderBy, setDoc, doc } from 'firebase/firestore';
+import OptimizedCloudinaryImage from '../OptimizedCloudinaryImage';
 
 const mobileCategories = [
   { id: 'm_1', title: 'OVERSIZED T-SHIRT', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=600&auto=format&fit=crop', link: '/shop?category=T-Shirts' },
@@ -79,9 +80,12 @@ const CategorySection = () => {
               to={cat.link || '/shop'}
               className="relative group block overflow-hidden bg-[#111] aspect-[3/4] w-full rounded-xl shadow-sm"
             >
-              <img
+              <OptimizedCloudinaryImage
                 src={cat.image}
                 alt={cat.name || cat.title}
+                preset="category"
+                quality="auto:best"
+                priority={true}
                 className="absolute inset-0 w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
@@ -114,9 +118,12 @@ const CategorySection = () => {
               className="relative group block overflow-hidden bg-[#111] w-full aspect-[1.35/1] border-none rounded-none"
             >
               {/* Hero Product Image */}
-              <img
+              <OptimizedCloudinaryImage
                 src={banner.image}
                 alt={`${banner.name || banner.title} collection`}
+                preset="category"
+                quality="auto:best"
+                priority={index < 2}
                 className="absolute inset-0 w-full h-full object-cover opacity-75 transition-all duration-[700ms] ease-out group-hover:scale-[1.04] group-hover:brightness-[1.08] group-hover:opacity-90"
               />
 

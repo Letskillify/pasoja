@@ -7,6 +7,7 @@ import { useStore } from "./StoreProvider";
 import { db } from "./Firebase";
 import { doc, getDoc } from "firebase/firestore";
 import SEOHead from "./SEOHead";
+import OptimizedCloudinaryImage from "./OptimizedCloudinaryImage";
 
 const Wishlist = () => {
   const { wishlist, removeFromWishlist, addToCart, loading } = useStore();
@@ -119,7 +120,7 @@ const Wishlist = () => {
                       return (
                         <>
                           <div onClick={() => navigate(`/product/${item.id}`)} className="relative w-full aspect-[3/4] overflow-hidden bg-zinc-100 cursor-pointer border border-zinc-200">
-                            <img src={item.image} alt={item.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                            <OptimizedCloudinaryImage src={item.image} alt={item.name} preset="product-card" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                             {isOutOfStock && (
                               <div className="absolute inset-0 z-20 bg-black/60 flex items-center justify-center">
                                 <span className="bg-white text-black font-black uppercase text-[10px] tracking-widest px-3 py-1.5">

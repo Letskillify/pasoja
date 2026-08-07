@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import OptimizedCloudinaryImage from '../OptimizedCloudinaryImage';
 
 const CollectionHighlights = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -60,9 +61,10 @@ const CollectionHighlights = () => {
                   transition={{ duration: 0.55, ease: [0.215, 0.61, 0.355, 1] }}
                   className="w-full h-full"
                 >
-                  <img
+                  <OptimizedCloudinaryImage
                     src={pillars[activeIndex].image}
                     alt={pillars[activeIndex].title}
+                    preset="product-grid"
                     className="w-full h-full object-cover object-center"
                   />
                   <div className="absolute inset-0 bg-gradient-to-tr from-black/30 via-transparent to-transparent" />

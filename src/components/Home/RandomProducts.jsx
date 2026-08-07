@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../Firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { useStore } from '../StoreProvider';
+import OptimizedCloudinaryImage from '../OptimizedCloudinaryImage';
 
 const DEFAULT_PRODUCTS = [
   {
@@ -145,11 +146,11 @@ const RandomProductCard = ({ product, idx, triggerToast }) => {
     >
       {/* Product Image Area */}
       <div className="relative w-full aspect-[2/3] overflow-hidden bg-[#fff] flex items-center justify-center">
-        <img
+        <OptimizedCloudinaryImage
           src={displayedImage}
           alt={product.name}
+          preset="product-card"
           className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-          loading="lazy"
         />
 
         <div className="absolute inset-0 bg-black/[0.02] pointer-events-none" />

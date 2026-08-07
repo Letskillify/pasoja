@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import OptimizedCloudinaryImage from './OptimizedCloudinaryImage';
 import {
   Instagram,
   Facebook,
@@ -27,9 +28,10 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
             <div>
               <Link to="/">
-                <img
+                <OptimizedCloudinaryImage
                   src="https://res.cloudinary.com/dcjn4y284/image/upload/v1786029668/p3jd3nuet4vkqbfd5qaz.png"
                   alt="Pasoja"
+                  preset="logo"
                   className="h-12 md:h-16 object-cover brightness-0 invert mb-4"
                 />
               </Link>

@@ -5,6 +5,7 @@ import { db } from '../Firebase';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import SectionHeader from './SectionHeader';
+import OptimizedCloudinaryImage from '../OptimizedCloudinaryImage';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -141,9 +142,10 @@ const GallerySwiper = () => {
                 className="relative rounded-none overflow-hidden border border-zinc-200/80 bg-white shadow-md cursor-pointer group"
               >
                 {/* Image */}
-                <img
+                <OptimizedCloudinaryImage
                   src={slide.image}
                   alt={slide.title}
+                  preset="product-grid"
                   className="w-full h-full object-cover transition-transform duration-[1500ms] ease-out hover:scale-105"
                 />
 

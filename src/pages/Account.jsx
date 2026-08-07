@@ -137,7 +137,7 @@ const Account = () => {
     if (!file) return;
     setUploadingAvatar(true);
     try {
-      const imageUrl = await uploadToCloudinary(file);
+      const imageUrl = await uploadToCloudinary(file, "logo");
 
       await updateProfile(auth.currentUser, { photoURL: imageUrl });
       await setDoc(doc(db, "users", user.uid), { photoURL: imageUrl }, { merge: true });
@@ -458,7 +458,7 @@ const Account = () => {
               <div className="relative group">
                 <div className="w-24 h-24 bg-zinc-100 border border-zinc-300 flex items-center justify-center text-zinc-800 overflow-hidden relative rounded-full">
                   {userData?.photoURL ? (
-                    <img src={userData.photoURL} alt="Profile" className="w-full h-full object-cover" />
+                    <OptimizedCloudinaryImage src={userData.photoURL} alt="Profile" preset="avatar" className="w-full h-full object-cover" />
                   ) : (
                     <User size={40} strokeWidth={1.2} className="text-zinc-400" />
                   )}
@@ -1222,7 +1222,7 @@ const Account = () => {
                   {selectedOrder.items?.map((item, i) => (
                     <div key={i} className="flex gap-4 items-center bg-zinc-50 border border-zinc-200 p-3.5 rounded">
                       <div className="w-12 h-14 bg-zinc-100 border border-zinc-200 overflow-hidden shrink-0">
-                        <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                        <OptimizedCloudinaryImage src={item.image} alt={item.name} preset="avatar" className="w-full h-full object-cover" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <h4 className="  text-zinc-900 truncate uppercase tracking-wider">{item.name}</h4>

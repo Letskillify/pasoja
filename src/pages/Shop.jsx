@@ -17,6 +17,7 @@ import PageHeader from "../components/Home/PageHeader";
 import { useStore } from "../components/StoreProvider";
 import ShopFilterSidebar, { DEFAULT_CATEGORIES } from "../components/ShopFilterSidebar";
 import SEOHead from "../components/SEOHead";
+import OptimizedCloudinaryImage from "../components/OptimizedCloudinaryImage";
 
 const ProductCard = ({ product, idx, triggerToast }) => {
   const navigate = useNavigate();
@@ -79,11 +80,12 @@ const ProductCard = ({ product, idx, triggerToast }) => {
     >
       {/* Full-bleed Product Image */}
       <div className="relative w-full aspect-[3/4] overflow-hidden bg-zinc-100 mb-2.5 rounded-none">
-        <img
+        <OptimizedCloudinaryImage
           src={displayedImage}
           alt={product.name}
+          preset="product-grid"
+          priority={idx < 4}
           className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-          loading="lazy"
         />
 
         {/* Out of Stock Overlay */}

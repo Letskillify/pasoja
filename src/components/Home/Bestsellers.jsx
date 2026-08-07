@@ -7,6 +7,7 @@ import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { useStore } from '../../components/StoreProvider';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Mousewheel } from 'swiper/modules';
+import OptimizedCloudinaryImage from '../OptimizedCloudinaryImage';
 
 import 'swiper/css';
 
@@ -59,9 +60,10 @@ const ProductCard = ({ product, idx, triggerToast }) => {
     >
       {/* Product Image Area */}
       <div className="relative w-full aspect-[3/4] overflow-hidden bg-[#fff] flex items-center justify-center">
-        <img
+        <OptimizedCloudinaryImage
           src={displayedImage}
           alt={product.name}
+          preset="product-card"
           className="w-full h-full object-cover transition-transform duration-700 ease-out"
         />
 

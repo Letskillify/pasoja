@@ -2,30 +2,17 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../components/useAuth";
 import { db } from "../components/Firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
-import {
-  Package,
-  ChevronRight,
-  ShoppingBag,
-  ArrowLeft,
-  Clock,
-  CheckCircle2,
-  XCircle,
-  Download,
-  Printer,
-  Eye,
-  MapPin,
-  CreditCard,
-  Truck,
-  X,
-  FileText,
-  Search,
-  Filter
-} from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import PageHeader from "../components/Home/PageHeader";
-import MiniLoader from "../components/MiniLoader";
-import SEOHead from "../components/SEOHead";
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Package, Clock, CheckCircle2, Truck, AlertCircle, ChevronRight, X, ArrowLeft, RefreshCw, ShoppingBag, Eye, MapPin, Calendar, CreditCard, Printer, Download, FileText, Search, Filter } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { db } from '../components/Firebase';
+import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { useAuth } from '../components/useAuth';
+import PageHeader from '../components/Home/PageHeader';
+import SEOHead from '../components/SEOHead';
+import OptimizedCloudinaryImage from '../components/OptimizedCloudinaryImage';
+import MiniLoader from '../components/MiniLoader';
 
 const Orders = () => {
   const { user } = useAuth();
@@ -444,9 +431,10 @@ const Orders = () => {
                         >
                           <div className="flex items-center gap-4">
                             <div className="w-14 h-16 bg-zinc-100 border border-zinc-200 overflow-hidden shrink-0">
-                              <img
+                              <OptimizedCloudinaryImage
                                 src={itemImg}
                                 alt={item.name}
+                                preset="avatar"
                                 className="w-full h-full object-cover"
                               />
                             </div>
@@ -563,9 +551,10 @@ const Orders = () => {
                   {(selectedOrder.items || []).map((item, idx) => (
                     <div key={idx} className="py-3 flex items-center justify-between gap-4 first:pt-0 last:pb-0">
                       <div className="flex items-center gap-3">
-                        <img
+                        <OptimizedCloudinaryImage
                           src={item.image || item.images?.[0]}
                           alt={item.name}
+                          preset="avatar"
                           className="w-12 h-14 object-cover bg-zinc-100 border border-zinc-200 shrink-0"
                         />
                         <div>

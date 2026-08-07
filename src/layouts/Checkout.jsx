@@ -8,6 +8,7 @@ import { CreditCard, MapPin, User, Phone, Mail, CheckCircle, X, ShieldCheck, Zap
 import { motion, AnimatePresence } from "framer-motion";
 import PageHeader from "../components/Home/PageHeader";
 import SEOHead from "../components/SEOHead";
+import { getOptimizedCloudinaryUrl } from "../utils/cloudinaryUtils";
 
 const Checkout = () => {
   const { user } = useAuth();
@@ -125,7 +126,7 @@ const Checkout = () => {
     if (formData.paymentMethod === "online") {
       const options = {
         key: "rzp_test_YOUR_KEY_HERE", amount: total * 100, currency: "INR",
-        name: "Pasoja", description: "Premium Apparel Order", image: "https://res.cloudinary.com/dcjn4y284/image/upload/v1786029668/p3jd3nuet4vkqbfd5qaz.png",
+        name: "Pasoja", description: "Premium Apparel Order", image: getOptimizedCloudinaryUrl("https://res.cloudinary.com/dcjn4y284/image/upload/v1786029668/p3jd3nuet4vkqbfd5qaz.png", { width: 150 }),
         handler: async (response) => { await saveOrder(response.razorpay_payment_id, "confirmed", "captured"); setIsProcessing(false); },
         prefill: { name: formData.name, email: formData.email, contact: formData.phone },
         theme: { color: "#000000" },
@@ -367,7 +368,7 @@ const Checkout = () => {
                 {items.map((item) => (
                   <div key={item.id} className="flex gap-3">
                     <div className="w-16 h-16 bg-zinc-100 shrink-0 border border-zinc-200 p-1.5">
-                      <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                      <OptimizedCloudinaryImage src={item.image} alt={item.name} preset="avatar" className="w-full h-full object-cover" />
                     </div>
                     <div className="flex-1 py-0.5">
                       <h4 className="text-[12px]   text-zinc-900 line-clamp-1">{item.name}</h4>

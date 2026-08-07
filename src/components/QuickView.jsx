@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { X, ShoppingBag, Heart } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
+import OptimizedCloudinaryImage from './OptimizedCloudinaryImage';
 
 const QuickView = ({ product, onClose }) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -51,9 +52,10 @@ const QuickView = ({ product, onClose }) => {
             {/* Image Section */}
             <div className="flex items-center justify-center">
               <div className="bg-gradient-to-br from-[#FDFBF7] to-[#E6CCB2]/20 rounded-none flex items-center justify-center w-full aspect-square relative overflow-hidden group">
-                <img
+                <OptimizedCloudinaryImage
                   src={product.image}
                   alt={product.name}
+                  preset="product-grid"
                   className="w-full h-full object-cover p-8 group-hover:scale-110 transition-transform duration-300"
                 />
                 {product.original_price && product.original_price > product.price && (

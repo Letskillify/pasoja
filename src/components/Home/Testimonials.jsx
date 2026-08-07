@@ -5,6 +5,7 @@ import { db } from '../../components/Firebase';
 import { collection, getDocs, query, orderBy, setDoc, doc } from 'firebase/firestore';
 import { Star, Award, MessageSquare, RefreshCw, Heart } from 'lucide-react';
 import { Autoplay, Mousewheel } from 'swiper/modules';
+import OptimizedCloudinaryImage from '../OptimizedCloudinaryImage';
 
 import 'swiper/css';
 
@@ -184,11 +185,11 @@ const Testimonials = () => {
                     {...componentProps}
                     className="relative group block overflow-hidden bg-zinc-100 aspect-[3/4] sm:aspect-[3/5] w-full border border-zinc-200 shadow-sm rounded-none"
                   >
-                    <img
+                    <OptimizedCloudinaryImage
                       src={item.image}
                       alt="Community look"
+                      preset="product-card"
                       className="absolute inset-0 w-full h-full object-cover transition-all duration-[600ms] ease-out group-hover:scale-[1.03]"
-                      loading="lazy"
                     />
                   </ImageComponent>
                 </SwiperSlide>

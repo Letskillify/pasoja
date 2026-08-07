@@ -5,6 +5,7 @@ import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { db } from '../../components/Firebase';
 import { collection, getDocs, query, orderBy, doc, setDoc } from 'firebase/firestore';
+import { getOptimizedCloudinaryUrl, generateCloudinarySrcSet } from '../../utils/cloudinaryUtils';
 
 const Hero = () => {
   const [slides, setSlides] = useState([]);
@@ -146,12 +147,23 @@ const Hero = () => {
           className="absolute inset-0 z-0"
         >
           <picture className="h-full w-full block">
-            {slide.mobileImage && <source media="(max-width: 639px)" srcSet={slide.mobileImage} />}
-            {slide.tabletImage && <source media="(max-width: 1023px)" srcSet={slide.tabletImage} />}
+            <source
+              media="(max-width: 639px)"
+              srcSet={getOptimizedCloudinaryUrl(slide.mobileImage || slide.image, { width: 600 })}
+            />
+            <source
+              media="(max-width: 1023px)"
+              srcSet={getOptimizedCloudinaryUrl(slide.tabletImage || slide.image, { width: 1200 })}
+            />
             <motion.img
-              src={slide.image}
+              src={getOptimizedCloudinaryUrl(slide.image, { width: 1920 })}
+              srcSet={generateCloudinarySrcSet(slide.image, { preset: 'banner' }, [600, 1200, 1920])}
+              sizes="(max-width: 640px) 600px, (max-width: 1024px) 1200px, 1920px"
               alt={slide.title}
               className="h-full w-full object-cover"
+              loading={currentSlide === 0 ? "eager" : "lazy"}
+              decoding="async"
+              fetchpriority={currentSlide === 0 ? "high" : "auto"}
               initial={{ scale: 1.04 }}
               animate={{ scale: 1 }}
               transition={{ duration: 7, ease: 'linear' }}

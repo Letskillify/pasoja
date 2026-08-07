@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import OptimizedCloudinaryImage from '../OptimizedCloudinaryImage';
 
 const GenderBanner = () => {
   const banners = [
@@ -35,9 +36,10 @@ const GenderBanner = () => {
             >
               <Link to={banner.path} className="block relative w-full h-[520px] sm:h-[620px] md:h-[680px] lg:h-[760px]">
                 {/* Background Image */}
-                <img
+                <OptimizedCloudinaryImage
                   src={banner.image}
                   alt={banner.title}
+                  preset="banner"
                   className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                 />
 

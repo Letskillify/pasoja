@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CheckCircle2, Search, Bell, Sun, Menu } from 'lucide-react';
+import OptimizedCloudinaryImage from '../../../components/OptimizedCloudinaryImage';
 
 const AdminHeader = ({ activeItem, searchVal, setSearchVal, onMenuClick }) => {
   const [profile, setProfile] = useState(() => {
@@ -64,7 +65,7 @@ const AdminHeader = ({ activeItem, searchVal, setSearchVal, onMenuClick }) => {
 
         <div className="flex items-center gap-3 pl-3 border-l border-zinc-200">
           <div className="w-8 h-8 rounded-full bg-zinc-200 border border-zinc-300 flex items-center justify-center text-[12px]   text-zinc-900 uppercase overflow-hidden shadow-sm">
-            <img src={profile.image} className="w-full h-full object-cover" alt="Profile" />
+            <OptimizedCloudinaryImage src={profile.image} preset="avatar" className="w-full h-full object-cover" alt="Profile" />
           </div>
           <div className="hidden md:block">
             <p className="text-[12px]   text-zinc-900 leading-none">{profile.name}</p>

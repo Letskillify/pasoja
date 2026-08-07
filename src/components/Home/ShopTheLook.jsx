@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { db } from '../../components/Firebase';
 import { collection, getDocs, query, orderBy, setDoc, doc } from 'firebase/firestore';
 import { Autoplay, Mousewheel, FreeMode } from 'swiper/modules';
+import OptimizedCloudinaryImage from '../OptimizedCloudinaryImage';
 
 import 'swiper/css';
 import 'swiper/css/free-mode';
@@ -76,9 +77,10 @@ const ShopTheLook = () => {
               className="relative group block overflow-hidden bg-zinc-100 aspect-[3/4] w-full border-none outline-none"
             >
               {/* Campaign Image */}
-              <img
+              <OptimizedCloudinaryImage
                 src={look.image}
                 alt={look.title}
+                preset="product-card"
                 className="absolute inset-0 w-full h-full object-cover transition-all duration-[600ms] ease-out group-hover:scale-[1.03]"
               />
             </Link>
@@ -126,9 +128,10 @@ const ShopTheLook = () => {
                 to={look.link}
                 className="relative group block overflow-hidden bg-zinc-100 aspect-[3/4] w-full border-none outline-none"
               >
-                <img
+                <OptimizedCloudinaryImage
                   src={look.image}
                   alt={look.title}
+                  preset="product-card"
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </Link>

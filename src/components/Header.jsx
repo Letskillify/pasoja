@@ -6,6 +6,7 @@ import { useAuth } from './useAuth';
 import { useStore } from './StoreProvider';
 import { db } from './Firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import OptimizedCloudinaryImage from './OptimizedCloudinaryImage';
 
 const easing = [0.22, 1, 0.36, 1];
 
@@ -350,9 +351,11 @@ const Header = () => {
             {/* Logo */}
             <div className="flex justify-center">
               <Link to="/" className="flex items-center">
-                <img
+                <OptimizedCloudinaryImage
                   src="https://res.cloudinary.com/dcjn4y284/image/upload/v1786029668/p3jd3nuet4vkqbfd5qaz.png"
                   alt="Pasoja"
+                  preset="logo"
+                  priority={true}
                   className="h-12 md:h-[52px] w-auto object-cover brightness-0 transition-opacity duration-300 hover:opacity-80"
                 />
               </Link>
@@ -570,9 +573,10 @@ const Header = () => {
                               className="group bg-zinc-50 border border-zinc-200 hover:border-zinc-400 p-3 cursor-pointer transition-all flex flex-col justify-between"
                             >
                               <div className="aspect-[3/4] bg-zinc-100 overflow-hidden mb-3 relative">
-                                <img
+                                <OptimizedCloudinaryImage
                                   src={image}
                                   alt={product.name}
+                                  preset="product-card"
                                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                 />
                                 {product.stock === 0 && (
@@ -629,9 +633,11 @@ const Header = () => {
               {/* Menu Header */}
               <div className="w-full px-5 h-[72px] flex items-center justify-between border-b border-zinc-200 shrink-0">
                 <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
-                  <img
+                  <OptimizedCloudinaryImage
                     src="https://res.cloudinary.com/dcjn4y284/image/upload/v1786029668/p3jd3nuet4vkqbfd5qaz.png"
                     alt="Pasoja"
+                    preset="logo"
+                    priority={true}
                     className="h-12 w-auto object-cover brightness-0"
                   />
                 </Link>

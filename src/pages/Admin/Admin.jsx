@@ -53,6 +53,7 @@ import AdminProfileSettings from "./components/AdminProfileSettings";
 import CloudinaryMediaPickerModal from "../../components/CloudinaryMediaPickerModal";
 
 import uploadToCloudinary from "../../utils/cloudinary";
+import OptimizedCloudinaryImage from "../../components/OptimizedCloudinaryImage";
 export { uploadToCloudinary };
 
 // Default Seed Data for Firebase Firestore
@@ -246,7 +247,7 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
                   {fields.map(f => (
                     <td key={f.key} className="py-3.5 px-4 font-medium text-zinc-800">
                       {f.type === 'image' ? (
-                        <img src={item[f.key]} className="w-10 h-10 object-cover rounded bg-zinc-100 border border-zinc-200" alt="thumb" />
+                        <OptimizedCloudinaryImage src={item[f.key]} preset="avatar" className="w-10 h-10 object-cover rounded bg-zinc-100 border border-zinc-200" alt="thumb" />
                       ) : f.type === 'boolean' ? (
                         <span className={`px-2 py-0.5 rounded text-[9px]   ${item[f.key] ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-red-100 text-red-800 border border-red-200'}`}>
                           {item[f.key] ? 'ACTIVE' : 'INACTIVE'}
@@ -291,7 +292,7 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
                   {f.type === 'image' ? (
                     <div className="space-y-2">
                       {formData[f.key] && (
-                        <img src={formData[f.key]} className="w-20 h-20 object-cover rounded-lg border border-zinc-200 bg-zinc-50" alt="preview" />
+                        <OptimizedCloudinaryImage src={formData[f.key]} preset="category" className="w-20 h-20 object-cover rounded-lg border border-zinc-200 bg-zinc-50" alt="preview" />
                       )}
                       <div className="flex flex-wrap items-center gap-2">
                         <label className="px-3 py-1.5 rounded-lg border border-zinc-300 bg-zinc-100 hover:bg-zinc-200 text-[11px] font-semibold text-zinc-900 cursor-pointer transition-all">
@@ -642,7 +643,7 @@ const CommunityManager = () => {
 
                 <div className="flex gap-4 items-center">
                   <div className="w-16 h-16 bg-[#0f0f0f] border border-[#222] rounded overflow-hidden flex items-center justify-center shrink-0">
-                    {img.image ? <img src={img.image} className="w-full h-full object-cover" alt="look" /> : <span className="text-[9px] text-zinc-600">No Image</span>}
+                    {img.image ? <OptimizedCloudinaryImage src={img.image} preset="category" className="w-full h-full object-cover" alt="look" /> : <span className="text-[9px] text-zinc-600">No Image</span>}
                   </div>
                   <div className="flex-1">
                     <input type="file" accept="image/*" onChange={(e) => handleImageUpload(img.id, e.target.files[0])} className="hidden" id={`gallery-file-${img.id}`} />
@@ -817,7 +818,7 @@ const CMSManager = ({ collectionName, title }) => {
               <label className="text-[10px]   text-zinc-400 uppercase tracking-wider block">Image</label>
               <div className="flex gap-4 items-center">
                 <div className="w-24 h-24 bg-[#090909] border border-[#222] rounded overflow-hidden flex items-center justify-center">
-                  {item.image ? <img src={item.image} alt={item.title} className="w-full h-full object-cover" /> : <span className="text-[10px] text-zinc-600">No Image</span>}
+                  {item.image ? <OptimizedCloudinaryImage src={item.image} preset="category" alt={item.title} className="w-full h-full object-cover" /> : <span className="text-[10px] text-zinc-600">No Image</span>}
                 </div>
                 <div className="flex-1 space-y-2">
                   <input type="file" accept="image/*" onChange={(e) => handleImageUpload(item.id, e.target.files[0])} className="hidden" id={`file-input-${item.id}`} />

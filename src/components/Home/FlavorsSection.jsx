@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import OptimizedCloudinaryImage from '../OptimizedCloudinaryImage';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Mousewheel } from 'swiper/modules';
 import { ArrowRight, Sparkles } from 'lucide-react';
@@ -59,9 +60,10 @@ const FlavorCard = ({ flavor }) => {
       <div>
         {/* Image Container with "Polaroid" or "Old Print" style */}
         <div className="w-full aspect-[4/3] relative border-b-4 border-r-4 border-[#5C4033] bg-[#E5D3B3] p-2">
-          <img
+          <OptimizedCloudinaryImage
             src={flavor.image}
             alt={flavor.name}
+            preset="product-card"
             className="w-full h-full object-cover grayscale-[20%] sepia-[10%]"
           />
           <div className="absolute inset-0 bg-[#8B5A2B]/10 mix-blend-multiply" />

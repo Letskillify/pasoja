@@ -4,8 +4,9 @@ import uploadToCloudinary from "../../../utils/cloudinary";
 import { db } from "../../../components/Firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Editor } from "@tinymce/tinymce-react";
-import { Image as ImageIcon, Upload } from "lucide-react";
+import { Image as ImageIcon, Upload, X, Plus, AlertCircle } from "lucide-react";
 import CloudinaryMediaPickerModal from "../../../components/CloudinaryMediaPickerModal";
+import OptimizedCloudinaryImage from "../../../components/OptimizedCloudinaryImage";
 
 const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
   // Initialize size_prices from existing product or default with empty array
@@ -621,7 +622,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
                   className={`relative group aspect-square rounded-lg border overflow-hidden bg-white cursor-pointer transition-all ${primaryIndex === idx ? 'border-4 border-black' : 'border-zinc-200 hover:border-zinc-400'
                     }`}
                 >
-                  <img src={img.url} alt="Preview" className="w-full h-full object-cover" />
+                  <OptimizedCloudinaryImage src={img.url} alt="Preview" preset="category" className="w-full h-full object-cover" />
 
                   {/* Remove button */}
                   <button
@@ -693,7 +694,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
               Selected Model Image
             </span>
             <div className="relative w-36 aspect-[3/4] rounded-xl border-2 border-black overflow-hidden bg-zinc-50 shadow-md">
-              <img src={modelImagePreview} alt="Model Preview" className="w-full h-full object-cover" />
+              <OptimizedCloudinaryImage src={modelImagePreview} alt="Model Preview" preset="category" className="w-full h-full object-cover" />
               <button
                 type="button"
                 onClick={removeModelImage}

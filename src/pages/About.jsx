@@ -4,6 +4,7 @@ import { Gem, Shield, Heart, Compass, Leaf, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import PageHeader from '../components/Home/PageHeader';
 import SEOHead from '../components/SEOHead';
+import OptimizedCloudinaryImage from '../components/OptimizedCloudinaryImage';
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -37,16 +38,18 @@ const About = () => {
             {/* Image Grid */}
             <motion.div {...fadeUp} className="grid grid-cols-12 gap-3 sm:gap-4">
               <div className="col-span-7 aspect-[3/4] overflow-hidden relative group border border-zinc-200 shadow-sm">
-                <img
+                <OptimizedCloudinaryImage
                   src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?q=80&w=800&auto=format&fit=crop"
                   alt="Pasoja craftsmanship"
+                  preset="product-grid"
                   className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
                 />
               </div>
               <div className="col-span-5 aspect-[3/4] overflow-hidden mt-10 sm:mt-16 relative group border border-zinc-200 shadow-sm">
-                <img
+                <OptimizedCloudinaryImage
                   src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=600&auto=format&fit=crop"
                   alt="Pasoja studio"
+                  preset="product-card"
                   className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
                 />
               </div>
@@ -134,9 +137,10 @@ const About = () => {
 
       {/* FULL WIDTH BANNER */}
       <section className="relative h-[40vh] sm:h-[50vh] overflow-hidden">
-        <img
+        <OptimizedCloudinaryImage
           src="https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=2000&auto=format&fit=crop"
           alt="Pasoja atelier"
+          preset="banner"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/40" />

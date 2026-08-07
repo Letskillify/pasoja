@@ -3,6 +3,7 @@ import { db } from '../../../components/Firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import uploadToCloudinary from '../../../utils/cloudinary';
 import { User, Mail, Phone, ShieldCheck, Camera, Save, CheckCircle2 } from 'lucide-react';
+import OptimizedCloudinaryImage from '../../../components/OptimizedCloudinaryImage';
 
 const AdminProfileSettings = () => {
   const [profile, setProfile] = useState({
@@ -48,7 +49,7 @@ const AdminProfileSettings = () => {
     if (!file) return;
     setUploading(true);
     try {
-      const url = await uploadToCloudinary(file);
+      const url = await uploadToCloudinary(file, "logo");
       setProfile(prev => ({ ...prev, image: url }));
     } catch (err) {
       alert("Image upload failed: " + err.message);
@@ -96,7 +97,7 @@ const AdminProfileSettings = () => {
             <div className="flex flex-col sm:flex-row items-center gap-6 border-b border-zinc-100 pb-6">
               <div className="relative group">
                 <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-zinc-300 shadow-md bg-zinc-100">
-                  <img src={profile.image} alt={profile.name} className="w-full h-full object-cover" />
+                  <OptimizedCloudinaryImage src={profile.image} alt={profile.name} preset="avatar" className="w-full h-full object-cover" />
                 </div>
                 <label className="absolute inset-0 bg-black/50 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-[12px]   gap-1">
                   <Camera size={16} />

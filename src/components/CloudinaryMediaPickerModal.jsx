@@ -3,6 +3,7 @@ import { db } from './Firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { X, Search, Check, Upload, Image as ImageIcon } from 'lucide-react';
 import uploadToCloudinary from '../utils/cloudinary';
+import OptimizedCloudinaryImage from './OptimizedCloudinaryImage';
 
 const CloudinaryMediaPickerModal = ({
   isOpen,
@@ -178,9 +179,10 @@ const CloudinaryMediaPickerModal = ({
                       isSelected ? 'border-black ring-2 ring-black/20 scale-[0.98]' : 'border-zinc-200 hover:border-zinc-400'
                     }`}
                   >
-                    <img
+                    <OptimizedCloudinaryImage
                       src={url}
                       alt={`cloud-${idx}`}
+                      preset="category"
                       className="w-full h-full object-cover"
                     />
 

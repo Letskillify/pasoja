@@ -1,5 +1,6 @@
 import React from 'react';
-import { Edit, Trash2 } from 'lucide-react';
+import { Edit2, Trash2, Tag, Eye } from 'lucide-react';
+import OptimizedCloudinaryImage from '../../../components/OptimizedCloudinaryImage';
 
 const statusBadgeClasses = (status) => {
   switch (status) {
@@ -46,9 +47,10 @@ const ProductsTable = ({ products, onEdit, onDelete }) => {
                   <div className="flex items-center gap-3">
                     {/* Thumbnail */}
                     <div className="relative w-10 h-12 rounded overflow-hidden bg-zinc-100 flex-shrink-0 border border-zinc-200 shadow-sm">
-                      <img
+                      <OptimizedCloudinaryImage
                         src={row.image || row.images?.[0] || 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?q=80&w=200&auto=format&fit=crop'}
                         alt={row.name}
+                        preset="avatar"
                         className="w-full h-full object-cover"
                       />
                       {row.model_image && (
