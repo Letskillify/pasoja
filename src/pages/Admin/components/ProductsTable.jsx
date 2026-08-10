@@ -98,7 +98,7 @@ const ProductsTable = ({ products, onEdit, onDelete }) => {
                       onClick={() => onEdit(row)}
                       className="p-2 rounded-lg bg-zinc-100 text-zinc-700 hover:bg-zinc-200 hover:text-black transition-colors border border-zinc-200"
                     >
-                      <Edit size={15} />
+                      <Edit2 size={15} />
                     </button>
                     <button
                       type="button"
