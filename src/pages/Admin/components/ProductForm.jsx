@@ -406,7 +406,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         </label>
         <div className="border border-gray-300 rounded-xl overflow-hidden bg-white">
           <Editor
-            apiKey="no-api-key"
+            apiKey="fyliq0cjbctqb3mtuka0gznhq60oqj2j9seqkjtee5evz7fo"
             value={watch("description") || ""}
             onEditorChange={(content) => setValue("description", content, { shouldValidate: true, shouldDirty: true })}
             init={{
