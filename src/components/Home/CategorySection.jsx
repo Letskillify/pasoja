@@ -5,45 +5,106 @@ import { db } from '../../components/Firebase';
 import { collection, getDocs, query, orderBy, setDoc, doc } from 'firebase/firestore';
 import OptimizedCloudinaryImage from '../OptimizedCloudinaryImage';
 
-const mobileCategories = [
-  { id: 'm_1', title: 'OVERSIZED T-SHIRT', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=600&auto=format&fit=crop', link: '/shop?category=T-Shirts' },
-  { id: 'm_2', title: 'SHIRTS', image: 'https://images.unsplash.com/photo-1596755094514-f87e32f85e2c?q=80&w=600&auto=format&fit=crop', link: '/shop?category=Shirts' },
-  { id: 'm_3', title: 'WAFFLE KNIT', image: 'https://images.unsplash.com/photo-1614975058789-41316d0e2e9c?q=80&w=600&auto=format&fit=crop', link: '/shop?category=Sweaters' },
-  { id: 'm_4', title: 'QUARTER ZIP', image: 'https://res.cloudinary.com/duzwys877/image/upload/v1783595079/ChatGPT_Image_Jul_9_2026_04_33_24_PM_nudlxb.png', link: '/shop?category=Jackets' }
+const DEFAULT_DESKTOP_BANNERS = [
+  { id: 'cat_sbc_1', name: 'OVERSIZED T-SHIRT', title: 'OVERSIZED T-SHIRT', slug: 'oversized-t-shirt', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop', link: '/shop?category=T-Shirts', sort_order: 1, is_active: true, position: 'left' },
+  { id: 'cat_sbc_2', name: 'SHIRTS', title: 'SHIRTS', slug: 'shirts', image: 'https://images.unsplash.com/photo-1596755094514-f87e32f85e2c?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Shirts', sort_order: 2, is_active: true, position: 'right' },
+  { id: 'cat_sbc_3', name: 'WAFFLE KNIT', title: 'WAFFLE KNIT', slug: 'waffle-knit', image: 'https://images.unsplash.com/photo-1614975058789-41316d0e2e9c?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Sweaters', sort_order: 3, is_active: true, position: 'left' },
+  { id: 'cat_sbc_4', name: 'QUARTER ZIP', title: 'QUARTER ZIP', slug: 'quarter-zip', image: 'https://images.unsplash.com/photo-1578587018452-892bacefd3f2?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Jackets', sort_order: 4, is_active: true, position: 'right' }
+];
+
+const DEFAULT_MOBILE_CATEGORIES = [
+  { id: 'm_cat_1', name: 'SHIRTS', title: 'SHIRTS', badge: '', image: 'https://images.unsplash.com/photo-1596755094514-f87e32f85e2c?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Shirts', sort_order: 1, is_active: true },
+  { id: 'm_cat_2', name: 'TROUSERS', title: 'TROUSERS', badge: '', image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Trousers', sort_order: 2, is_active: true },
+  { id: 'm_cat_3', name: 'POLOS', title: 'POLOS', badge: '', image: 'https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Polos', sort_order: 3, is_active: true },
+  { id: 'm_cat_4', name: 'JEANS', title: 'JEANS', badge: '', image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Jeans', sort_order: 4, is_active: true },
+  { id: 'm_cat_5', name: 'CARGOS', title: 'CARGOS', badge: '', image: 'https://images.unsplash.com/photo-1517445312882-bc9910d016b7?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Cargos', sort_order: 5, is_active: true },
+  { id: 'm_cat_6', name: 'T-SHIRTS', title: 'T-SHIRTS', badge: '', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop', link: '/shop?category=T-Shirts', sort_order: 6, is_active: true },
+  { id: 'm_cat_7', name: 'SHORTS', title: 'SHORTS', badge: '', image: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Shorts', sort_order: 7, is_active: true },
+  { id: 'm_cat_8', name: 'PLUS SIZE', title: 'PLUS SIZE', badge: '3XL TO 6XL', image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Plus-Size', sort_order: 8, is_active: true },
+  { id: 'm_cat_9', name: 'SHOES', title: 'SHOES', badge: 'JUST LAUNCHED', image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Shoes', sort_order: 9, is_active: true }
 ];
 
 const CategorySection = () => {
   const [banners, setBanners] = useState([]);
+  const [mobileCategories, setMobileCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const q = query(collection(db, 'shop_by_category'), orderBy('sort_order', 'asc'));
-        const snap = await getDocs(q);
-        if (snap.empty) {
-          const defaults = [
-            { id: 'cat_sbc_1', name: 'OVERSIZED T-SHIRT', title: 'OVERSIZED T-SHIRT', slug: 'oversized-t-shirt', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop', link: '/shop?category=T-Shirts', sort_order: 1, is_active: true, position: 'left' },
-            { id: 'cat_sbc_2', name: 'SHIRTS', title: 'SHIRTS', slug: 'shirts', image: 'https://images.unsplash.com/photo-1596755094514-f87e32f85e2c?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Shirts', sort_order: 2, is_active: true, position: 'right' },
-            { id: 'cat_sbc_3', name: 'WAFFLE KNIT', title: 'WAFFLE KNIT', slug: 'waffle-knit', image: 'https://images.unsplash.com/photo-1614975058789-41316d0e2e9c?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Sweaters', sort_order: 3, is_active: true, position: 'left' },
-            { id: 'cat_sbc_4', name: 'QUARTER ZIP', title: 'QUARTER ZIP', slug: 'quarter-zip', image: 'https://images.unsplash.com/photo-1578587018452-892bacefd3f2?q=80&w=800&auto=format&fit=crop', link: '/shop?category=Jackets', sort_order: 4, is_active: true, position: 'right' }
-          ];
-          for (const item of defaults) {
+        // Fetch Desktop Banners (shop_by_category)
+        const snapDesktop = await getDocs(collection(db, 'shop_by_category'));
+        let desktopList = snapDesktop.docs
+          .map(doc => ({ id: doc.id, ...doc.data() }))
+          .filter(item => item.is_active !== false);
+
+        if (desktopList.length === 0) {
+          for (const item of DEFAULT_DESKTOP_BANNERS) {
             await setDoc(doc(db, 'shop_by_category', item.id), item);
           }
-          setBanners(defaults);
-        } else {
-          const list = snap.docs
+          desktopList = [...DEFAULT_DESKTOP_BANNERS];
+        }
+
+        desktopList.sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
+        const positionedList = desktopList.map((item, index) => ({
+          ...item,
+          position: index % 2 === 0 ? 'left' : 'right'
+        }));
+        setBanners(positionedList);
+
+        // Fetch Mobile Categories from Firestore collections
+        const snapMobile = await getDocs(collection(db, 'mobile_categories'));
+        const mobileDocs = snapMobile.docs
+          .map(doc => ({ id: doc.id, ...doc.data() }))
+          .filter(item => item.is_active !== false);
+
+        let categoryDocs = [];
+        try {
+          const snapCat = await getDocs(collection(db, 'categories'));
+          categoryDocs = snapCat.docs
             .map(doc => ({ id: doc.id, ...doc.data() }))
             .filter(item => item.is_active !== false);
-          const positionedList = list.map((item, index) => ({
-            ...item,
-            position: index % 2 === 0 ? 'left' : 'right'
-          }));
-          setBanners(positionedList);
+        } catch (e) {
+          console.warn("Could not fetch categories collection:", e);
         }
+
+        // Build comprehensive mobile list by merging uploaded items with defaults
+        const categoryMap = new Map();
+        const addCategoryItem = (item, defaultSort = 99) => {
+          if (!item || item.is_active === false) return;
+          const nameStr = (item.name || item.title || '').trim();
+          if (!nameStr) return;
+          const key = nameStr.toLowerCase();
+          if (!categoryMap.has(key)) {
+            categoryMap.set(key, {
+              id: item.id || `m_merged_${key}`,
+              name: nameStr.toUpperCase(),
+              title: nameStr.toUpperCase(),
+              image: item.image || item.image_url || 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop',
+              link: item.link || `/shop?category=${encodeURIComponent(nameStr)}`,
+              badge: item.badge || '',
+              sort_order: Number(item.sort_order) || defaultSort
+            });
+          }
+        };
+
+        // Priority 1: Admin mobile_categories
+        mobileDocs.forEach((item, idx) => addCategoryItem(item, idx + 1));
+        // Priority 2: Admin shop_by_category
+        desktopList.forEach((item, idx) => addCategoryItem(item, idx + 10));
+        // Priority 3: Admin categories
+        categoryDocs.forEach((item, idx) => addCategoryItem(item, idx + 20));
+        // Priority 4: Default seed list
+        DEFAULT_MOBILE_CATEGORIES.forEach((item, idx) => addCategoryItem(item, item.sort_order || (idx + 30)));
+
+        const combinedList = Array.from(categoryMap.values());
+        combinedList.sort((a, b) => (a.sort_order || 99) - (b.sort_order || 99));
+
+        setMobileCategories(combinedList);
       } catch (error) {
         console.error("Error fetching categories:", error);
+        setBanners(DEFAULT_DESKTOP_BANNERS);
+        setMobileCategories(DEFAULT_MOBILE_CATEGORIES);
       } finally {
         setLoading(false);
       }
@@ -52,13 +113,13 @@ const CategorySection = () => {
     fetchCategories();
   }, []);
 
-  if (loading || banners.length === 0) return null;
+  if (loading && banners.length === 0 && mobileCategories.length === 0) return null;
 
   return (
     <section className="py-8 md:py-12 bg-[#faf9f5] overflow-hidden relative border-t border-zinc-200">
       {/* Header Container */}
       <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 mb-6 md:mb-8">
-        <p className="text-[10px] sm:text-xs tracking-[0.3em] text-[#b8860b] uppercase mb-2  ">
+        <p className="text-[10px] sm:text-xs tracking-[0.3em] text-[#b8860b] uppercase mb-2">
           THE COLLECTION
         </p>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-8">
@@ -71,29 +132,34 @@ const CategorySection = () => {
         </div>
       </div>
 
-      {/* Mobile Grid View (lg:hidden) - Dynamic Live Data */}
+      {/* Mobile Grid View (lg:hidden) - Dynamic Live Data from Firebase mobile_categories */}
       <div className="lg:hidden w-full px-4">
-        <div className="grid grid-cols-2 gap-2.5">
-          {banners.map((cat) => (
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-3.5">
+          {mobileCategories.map((cat, idx) => (
             <Link
-              key={cat.id}
+              key={cat.id || idx}
               to={cat.link || '/shop'}
-              className="relative group block overflow-hidden bg-[#111] aspect-[3/4] w-full rounded-xl shadow-sm"
+              className="relative group block overflow-hidden rounded-none bg-[#111] aspect-[3/4] w-full shadow-sm"
             >
               <OptimizedCloudinaryImage
                 src={cat.image}
                 alt={cat.name || cat.title}
                 preset="category"
                 quality="auto:best"
-                priority={true}
-                className="absolute inset-0 w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-500"
+                priority={idx < 4}
+                className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
-              <div className="absolute bottom-4 left-0 right-0 z-20 text-center pointer-events-none px-2">
-                <span className="text-[11px] tracking-[0.15em] text-white uppercase font-extrabold block">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
+              <div className="absolute bottom-3 sm:bottom-4 left-0 right-0 z-20 text-center pointer-events-none px-2">
+                {cat.badge && (
+                  <span className="inline-block bg-[#b8860b] text-white text-[8px] font-bold px-1.5 py-0.5 rounded tracking-wider uppercase mb-1.5 shadow-sm">
+                    {cat.badge}
+                  </span>
+                )}
+                <span className="text-[11px] sm:text-xs tracking-[0.15em] text-white uppercase font-extrabold block drop-shadow-sm">
                   {cat.name || cat.title}
                 </span>
-                <span className="text-[9px] tracking-[0.2em] text-[#c9a962] uppercase font-semibold mt-0.5 block">
+                <span className="text-[9px] sm:text-[10px] tracking-[0.2em] text-[#c9a962] uppercase font-semibold mt-1 block">
                   SHOP NOW &rarr;
                 </span>
               </div>

@@ -27,6 +27,7 @@ const ProductDetail = () => {
   const [isZoomOpen, setIsZoomOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedColor, setSelectedColor] = useState(null);
+  const [isColorChanging, setIsColorChanging] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState(null);
   const [activeAccordion, setActiveAccordion] = useState('description');
   const [isSizeChartOpen, setIsSizeChartOpen] = useState(false);
@@ -40,6 +41,50 @@ const ProductDetail = () => {
   const currentCartId = selectedSize ? `${id}-${selectedSize.size}` : id;
   const isInCart = cart.some(item => (item.cartId || item.id) === currentCartId);
   const isOutOfStock = product?.stock === 0 || product?.stock_status === 'Out of Stock';
+
+  const colorList = product?.colors
+    ? (typeof product.colors === 'string' ? product.colors.split(',').map(c => c.trim()).filter(Boolean) : product.colors)
+    : [];
+
+  const handleColorChange = (col) => {
+    if (!col || (selectedColor && selectedColor.toLowerCase().trim() === col.toLowerCase().trim())) return;
+    setSelectedColor(col);
+    setIsColorChanging(true);
+
+    const colKey = col.toLowerCase().trim();
+    let targetIdx = -1;
+
+    // 1. Priority: Check custom color_images map on product
+    if (product?.color_images) {
+      const colorImgUrl = product.color_images[colKey] || product.color_images[col];
+      if (colorImgUrl) {
+        targetIdx = images.findIndex(img => img === colorImgUrl);
+      }
+    }
+
+    // 2. Fallback: Check if image URL contains color string
+    if (targetIdx === -1) {
+      targetIdx = images.findIndex(img => typeof img === 'string' && img.toLowerCase().includes(colKey));
+    }
+
+    // 3. Fallback: Match color position index to image index
+    if (targetIdx === -1) {
+      const colIdx = colorList.findIndex(c => c.toLowerCase().trim() === colKey);
+      if (colIdx !== -1 && images[colIdx]) {
+        targetIdx = colIdx;
+      }
+    }
+
+    if (targetIdx === -1) targetIdx = 0;
+
+    setTimeout(() => {
+      setSelectedImage(targetIdx);
+      if (swiperRef.current) {
+        swiperRef.current.slideTo(targetIdx);
+      }
+      setIsColorChanging(false);
+    }, 400);
+  };
 
   useEffect(() => {
     if (product) {
@@ -143,10 +188,6 @@ const ProductDetail = () => {
     { label: 'Size', value: 'Model is wearing size L' },
     { label: 'Material', value: product?.material || '100% Super-Combed Cotton' },
   ];
-
-  const colorList = product?.colors
-    ? (typeof product.colors === 'string' ? product.colors.split(',').map(c => c.trim()).filter(Boolean) : product.colors)
-    : [];
 
   if (loading) {
     return <MiniLoader message="Loading Product Details" />;
@@ -292,6 +333,26 @@ const ProductDetail = () => {
             {/* Main Swiper Hero Image View */}
             <div className="relative flex-1 w-full aspect-[3/4] sm:aspect-[3/4] min-h-[62vh] sm:min-h-[72vh] bg-zinc-100 overflow-hidden border border-zinc-200 shadow-sm group">
 
+              {/* Color Switch Shimmer & Loader Overlay */}
+              <AnimatePresence>
+                {isColorChanging && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute inset-0 z-40 bg-white/70 backdrop-blur-xs flex flex-col items-center justify-center pointer-events-none"
+                  >
+                    <div className="flex flex-col items-center gap-2.5 bg-black/95 text-white px-5 py-3 shadow-2xl">
+                      <div className="w-5 h-5 border-2 border-[#c9a962] border-t-transparent rounded-full animate-spin" />
+                      <span className="text-[10px] uppercase font-extrabold tracking-[0.2em] text-white">
+                        SELECTING {selectedColor}...
+                      </span>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
               {/* Discount Tag */}
               {discountPercent > 0 && (
                 <div className="absolute top-4 left-4 z-30">
@@ -393,19 +454,19 @@ const ProductDetail = () => {
             </div>
           </div>
 
-          {/* ── RIGHT PRODUCT DETAILS SECTION (SNITCH SCREENSHOT 3 & 4 STYLE) ── */}
+          {/* ── RIGHT PRODUCT DETAILS SECTION ── */}
           <div className="lg:col-span-5 flex flex-col space-y-6">
 
             {/* Title & Price Header */}
             <div>
-              <h1 className="text-lg sm:text-xl md:text-2xl   tracking-wide text-zinc-900 uppercase mb-2 leading-snug">
+              <h1 className="text-lg sm:text-xl md:text-2xl tracking-wide text-zinc-900 uppercase mb-2 leading-snug">
                 {product.name}
               </h1>
 
               {/* Price Row */}
               <div className="flex items-baseline justify-between sm:justify-start gap-4">
                 <div className="flex items-baseline gap-3">
-                  <span className="text-xl sm:text-2xl   text-zinc-900">
+                  <span className="text-xl sm:text-2xl text-zinc-900">
                     ₹{(selectedSize?.price || product.price)?.toLocaleString('en-IN')}
                   </span>
                   {(selectedSize?.original_price || product.original_price) && (
@@ -416,9 +477,9 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              {/* Ratings Badge (Snitch Style) */}
+              {/* Ratings Badge */}
               <div className="mt-3 flex items-center gap-2">
-                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-black text-white text-[11px]   rounded-none">
+                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-black text-white text-[11px] rounded-none">
                   <span>{product.rating || 4.4}</span>
                   <Star size={10} fill="white" strokeWidth={0} />
                 </div>
@@ -428,7 +489,7 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* Offer Coupons Strip (Snitch Screenshot 3 Style) */}
+            {/* Offer Coupons Strip */}
             <div className="grid grid-cols-2 gap-2.5 pt-1">
               <div
                 onClick={() => handleCopyCoupon('TRYPASOJA5')}
@@ -463,26 +524,35 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* COLORS Selection Section (Snitch Screenshot 3 Style) */}
+            {/* COLORS Selection Section */}
             {colorList.length > 0 && (
               <div className="border-t border-zinc-200 pt-5">
                 <div className="flex items-center justify-center mb-3">
-                  <span className="text-[12px]   uppercase tracking-[0.2em] text-zinc-900">COLORS</span>
+                  <span className="text-[12px] uppercase tracking-[0.2em] text-zinc-900">COLORS</span>
                 </div>
                 <div className="flex items-center justify-center flex-wrap gap-2.5">
-                  {colorList.map((col, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => setSelectedColor(col)}
-                      className={`px-3 py-1.5 border text-[11px] font-medium uppercase tracking-wider transition-all cursor-pointer ${selectedColor === col || (idx === 0 && !selectedColor)
-                          ? 'border-black bg-black text-white shadow-sm'
-                          : 'border-zinc-300 bg-white text-zinc-700 hover:border-black'
-                        }`}
-                    >
-                      {col}
-                    </button>
-                  ))}
+                  {colorList.map((col, idx) => {
+                    const isSelected = selectedColor?.toLowerCase().trim() === col.toLowerCase().trim() || (idx === 0 && !selectedColor);
+                    const colName = col.toLowerCase().trim();
+                    const swatchBg = colName === 'white' ? '#ffffff' : colName === 'black' ? '#000000' : colName === 'red' ? '#dc2626' : colName === 'blue' ? '#2563eb' : colName === 'green' ? '#16a34a' : colName === 'beige' ? '#f5f5dc' : colName === 'grey' || colName === 'gray' ? '#6b7280' : colName === 'brown' ? '#78350f' : '#888888';
+                    return (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => handleColorChange(col)}
+                        className={`px-4 py-2 border text-[11px] font-extrabold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${isSelected
+                            ? 'border-black bg-black text-white shadow-md scale-[1.02]'
+                            : 'border-zinc-300 bg-white text-zinc-700 hover:border-black hover:bg-zinc-50'
+                          }`}
+                      >
+                        <span
+                          className={`w-2.5 h-2.5 rounded-full border border-zinc-400 shrink-0`}
+                          style={{ backgroundColor: swatchBg }}
+                        />
+                        <span>{col}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}

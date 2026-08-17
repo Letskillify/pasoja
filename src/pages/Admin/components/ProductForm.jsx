@@ -108,14 +108,23 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
     },
   });
 
+  // Color Variant Images Mapping state ({ "black": "url", "white": "url" })
+  const [colorImages, setColorImages] = useState(product?.color_images || {});
+  const [activePickerColor, setActivePickerColor] = useState(null);
+
   const stockValue = watch("stock");
   const selectedCategory = watch("category");
+  const watchedColors = watch("colors");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const filteredSubcategories = dbSubcategories.filter(
     sub => !selectedCategory || !sub.parent_category || sub.parent_category === selectedCategory
   );
+
+  const parsedColorsList = watchedColors
+    ? (typeof watchedColors === 'string' ? watchedColors.split(',').map(c => c.trim()).filter(Boolean) : watchedColors)
+    : [];
 
   useEffect(() => {
     if (product) {
@@ -129,6 +138,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
       setPrimaryIndex(0);
       setModelImagePreview(product.model_image || null);
       setModelImageFile(null);
+      setColorImages(product.color_images || {});
       setSizePrices(product.size_prices && product.size_prices.length > 0 ? product.size_prices : [{ size: "", price: 0, original_price: 0 }]);
       reset({
         name: product.name || "",
@@ -151,6 +161,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
       setPrimaryIndex(0);
       setModelImagePreview(null);
       setModelImageFile(null);
+      setColorImages({});
       setSizePrices([{ size: "", price: 0, original_price: 0 }]);
       reset({
         name: "",
@@ -250,6 +261,13 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         orderedUrls = [primaryUrl, ...remainingUrls];
       }
 
+      // Merge color variant images into orderedUrls if not present
+      Object.values(colorImages).forEach(url => {
+        if (url && !orderedUrls.includes(url)) {
+          orderedUrls.push(url);
+        }
+      });
+
       const validSizePrices = sizePrices.filter(sp => sp.size.trim() !== "");
       const defaultPrice = validSizePrices.length > 0 ? validSizePrices[0].price : Number(values.price) || 0;
       const defaultOriginalPrice = validSizePrices.length > 0 ? validSizePrices[0].original_price : Number(values.original_price) || 0;
@@ -271,6 +289,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         stock_status: autoStatus,
         sizes: validSizePrices.map(sp => sp.size).join(", "),
         colors: values.colors,
+        color_images: colorImages,
         material: values.material,
         rating: Number(values.rating) || 4.5,
         images: orderedUrls,
@@ -516,7 +535,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
             {...register("colors")}
           />
           <div className="flex flex-wrap gap-1 pt-1">
-            <span className="text-[10px] text-zinc-400   uppercase self-center mr-1">Suggested:</span>
+            <span className="text-[10px] text-zinc-400 uppercase self-center mr-1">Suggested:</span>
             {availableColors.map(col => (
               <button
                 key={col}
@@ -535,6 +554,100 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         </div>
       </div>
 
+      {/* Color Variant Images Assignment Section */}
+      <div className="space-y-3 bg-amber-50/50 border border-amber-200/80 p-4 rounded-xl">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+          <label className="text-[12px] font-extrabold text-zinc-900 uppercase tracking-wider flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#b8860b]" />
+            Color Variant Image Mapping
+          </label>
+          <span className="text-[11px] font-medium text-zinc-500">
+            {parsedColorsList.length > 0
+              ? "Assign specific image for each color option"
+              : "Enter colors above (e.g. Black, White) to enable color image mapping"}
+          </span>
+        </div>
+
+        {parsedColorsList.length === 0 ? (
+          <div className="bg-white p-3 rounded-lg border border-amber-200 text-[11px] text-zinc-600 font-medium">
+            💡 <strong>Tip:</strong> Add color names in the <strong>COLORS</strong> field above (e.g. <code className="bg-zinc-100 px-1 py-0.5 rounded font-mono">Black, White</code> or click <span className="font-bold text-zinc-900">+ Black</span>, <span className="font-bold text-zinc-900">+ White</span>) to map custom t-shirt images for each color!
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {parsedColorsList.map((col) => {
+              const colKey = col.toLowerCase().trim();
+              const currentImg = colorImages[colKey];
+              const swatchBg = colKey === 'white' ? '#ffffff' : colKey === 'black' ? '#000000' : colKey === 'red' ? '#dc2626' : colKey === 'blue' ? '#2563eb' : colKey === 'green' ? '#16a34a' : colKey === 'beige' ? '#f5f5dc' : colKey === 'grey' || colKey === 'gray' ? '#6b7280' : colKey === 'brown' ? '#78350f' : '#888888';
+              return (
+                <div key={col} className="flex items-center justify-between gap-3 bg-white p-3 rounded-lg border border-zinc-200 shadow-xs">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 bg-black text-white text-[10px] font-extrabold rounded uppercase tracking-wider shrink-0">
+                      <span className="w-2 h-2 rounded-full border border-white/50" style={{ backgroundColor: swatchBg }} />
+                      <span>{col}</span>
+                    </div>
+                    {currentImg ? (
+                      <div className="flex items-center gap-2 shrink-0">
+                        <OptimizedCloudinaryImage src={currentImg} preset="avatar" className="w-11 h-11 object-cover rounded border border-zinc-300" alt={col} />
+                        <span className="text-[10px] text-emerald-700 font-bold uppercase tracking-wider">✓ Linked</span>
+                      </div>
+                    ) : (
+                      <span className="text-[10px] text-zinc-400 italic truncate">No image assigned</span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <label className="px-2.5 py-1 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 text-[10px] font-bold rounded cursor-pointer transition-all border border-zinc-300">
+                      Upload
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            const url = await uploadToCloudinary(file);
+                            setColorImages(prev => ({ ...prev, [colKey]: url }));
+                            // Also add to preview images if not present
+                            setImagePreviews(prev => prev.some(p => p.url === url) ? prev : [...prev, { type: 'existing', url }]);
+                          }
+                        }}
+                      />
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActivePickerColor(colKey);
+                        setPickerTarget("color");
+                        setIsPickerOpen(true);
+                      }}
+                      className="px-2.5 py-1 bg-white hover:bg-zinc-100 text-zinc-800 text-[10px] font-bold border border-zinc-300 rounded transition-all cursor-pointer shadow-xs"
+                    >
+                      Cloudinary
+                    </button>
+                    {currentImg && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setColorImages(prev => {
+                            const copy = { ...prev };
+                            delete copy[colKey];
+                            return copy;
+                          });
+                        }}
+                        className="p-1 text-red-500 hover:text-red-700 cursor-pointer"
+                        title="Clear image"
+                      >
+                        <X size={13} />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
         <div className="space-y-1.5">
           <label className="text-sm font-semibold text-[#71717b] uppercase tracking-wide">
@@ -546,7 +659,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
             {...register("material")}
           />
           <div className="flex flex-wrap gap-1 pt-1">
-            <span className="text-[10px] text-zinc-400   uppercase self-center mr-1">Suggested:</span>
+            <span className="text-[10px] text-zinc-400 uppercase self-center mr-1">Suggested:</span>
             {availableMaterials.map(mat => (
               <button
                 key={mat}
@@ -580,7 +693,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
 
       <div className="space-y-3">
         <label className="text-sm font-semibold text-[#71717b] uppercase tracking-wide block">
-          Product Images (Select first image display)
+          Product Images (Select first image display & tag colors)
         </label>
         <div className="flex flex-wrap items-center gap-3">
           <label className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-zinc-300 bg-zinc-100 hover:bg-zinc-200 text-sm font-semibold text-zinc-900 cursor-pointer transition-all">
@@ -608,45 +721,91 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
           </button>
         </div>
 
-        {/* Image previews grid */}
+        {/* Image previews grid with explicit Color Tag selectors */}
         {imagePreviews.length > 0 && (
           <div className="space-y-2">
-            <span className="text-[12px]   text-zinc-500 uppercase tracking-wider block">
-              Manage Images (Click on image to mark as Primary display thumbnail)
+            <span className="text-[12px] text-zinc-500 uppercase tracking-wider block">
+              Manage Images (Select primary thumbnail & tag color for each image)
             </span>
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 bg-zinc-50 p-4 rounded-xl border border-zinc-200">
-              {imagePreviews.map((img, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => selectPrimary(idx)}
-                  className={`relative group aspect-square rounded-lg border overflow-hidden bg-white cursor-pointer transition-all ${primaryIndex === idx ? 'border-4 border-black' : 'border-zinc-200 hover:border-zinc-400'
-                    }`}
-                >
-                  <OptimizedCloudinaryImage src={img.url} alt="Preview" preset="category" className="w-full h-full object-cover" />
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 bg-zinc-50 p-4 rounded-xl border border-zinc-200">
+              {imagePreviews.map((img, idx) => {
+                const assignedColorKey = Object.keys(colorImages).find(k => colorImages[k] === img.url);
+                const assignedColorName = assignedColorKey ? assignedColorKey.toUpperCase() : null;
 
-                  {/* Remove button */}
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      removeImage(idx);
-                    }}
-                    className="absolute top-1.5 right-1.5 z-30 bg-red-600 hover:bg-red-700 text-white p-1 rounded-full text-[12px] shadow transition-opacity"
-                    title="Remove Image"
+                return (
+                  <div
+                    key={idx}
+                    className={`relative flex flex-col rounded-xl border overflow-hidden bg-white shadow-xs transition-all ${primaryIndex === idx ? 'border-2 border-black ring-2 ring-black/10' : 'border-zinc-200'
+                      }`}
                   >
-                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
+                    {/* Thumbnail Image */}
+                    <div
+                      onClick={() => selectPrimary(idx)}
+                      className="relative aspect-square cursor-pointer overflow-hidden bg-zinc-100 group"
+                    >
+                      <OptimizedCloudinaryImage src={img.url} alt="Preview" preset="category" className="w-full h-full object-cover" />
 
-                  {/* Primary indicator badge */}
-                  {primaryIndex === idx && (
-                    <span className="absolute bottom-1.5 left-1.5 bg-black text-white text-[8px]   tracking-wider px-1.5 py-0.5 rounded-sm uppercase">
-                      Primary
-                    </span>
-                  )}
-                </div>
-              ))}
+                      {/* Remove button */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeImage(idx);
+                        }}
+                        className="absolute top-2 right-2 z-30 bg-red-600 hover:bg-red-700 text-white p-1 rounded-full text-[12px] shadow transition-opacity"
+                        title="Remove Image"
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+
+                      {/* Badges */}
+                      <div className="absolute top-2 left-2 z-20 flex flex-col gap-1 items-start">
+                        {primaryIndex === idx && (
+                          <span className="bg-black text-white text-[8px] font-extrabold tracking-wider px-2 py-0.5 rounded uppercase shadow-sm">
+                            ★ Primary
+                          </span>
+                        )}
+                        {assignedColorName && (
+                          <span className="bg-[#b8860b] text-white text-[8px] font-extrabold tracking-wider px-2 py-0.5 rounded uppercase shadow-sm">
+                            🎨 {assignedColorName}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Color Tag Selector Bar below thumbnail */}
+                    <div className="p-2 bg-zinc-50 border-t border-zinc-200">
+                      <select
+                        value={assignedColorKey || ""}
+                        onChange={(e) => {
+                          const chosenKey = e.target.value;
+                          setColorImages(prev => {
+                            const copy = { ...prev };
+                            // Clear this image from any other key
+                            Object.keys(copy).forEach(k => {
+                              if (copy[k] === img.url) delete copy[k];
+                            });
+                            if (chosenKey) {
+                              copy[chosenKey] = img.url;
+                            }
+                            return copy;
+                          });
+                        }}
+                        className="w-full text-[10px] font-extrabold px-2 py-1 rounded bg-white text-zinc-900 border border-zinc-300 outline-none cursor-pointer hover:border-black transition-colors uppercase"
+                      >
+                        <option value="">Tag Color: None</option>
+                        {parsedColorsList.map(c => (
+                          <option key={c} value={c.toLowerCase().trim()}>
+                            Tag Color: {c.toUpperCase()}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
@@ -690,7 +849,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         {/* Model Image Preview */}
         {modelImagePreview && (
           <div className="space-y-2">
-            <span className="text-[12px]   text-zinc-500 uppercase tracking-wider block">
+            <span className="text-[12px] text-zinc-500 uppercase tracking-wider block">
               Selected Model Image
             </span>
             <div className="relative w-36 aspect-[3/4] rounded-xl border-2 border-black overflow-hidden bg-zinc-50 shadow-md">
@@ -705,7 +864,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-              <span className="absolute bottom-1.5 left-1.5 bg-black text-white text-[8px]   tracking-wider px-2 py-0.5 rounded-sm uppercase">
+              <span className="absolute bottom-1.5 left-1.5 bg-black text-white text-[8px] tracking-wider px-2 py-0.5 rounded-sm uppercase">
                 Model Photo
               </span>
             </div>
@@ -715,20 +874,20 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
 
       <div className="flex items-center justify-end gap-3 pt-2 border-t border-zinc-200 mt-4">
         {formState.isSubmitted && !loading && !error && (
-          <span className="flex items-center gap-1.5 text-sm   text-emerald-600">
+          <span className="flex items-center gap-1.5 text-sm text-emerald-600">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
             Product {isEdit ? "Updated" : "Created"} Successfully
           </span>
         )}
         {error && (
-          <span className="text-sm   text-red-600">
+          <span className="text-sm text-red-600">
             Error: {error}
           </span>
         )}
         <button
           type="submit"
           disabled={loading}
-          className="px-8 py-3 rounded-xl bg-black text-white text-sm   shadow-md hover:bg-zinc-800 transition-all disabled:opacity-60 disabled:translate-y-0 cursor-pointer"
+          className="px-8 py-3 rounded-xl bg-black text-white text-sm shadow-md hover:bg-zinc-800 transition-all disabled:opacity-60 disabled:translate-y-0 cursor-pointer"
         >
           {loading ? (
             <span className="flex items-center gap-2">
@@ -751,6 +910,9 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
             const urls = Array.isArray(selected) ? selected : [selected];
             const newItems = urls.map(url => ({ type: 'existing', url }));
             setImagePreviews(prev => [...prev, ...newItems]);
+          } else if (pickerTarget === "color" && activePickerColor) {
+            const singleUrl = Array.isArray(selected) ? selected[0] : selected;
+            setColorImages(prev => ({ ...prev, [activePickerColor]: singleUrl }));
           } else {
             const singleUrl = Array.isArray(selected) ? selected[0] : selected;
             setModelImagePreview(singleUrl);
