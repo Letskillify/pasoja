@@ -35,8 +35,7 @@ const CategorySection = () => {
         // Fetch Desktop Banners (shop_by_category)
         const snapDesktop = await getDocs(collection(db, 'shop_by_category'));
         let desktopList = snapDesktop.docs
-          .map(doc => ({ id: doc.id, ...doc.data() }))
-          .filter(item => item.is_active !== false);
+          .map(doc => ({ id: doc.id, ...doc.data() }));
 
         if (desktopList.length === 0) {
           for (const item of DEFAULT_DESKTOP_BANNERS) {
@@ -45,8 +44,11 @@ const CategorySection = () => {
           desktopList = [...DEFAULT_DESKTOP_BANNERS];
         }
 
-        desktopList.sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
-        const positionedList = desktopList.map((item, index) => ({
+        const activeDesktop = desktopList
+          .filter(item => item.is_active !== false)
+          .sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
+
+        const positionedList = activeDesktop.map((item, index) => ({
           ...item,
           position: index % 2 === 0 ? 'left' : 'right'
         }));
@@ -54,57 +56,25 @@ const CategorySection = () => {
 
         // Fetch Mobile Categories from Firestore collections
         const snapMobile = await getDocs(collection(db, 'mobile_categories'));
-        const mobileDocs = snapMobile.docs
-          .map(doc => ({ id: doc.id, ...doc.data() }))
-          .filter(item => item.is_active !== false);
+        let mobileList = snapMobile.docs
+          .map(doc => ({ id: doc.id, ...doc.data() }));
 
-        let categoryDocs = [];
-        try {
-          const snapCat = await getDocs(collection(db, 'categories'));
-          categoryDocs = snapCat.docs
-            .map(doc => ({ id: doc.id, ...doc.data() }))
-            .filter(item => item.is_active !== false);
-        } catch (e) {
-          console.warn("Could not fetch categories collection:", e);
+        if (mobileList.length === 0) {
+          for (const item of DEFAULT_MOBILE_CATEGORIES) {
+            await setDoc(doc(db, 'mobile_categories', item.id), item);
+          }
+          mobileList = [...DEFAULT_MOBILE_CATEGORIES];
         }
 
-        // Build comprehensive mobile list by merging uploaded items with defaults
-        const categoryMap = new Map();
-        const addCategoryItem = (item, defaultSort = 99) => {
-          if (!item || item.is_active === false) return;
-          const nameStr = (item.name || item.title || '').trim();
-          if (!nameStr) return;
-          const key = nameStr.toLowerCase();
-          if (!categoryMap.has(key)) {
-            categoryMap.set(key, {
-              id: item.id || `m_merged_${key}`,
-              name: nameStr.toUpperCase(),
-              title: nameStr.toUpperCase(),
-              image: item.image || item.image_url || 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop',
-              link: item.link || `/shop?category=${encodeURIComponent(nameStr)}`,
-              badge: item.badge || '',
-              sort_order: Number(item.sort_order) || defaultSort
-            });
-          }
-        };
+        const activeMobile = mobileList
+          .filter(item => item.is_active !== false)
+          .sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
 
-        // Priority 1: Admin mobile_categories
-        mobileDocs.forEach((item, idx) => addCategoryItem(item, idx + 1));
-        // Priority 2: Admin shop_by_category
-        desktopList.forEach((item, idx) => addCategoryItem(item, idx + 10));
-        // Priority 3: Admin categories
-        categoryDocs.forEach((item, idx) => addCategoryItem(item, idx + 20));
-        // Priority 4: Default seed list
-        DEFAULT_MOBILE_CATEGORIES.forEach((item, idx) => addCategoryItem(item, item.sort_order || (idx + 30)));
-
-        const combinedList = Array.from(categoryMap.values());
-        combinedList.sort((a, b) => (a.sort_order || 99) - (b.sort_order || 99));
-
-        setMobileCategories(combinedList);
+        setMobileCategories(activeMobile);
       } catch (error) {
         console.error("Error fetching categories:", error);
-        setBanners(DEFAULT_DESKTOP_BANNERS);
-        setMobileCategories(DEFAULT_MOBILE_CATEGORIES);
+        setBanners(DEFAULT_DESKTOP_BANNERS.filter(item => item.is_active !== false));
+        setMobileCategories(DEFAULT_MOBILE_CATEGORIES.filter(item => item.is_active !== false));
       } finally {
         setLoading(false);
       }

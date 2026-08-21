@@ -1301,11 +1301,10 @@ const Admin = () => {
           />
         );
       case "Mobile Category":
-      case "Pages":
         return (
           <GenericCRUDManager
             collectionName="mobile_categories"
-            title="Mobile Categories (Featured 3-Column Grid)"
+            title="Mobile Categories (Featured Grid)"
             fields={[
               { key: 'image', label: 'Category Card Image', type: 'image' },
               { key: 'name', label: 'Category Name / Title' },
@@ -1315,6 +1314,20 @@ const Admin = () => {
               { key: 'is_active', label: 'Status', type: 'boolean' }
             ]}
             defaultItem={{ image: '', name: 'SHIRTS', badge: '', link: '/shop?category=Shirts', sort_order: 1, is_active: true }}
+          />
+        );
+      case "Pages":
+        return (
+          <GenericCRUDManager
+            collectionName="pages"
+            title="Static Brand Pages"
+            fields={[
+              { key: 'title', label: 'Page Title' },
+              { key: 'slug', label: 'Slug' },
+              { key: 'content', label: 'Content', type: 'textarea' },
+              { key: 'is_active', label: 'Status', type: 'boolean' }
+            ]}
+            defaultItem={{ title: '', slug: '', content: '', is_active: true }}
           />
         );
       case "Shop By Category":

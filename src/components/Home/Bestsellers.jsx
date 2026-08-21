@@ -151,7 +151,10 @@ const BestsellerProducts = () => {
       try {
         const q = query(collection(db, 'products'), orderBy('createdAt', 'desc'));
         const snap = await getDocs(q);
-        setProducts(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })).slice(0, 8));
+        const list = snap.docs
+          .map(doc => ({ id: doc.id, ...doc.data() }))
+          .filter(item => item.is_active !== false);
+        setProducts(list.slice(0, 8));
       } catch {
         setProducts([
           { id: '1', name: 'Classic Woolen Coat', price: 4999, category: 'Coats' },

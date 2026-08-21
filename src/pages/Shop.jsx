@@ -232,7 +232,10 @@ const Shop = () => {
       try {
         const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
         const snap = await getDocs(q);
-        setProducts(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        const list = snap.docs
+          .map(doc => ({ id: doc.id, ...doc.data() }))
+          .filter(item => item.is_active !== false);
+        setProducts(list);
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {

@@ -102,18 +102,22 @@ const ProductDetail = () => {
         const docSnap = await getDoc(doc(db, "products", id));
         if (docSnap.exists()) {
           const data = { id: docSnap.id, ...docSnap.data() };
-          setProduct(data);
-          if (data.size_prices && data.size_prices.length > 0) {
-            const lSize = data.size_prices.find(s => s.size?.toUpperCase() === 'L');
-            setSelectedSize(lSize || data.size_prices[0]);
+          if (data.is_active === false) {
+            setProduct(null);
+          } else {
+            setProduct(data);
+            if (data.size_prices && data.size_prices.length > 0) {
+              const lSize = data.size_prices.find(s => s.size?.toUpperCase() === 'L');
+              setSelectedSize(lSize || data.size_prices[0]);
+            }
+            if (data.colors) {
+              const cols = typeof data.colors === 'string' ? data.colors.split(',').map(c => c.trim()) : data.colors;
+              if (cols.length > 0) setSelectedColor(cols[0]);
+            }
+            const q = query(collection(db, "products"), limit(5));
+            const snap = await getDocs(q);
+            setRelatedProducts(snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.id !== id && p.is_active !== false).slice(0, 4));
           }
-          if (data.colors) {
-            const cols = typeof data.colors === 'string' ? data.colors.split(',').map(c => c.trim()) : data.colors;
-            if (cols.length > 0) setSelectedColor(cols[0]);
-          }
-          const q = query(collection(db, "products"), limit(5));
-          const snap = await getDocs(q);
-          setRelatedProducts(snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.id !== id).slice(0, 4));
         }
       } catch (error) { console.error("Error fetching product:", error); }
       finally { setLoading(false); }
