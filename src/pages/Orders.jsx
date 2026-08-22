@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, Clock, CheckCircle2, XCircle, Truck, AlertCircle, ChevronRight, X, ArrowLeft, RefreshCw, ShoppingBag, Eye, MapPin, Calendar, CreditCard, Printer, Download, FileText, Search, Filter } from 'lucide-react';
+import { Package, Clock, CheckCircle2, XCircle, ChevronRight, X, ArrowLeft, ShoppingBag, Eye, MapPin, CreditCard, Download, Search, Filter } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../components/Firebase';
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import { useAuth } from '../components/useAuth';
 import PageHeader from '../components/Home/PageHeader';
 import SEOHead from '../components/SEOHead';

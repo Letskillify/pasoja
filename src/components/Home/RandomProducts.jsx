@@ -216,10 +216,10 @@ const RandomProductCard = ({ product, idx, triggerToast }) => {
 
         <div className="flex items-baseline gap-2.5 pt-1 border-t border-zinc-100">
           <span className="text-[12px] text-zinc-400 line-through">
-            Rs.{originalPrice?.toLocaleString('en-IN')}.00
+            ₹{Number(originalPrice).toLocaleString('en-IN')}
           </span>
-          <span className="text-sm   text-zinc-900">
-            Rs.{displayPrice?.toLocaleString('en-IN')}.00
+          <span className="text-sm text-[#e53e3e] font-semibold">
+            ₹{Number(displayPrice).toLocaleString('en-IN')}
           </span>
         </div>
       </div>

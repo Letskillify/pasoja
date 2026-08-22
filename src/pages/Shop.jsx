@@ -100,7 +100,9 @@ const ProductCard = ({ product, idx, triggerToast }) => {
         {/* Top-left Save Percentage Badge (Screenshot 2 Style) */}
         {savingsPercent > 0 && !isOutOfStock && (
           <div className="absolute top-2.5 left-2.5 z-10">
-           
+            <span className="bg-[#b8860b] text-white font-extrabold uppercase text-[8px] tracking-[0.18em] px-2.5 py-1 shadow-sm">
+              -{savingsPercent}%
+            </span>
           </div>
         )}
         {!savingsPercent && badgeText && !isOutOfStock && (
@@ -149,8 +151,13 @@ const ProductCard = ({ product, idx, triggerToast }) => {
 
         {/* Prices */}
         <div className="flex items-baseline gap-2">
-          <span className="text-[12px] sm:text-sm">
-            Rs.{displayPrice?.toLocaleString("en-IN")}.00
+          {savingsPercent > 0 && (
+            <span className="text-[11px] sm:text-[12px] text-zinc-400 line-through">
+              ₹{Number(originalPrice).toLocaleString("en-IN")}
+            </span>
+          )}
+          <span className={`${savingsPercent > 0 ? "text-[#e53e3e]" : "text-zinc-900"} text-[12px] sm:text-sm font-semibold`}>
+            ₹{Number(displayPrice).toLocaleString("en-IN")}
           </span>
         </div>
       </div>

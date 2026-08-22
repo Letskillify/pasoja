@@ -81,6 +81,7 @@ const Footer = () => {
               {[
                 { label: 'My Account', path: '/account' },
                 { label: 'Track Order', path: '/orders' },
+                { label: 'Return Policy', path: '/return-policy' },
                 { label: 'Terms & Conditions', path: '/terms' },
                 { label: 'Privacy Policy', path: '/privacy' },
                 { label: 'Contact Us', path: '/contact' },
@@ -101,6 +102,7 @@ const Footer = () => {
               {[
                 { label: 'Our Story', path: '/about' },
                 { label: 'Contact', path: '/contact' },
+                { label: 'Return Policy', path: '/return-policy' },
                 { label: 'Terms & Conditions', path: '/terms' },
                 { label: 'Privacy Policy', path: '/privacy' }
               ].map((item) => (
@@ -151,7 +153,7 @@ const Footer = () => {
           {[
             { icon: Truck, title: 'Free Shipping', sub: 'On all orders over ₹1999' },
             { icon: Zap, title: 'Fast Delivery', sub: 'Delivered in 3–5 working days' },
-            { icon: RotateCcw, title: 'Easy Returns', sub: '30-day hassle-free returns' },
+            { icon: RotateCcw, title: 'Easy Returns', sub: '7–10 day hassle-free returns' },
             { icon: ShieldCheck, title: 'Secure Checkout', sub: 'Encrypted payment gateway' },
           ].map(({ icon: Icon, title, sub }) => (
             <div key={title} className="flex items-center gap-3.5 p-4 bg-zinc-900/40 border border-zinc-800/80 rounded-none hover:border-zinc-700 transition-colors">
@@ -179,6 +181,10 @@ const Footer = () => {
             <span className="text-zinc-700">•</span>
             <Link to="/terms" className="text-zinc-400 hover:text-white transition-colors font-medium tracking-wide">
               Terms of Service
+            </Link>
+            <span className="text-zinc-700">•</span>
+            <Link to="/return-policy" className="text-zinc-400 hover:text-white transition-colors font-medium tracking-wide">
+              Return & Refund
             </Link>
             <span className="text-zinc-700">•</span>
             <a

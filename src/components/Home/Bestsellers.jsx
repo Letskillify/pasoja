@@ -124,10 +124,10 @@ const ProductCard = ({ product, idx, triggerToast }) => {
         {/* Prices */}
         <div className="flex items-baseline gap-2.5">
           <span className="text-[12px] text-zinc-400 line-through">
-            Rs.{originalPrice?.toLocaleString('en-IN')}.00
+            ₹{Number(originalPrice).toLocaleString('en-IN')}
           </span>
-          <span className="text-sm   text-[#e53e3e]">
-            Rs.{displayPrice?.toLocaleString('en-IN')}.00
+          <span className="text-sm   text-[#e53e3e] font-semibold">
+            ₹{Number(displayPrice).toLocaleString('en-IN')}
           </span>
         </div>
       </div>

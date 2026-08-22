@@ -434,7 +434,7 @@ const Account = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#faf9f5] text-zinc-900 pt-[72px] md:pt-[80px] pb-24 px-4 sm:px-6 md:px-10 lg:px-14 font-sans select-none">
+    <div className="min-h-screen bg-[#faf9f5] text-zinc-900 pt-[145px] md:pt-[105px] pb-24 px-4 sm:px-6 md:px-10 lg:px-14 font-sans select-none">
       <SEOHead
         title="My Account | Pasoja"
         description="Manage your account profile, orders, and addresses on Pasoja."

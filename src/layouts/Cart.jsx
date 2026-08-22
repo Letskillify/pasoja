@@ -98,7 +98,7 @@ const Cart = () => {
           url="https://pasoja.in/cart"
         />
         {/* Simple page top padding for header */}
-        <div className="mt-[145px] md:mt-[105px]" />
+        <div className="mt-[145px] md:mt-[130px]" />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -138,7 +138,7 @@ const Cart = () => {
       />
 
       {/* Header offset */}
-      <div className="mt-[145px] md:mt-[105px]" />
+      <div className="mt-[145px] md:mt-[130px]" />
 
       {/* ── Page title bar ── */}
       <div className="bg-white border-b border-zinc-200">
@@ -304,7 +304,7 @@ const Cart = () => {
                 {[
                   { icon: ShieldCheck, title: "Secure\nCheckout", sub: "256-bit SSL" },
                   { icon: Truck, title: "Free\nShipping", sub: "On orders ₹1999+" },
-                  { icon: RotateCcw, title: "Easy\nReturns", sub: "30-day policy" },
+                  { icon: RotateCcw, title: "Easy\nReturns", sub: "7–10 day returns" },
                 ].map(({ icon: Icon, title, sub }) => (
                   <div key={title} className="flex flex-col items-center gap-1.5">
                     <div className="w-9 h-9 rounded-full bg-[#f0eeeb] flex items-center justify-center">
@@ -330,7 +330,7 @@ const Cart = () => {
                     Love it or return it
                   </p>
                   <p className="text-xs text-zinc-500">
-                    Easy 30-day returns. No questions asked.
+                    Easy 7–10 day returns. Refund after we receive product back.
                   </p>
                 </div>
               </div>

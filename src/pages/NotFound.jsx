@@ -16,7 +16,7 @@ const NotFound = () => {
   const [countdown, setCountdown] = useState(null);
 
   return (
-    <div className="min-h-screen bg-[#f5f5f5] flex flex-col items-center justify-center px-4 pt-[105px] pb-16 select-none overflow-hidden relative">
+    <div className="min-h-screen bg-[#f5f5f5] flex flex-col items-center justify-center px-4 pt-[145px] md:pt-[105px] pb-16 select-none overflow-hidden relative">
       <SEOHead
         title="404 – Page Not Found | Pasoja"
         description="The page you're looking for doesn't exist."

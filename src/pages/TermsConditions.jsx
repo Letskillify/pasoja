@@ -66,14 +66,33 @@ const TermsConditions = () => {
             5. Returns, Exchanges & Refunds
           </h2>
           <p className="text-[12px] md:text-sm text-zinc-600 leading-relaxed">
-            Items may be returned or exchanged within 30 days of delivery, provided they remain unworn, unwashed, and in their original packaging with all security tags intact. Custom or bespoke garments are non-returnable unless defective.
+            Items may be returned or exchanged within 7 to 10 calendar days of delivery, provided they remain unworn, unwashed, and in their original packaging with all security tags intact. Refunds are initiated only after the returned product has been received back at our warehouse and cleared through a quality inspection process. Custom or bespoke garments are non-returnable unless defective.
           </p>
+        </section>
+
+        {/* Payment Methods */}
+        <section className="space-y-4 border-t border-zinc-200 pt-8">
+          <h2 className="text-xl font-light uppercase tracking-widest text-[#b8860b]">
+            6. Accepted Payment Methods
+          </h2>
+          <div className="grid md:grid-cols-2 gap-4">
+            <ul className="text-[12px] md:text-sm text-zinc-600 leading-relaxed space-y-2">
+              <li>• <strong className="text-zinc-900">UPI:</strong> Google Pay, PhonePe, Paytm, BHIM UPI</li>
+              <li>• <strong className="text-zinc-900">Debit &amp; Credit Cards:</strong> Visa, Mastercard, RuPay, American Express</li>
+              <li>• <strong className="text-zinc-900">Net Banking:</strong> All major Indian banks (HDFC, SBI, ICICI, Axis, etc.)</li>
+            </ul>
+            <ul className="text-[12px] md:text-sm text-zinc-600 leading-relaxed space-y-2">
+              <li>• <strong className="text-zinc-900">Mobile Wallets:</strong> Paytm, PhonePe, Mobikwik, Amazon Pay</li>
+              <li>• <strong className="text-zinc-900">Cash on Delivery (COD):</strong> Available on eligible pincodes</li>
+              <li>• <strong className="text-zinc-900">Security:</strong> All online transactions processed via Razorpay 256-bit SSL</li>
+            </ul>
+          </div>
         </section>
 
         {/* User Obligations */}
         <section className="space-y-4 border-t border-zinc-200 pt-8">
           <h2 className="text-xl font-light uppercase tracking-widest text-[#b8860b]">
-            6. Governing Law & Contact
+            7. Governing Law & Contact
           </h2>
           <p className="text-[12px] md:text-sm text-zinc-600 leading-relaxed">
             These Terms shall be governed by and construed in accordance with the laws of India. For any inquiries regarding our terms, please contact our support team at <a href="mailto:pasoja.help@gmail.com" className="text-zinc-900 font-semibold underline">pasoja.help@gmail.com</a>.

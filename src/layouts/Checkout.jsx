@@ -59,7 +59,7 @@ const MasterIcon = () => (
 
 /* ─── Order Status pages ─────────────────────────────────────────────────── */
 const OrderSuccess = ({ navigate }) => (
-  <div className="min-h-screen bg-[#f5f5f5] flex items-center justify-center px-4 pt-[105px] pb-16">
+  <div className="min-h-screen bg-[#f5f5f5] flex items-center justify-center px-4 pt-[145px] md:pt-[105px] pb-16">
     <SEOHead title="Order Confirmed | Pasoja" robots="noindex" url="https://pasoja.in/checkout" />
     <motion.div
       initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -109,7 +109,7 @@ const OrderSuccess = ({ navigate }) => (
 );
 
 const OrderFailed = ({ onRetry }) => (
-  <div className="min-h-screen bg-[#f5f5f5] flex items-center justify-center px-4 pt-[105px] pb-16">
+  <div className="min-h-screen bg-[#f5f5f5] flex items-center justify-center px-4 pt-[145px] md:pt-[105px] pb-16">
     <SEOHead title="Payment Failed | Pasoja" robots="noindex" url="https://pasoja.in/checkout" />
     <motion.div
       initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -262,7 +262,12 @@ const Checkout = () => {
         },
         prefill: { name: formData.name, email: formData.email, contact: formData.phone },
         theme: { color: "#111111" },
-        modal: { ondismiss: () => setIsProcessing(false) }
+        modal: {
+          ondismiss: async () => {
+            await saveOrder("CANCELLED_BY_USER", "failed", "cancelled");
+            setIsProcessing(false);
+          }
+        }
       };
       const rzp = new window.Razorpay(options);
       rzp.on("payment.failed", async (response) => {
@@ -313,7 +318,7 @@ const Checkout = () => {
       />
 
       {/* Header offset + breadcrumb */}
-      <div className="mt-[145px] md:mt-[105px]" />
+      <div className="mt-[145px] md:mt-[130px]" />
       <div className="bg-white border-b border-zinc-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center gap-2 text-xs text-zinc-400 uppercase tracking-wider">
           <Link to="/" className="hover:text-zinc-700 transition-colors">Home</Link>
@@ -469,7 +474,10 @@ const Checkout = () => {
                             <MasterIcon />
                           </div>
                           <div className="h-8 px-3 bg-white border border-zinc-200 rounded-md flex items-center justify-center">
-                            <span className="text-[#003087] text-xs font-black italic">PayPal</span>
+                            <span className="text-[#F26821] text-xs font-black tracking-tight">RuPay</span>
+                          </div>
+                          <div className="h-8 px-3 bg-[#0B5ED7] border border-[#0B5ED7] rounded-md flex items-center justify-center">
+                            <span className="text-white text-[10px] font-black tracking-wide">NET BANKING</span>
                           </div>
                           <div className="h-8 px-2 bg-[#6B3FA0] border border-[#6B3FA0] rounded-md flex items-center justify-center">
                             <span className="text-white text-xs font-bold">UPI</span>
