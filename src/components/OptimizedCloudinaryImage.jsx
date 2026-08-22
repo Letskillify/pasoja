@@ -26,7 +26,7 @@ const OptimizedCloudinaryImage = ({
   srcSetWidths,
   loading,
   decoding = 'async',
-  fetchpriority,
+  fetchPriority,
   priority = false,
   crop = 'limit',
   quality = 'auto',
@@ -49,35 +49,35 @@ const OptimizedCloudinaryImage = ({
   // Calculate optimized src URL
   const optimizedSrc = isCloudinary
     ? getOptimizedCloudinaryUrl(src, {
-        preset,
-        width,
-        height,
-        crop,
-        quality,
-        format,
-      })
+      preset,
+      width,
+      height,
+      crop,
+      quality,
+      format,
+    })
     : src;
 
   // Calculate responsive srcSet if Cloudinary image
   const computedSrcSet = isCloudinary
     ? generateCloudinarySrcSet(
-        src,
-        {
-          preset,
-          crop,
-          quality,
-          format,
-        },
-        srcSetWidths
-      )
+      src,
+      {
+        preset,
+        crop,
+        quality,
+        format,
+      },
+      srcSetWidths
+    )
     : undefined;
 
   // Calculate responsive sizes attribute
   const computedSizes = sizes || (preset ? getDefaultSizes(preset) : undefined);
 
-  // Compute loading & fetchpriority attributes
+  // Compute loading & fetchPriority attributes
   const effectiveLoading = priority ? 'eager' : loading || 'lazy';
-  const effectiveFetchPriority = priority ? 'high' : fetchpriority || 'auto';
+  const effectiveFetchPriority = priority ? 'high' : fetchPriority || 'auto';
 
   const handleImageError = (e) => {
     setHasError(true);
@@ -110,7 +110,7 @@ const OptimizedCloudinaryImage = ({
       sizes={!hasError ? computedSizes : undefined}
       loading={effectiveLoading}
       decoding={decoding}
-      fetchpriority={effectiveFetchPriority}
+      fetchPriority={effectiveFetchPriority}
       className={className}
       style={style}
       onLoad={handleImageLoad}

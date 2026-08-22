@@ -65,7 +65,7 @@ const AppRoutes = () => {
             <Route path="/terms-and-conditions" element={<TermsConditions />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            
+
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/product/:id/quickview" element={<QuickView />} />
 
@@ -80,6 +80,7 @@ const AppRoutes = () => {
 };
 
 import PromoPopup from "./components/PromoPopup";
+import AddToCartModal from "./components/AddToCartModal";
 
 function App() {
   const [isPreloaderDone, setIsPreloaderDone] = useState(false);
@@ -92,6 +93,7 @@ function App() {
           <BrowserRouter>
             <AppRoutes />
             <PromoPopup />
+            <AddToCartModal />
           </BrowserRouter>
         </StoreProvider>
       </AuthProvider>

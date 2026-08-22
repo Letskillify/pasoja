@@ -160,7 +160,7 @@ const CategorySection = () => {
                 preset="category"
                 quality="auto:best"
                 priority={index < 2}
-                className="absolute inset-0 w-full h-full object-cover opacity-75 transition-all duration-[700ms] ease-out group-hover:scale-[1.04] group-hover:brightness-[1.08] group-hover:opacity-90"
+                className="absolute inset-0 w-full h-full object-cover transition-all duration-[700ms] ease-out group-hover:scale-[1.04] group-hover:brightness-[1.08]"
               />
 
               {/* Subtle dark gradient overlay at bottom for readability */}

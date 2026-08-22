@@ -12,6 +12,7 @@ export const StoreProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [addedItem, setAddedItem] = useState(null); // global add-to-cart dialog trigger
 
   // --- SYNC GUEST DATA ON LOGIN ---
   useEffect(() => {
@@ -46,8 +47,8 @@ export const StoreProvider = ({ children }) => {
 
   // --- REAL-TIME LISTENERS OR LOCAL STORAGE SYNC ---
   useEffect(() => {
-    let unsubCart = () => {};
-    let unsubWishlist = () => {};
+    let unsubCart = () => { };
+    let unsubWishlist = () => { };
 
     if (user) {
       unsubCart = onSnapshot(collection(db, "users", user.uid, "cart"), (snapshot) => {
@@ -73,7 +74,7 @@ export const StoreProvider = ({ children }) => {
   const addToCart = async (product, selectedSize = null) => {
     const cartId = selectedSize ? `${product.id}-${selectedSize.size}` : product.id;
     const price = selectedSize?.price || product.price;
-    
+
     const newItem = {
       cartId: cartId,
       id: product.id,
@@ -97,6 +98,7 @@ export const StoreProvider = ({ children }) => {
         setCart(updated);
       }
     }
+    setAddedItem(newItem); // trigger the dialog
   };
 
   const removeFromCart = async (cartId) => {
@@ -166,7 +168,7 @@ export const StoreProvider = ({ children }) => {
   };
 
   return (
-    <StoreContext.Provider value={{ cart, wishlist, loading, addToCart, removeFromCart, updateQuantity, addToWishlist, removeFromWishlist }}>
+    <StoreContext.Provider value={{ cart, wishlist, loading, addToCart, removeFromCart, updateQuantity, addToWishlist, removeFromWishlist, addedItem, dismissAddedItem: () => setAddedItem(null) }}>
       {children}
     </StoreContext.Provider>
   );
