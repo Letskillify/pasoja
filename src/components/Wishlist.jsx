@@ -55,7 +55,7 @@ const Wishlist = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#faf9f5] flex items-center justify-center">
+      <div className="min-h-screen bg-[#f5f5f5] flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 border border-zinc-300 border-t-black rounded-full animate-spin" />
           <p className="text-[10px]   uppercase tracking-[0.25em] text-zinc-500">Loading wishlist...</p>
@@ -65,7 +65,7 @@ const Wishlist = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#faf9f5]">
+    <div className="min-h-screen bg-[#f5f5f5]">
       <SEOHead
         title="My Wishlist | Pasoja"
         description="View your saved items and favorite clothing on Pasoja."

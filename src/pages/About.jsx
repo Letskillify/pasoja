@@ -15,7 +15,7 @@ const fadeUp = {
 
 const About = () => {
   return (
-    <div className="min-h-screen bg-[#faf9f5]">
+    <div className="min-h-screen bg-[#f5f5f5]">
       <SEOHead
         title="Our Story & Philosophy | Pasoja"
         description="Discover the story behind Pasoja. Designed with intention, crafted with ethical luxury standards for modern streetwear enthusiasts."
@@ -32,7 +32,7 @@ const About = () => {
       />
 
       {/* HERO EDITORIAL */}
-      <section className="py-16 md:py-24 bg-[#faf9f5]">
+      <section className="py-16 md:py-24 bg-[#f5f5f5]">
         <div className="max-w-7xl py-3 mx-auto px-5 md:px-10 lg:px-14">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             {/* Image Grid */}
@@ -100,7 +100,7 @@ const About = () => {
       </section>
 
       {/* VALUES */}
-      <section className="py-16 md:py-20 bg-[#faf9f5]">
+      <section className="py-16 md:py-20 bg-[#f5f5f5]">
         <div className="max-w-7xl py-3 mx-auto px-5 md:px-10 lg:px-14">
           <div className="pb-10 border-b border-zinc-200 mb-12">
             <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-500   block mb-3">What Defines Us</span>
@@ -126,7 +126,7 @@ const About = () => {
                   <div className="w-10 h-10 border border-zinc-300 flex items-center justify-center text-zinc-600 mb-5 group-hover:bg-black group-hover:text-white group-hover:border-black transition-all duration-400">
                     <Icon size={17} strokeWidth={1.5} />
                   </div>
-                  <h3 className="text-[12px] font-semibold text-zinc-900 uppercase tracking-wide mb-2">{pillar.title}</h3>
+                  <h3 className="text-[14px] font-semibold text-zinc-900 uppercase tracking-wide mb-2">{pillar.title}</h3>
                   <p className="text-[13px] text-zinc-500 leading-relaxed">{pillar.desc}</p>
                 </motion.div>
               );
@@ -160,7 +160,7 @@ const About = () => {
       </section>
 
       {/* TIMELINE */}
-      <section className="py-16 md:py-24 bg-[#faf9f5]">
+      <section className="py-16 md:py-24 bg-[#f5f5f5]">
         <div className="max-w-4xl mx-auto px-5 md:px-10 lg:px-14">
           <div className="pb-10 border-b border-zinc-200 mb-12">
             <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-500   block mb-3">Our Journey</span>

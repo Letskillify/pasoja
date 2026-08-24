@@ -46,7 +46,7 @@ const BillingSystem = () => {
           <h2 className="text-xl   font-poppins text-zinc-900 uppercase tracking-wider flex items-center gap-2">
             <FileText className="text-[#b8860b]" size={22} /> Customer Billing & Tax Invoice System
           </h2>
-          <p className="text-[12px] text-zinc-500 mt-1">View, search, and print official Tax Invoices for all completed customer store orders.</p>
+          <p className="text-[14px] text-zinc-500 mt-1">View, search, and print official Tax Invoices for all completed customer store orders.</p>
         </div>
       </div>
 
@@ -59,7 +59,7 @@ const BillingSystem = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search bills by customer name, email, phone number, or order ID..."
-            className="w-full pl-10 pr-4 py-2.5 bg-zinc-50 border border-zinc-300 rounded-xl text-[12px] outline-none focus:border-black focus:bg-white transition-all"
+            className="w-full pl-10 pr-4 py-2.5 bg-zinc-50 border border-zinc-300 rounded-xl text-[14px] outline-none focus:border-black focus:bg-white transition-all"
           />
         </div>
       </div>
@@ -67,10 +67,10 @@ const BillingSystem = () => {
       {/* Customer Orders / Bills Table */}
       <div className="bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm print:hidden">
         {loading ? (
-          <div className="py-12 text-center text-[12px] text-zinc-500">Loading customer billing records...</div>
+          <div className="py-12 text-center text-[14px] text-zinc-500">Loading customer billing records...</div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-[12px] border-collapse">
+            <table className="w-full text-left text-[14px] border-collapse">
               <thead>
                 <tr className="text-[10px]   uppercase tracking-widest text-zinc-400 border-b border-zinc-200">
                   <th className="py-3 px-3">Invoice #</th>
@@ -113,7 +113,7 @@ const BillingSystem = () => {
                       <td className="py-3.5 px-3 text-right">
                         <button
                           onClick={() => setSelectedOrder(o)}
-                          className="px-3.5 py-1.5 bg-black hover:bg-zinc-800 text-white   text-[12px] rounded-lg shadow-sm transition-all flex items-center gap-1.5 ml-auto cursor-pointer"
+                          className="px-3.5 py-1.5 bg-black hover:bg-zinc-800 text-white   text-[14px] rounded-lg shadow-sm transition-all flex items-center gap-1.5 ml-auto cursor-pointer"
                         >
                           <Printer size={13} />
                           <span>View & Print Bill</span>
@@ -124,7 +124,7 @@ const BillingSystem = () => {
                 })}
                 {filteredOrders.length === 0 && (
                   <tr>
-                    <td colSpan={7} className="py-8 text-center text-zinc-500 text-[12px]">No billing records found.</td>
+                    <td colSpan={7} className="py-8 text-center text-zinc-500 text-[14px]">No billing records found.</td>
                   </tr>
                 )}
               </tbody>
@@ -140,13 +140,13 @@ const BillingSystem = () => {
 
             {/* Modal Close & Print Buttons Header (Hidden during printing) */}
             <div className="flex justify-between items-center border-b border-zinc-200 pb-4 print:hidden">
-              <span className="text-[12px] font-extrabold uppercase tracking-widest text-[#b8860b]">
+              <span className="text-[14px] font-extrabold uppercase tracking-widest text-[#b8860b]">
                 Tax Invoice Preview
               </span>
               <div className="flex items-center gap-2">
                 <button
                   onClick={handlePrint}
-                  className="px-4 py-2 bg-black hover:bg-zinc-800 text-white   text-[12px] rounded-xl shadow transition-all flex items-center gap-2 cursor-pointer"
+                  className="px-4 py-2 bg-black hover:bg-zinc-800 text-white   text-[14px] rounded-xl shadow transition-all flex items-center gap-2 cursor-pointer"
                 >
                   <Printer size={15} /> Print Invoice
                 </button>
@@ -171,24 +171,24 @@ const BillingSystem = () => {
                   <p className="text-[10px] text-zinc-500 uppercase tracking-widest mt-0.5  ">
                     Official Tax Invoice & Sales Receipt
                   </p>
-                  <p className="text-[12px] text-zinc-600 mt-2 font-medium">
+                  <p className="text-[14px] text-zinc-600 mt-2 font-medium">
                     Worldwide Online Store | pasoja.in
                   </p>
-                  <p className="text-[12px] text-zinc-500">Contact: +91 8959041514 | pasoja.help@gmail.com</p>
+                  <p className="text-[14px] text-zinc-500">Contact: +91 8959041514 | pasoja.help@gmail.com</p>
                 </div>
                 <div className="text-right">
                   <span className="px-3 py-1 bg-black text-white text-[10px] font-extrabold uppercase tracking-widest rounded-md inline-block mb-2">
                     TAX INVOICE
                   </span>
-                  <p className="text-[12px]   text-zinc-900">Invoice #: INV-{selectedOrder.id?.slice(0, 8).toUpperCase()}</p>
-                  <p className="text-[12px] text-zinc-500">
+                  <p className="text-[14px]   text-zinc-900">Invoice #: INV-{selectedOrder.id?.slice(0, 8).toUpperCase()}</p>
+                  <p className="text-[14px] text-zinc-500">
                     Date: {selectedOrder.createdAt ? new Date(selectedOrder.createdAt.seconds ? selectedOrder.createdAt.seconds * 1000 : selectedOrder.createdAt).toLocaleDateString('en-IN') : new Date().toLocaleDateString('en-IN')}
                   </p>
                 </div>
               </div>
 
               {/* Billed To Details */}
-              <div className="grid grid-cols-2 gap-6 bg-zinc-50 p-4 rounded-xl border border-zinc-200 text-[12px]">
+              <div className="grid grid-cols-2 gap-6 bg-zinc-50 p-4 rounded-xl border border-zinc-200 text-[14px]">
                 <div className="space-y-1">
                   <p className="text-[10px]   text-zinc-400 uppercase tracking-widest">Billed To (Customer):</p>
                   <p className="  text-zinc-900 text-sm">{selectedOrder.customerName || selectedOrder.shippingAddress?.fullName || 'Valued Customer'}</p>
@@ -209,7 +209,7 @@ const BillingSystem = () => {
 
               {/* Invoice Items Table */}
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-[12px] border-collapse">
+                <table className="w-full text-left text-[14px] border-collapse">
                   <thead>
                     <tr className="text-[10px]   uppercase tracking-widest text-zinc-500 border-b border-zinc-300">
                       <th className="py-2.5 px-2">Item Description</th>
@@ -241,7 +241,7 @@ const BillingSystem = () => {
 
               {/* Total Summary */}
               <div className="border-t border-zinc-300 pt-4 flex justify-end">
-                <div className="w-64 space-y-2 text-[12px]">
+                <div className="w-64 space-y-2 text-[14px]">
                   <div className="flex justify-between text-zinc-600">
                     <span>Subtotal:</span>
                     <span className="font-semibold text-zinc-900">₹{Number(selectedOrder.total || selectedOrder.grandTotal || 1999).toLocaleString('en-IN')}</span>

@@ -82,7 +82,7 @@ const PromoPopup = () => {
               PASOJA SALE
             </h3>
 
-            <div className="w-full py-1.5 bg-black/85 text-[#c9a962] border border-[#c9a962]/40 font-black text-[12px] md:text-sm uppercase tracking-[0.25em] shadow-lg my-1">
+            <div className="w-full py-1.5 bg-black/85 text-[#c9a962] border border-[#c9a962]/40 font-black text-[14px] md:text-sm uppercase tracking-[0.25em] shadow-lg my-1">
               LIVE NOW
             </div>
 
@@ -100,7 +100,7 @@ const PromoPopup = () => {
                 <Check size={28} strokeWidth={2.5} />
               </div>
               <h4 className="text-xl   text-zinc-900 uppercase tracking-wide">You're On The List!</h4>
-              <p className="text-[12px] text-zinc-600 leading-relaxed max-w-xs mx-auto">
+              <p className="text-[14px] text-zinc-600 leading-relaxed max-w-xs mx-auto">
                 Thank you for joining Pasoja Couture. Use code <span className="font-mono   text-[#b8860b] bg-amber-50 px-2.5 py-1 border border-amber-200 rounded">PASOJA15</span>
               </p>
             </div>
@@ -111,7 +111,7 @@ const PromoPopup = () => {
                 <h4 className="text-lg md:text-xl   text-zinc-900 tracking-tight flex items-center gap-1.5">
                   Pasoja Sale is LIVE <span className="text-base">✨</span>
                 </h4>
-                <p className="text-[12px] text-zinc-600 mt-1 leading-snug">
+                <p className="text-[14px] text-zinc-600 mt-1 leading-snug">
                   Your favourite luxury fits just dropped. <br />
                   <span className="font-semibold text-zinc-800">Log in and claim your discount 💖</span>
                 </p>
@@ -121,7 +121,7 @@ const PromoPopup = () => {
               <form onSubmit={handleSubmit} className="space-y-3">
                 {/* Phone Input with +91 Country Code */}
                 <div className="flex gap-2">
-                  <span className="px-3 py-2.5 bg-zinc-100 border border-zinc-300 rounded-lg text-[12px]   text-zinc-700 flex items-center justify-center shrink-0">
+                  <span className="px-3 py-2.5 bg-zinc-100 border border-zinc-300 rounded-lg text-[14px]   text-zinc-700 flex items-center justify-center shrink-0">
                     +91
                   </span>
                   <input
@@ -130,7 +130,7 @@ const PromoPopup = () => {
                     placeholder="Enter Mobile Number*"
                     value={mobile}
                     onChange={(e) => setMobile(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-zinc-50 border border-zinc-300 rounded-lg text-[12px] text-zinc-900 placeholder:text-zinc-400 outline-none focus:border-black focus:bg-white transition-all"
+                    className="w-full px-3.5 py-2.5 bg-zinc-50 border border-zinc-300 rounded-lg text-[14px] text-zinc-900 placeholder:text-zinc-400 outline-none focus:border-black focus:bg-white transition-all"
                   />
                 </div>
 
@@ -142,7 +142,7 @@ const PromoPopup = () => {
                     placeholder="Email*"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-zinc-50 border border-zinc-300 rounded-lg text-[12px] text-zinc-900 placeholder:text-zinc-400 outline-none focus:border-black focus:bg-white transition-all"
+                    className="w-full px-3.5 py-2.5 bg-zinc-50 border border-zinc-300 rounded-lg text-[14px] text-zinc-900 placeholder:text-zinc-400 outline-none focus:border-black focus:bg-white transition-all"
                   />
                 </div>
 
@@ -153,7 +153,7 @@ const PromoPopup = () => {
                     placeholder="Birthday (DD-MM-YYYY)"
                     value={birthday}
                     onChange={(e) => setBirthday(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-zinc-50 border border-zinc-300 rounded-lg text-[12px] text-zinc-900 placeholder:text-zinc-400 outline-none focus:border-black focus:bg-white transition-all"
+                    className="w-full px-3.5 py-2.5 bg-zinc-50 border border-zinc-300 rounded-lg text-[14px] text-zinc-900 placeholder:text-zinc-400 outline-none focus:border-black focus:bg-white transition-all"
                   />
                 </div>
 
@@ -173,7 +173,7 @@ const PromoPopup = () => {
                 {/* Submit CTA */}
                 <button
                   type="submit"
-                  className="w-full py-3 bg-[#505050] hover:bg-black text-white   text-[12px] rounded-lg uppercase tracking-wider transition-all duration-300 shadow-md active:scale-[0.99] mt-2 cursor-pointer"
+                  className="w-full py-3 bg-[#505050] hover:bg-black text-white   text-[14px] rounded-lg uppercase tracking-wider transition-all duration-300 shadow-md active:scale-[0.99] mt-2 cursor-pointer"
                 >
                   Join Us
                 </button>

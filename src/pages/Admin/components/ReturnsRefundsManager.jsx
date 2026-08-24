@@ -138,11 +138,11 @@ const ReturnsRefundsManager = () => {
           <h2 className="text-xl   font-poppins text-zinc-900 uppercase tracking-wider flex items-center gap-2">
             <Undo2 className="text-[#b8860b]" size={22} /> Customer Returns & Refund Operations
           </h2>
-          <p className="text-[12px] text-zinc-500 mt-1">Manage return tickets, review customer dispute claims, and authorize refunds.</p>
+          <p className="text-[14px] text-zinc-500 mt-1">Manage return tickets, review customer dispute claims, and authorize refunds.</p>
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-5 py-2.5 bg-black hover:bg-zinc-800 text-white   text-[12px] rounded-xl shadow-md transition-all cursor-pointer"
+          className="flex items-center gap-2 px-5 py-2.5 bg-black hover:bg-zinc-800 text-white   text-[14px] rounded-xl shadow-md transition-all cursor-pointer"
         >
           <Plus size={15} /> Create Return Ticket
         </button>
@@ -157,32 +157,32 @@ const ReturnsRefundsManager = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search return by ticket ID, order ID, or customer name..."
-            className="w-full pl-10 pr-4 py-2.5 bg-zinc-50 border border-zinc-300 rounded-xl text-[12px] outline-none focus:border-black focus:bg-white transition-all"
+            className="w-full pl-10 pr-4 py-2.5 bg-zinc-50 border border-zinc-300 rounded-xl text-[14px] outline-none focus:border-black focus:bg-white transition-all"
           />
         </div>
 
         <div className="flex items-center gap-1.5 bg-zinc-100 p-1 rounded-xl w-full sm:w-auto overflow-x-auto">
           <button
             onClick={() => setStatusFilter("all")}
-            className={`px-3.5 py-1.5 text-[12px]   rounded-lg transition-all ${statusFilter === "all" ? "bg-white text-black shadow-sm" : "text-zinc-500 hover:text-black"}`}
+            className={`px-3.5 py-1.5 text-[14px]   rounded-lg transition-all ${statusFilter === "all" ? "bg-white text-black shadow-sm" : "text-zinc-500 hover:text-black"}`}
           >
             All
           </button>
           <button
             onClick={() => setStatusFilter("requested")}
-            className={`px-3.5 py-1.5 text-[12px]   rounded-lg transition-all ${statusFilter === "requested" ? "bg-amber-500 text-white shadow-sm" : "text-amber-700 hover:bg-amber-100"}`}
+            className={`px-3.5 py-1.5 text-[14px]   rounded-lg transition-all ${statusFilter === "requested" ? "bg-amber-500 text-white shadow-sm" : "text-amber-700 hover:bg-amber-100"}`}
           >
             Requested
           </button>
           <button
             onClick={() => setStatusFilter("approved")}
-            className={`px-3.5 py-1.5 text-[12px]   rounded-lg transition-all ${statusFilter === "approved" ? "bg-blue-600 text-white shadow-sm" : "text-blue-700 hover:bg-blue-100"}`}
+            className={`px-3.5 py-1.5 text-[14px]   rounded-lg transition-all ${statusFilter === "approved" ? "bg-blue-600 text-white shadow-sm" : "text-blue-700 hover:bg-blue-100"}`}
           >
             Approved
           </button>
           <button
             onClick={() => setStatusFilter("refunded")}
-            className={`px-3.5 py-1.5 text-[12px]   rounded-lg transition-all ${statusFilter === "refunded" ? "bg-emerald-600 text-white shadow-sm" : "text-emerald-700 hover:bg-emerald-100"}`}
+            className={`px-3.5 py-1.5 text-[14px]   rounded-lg transition-all ${statusFilter === "refunded" ? "bg-emerald-600 text-white shadow-sm" : "text-emerald-700 hover:bg-emerald-100"}`}
           >
             Refunded
           </button>
@@ -192,10 +192,10 @@ const ReturnsRefundsManager = () => {
       {/* Returns Table */}
       <div className="bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm">
         {loading ? (
-          <div className="py-12 text-center text-[12px] text-zinc-500">Loading returns tickets...</div>
+          <div className="py-12 text-center text-[14px] text-zinc-500">Loading returns tickets...</div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-[12px] border-collapse">
+            <table className="w-full text-left text-[14px] border-collapse">
               <thead>
                 <tr className="text-[10px]   uppercase tracking-widest text-zinc-400 border-b border-zinc-200">
                   <th className="py-3 px-3">Ticket ID</th>
@@ -259,7 +259,7 @@ const ReturnsRefundsManager = () => {
                 ))}
                 {filteredReturns.length === 0 && (
                   <tr>
-                    <td colSpan={8} className="py-8 text-center text-zinc-500 text-[12px]">No return records found.</td>
+                    <td colSpan={8} className="py-8 text-center text-zinc-500 text-[14px]">No return records found.</td>
                   </tr>
                 )}
               </tbody>
@@ -279,7 +279,7 @@ const ReturnsRefundsManager = () => {
               </button>
             </div>
 
-            <div className="space-y-3 text-[12px]">
+            <div className="space-y-3 text-[14px]">
               <div className="space-y-1">
                 <label className="  text-zinc-500 uppercase tracking-wider block">Order ID</label>
                 <input type="text" value={formData.orderId} onChange={e => setFormData(prev => ({ ...prev, orderId: e.target.value }))} required className="w-full px-3 py-2 bg-zinc-50 border border-zinc-300 rounded-lg" placeholder="ORD-9842" />
@@ -307,8 +307,8 @@ const ReturnsRefundsManager = () => {
             </div>
 
             <div className="pt-3 border-t border-zinc-200 flex justify-end gap-2">
-              <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 border border-zinc-300 rounded-lg text-[12px]  ">Cancel</button>
-              <button type="submit" className="px-5 py-2 bg-black text-white rounded-lg text-[12px]  ">Create Ticket</button>
+              <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 border border-zinc-300 rounded-lg text-[14px]  ">Cancel</button>
+              <button type="submit" className="px-5 py-2 bg-black text-white rounded-lg text-[14px]  ">Create Ticket</button>
             </div>
           </form>
         </div>

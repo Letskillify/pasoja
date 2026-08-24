@@ -51,7 +51,7 @@ const GenderBanner = () => {
                   <h2 className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-black tracking-tight text-white uppercase mb-4 drop-shadow-md">
                     {banner.title}
                   </h2>
-                  <div className="px-6 py-2 sm:px-7 sm:py-2.5 rounded-full border border-white text-white text-[12px] sm:text-sm   uppercase tracking-widest bg-black/20 backdrop-blur-xs transition-all duration-300 group-hover:bg-white group-hover:text-black group-hover:border-white shadow-md">
+                  <div className="px-6 py-2 sm:px-7 sm:py-2.5 rounded-full border border-white text-white text-[14px] sm:text-sm   uppercase tracking-widest bg-black/20 backdrop-blur-xs transition-all duration-300 group-hover:bg-white group-hover:text-black group-hover:border-white shadow-md">
                     {banner.buttonText}
                   </div>
                 </div>

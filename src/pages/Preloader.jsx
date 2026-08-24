@@ -50,7 +50,7 @@ const Preloader = ({ onComplete, label = 'Loading', isDataReady }) => {
       <div className="absolute inset-0 flex flex-col">
         {/* Top curtain */}
         <div
-          className="w-full h-1/2 bg-[#faf9f5]"
+          className="w-full h-1/2 bg-[#f5f5f5]"
           style={{
             transform: isExiting ? 'translateY(-100%)' : 'translateY(0%)',
             transition: 'transform 800ms cubic-bezier(0.85, 0, 0.15, 1)',
@@ -58,7 +58,7 @@ const Preloader = ({ onComplete, label = 'Loading', isDataReady }) => {
         />
         {/* Bottom curtain */}
         <div
-          className="w-full h-1/2 bg-[#faf9f5]"
+          className="w-full h-1/2 bg-[#f5f5f5]"
           style={{
             transform: isExiting ? 'translateY(100%)' : 'translateY(0%)',
             transition: 'transform 800ms cubic-bezier(0.85, 0, 0.15, 1)',

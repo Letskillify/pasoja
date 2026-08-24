@@ -94,9 +94,9 @@ const Hero = () => {
   };
 
   if (loading || slides.length === 0) return (
-    <section className="relative h-[85vh] md:h-screen w-full bg-[#faf9f5] mt-[72px] md:mt-[80px] overflow-hidden flex flex-col justify-end pb-12 sm:pb-24 lg:pb-32 px-6 md:px-12 lg:px-16">
+    <section className="relative h-[85vh] md:h-screen w-full bg-[#f5f5f5] mt-[72px] md:mt-[80px] overflow-hidden flex flex-col justify-end pb-12 sm:pb-24 lg:pb-32 px-6 md:px-12 lg:px-16">
       {/* Background ambient glow shimmer */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#faf9f5] via-[#f4f1ea] to-[#faf9f5] animate-pulse" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#f5f5f5] via-[#f5f5f5] to-[#f5f5f5] animate-pulse" />
 
       {/* Skeleton layout matching Hero typography */}
       <div className="relative z-10 max-w-7xl mx-auto w-full space-y-6 opacity-60">

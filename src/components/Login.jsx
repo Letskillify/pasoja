@@ -24,7 +24,8 @@ const Login = () => {
     setLoading(true);
     try {
       await login(email, password);
-      navigate(redirectPath);
+      const finalPath = redirectPath.startsWith("/") ? redirectPath : "/" + redirectPath;
+      navigate(finalPath);
     } catch (err) {
       setError("Invalid email or password. Please try again.");
     } finally {
@@ -33,24 +34,26 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#faf9f5] flex flex-col justify-center items-center relative overflow-hidden px-5 py-12">
+    <div className="min-h-screen bg-[#f5f5f5] flex flex-col justify-center items-center relative overflow-hidden px-5 py-12">
       <SEOHead
         title="Sign In | Pasoja Account"
         description="Sign in to your Pasoja account to view saved orders, wishlist, and profile settings."
         robots="noindex, follow"
         url="https://pasoja.in/login"
       />
-      {/* Back to Home Button */}
-      <Link
-        to="/"
-        className="absolute top-8 left-8 z-50 flex items-center gap-2 text-[10px]   uppercase tracking-[0.2em] text-zinc-500 hover:text-black transition-all duration-300"
-      >
-        <span className="text-[12px]">←</span> Back to Home
-      </Link>
+      {/* Collection Navigation Button */}
+      <div className="w-full max-w-[1100px] flex justify-start mb-6 z-10 px-2 lg:px-0">
+        <Link
+          to="/shop"
+          className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-zinc-500 hover:text-black transition-all duration-300"
+        >
+          <span className="text-[14px]">←</span> Collection
+        </Link>
+      </div>
 
       <div className="w-full max-w-[1100px] grid lg:grid-cols-12 gap-12 lg:gap-0 border border-zinc-200 bg-white min-h-[580px] z-10 shadow-xl">
         {/* Left Side styling: Editorial brand layout */}
-        <div className="lg:col-span-5 bg-[#f4f1ea] p-8 md:p-12 lg:p-14 flex flex-col justify-between border-r border-zinc-200 relative overflow-hidden text-zinc-900">
+        <div className="lg:col-span-5 bg-[#f5f5f5] p-8 md:p-12 lg:p-14 flex flex-col justify-between border-r border-zinc-200 relative overflow-hidden text-zinc-900">
           <div className="relative z-10">
             <Link to="/" className="inline-block mb-10">
               <OptimizedCloudinaryImage src="https://res.cloudinary.com/dcjn4y284/image/upload/v1786029668/p3jd3nuet4vkqbfd5qaz.png" alt="Pasoja" preset="logo" priority={true} className="h-9 object-cover brightness-0" />
@@ -63,7 +66,7 @@ const Login = () => {
               Welcome<br />Back
             </h1>
             <div className="w-8 h-[1px] bg-[#b8860b]/50" />
-            <p className="text-[12px] text-zinc-600 leading-relaxed mt-5 max-w-xs">
+            <p className="text-[14px] text-zinc-600 leading-relaxed mt-5 max-w-xs">
               Access your personal collection, trace active order shipments, and customize updates.
             </p>
           </div>
@@ -103,8 +106,8 @@ const Login = () => {
                 <label className="text-[9px]   uppercase tracking-[0.25em] text-zinc-500">Email Address</label>
                 <div className="relative">
                   <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
-                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="name@email.com" required
-                    className="w-full pl-10 pr-4 py-3 bg-zinc-50 border border-zinc-300 text-[12px] text-zinc-900 outline-none focus:border-zinc-500 transition-all duration-300 placeholder:text-zinc-400 uppercase tracking-widest"
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value.toLowerCase())} placeholder="name@email.com" required
+                    className="w-full pl-10 pr-4 py-3 bg-zinc-50 border border-zinc-300 text-[14px] text-zinc-900 outline-none focus:border-zinc-500 transition-all duration-300 placeholder:text-zinc-400 lowercase tracking-wider"
                   />
                 </div>
               </div>
@@ -112,12 +115,12 @@ const Login = () => {
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
                   <label className="text-[9px]   uppercase tracking-[0.25em] text-zinc-500">Password</label>
-                  <button type="button" className="text-[9px]   text-zinc-400 hover:text-black transition-colors uppercase tracking-wider font-sans">Forgot?</button>
+                  <Link to={`/forgot-password?redirect=${encodeURIComponent(redirectPath)}`} className="text-[9px] text-zinc-400 hover:text-black transition-colors uppercase tracking-wider font-sans">Forgot?</Link>
                 </div>
                 <div className="relative">
                   <Lock size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
                   <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required
-                    className="w-full pl-10 pr-10 py-3 bg-zinc-50 border border-zinc-300 text-[12px] text-zinc-900 outline-none focus:border-zinc-500 transition-all duration-300 placeholder:text-zinc-400"
+                    className="w-full pl-10 pr-10 py-3 bg-zinc-50 border border-zinc-300 text-[14px] text-zinc-900 outline-none focus:border-zinc-500 transition-all duration-300 placeholder:text-zinc-400"
                   />
                   <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-black transition-colors">
                     {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
@@ -139,7 +142,7 @@ const Login = () => {
 
           {/* Bottom segment matching copyright height baseline */}
           <div className="relative z-10 pt-6">
-            <span className="text-[12px] text-zinc-500 tracking-wider">
+            <span className="text-[14px] text-zinc-500 tracking-wider">
               Don't have an account?{" "}
               <Link to={`/signup?redirect=${encodeURIComponent(redirectPath)}`} className="text-zinc-900   hover:text-black transition-colors uppercase text-[11px] tracking-wider ml-1">Create one</Link>
             </span>

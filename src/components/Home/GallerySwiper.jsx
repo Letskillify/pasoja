@@ -91,7 +91,7 @@ const GallerySwiper = () => {
   const currentSlide = slides[activeIndex] || {};
 
   return (
-    <section className="pt-2 pb-6 md:pt-4 md:pb-8 bg-[#faf9f5] overflow-x-hidden relative border-t border-zinc-200">
+    <section className="pt-2 pb-6 md:pt-4 md:pb-8 bg-[#f5f5f5] overflow-x-hidden relative border-t border-zinc-200">
       {/* Premium ambient decorative elements */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,#000/[0.01],transparent_40%)] pointer-events-none" />
       <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-black/[0.005] rounded-full blur-[160px] pointer-events-none" />
@@ -188,7 +188,7 @@ const GallerySwiper = () => {
           </div>
 
           {currentSlide.price !== undefined && currentSlide.price !== null && (
-            <span className="text-[12px] font-semibold text-zinc-600 tracking-widest mt-2 block">
+            <span className="text-[14px] font-semibold text-zinc-600 tracking-widest mt-2 block">
               INR {Number(currentSlide.price).toLocaleString("en-IN")}.00
             </span>
           )}

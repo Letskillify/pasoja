@@ -141,12 +141,12 @@ const CloudinaryMediaPickerModal = ({
               placeholder="Filter images..."
               value={searchVal}
               onChange={(e) => setSearchVal(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 bg-zinc-50 border border-zinc-300 rounded-lg text-[12px] text-zinc-900 focus:bg-white focus:border-black outline-none"
+              className="w-full pl-9 pr-3 py-1.5 bg-zinc-50 border border-zinc-300 rounded-lg text-[14px] text-zinc-900 focus:bg-white focus:border-black outline-none"
             />
           </div>
 
           <div className="flex items-center gap-2 w-full sm:w-auto">
-            <label className="flex items-center gap-2 px-3 py-1.5 bg-zinc-100 hover:bg-zinc-200 border border-zinc-300 rounded-lg text-[12px] font-medium text-zinc-800 cursor-pointer transition-all">
+            <label className="flex items-center gap-2 px-3 py-1.5 bg-zinc-100 hover:bg-zinc-200 border border-zinc-300 rounded-lg text-[14px] font-medium text-zinc-800 cursor-pointer transition-all">
               <Upload size={14} />
               <span>{uploading ? 'Uploading...' : 'Upload New File'}</span>
               <input
@@ -164,9 +164,9 @@ const CloudinaryMediaPickerModal = ({
         {/* Image Grid */}
         <div className="flex-1 overflow-y-auto p-4 bg-zinc-50/50">
           {loading ? (
-            <div className="py-16 text-center text-zinc-500 text-[12px]">Loading media library...</div>
+            <div className="py-16 text-center text-zinc-500 text-[14px]">Loading media library...</div>
           ) : filteredImages.length === 0 ? (
-            <div className="py-16 text-center text-zinc-500 text-[12px]">No images found in library.</div>
+            <div className="py-16 text-center text-zinc-500 text-[14px]">No images found in library.</div>
           ) : (
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
               {filteredImages.map((url, idx) => {
@@ -205,14 +205,14 @@ const CloudinaryMediaPickerModal = ({
 
         {/* Footer Actions */}
         <div className="p-4 border-t border-zinc-200 bg-white flex justify-between items-center">
-          <span className="text-[12px] text-zinc-600 font-medium">
+          <span className="text-[14px] text-zinc-600 font-medium">
             {selectedUrls.length} {selectedUrls.length === 1 ? 'image' : 'images'} selected
           </span>
           <div className="flex gap-2">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-zinc-300 text-zinc-700 text-[12px] font-medium rounded-lg hover:bg-zinc-100"
+              className="px-4 py-2 border border-zinc-300 text-zinc-700 text-[14px] font-medium rounded-lg hover:bg-zinc-100"
             >
               Cancel
             </button>
@@ -220,7 +220,7 @@ const CloudinaryMediaPickerModal = ({
               type="button"
               onClick={handleConfirm}
               disabled={selectedUrls.length === 0}
-              className="px-5 py-2 bg-black text-white text-[12px] font-medium rounded-lg hover:bg-zinc-800 disabled:opacity-50 shadow-sm cursor-pointer"
+              className="px-5 py-2 bg-black text-white text-[14px] font-medium rounded-lg hover:bg-zinc-800 disabled:opacity-50 shadow-sm cursor-pointer"
             >
               {isMultiSelect ? `Use Selected (${selectedUrls.length})` : 'Use Selected Image'}
             </button>

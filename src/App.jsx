@@ -13,6 +13,7 @@ const Home = lazy(() => import("./components/Homepage/Home"));
 const Admin = lazy(() => import("./pages/Admin/Admin"));
 const Login = lazy(() => import("./components/Login"));
 const Signup = lazy(() => import("./components/Signup"));
+const ForgotPassword = lazy(() => import("./components/ForgotPassword"));
 const Cart = lazy(() => import("./layouts/Cart"));
 const Checkout = lazy(() => import("./layouts/Checkout"));
 const Wishlist = lazy(() => import("./components/Wishlist"));
@@ -29,7 +30,7 @@ const ReturnPolicy = lazy(() => import("./pages/ReturnPolicy"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const RouteLoader = () => (
-  <div className="min-h-[60vh] flex items-center justify-center bg-[#faf9f5]">
+  <div className="min-h-[60vh] flex items-center justify-center bg-[#f5f5f5]">
     <div className="w-8 h-8 border border-zinc-300 border-t-black animate-spin" />
   </div>
 );
@@ -40,7 +41,8 @@ const AppRoutes = () => {
     location.pathname.startsWith("/admin") ||
     location.pathname.startsWith("/super") ||
     location.pathname.startsWith("/login") ||
-    location.pathname.startsWith("/signup");
+    location.pathname.startsWith("/signup") ||
+    location.pathname.startsWith("/forgot-password");
 
   return (
     <>
@@ -53,6 +55,7 @@ const AppRoutes = () => {
             <Route path="/admin" element={<Admin />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/wishlist" element={<Wishlist />} />

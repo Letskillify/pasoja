@@ -98,14 +98,14 @@ const AnalyticsView = () => {
           <h2 className="text-xl   font-poppins text-zinc-900 uppercase tracking-wider flex items-center gap-2">
             <BarChart3 className="text-[#b8860b]" size={22} /> Live Store Analytics & Performance
           </h2>
-          <p className="text-[12px] text-zinc-500 mt-1">Real-time revenue, conversion ratios, and transaction channel diagnostics from Firestore.</p>
+          <p className="text-[14px] text-zinc-500 mt-1">Real-time revenue, conversion ratios, and transaction channel diagnostics from Firestore.</p>
         </div>
         <div className="flex items-center gap-2">
           <Filter size={14} className="text-zinc-400" />
           <select
             value={timeRange}
             onChange={(e) => setTimeRange(e.target.value)}
-            className="px-3.5 py-2 bg-zinc-50 border border-zinc-300 rounded-xl text-[12px] font-semibold text-zinc-900 outline-none focus:border-black transition-all cursor-pointer"
+            className="px-3.5 py-2 bg-zinc-50 border border-zinc-300 rounded-xl text-[14px] font-semibold text-zinc-900 outline-none focus:border-black transition-all cursor-pointer"
           >
             <option value="7d">Last 7 Days</option>
             <option value="30d">Last 30 Days</option>
@@ -116,7 +116,7 @@ const AnalyticsView = () => {
       </div>
 
       {loading ? (
-        <div className="py-12 text-center text-[12px] text-zinc-500 font-medium">Loading live store metrics...</div>
+        <div className="py-12 text-center text-[14px] text-zinc-500 font-medium">Loading live store metrics...</div>
       ) : (
         <>
           {/* Key Metric Cards */}
@@ -127,7 +127,7 @@ const AnalyticsView = () => {
                 <div className="p-2 bg-emerald-50 text-emerald-600 rounded-xl"><DollarSign size={16} /></div>
               </div>
               <h3 className="text-2xl   text-zinc-900">₹{Math.round(totalGrossRevenue).toLocaleString('en-IN')}</h3>
-              <div className="flex items-center gap-1.5 text-[12px]   text-emerald-600">
+              <div className="flex items-center gap-1.5 text-[14px]   text-emerald-600">
                 <ArrowUpRight size={14} /> <span>+14.2% vs last period</span>
               </div>
             </div>
@@ -138,7 +138,7 @@ const AnalyticsView = () => {
                 <div className="p-2 bg-blue-50 text-blue-600 rounded-xl"><ShoppingBag size={16} /></div>
               </div>
               <h3 className="text-2xl   text-zinc-900">{completedOrdersCount}</h3>
-              <div className="flex items-center gap-1.5 text-[12px]   text-emerald-600">
+              <div className="flex items-center gap-1.5 text-[14px]   text-emerald-600">
                 <ArrowUpRight size={14} /> <span>+8.6% vs last period</span>
               </div>
             </div>
@@ -149,7 +149,7 @@ const AnalyticsView = () => {
                 <div className="p-2 bg-amber-50 text-[#b8860b] rounded-xl"><TrendingUp size={16} /></div>
               </div>
               <h3 className="text-2xl   text-zinc-900">₹{aov.toLocaleString('en-IN')}</h3>
-              <div className="flex items-center gap-1.5 text-[12px]   text-emerald-600">
+              <div className="flex items-center gap-1.5 text-[14px]   text-emerald-600">
                 <ArrowUpRight size={14} /> <span>+5.1% vs last period</span>
               </div>
             </div>
@@ -160,7 +160,7 @@ const AnalyticsView = () => {
                 <div className="p-2 bg-purple-50 text-purple-600 rounded-xl"><Users size={16} /></div>
               </div>
               <h3 className="text-2xl   text-zinc-900">{conversionRate}%</h3>
-              <div className="flex items-center gap-1.5 text-[12px]   text-emerald-600">
+              <div className="flex items-center gap-1.5 text-[14px]   text-emerald-600">
                 <ArrowUpRight size={14} /> <span>+0.8% vs last period</span>
               </div>
             </div>
@@ -176,7 +176,7 @@ const AnalyticsView = () => {
               <div className="space-y-4">
                 {channelBreakdown.map((item) => (
                   <div key={item.channel} className="space-y-1.5">
-                    <div className="flex justify-between text-[12px] font-semibold text-zinc-700">
+                    <div className="flex justify-between text-[14px] font-semibold text-zinc-700">
                       <span>{item.channel}</span>
                       <span className="  text-zinc-900">{item.revenue} ({item.percentage}%)</span>
                     </div>
@@ -194,7 +194,7 @@ const AnalyticsView = () => {
                 Revenue Share by Category
               </h3>
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-[12px] border-collapse">
+                <table className="w-full text-left text-[14px] border-collapse">
                   <thead>
                     <tr className="text-[10px]   uppercase tracking-widest text-zinc-400 border-b border-zinc-100">
                       <th className="pb-3">Category</th>

@@ -155,7 +155,7 @@ const AdminSidebar = ({ activeItem, setActiveItem, isOpen, onClose }) => {
                         setActiveItem(item.name);
                         onClose();
                       }}
-                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[12px] font-semibold tracking-wide transition-all ${isActive
+                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[14px] font-semibold tracking-wide transition-all ${isActive
                         ? "bg-black text-white shadow-sm"
                         : "text-zinc-600 hover:bg-zinc-100 hover:text-black border border-transparent"
                         }`}
@@ -174,7 +174,7 @@ const AdminSidebar = ({ activeItem, setActiveItem, isOpen, onClose }) => {
         <div className="p-4 border-t border-zinc-200 bg-zinc-50">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-[12px]   text-red-600 hover:bg-red-50 hover:text-red-700 transition-all border border-red-200"
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-[14px]   text-red-600 hover:bg-red-50 hover:text-red-700 transition-all border border-red-200"
           >
             <LogOut size={14} />
             <span>LOGOUT</span>

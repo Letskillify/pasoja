@@ -31,7 +31,7 @@ const features = [
 
 const FeaturesStrip = () => {
   return (
-    <section className="bg-[#faf9f5] py-6 md:py-10">
+    <section className="bg-[#f5f5f5] py-6 md:py-10">
       <div className="max-w-7xl py-3 mx-auto px-5 md:px-10 lg:px-14">
         <div className="bg-white border border-zinc-200 p-2 md:p-6 lg:p-8 rounded-none flex flex-col md:grid md:grid-cols-5 gap-0 md:gap-2 items-stretch md:items-center relative shadow-sm">
           {/* Subtle gradient highlights */}

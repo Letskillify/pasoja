@@ -37,7 +37,7 @@ const OrdersTable = () => {
       <div className="px-6 py-5 flex items-center justify-between border-b border-zinc-200">
         <div>
           <h2 className="text-lg font-poppins   text-zinc-900">Recent Orders</h2>
-          <p className="text-[12px] text-zinc-500 mt-0.5">Latest customer transactions</p>
+          <p className="text-[14px] text-zinc-500 mt-0.5">Latest customer transactions</p>
         </div>
       </div>
       <div className="overflow-x-auto">

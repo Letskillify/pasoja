@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import SEOHead from "../components/SEOHead";
 import uploadToCloudinary from "../utils/cloudinary";
+import OptimizedCloudinaryImage from "../components/OptimizedCloudinaryImage";
 
 const Account = () => {
   const { user, logout } = useAuth();
@@ -24,6 +25,7 @@ const Account = () => {
   const [dataReady, setDataReady] = useState(false);
   const [showPreloader, setShowPreloader] = useState(true);
   const [activeTab, setActiveTab] = useState("overview"); // overview, profile, orders, payments, addresses, notifications
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Modals & Feedback
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -434,7 +436,7 @@ const Account = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#faf9f5] text-zinc-900 pt-[145px] md:pt-[105px] pb-24 px-4 sm:px-6 md:px-10 lg:px-14 font-sans select-none">
+    <div className="min-h-screen bg-[#f5f5f5] text-zinc-900 pt-[145px] md:pt-[105px] pb-24 px-4 sm:px-6 md:px-10 lg:px-14 font-sans select-none">
       <SEOHead
         title="My Account | Pasoja"
         description="Manage your account profile, orders, and addresses on Pasoja."
@@ -449,12 +451,12 @@ const Account = () => {
         </div>
       )}
 
-      <div className="max-w-6xl mx-auto pt-8 md:pt-12">
+      <div className="max-w-7xl mx-auto pt-8 md:pt-12">
 
         {/* PROFILE HEADER CARD */}
         <div className="bg-white border border-zinc-200 p-6 sm:p-8 md:p-10 mb-8 relative overflow-hidden shadow-sm">
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
+            <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left w-full md:w-auto">
               <div className="relative group">
                 <div className="w-24 h-24 bg-zinc-100 border border-zinc-300 flex items-center justify-center text-zinc-800 overflow-hidden relative rounded-full">
                   {userData?.photoURL ? (
@@ -481,7 +483,7 @@ const Account = () => {
                   </h1>
                   <span className="px-2.5 py-0.5 bg-[#b8860b]/10 border border-[#b8860b]/30 text-[#b8860b] text-[8px] font-black uppercase tracking-widest">Client Member</span>
                 </div>
-                <p className="text-[12px] text-zinc-500">{user?.email}</p>
+                <p className="text-[14px] text-zinc-500">{user?.email}</p>
                 {phone && (
                   <p className="text-[11px] text-[#b8860b] flex items-center justify-center md:justify-start gap-1 font-semibold">
                     <Phone size={10} /> {phone}
@@ -491,12 +493,15 @@ const Account = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
-              {activeTab !== "overview" && (
-                <button onClick={() => setActiveTab("overview")} className="h-10 px-5 border border-zinc-300 text-zinc-700 text-[10px]   uppercase tracking-wider hover:border-black hover:text-black transition-all bg-white">
-                  Overview
-                </button>
-              )}
+            <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+              {/* Mobile Menu Toggle */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="lg:hidden p-2 border border-zinc-300 text-zinc-600 hover:bg-zinc-100 rounded"
+              >
+                {mobileMenuOpen ? <X size={20} /> : <Settings size={20} />}
+              </button>
+
               <button onClick={handleLogout}
                 className="h-10 px-5 bg-zinc-100 border border-zinc-300 text-zinc-700   text-[10px] uppercase tracking-[0.2em] hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center gap-2"
               >
@@ -510,64 +515,153 @@ const Account = () => {
         {/* CONTAINER GRID */}
         <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-start">
 
+          {/* Mobile Drawer Backdrop */}
+          {mobileMenuOpen && (
+            <div
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/60 z-30 lg:hidden"
+            />
+          )}
+
           {/* SIDEBAR NAVIGATION */}
-          <div className="lg:col-span-4 space-y-4">
-            {/* Quick Metrics */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-3">
-              <Link to="/cart" className="group bg-white border border-zinc-200 p-4 hover:border-black/30 transition-all text-center sm:text-left shadow-sm">
-                <div className="w-8 h-8 border border-zinc-300 flex items-center justify-center text-zinc-500 mb-2 group-hover:bg-black group-hover:text-white group-hover:border-black transition-all mx-auto sm:mx-0">
-                  <ShoppingBag size={13} strokeWidth={1.5} />
+          <aside className={`lg:col-span-3 space-y-4 fixed inset-y-0 left-0 z-40 w-64 border-r border-zinc-200 bg-white text-zinc-600 flex flex-col h-screen shrink-0 transition-transform duration-300 lg:static lg:translate-x-0 lg:border-none lg:bg-transparent lg:h-auto ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            
+            {/* Mobile Header */}
+            <div className="lg:hidden px-6 py-5 border-b border-zinc-200 sticky top-0 bg-white z-10 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-9 rounded-lg bg-black text-white flex items-center justify-center shadow-md">
+                  <User size={18} strokeWidth={2.5} />
                 </div>
-                <p className="text-xl font-light text-zinc-900 tracking-wider">{stats.cart}</p>
-                <p className="text-[8px]   text-zinc-500 uppercase tracking-widest mt-0.5">In Cart</p>
-              </Link>
-
-              <Link to="/wishlist" className="group bg-white border border-zinc-200 p-4 hover:border-black/30 transition-all text-center sm:text-left shadow-sm">
-                <div className="w-8 h-8 border border-zinc-300 flex items-center justify-center text-zinc-500 mb-2 group-hover:bg-black group-hover:text-white group-hover:border-black transition-all mx-auto sm:mx-0">
-                  <Heart size={13} strokeWidth={1.5} />
+                <div>
+                  <p className="text-sm font-poppins   tracking-wider text-zinc-900 uppercase">
+                    ACCOUNT
+                  </p>
+                  <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-semibold">Panel</p>
                 </div>
-                <p className="text-xl font-light text-zinc-900 tracking-wider">{stats.wishlist}</p>
-                <p className="text-[8px]   text-zinc-500 uppercase tracking-widest mt-0.5">Wishlist</p>
-              </Link>
-
-              <button onClick={() => setActiveTab("orders")} className="group bg-white border border-zinc-200 p-4 hover:border-black/30 transition-all text-center sm:text-left shadow-sm">
-                <div className="w-8 h-8 border border-zinc-300 flex items-center justify-center text-zinc-500 mb-2 group-hover:bg-black group-hover:text-white group-hover:border-black transition-all mx-auto sm:mx-0">
-                  <Package size={13} strokeWidth={1.5} />
-                </div>
-                <p className="text-xl font-light text-zinc-900 tracking-wider">{stats.orders}</p>
-                <p className="text-[8px]   text-zinc-500 uppercase tracking-widest mt-0.5">Orders</p>
+              </div>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-1.5 hover:bg-zinc-100 text-zinc-500 hover:text-black rounded"
+              >
+                <X size={16} />
               </button>
             </div>
 
-            {/* Nav Menu */}
-            <div className="bg-white border border-zinc-200 p-1.5 shadow-sm">
-              <span className="block px-3 py-2 text-[9px]   text-zinc-400 uppercase tracking-[0.3em]">Account Panel</span>
-              {[
-                { id: "profile", icon: Settings, label: "Profile & Phone" },
-                { id: "orders", icon: Package, label: "Orders & Invoices" },
-                { id: "addresses", icon: MapPin, label: "Shipping Addresses" },
-                { id: "payments", icon: CreditCard, label: "Saved Cards" },
-                { id: "notifications", icon: Bell, label: "Notification Preferences" },
-              ].map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveTab(item.id)}
-                  className={`w-full flex items-center justify-between p-3 transition-all group text-left ${activeTab === item.id ? 'bg-zinc-100' : 'hover:bg-zinc-50'}`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={`w-7 h-7 border flex items-center justify-center transition-colors ${activeTab === item.id ? 'bg-black text-white border-black' : 'border-zinc-300 text-zinc-500 group-hover:bg-black group-hover:text-white group-hover:border-black'}`}>
-                      <item.icon size={11} strokeWidth={1.5} />
+            {/* Navigation */}
+            <nav className="flex-grow overflow-y-auto px-4 py-6 space-y-4 lg:space-y-4 lg:px-0 lg:py-0">
+              {/* Mobile Only - Quick Metrics & Nav */}
+              <div className="lg:hidden space-y-4">
+                <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                  <Link to="/cart" onClick={() => setMobileMenuOpen(false)} className="group bg-white border border-zinc-200 p-4 hover:border-black/30 transition-all text-center sm:text-left shadow-sm">
+                    <div className="w-8 h-8 border border-zinc-300 flex items-center justify-center text-zinc-500 mb-2 group-hover:bg-black group-hover:text-white group-hover:border-black transition-all mx-auto sm:mx-0">
+                      <ShoppingBag size={13} strokeWidth={1.5} />
                     </div>
-                    <span className={`text-[12px] font-semibold transition-colors ${activeTab === item.id ? 'text-zinc-900' : 'text-zinc-600 group-hover:text-black'}`}>{item.label}</span>
-                  </div>
-                  <ChevronRight size={11} className={`text-zinc-400 group-hover:text-black transition-all ${activeTab === item.id ? 'translate-x-1 text-black' : 'group-hover:translate-x-0.5'}`} />
-                </button>
-              ))}
+                    <p className="text-xl font-light text-zinc-900 tracking-wider">{stats.cart}</p>
+                    <p className="text-[8px]   text-zinc-500 uppercase tracking-widest mt-0.5">In Cart</p>
+                  </Link>
+
+                  <Link to="/wishlist" onClick={() => setMobileMenuOpen(false)} className="group bg-white border border-zinc-200 p-4 hover:border-black/30 transition-all text-center sm:text-left shadow-sm">
+                    <div className="w-8 h-8 border border-zinc-300 flex items-center justify-center text-zinc-500 mb-2 group-hover:bg-black group-hover:text-white group-hover:border-black transition-all mx-auto sm:mx-0">
+                      <Heart size={13} strokeWidth={1.5} />
+                    </div>
+                    <p className="text-xl font-light text-zinc-900 tracking-wider">{stats.wishlist}</p>
+                    <p className="text-[8px]   text-zinc-500 uppercase tracking-widest mt-0.5">Wishlist</p>
+                  </Link>
+
+                  <button onClick={() => { setActiveTab("orders"); setMobileMenuOpen(false); }} className="group bg-white border border-zinc-200 p-4 hover:border-black/30 transition-all text-center sm:text-left shadow-sm">
+                    <div className="w-8 h-8 border border-zinc-300 flex items-center justify-center text-zinc-500 mb-2 group-hover:bg-black group-hover:text-white group-hover:border-black transition-all mx-auto sm:mx-0">
+                      <Package size={13} strokeWidth={1.5} />
+                    </div>
+                    <p className="text-xl font-light text-zinc-900 tracking-wider">{stats.orders}</p>
+                    <p className="text-[8px]   text-zinc-500 uppercase tracking-widest mt-0.5">Orders</p>
+                  </button>
+                </div>
+
+                <div className="bg-white border border-zinc-200 p-1.5 shadow-sm">
+                  <span className="block px-3 py-2 text-[9px]   text-zinc-400 uppercase tracking-[0.3em]">Account Panel</span>
+                  {[
+                    { id: "profile", icon: Settings, label: "Profile & Phone" },
+                    { id: "orders", icon: Package, label: "Orders & Invoices" },
+                    { id: "addresses", icon: MapPin, label: "Shipping Addresses" },
+                    { id: "payments", icon: CreditCard, label: "Saved Cards" },
+                    { id: "notifications", icon: Bell, label: "Notification Preferences" },
+                  ].map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => { setActiveTab(item.id); setMobileMenuOpen(false); }}
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[14px] font-semibold tracking-wide transition-all ${activeTab === item.id ? 'bg-black text-white shadow-sm' : 'text-zinc-600 hover:bg-zinc-100 hover:text-black border border-transparent'}`}
+                    >
+                      <item.icon size={14} strokeWidth={2} />
+                      <span>{item.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Desktop Only - Quick Metrics & Nav */}
+              <div className="hidden lg:block space-y-4">
+                <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                  <Link to="/cart" className="group bg-white border border-zinc-200 p-4 hover:border-black/30 transition-all text-center sm:text-left shadow-sm">
+                    <div className="w-8 h-8 border border-zinc-300 flex items-center justify-center text-zinc-500 mb-2 group-hover:bg-black group-hover:text-white group-hover:border-black transition-all mx-auto sm:mx-0">
+                      <ShoppingBag size={13} strokeWidth={1.5} />
+                    </div>
+                    <p className="text-xl font-light text-zinc-900 tracking-wider">{stats.cart}</p>
+                    <p className="text-[8px]   text-zinc-500 uppercase tracking-widest mt-0.5">In Cart</p>
+                  </Link>
+
+                  <Link to="/wishlist" className="group bg-white border border-zinc-200 p-4 hover:border-black/30 transition-all text-center sm:text-left shadow-sm">
+                    <div className="w-8 h-8 border border-zinc-300 flex items-center justify-center text-zinc-500 mb-2 group-hover:bg-black group-hover:text-white group-hover:border-black transition-all mx-auto sm:mx-0">
+                      <Heart size={13} strokeWidth={1.5} />
+                    </div>
+                    <p className="text-xl font-light text-zinc-900 tracking-wider">{stats.wishlist}</p>
+                    <p className="text-[8px]   text-zinc-500 uppercase tracking-widest mt-0.5">Wishlist</p>
+                  </Link>
+
+                  <button onClick={() => setActiveTab("orders")} className="group bg-white border border-zinc-200 p-4 hover:border-black/30 transition-all text-center sm:text-left shadow-sm">
+                    <div className="w-8 h-8 border border-zinc-300 flex items-center justify-center text-zinc-500 mb-2 group-hover:bg-black group-hover:text-white group-hover:border-black transition-all mx-auto sm:mx-0">
+                      <Package size={13} strokeWidth={1.5} />
+                    </div>
+                    <p className="text-xl font-light text-zinc-900 tracking-wider">{stats.orders}</p>
+                    <p className="text-[8px]   text-zinc-500 uppercase tracking-widest mt-0.5">Orders</p>
+                  </button>
+                </div>
+
+                <div className="bg-white border border-zinc-200 p-1.5 shadow-sm">
+                  <span className="block px-3 py-2 text-[9px]   text-zinc-400 uppercase tracking-[0.3em]">Account Panel</span>
+                  {[
+                    { id: "profile", icon: Settings, label: "Profile & Phone" },
+                    { id: "orders", icon: Package, label: "Orders & Invoices" },
+                    { id: "addresses", icon: MapPin, label: "Shipping Addresses" },
+                    { id: "payments", icon: CreditCard, label: "Saved Cards" },
+                    { id: "notifications", icon: Bell, label: "Notification Preferences" },
+                  ].map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => setActiveTab(item.id)}
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[14px] font-semibold tracking-wide transition-all ${activeTab === item.id ? 'bg-black text-white shadow-sm' : 'text-zinc-600 hover:bg-zinc-100 hover:text-black border border-transparent'}`}
+                    >
+                      <item.icon size={14} strokeWidth={2} />
+                      <span>{item.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </nav>
+
+            {/* Logout button */}
+            <div className="p-4 border-t border-zinc-200 bg-zinc-50 lg:hidden">
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-[14px]   text-red-600 hover:bg-red-50 hover:text-red-700 transition-all border border-red-200"
+              >
+                <LogOut size={14} />
+                <span>LOGOUT</span>
+              </button>
             </div>
-          </div>
+          </aside>
 
           {/* MAIN DYNAMIC CONTENT */}
-          <div className="lg:col-span-8">
+          <div className="lg:col-span-9 lg:pl-8">
 
             {/* TAB: OVERVIEW */}
             {activeTab === "overview" && (
@@ -653,7 +747,7 @@ const Account = () => {
                   <div className="flex items-center justify-between mb-4 pb-3 border-b border-zinc-200">
                     <div className="flex items-center gap-2">
                       <MapPin size={14} className="text-[#b8860b]" />
-                      <h4 className="text-[12px]   text-zinc-900 uppercase tracking-widest">Primary Shipping Address</h4>
+                      <h4 className="text-[14px]   text-zinc-900 uppercase tracking-widest">Primary Shipping Address</h4>
                     </div>
                     <button onClick={() => setActiveTab("addresses")} className="text-[10px] text-[#b8860b] font-semibold hover:underline uppercase tracking-wider">
                       Manage Addresses ({addresses.length})
@@ -664,7 +758,7 @@ const Account = () => {
                     (() => {
                       const defaultAddr = addresses.find(a => a.isDefault) || addresses[0];
                       return (
-                        <div className="text-[12px] text-zinc-700 space-y-1">
+                        <div className="text-[14px] text-zinc-700 space-y-1">
                           <p className="  text-zinc-900 uppercase tracking-wider">{defaultAddr.name}</p>
                           <p className="text-zinc-500">{defaultAddr.address}, {defaultAddr.city}, {defaultAddr.state} - {defaultAddr.pincode}</p>
                           <p className="text-[10px] text-[#b8860b] font-semibold">Contact: {defaultAddr.phone}</p>
@@ -672,7 +766,7 @@ const Account = () => {
                       );
                     })()
                   ) : (
-                    <div className="flex items-center justify-between text-[12px] text-zinc-500">
+                    <div className="flex items-center justify-between text-[14px] text-zinc-500">
                       <p>No saved addresses.</p>
                       <button onClick={() => { setActiveTab("addresses"); setShowAddressForm(true); }} className="text-[10px] text-zinc-900 underline uppercase  ">Add Address</button>
                     </div>
@@ -699,7 +793,7 @@ const Account = () => {
                         onChange={(e) => setDisplayName(e.target.value)}
                         required
                         placeholder="Your Full Name"
-                        className="w-full px-4 py-3 bg-zinc-50 border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none transition-colors"
+                        className="w-full px-4 py-3 bg-zinc-50 border border-zinc-300 text-[14px] text-zinc-900 focus:border-zinc-500 outline-none transition-colors"
                       />
                     </div>
                     <div className="space-y-1.5">
@@ -709,7 +803,7 @@ const Account = () => {
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="+91 98765 43210"
-                        className="w-full px-4 py-3 bg-zinc-50 border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none transition-colors"
+                        className="w-full px-4 py-3 bg-zinc-50 border border-zinc-300 text-[14px] text-zinc-900 focus:border-zinc-500 outline-none transition-colors"
                       />
                     </div>
                   </div>
@@ -720,7 +814,7 @@ const Account = () => {
                       type="email"
                       value={user?.email || ""}
                       disabled
-                      className="w-full px-4 py-3 bg-zinc-100 border border-zinc-200 text-[12px] text-zinc-500 cursor-not-allowed outline-none"
+                      className="w-full px-4 py-3 bg-zinc-100 border border-zinc-200 text-[14px] text-zinc-500 cursor-not-allowed outline-none"
                     />
                   </div>
 
@@ -731,7 +825,7 @@ const Account = () => {
                       onChange={(e) => setBio(e.target.value)}
                       placeholder="Share your fashion preferences..."
                       rows={3}
-                      className="w-full px-4 py-3 bg-zinc-50 border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none transition-colors resize-none"
+                      className="w-full px-4 py-3 bg-zinc-50 border border-zinc-300 text-[14px] text-zinc-900 focus:border-zinc-500 outline-none transition-colors resize-none"
                     />
                   </div>
 
@@ -767,7 +861,7 @@ const Account = () => {
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-zinc-200">
                           <div>
                             <span className="text-[9px] text-[#b8860b] font-black uppercase tracking-widest">Order Reference</span>
-                            <h4 className="text-[12px]   text-zinc-900 uppercase tracking-wider">#{order.id.slice(0, 14).toUpperCase()}</h4>
+                            <h4 className="text-[14px]   text-zinc-900 uppercase tracking-wider">#{order.id.slice(0, 14).toUpperCase()}</h4>
                           </div>
                           <div className="flex items-center gap-3">
                             <span className={`px-2.5 py-0.5 text-[8px]   uppercase tracking-widest border ${order.status === 'confirmed' || order.status === 'delivered' ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
@@ -816,7 +910,7 @@ const Account = () => {
                   </div>
                 ) : (
                   <div className="text-center py-16">
-                    <p className="text-zinc-500 text-[12px] uppercase tracking-widest mb-3">No order history available.</p>
+                    <p className="text-zinc-500 text-[14px] uppercase tracking-widest mb-3">No order history available.</p>
                     <Link to="/shop" className="px-6 py-3 bg-black text-white   text-[10px] uppercase tracking-widest hover:bg-zinc-800 transition-all inline-block">
                       Browse Shop
                     </Link>
@@ -847,7 +941,7 @@ const Account = () => {
                 {/* ADDRESS FORM */}
                 {showAddressForm && (
                   <form onSubmit={handleSaveAddress} className="bg-zinc-50 border border-zinc-200 p-6 space-y-4 rounded">
-                    <h4 className="text-[12px]   uppercase tracking-widest text-[#b8860b] mb-2">
+                    <h4 className="text-[14px]   uppercase tracking-widest text-[#b8860b] mb-2">
                       {editingAddressId ? "Edit Address" : "New Address Details"}
                     </h4>
 
@@ -860,7 +954,7 @@ const Account = () => {
                           onChange={(e) => setAddressForm({ ...addressForm, name: e.target.value })}
                           required
                           placeholder="John Doe"
-                          className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none"
+                          className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-[14px] text-zinc-900 focus:border-zinc-500 outline-none"
                         />
                       </div>
                       <div className="space-y-1">
@@ -871,7 +965,7 @@ const Account = () => {
                           onChange={(e) => setAddressForm({ ...addressForm, phone: e.target.value })}
                           required
                           placeholder="+91 98765 43210"
-                          className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none"
+                          className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-[14px] text-zinc-900 focus:border-zinc-500 outline-none"
                         />
                       </div>
                     </div>
@@ -884,7 +978,7 @@ const Account = () => {
                         onChange={(e) => setAddressForm({ ...addressForm, address: e.target.value })}
                         required
                         placeholder="Apartment, Street Name, Landmark"
-                        className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none"
+                        className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-[14px] text-zinc-900 focus:border-zinc-500 outline-none"
                       />
                     </div>
 
@@ -897,7 +991,7 @@ const Account = () => {
                           onChange={(e) => setAddressForm({ ...addressForm, city: e.target.value })}
                           required
                           placeholder="City"
-                          className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none"
+                          className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-[14px] text-zinc-900 focus:border-zinc-500 outline-none"
                         />
                       </div>
                       <div className="space-y-1">
@@ -908,7 +1002,7 @@ const Account = () => {
                           onChange={(e) => setAddressForm({ ...addressForm, state: e.target.value })}
                           required
                           placeholder="State"
-                          className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none"
+                          className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-[14px] text-zinc-900 focus:border-zinc-500 outline-none"
                         />
                       </div>
                       <div className="space-y-1">
@@ -920,13 +1014,13 @@ const Account = () => {
                           required
                           maxLength={6}
                           placeholder="6-digit Pincode"
-                          className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none"
+                          className="w-full px-3 py-2.5 bg-white border border-zinc-300 text-[14px] text-zinc-900 focus:border-zinc-500 outline-none"
                         />
                       </div>
                     </div>
 
                     <div className="flex items-center gap-4 pt-2">
-                      <label className="flex items-center gap-2 cursor-pointer text-[12px] text-zinc-700">
+                      <label className="flex items-center gap-2 cursor-pointer text-[14px] text-zinc-700">
                         <input
                           type="checkbox"
                           checked={addressForm.isDefault}
@@ -958,7 +1052,7 @@ const Account = () => {
                         </span>
                       )}
 
-                      <div className="space-y-2 text-[12px]">
+                      <div className="space-y-2 text-[14px]">
                         <h4 className="  text-zinc-900 tracking-wide uppercase pr-16">{a.name}</h4>
                         <p className="text-zinc-600 leading-relaxed">{a.address}, {a.city}, {a.state} - {a.pincode}</p>
                         <p className="text-[10px] text-[#b8860b] font-semibold flex items-center gap-1 pt-1">
@@ -999,7 +1093,7 @@ const Account = () => {
                   {addresses.length === 0 && !showAddressForm && (
                     <div className="col-span-2 text-center py-12 border border-dashed border-zinc-300 rounded">
                       <MapPin size={24} className="mx-auto text-zinc-400 mb-2" />
-                      <p className="text-zinc-500 text-[12px] uppercase tracking-widest mb-3">No saved addresses found.</p>
+                      <p className="text-zinc-500 text-[14px] uppercase tracking-widest mb-3">No saved addresses found.</p>
                       <button
                         onClick={() => setShowAddressForm(true)}
                         className="px-4 py-2 border border-zinc-400 text-zinc-900 text-[9px]   uppercase tracking-widest hover:bg-black hover:text-white transition-all"
@@ -1039,7 +1133,7 @@ const Account = () => {
                           onChange={(e) => setNewCard({ ...newCard, cardHolder: e.target.value })}
                           required
                           placeholder="John Doe"
-                          className="w-full px-3 py-2 bg-white border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none"
+                          className="w-full px-3 py-2 bg-white border border-zinc-300 text-[14px] text-zinc-900 focus:border-zinc-500 outline-none"
                         />
                       </div>
                       <div className="space-y-1">
@@ -1051,7 +1145,7 @@ const Account = () => {
                           required
                           maxLength={16}
                           placeholder="4242 4242 4242 4242"
-                          className="w-full px-3 py-2 bg-white border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none"
+                          className="w-full px-3 py-2 bg-white border border-zinc-300 text-[14px] text-zinc-900 focus:border-zinc-500 outline-none"
                         />
                       </div>
                     </div>
@@ -1065,7 +1159,7 @@ const Account = () => {
                           required
                           placeholder="MM/YY"
                           maxLength={5}
-                          className="w-full px-3 py-2 bg-white border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none"
+                          className="w-full px-3 py-2 bg-white border border-zinc-300 text-[14px] text-zinc-900 focus:border-zinc-500 outline-none"
                         />
                       </div>
                       <div className="space-y-1">
@@ -1073,7 +1167,7 @@ const Account = () => {
                         <select
                           value={newCard.brand}
                           onChange={(e) => setNewCard({ ...newCard, brand: e.target.value })}
-                          className="w-full px-3 py-2 bg-white border border-zinc-300 text-[12px] text-zinc-900 focus:border-zinc-500 outline-none"
+                          className="w-full px-3 py-2 bg-white border border-zinc-300 text-[14px] text-zinc-900 focus:border-zinc-500 outline-none"
                         >
                           <option value="Visa">Visa</option>
                           <option value="Mastercard">Mastercard</option>
@@ -1141,7 +1235,7 @@ const Account = () => {
                   ].map((notif) => (
                     <div key={notif.key} className="flex justify-between items-center p-4 bg-zinc-50 border border-zinc-200 rounded">
                       <div className="max-w-[80%] space-y-0.5">
-                        <h4 className="text-[12px]   text-zinc-900 uppercase tracking-wider">{notif.title}</h4>
+                        <h4 className="text-[14px]   text-zinc-900 uppercase tracking-wider">{notif.title}</h4>
                         <p className="text-[10px] text-zinc-500 leading-relaxed">{notif.sub}</p>
                       </div>
                       <input
@@ -1172,7 +1266,7 @@ const Account = () => {
             <div className="px-6 py-5 border-b border-zinc-200 flex items-center justify-between sticky top-0 bg-white z-10">
               <div>
                 <span className="text-[9px] text-[#b8860b] font-black uppercase tracking-widest">Order Details & Tracking</span>
-                <h3 className="text-[12px]   uppercase tracking-widest text-zinc-900 mt-0.5">
+                <h3 className="text-[14px]   uppercase tracking-widest text-zinc-900 mt-0.5">
                   Order #{selectedOrder.id.slice(0, 16).toUpperCase()}
                 </h3>
               </div>
@@ -1189,7 +1283,7 @@ const Account = () => {
               </div>
             </div>
 
-            <div className="p-6 space-y-6 text-[12px]">
+            <div className="p-6 space-y-6 text-[14px]">
               {/* STEPPER TIMELINE */}
               <div className="space-y-4 bg-zinc-50 border border-zinc-200 p-5 rounded">
                 <div className="flex justify-between items-center">

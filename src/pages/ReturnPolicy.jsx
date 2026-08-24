@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const ReturnPolicy = () => {
   return (
-    <div className="min-h-screen bg-[#faf9f5] text-zinc-900">
+    <div className="min-h-screen bg-[#f5f5f5] text-zinc-900">
       <SEOHead
         title="Return, Refund & Cancellation Policy | Pasoja"
         description="Read Pasoja's return and refund policy. 7–10 day easy returns, refund processed after product inspection."
@@ -81,8 +81,8 @@ const ReturnPolicy = () => {
                 <div className="w-10 h-10 border border-zinc-300 flex items-center justify-center text-zinc-600 mb-4">
                   <Icon size={18} strokeWidth={1.5} />
                 </div>
-                <h3 className="text-[12px] font-semibold uppercase tracking-wider text-zinc-900 mb-2">{title}</h3>
-                <p className="text-[12px] text-zinc-500 leading-relaxed">{desc}</p>
+                <h3 className="text-[14px] font-semibold uppercase tracking-wider text-zinc-900 mb-2">{title}</h3>
+                <p className="text-[14px] text-zinc-500 leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
@@ -98,7 +98,7 @@ const ReturnPolicy = () => {
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-4">
                 <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-[#b8860b]">Processing Timeline</h3>
-                <ul className="space-y-3 text-[12px] md:text-sm text-zinc-600">
+                <ul className="space-y-3 text-[14px] md:text-sm text-zinc-600">
                   <li className="flex gap-2.5 items-start">
                     <Clock size={14} className="text-zinc-500 shrink-0 mt-0.5" />
                     <span><strong className="text-zinc-900">Quality Check:</strong> 24–48 hours after product is received at our warehouse.</span>
@@ -115,7 +115,7 @@ const ReturnPolicy = () => {
               </div>
               <div className="space-y-4">
                 <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-[#b8860b]">Payment Method Refunds</h3>
-                <ul className="space-y-3 text-[12px] md:text-sm text-zinc-600">
+                <ul className="space-y-3 text-[14px] md:text-sm text-zinc-600">
                   <li>• <strong>UPI / Cards / Net Banking:</strong> Refund credited back to original source account.</li>
                   <li>• <strong>Wallets (Paytm, PhonePe, GPay):</strong> Refund to wallet within 24–48 hours.</li>
                   <li>• <strong>Cash on Delivery (COD):</strong> Refund processed via UPI or store credit (your choice).</li>
@@ -167,7 +167,7 @@ const ReturnPolicy = () => {
         </section>
 
         {/* 6. Contact */}
-        <section className="bg-[#f4f1ea] border border-zinc-200 p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+        <section className="bg-[#f5f5f5] border border-zinc-200 p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
           <div>
             <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-[#b8860b] mb-2">Need Help With A Return?</h3>
             <p className="text-[13px] md:text-sm text-zinc-600">Reach out to our support team for assistance with returns, exchanges or refund status.</p>

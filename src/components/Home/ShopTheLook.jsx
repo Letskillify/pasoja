@@ -50,7 +50,7 @@ const ShopTheLook = () => {
   if (loading || looks.length === 0) return null;
 
   return (
-    <section className="py-8 md:py-12 bg-[#faf9f5] overflow-hidden relative border-t border-zinc-200">
+    <section className="py-8 md:py-12 bg-[#f5f5f5] overflow-hidden relative border-t border-zinc-200">
       {/* Ambient decorative lighting */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-black/[0.005] rounded-full blur-[120px] pointer-events-none" />
 
@@ -58,7 +58,7 @@ const ShopTheLook = () => {
       <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 mb-6 md:mb-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <p className="text-[10px] sm:text-[12px] tracking-[0.3em] text-[#b8860b] uppercase mb-2  ">
+            <p className="text-[10px] sm:text-[14px] tracking-[0.3em] text-[#b8860b] uppercase mb-2  ">
               SHOP THE LOOK
             </p>
             <h2 className="text-xl sm:text-3xl lg:text-4xl font-extralight tracking-[0.15em] text-zinc-900 uppercase whitespace-nowrap leading-none">
@@ -71,7 +71,7 @@ const ShopTheLook = () => {
       {/* Desktop Grid View (hidden lg:grid) - Full Width Edge-to-Edge with 0 Gap */}
       <div className="hidden lg:grid grid-cols-4 gap-0 w-full max-w-none">
         {looks.map((look) => (
-          <div key={look.id} className="relative w-full flex flex-col bg-[#faf9f5] border-none outline-none">
+          <div key={look.id} className="relative w-full flex flex-col bg-[#f5f5f5] border-none outline-none">
             <Link
               to={look.link}
               className="relative group block overflow-hidden bg-zinc-100 aspect-[3/4] w-full border-none outline-none"
@@ -89,7 +89,7 @@ const ShopTheLook = () => {
               <span className="text-[9px] uppercase tracking-[0.2em] font-medium text-zinc-500 mb-1.5">
                 {look.category || 'COLLECTION'}
               </span>
-              <h4 className="text-[12px] font-semibold text-zinc-900 tracking-wider uppercase leading-snug px-3 line-clamp-1 mb-1">
+              <h4 className="text-[14px] font-semibold text-zinc-900 tracking-wider uppercase leading-snug px-3 line-clamp-1 mb-1">
                 {look.title || 'Brand Look'}
               </h4>
               <span className="text-[10px]   text-zinc-700 tracking-widest mt-1">
@@ -123,7 +123,7 @@ const ShopTheLook = () => {
           className="w-full overflow-visible"
         >
           {looks.map((look) => (
-            <SwiperSlide key={look.id} className="flex flex-col bg-[#faf9f5] border-none outline-none">
+            <SwiperSlide key={look.id} className="flex flex-col bg-[#f5f5f5] border-none outline-none">
               <Link
                 to={look.link}
                 className="relative group block overflow-hidden bg-zinc-100 aspect-[3/4] w-full border-none outline-none"
@@ -140,10 +140,10 @@ const ShopTheLook = () => {
                 <span className="text-[10px] uppercase tracking-[0.2em] font-medium text-zinc-500 mb-1">
                   {look.category || 'COLLECTION'}
                 </span>
-                <h5 className="text-[12px] sm:text-sm   text-zinc-900 tracking-wider uppercase leading-snug px-1 line-clamp-1 mb-1">
+                <h5 className="text-[14px] sm:text-sm   text-zinc-900 tracking-wider uppercase leading-snug px-1 line-clamp-1 mb-1">
                   {look.title || 'Brand Look'}
                 </h5>
-                <span className="text-[12px]   text-zinc-800 tracking-widest">
+                <span className="text-[14px]   text-zinc-800 tracking-widest">
                   INR {Number(look.price || 2499).toLocaleString("en-IN")}.00
                 </span>
               </div>

@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 const PageHeader = ({ title, subtitle, breadcrumbItems = [] }) => {
   return (
-    <section className="relative w-full bg-[#f4f1ea] mt-[145px] md:mt-[130px] overflow-hidden border-b border-zinc-200">
+    <section className="relative w-full bg-[#f5f5f5] mt-[145px] md:mt-[130px] overflow-hidden border-b border-zinc-200">
       <div className="max-w-7xl py-3 mx-auto px-5 md:px-10 lg:px-14 py-10 md:py-16">
         {/* Breadcrumbs */}
         <nav aria-label="Breadcrumb" className="flex items-center gap-2 mb-5">

@@ -76,7 +76,7 @@ const Cart = () => {
   /* ── Loading ── */
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#faf9f5] flex items-center justify-center">
+      <div className="min-h-screen bg-[#f5f5f5] flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 border-2 border-zinc-200 border-t-zinc-800 rounded-full animate-spin" />
           <p className="text-xs uppercase tracking-widest text-zinc-400">
@@ -90,7 +90,7 @@ const Cart = () => {
   /* ── Empty ── */
   if (cart.length === 0) {
     return (
-      <div className="min-h-screen bg-[#faf9f5]">
+      <div className="min-h-screen bg-[#f5f5f5]">
         <SEOHead
           title="Shopping Bag | Pasoja"
           description="View items in your Pasoja shopping bag and proceed to checkout."

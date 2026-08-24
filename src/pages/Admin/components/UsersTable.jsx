@@ -6,9 +6,9 @@ const UsersTable = ({ users }) => {
       <div className="px-6 py-5 flex items-center justify-between border-b border-zinc-200">
         <div>
           <h2 className="text-lg font-poppins   text-zinc-900">Registered Users</h2>
-          <p className="text-[12px] text-zinc-500 mt-0.5">All customers and their details</p>
+          <p className="text-[14px] text-zinc-500 mt-0.5">All customers and their details</p>
         </div>
-        <span className="px-3.5 py-1.5 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-800 text-[12px]  ">
+        <span className="px-3.5 py-1.5 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-800 text-[14px]  ">
           {users.length} Users
         </span>
       </div>
@@ -34,7 +34,7 @@ const UsersTable = ({ users }) => {
                 <td className="px-6 py-4 text-zinc-600">
                   {user.phone || "-"}
                 </td>
-                <td className="px-6 py-4 text-zinc-500 text-[12px]">
+                <td className="px-6 py-4 text-zinc-500 text-[14px]">
                   {user.createdAt ? new Date(user.createdAt.toDate?.() || user.createdAt).toLocaleDateString() : "-"}
                 </td>
               </tr>

@@ -35,7 +35,7 @@ const SectionHeader = ({ subtitle, title, description, action, border = true, ce
           className={`flex flex-col ${center ? 'items-center mt-4 text-center' : 'md:items-end md:mt-0 mt-4'} max-w-sm`}
         >
           {description && (
-            <p className="text-zinc-600 text-[12px] md:text-sm font-light leading-relaxed mb-4 md:mb-0 md:text-right">
+            <p className="text-zinc-600 text-[14px] md:text-sm font-light leading-relaxed mb-4 md:mb-0 md:text-right">
               {description}
             </p>
           )}

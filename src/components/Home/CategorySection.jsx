@@ -86,7 +86,7 @@ const CategorySection = () => {
   if (loading && banners.length === 0 && mobileCategories.length === 0) return null;
 
   return (
-    <section className="py-8 md:py-12 bg-[#faf9f5] overflow-hidden relative border-t border-zinc-200">
+    <section className="py-8 md:py-12 bg-[#f5f5f5] overflow-hidden relative border-t border-zinc-200">
       {/* Header Container */}
       <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 mb-6 md:mb-8">
         <p className="text-[10px] sm:text-xs tracking-[0.3em] text-[#b8860b] uppercase mb-2">

@@ -28,7 +28,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#faf9f5]">
+    <div className="min-h-screen bg-[#f5f5f5]">
       <SEOHead
         title="Contact Us | Pasoja Customer Support"
         description="Have questions or need support? Contact Pasoja official support at pasoja.help@gmail.com or call +91 8959041514. Worldwide online store."
@@ -49,7 +49,7 @@ const Contact = () => {
             className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-black text-white px-5 py-3.5 shadow-2xl flex items-center gap-3"
           >
             <CheckCircle size={14} />
-            <p className="text-[12px] font-black uppercase tracking-wider">Message sent! We'll respond shortly.</p>
+            <p className="text-[14px] font-black uppercase tracking-wider">Message sent! We'll respond shortly.</p>
             <button onClick={() => setFormSubmitted(false)} className="opacity-40 hover:opacity-100 ml-1"><X size={13} /></button>
           </motion.div>
         )}
@@ -97,8 +97,8 @@ const Contact = () => {
               <Clock size={14} className="text-zinc-500 shrink-0 mt-0.5" />
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-1">Business Hours</p>
-                <p className="text-[12px] text-zinc-700 font-medium">Monday – Saturday: 10:00 AM – 7:00 PM IST</p>
-                <p className="text-[12px] text-zinc-500">Sunday: Closed</p>
+                <p className="text-[14px] text-zinc-700 font-medium">Monday – Saturday: 10:00 AM – 7:00 PM IST</p>
+                <p className="text-[14px] text-zinc-500">Sunday: Closed</p>
               </div>
             </div>
           </motion.div>
@@ -162,7 +162,7 @@ const Contact = () => {
       </div>
 
       {/* MAP */}
-      <section className="bg-[#faf9f5] py-14 md:py-16 border-t border-zinc-200">
+      {/* <section className="bg-[#f5f5f5] py-14 md:py-16 border-t border-zinc-200">
         <div className="max-w-7xl py-3 mx-auto px-5 md:px-10 lg:px-14">
           <div className="mb-8 pb-8 border-b border-zinc-200">
             <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-500   block mb-3">Find Us</span>
@@ -178,7 +178,7 @@ const Contact = () => {
             ></iframe>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };

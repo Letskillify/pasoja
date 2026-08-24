@@ -60,7 +60,7 @@ const AnimatedSearchBox = ({ searchQuery, setSearchQuery, onSubmit, onFocus }) =
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={onFocus}
-          className="w-full bg-transparent text-zinc-900 outline-none font-medium text-[12px] tracking-wide z-10"
+          className="w-full bg-transparent text-zinc-900 outline-none font-medium text-[14px] tracking-wide z-10"
         />
         {!searchQuery && (
           <div className="absolute left-10 top-1/2 -translate-y-1/2 pointer-events-none overflow-hidden h-5 flex items-center z-0">
@@ -71,7 +71,7 @@ const AnimatedSearchBox = ({ searchQuery, setSearchQuery, onSubmit, onFocus }) =
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -16, opacity: 0 }}
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                className="text-zinc-500 text-[12px] tracking-wide whitespace-nowrap font-normal"
+                className="text-zinc-500 text-[14px] tracking-wide whitespace-nowrap font-normal"
               >
                 Search &quot;{SEARCH_PLACEHOLDERS[index]}&quot;
               </motion.span>
@@ -592,10 +592,10 @@ const Header = () => {
                                     {product.category}
                                   </span>
                                 )}
-                                <h4 className="text-[12px]   text-zinc-900 uppercase tracking-wide truncate group-hover:text-[#b8860b] transition-colors">
+                                <h4 className="text-[14px]   text-zinc-900 uppercase tracking-wide truncate group-hover:text-[#b8860b] transition-colors">
                                   {product.name}
                                 </h4>
-                                <p className="text-[12px] font-mono   text-zinc-800 mt-1">
+                                <p className="text-[14px] font-mono   text-zinc-800 mt-1">
                                   ₹{product.price?.toLocaleString('en-IN')}
                                 </p>
                               </div>
@@ -628,7 +628,7 @@ const Header = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: '-100%' }}
               transition={{ duration: 0.5, ease: easing }}
-              className="fixed inset-0 bg-[#faf9f5] text-zinc-900 z-[200] flex flex-col"
+              className="fixed inset-0 bg-[#f5f5f5] text-zinc-900 z-[200] flex flex-col"
             >
               {/* Menu Header */}
               <div className="w-full px-5 h-[72px] flex items-center justify-between border-b border-zinc-200 shrink-0">

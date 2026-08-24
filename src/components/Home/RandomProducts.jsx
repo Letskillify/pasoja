@@ -209,13 +209,13 @@ const RandomProductCard = ({ product, idx, triggerToast }) => {
               {product.category}
             </span>
           )}
-          <h3 className="text-[12px] sm:text-sm   text-zinc-900 uppercase tracking-wider line-clamp-1 leading-snug mb-2">
+          <h3 className="text-[14px] sm:text-sm   text-zinc-900 uppercase tracking-wider line-clamp-1 leading-snug mb-2">
             {product.name}
           </h3>
         </div>
 
         <div className="flex items-baseline gap-2.5 pt-1 border-t border-zinc-100">
-          <span className="text-[12px] text-zinc-400 line-through">
+          <span className="text-[14px] text-zinc-400 line-through">
             ₹{Number(originalPrice).toLocaleString('en-IN')}
           </span>
           <span className="text-sm text-[#e53e3e] font-semibold">
@@ -274,7 +274,7 @@ const RandomProducts = () => {
 
   if (loading) {
     return (
-      <section className="py-12 bg-[#faf9f5] border-t border-zinc-200">
+      <section className="py-12 bg-[#f5f5f5] border-t border-zinc-200">
         <div className="w-full max-w-[1800px] mx-auto px-1 sm:px-6 lg:px-8">
           <div className="h-4 w-32 bg-zinc-200 animate-pulse mb-3" />
           <div className="h-8 w-64 bg-zinc-200 animate-pulse mb-8" />
@@ -289,7 +289,7 @@ const RandomProducts = () => {
   }
 
   return (
-    <section className="py-12 md:py-16 bg-[#faf9f5] relative border-t border-zinc-200 overflow-hidden">
+    <section className="py-12 md:py-16 bg-[#f5f5f5] relative border-t border-zinc-200 overflow-hidden">
       <div className="w-full max-w-[1800px] mx-auto px-1 sm:px-6 lg:px-8">
 
         {/* Section Header */}
@@ -297,7 +297,7 @@ const RandomProducts = () => {
           <div className="flex-1 flex flex-col md:flex-row md:items-end gap-6 md:gap-12">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <p className="text-[10px] sm:text-[12px] tracking-[0.3em] text-[#b8860b] uppercase  ">
+                <p className="text-[10px] sm:text-[14px] tracking-[0.3em] text-[#b8860b] uppercase  ">
                   CURATED DISCOVERIES
                 </p>
               </div>
@@ -313,7 +313,7 @@ const RandomProducts = () => {
               type="button"
               onClick={handleShuffle}
               disabled={isShuffling}
-              className="flex items-center gap-2 px-4 py-2.5 border border-zinc-300 bg-white text-zinc-800 hover:text-black hover:border-black transition-all duration-300 text-[12px] font-semibold uppercase tracking-wider shadow-sm rounded-none cursor-pointer group shrink-0"
+              className="flex items-center gap-2 px-4 py-2.5 border border-zinc-300 bg-white text-zinc-800 hover:text-black hover:border-black transition-all duration-300 text-[14px] font-semibold uppercase tracking-wider shadow-sm rounded-none cursor-pointer group shrink-0"
             >
               <Shuffle
                 size={14}
@@ -367,7 +367,7 @@ const RandomProducts = () => {
             exit={{ opacity: 0, y: 20 }}
             className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-[200] bg-black text-white px-5 py-3 rounded-none shadow-2xl flex items-center gap-3"
           >
-            <p className="text-[12px] font-black uppercase tracking-wider whitespace-nowrap">{feedbackMessage}</p>
+            <p className="text-[14px] font-black uppercase tracking-wider whitespace-nowrap">{feedbackMessage}</p>
             <button onClick={() => setFeedbackMessage(null)} className="opacity-60 hover:opacity-100 ml-1">
               <X size={13} />
             </button>

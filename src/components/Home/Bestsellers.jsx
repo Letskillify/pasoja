@@ -117,13 +117,13 @@ const ProductCard = ({ product, idx, triggerToast }) => {
 
       {/* Info Area (Text displays below product) */}
       <div className="pt-4 pb-5 px-3 flex flex-col text-left bg-white">
-        <h3 className="text-[12px] md:text-sm   text-zinc-900 uppercase tracking-wider line-clamp-1 leading-snug mb-1">
+        <h3 className="text-[14px] md:text-sm   text-zinc-900 uppercase tracking-wider line-clamp-1 leading-snug mb-1">
           {product.name}
         </h3>
 
         {/* Prices */}
         <div className="flex items-baseline gap-2.5">
-          <span className="text-[12px] text-zinc-400 line-through">
+          <span className="text-[14px] text-zinc-400 line-through">
             ₹{Number(originalPrice).toLocaleString('en-IN')}
           </span>
           <span className="text-sm   text-[#e53e3e] font-semibold">
@@ -175,7 +175,7 @@ const BestsellerProducts = () => {
 
   if (loading) {
     return (
-      <section className="py-8 md:py-12 bg-[#faf9f5]">
+      <section className="py-8 md:py-12 bg-[#f5f5f5]">
         <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-10">
             <div>
@@ -198,14 +198,14 @@ const BestsellerProducts = () => {
   }
 
   return (
-    <section className="py-8 md:py-12 bg-[#faf9f5] overflow-hidden border-t border-zinc-200">
+    <section className="py-8 md:py-12 bg-[#f5f5f5] overflow-hidden border-t border-zinc-200">
       <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Premium Header Layout */}
         <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="flex-1 flex flex-col md:flex-row md:items-end gap-6 md:gap-12">
             <div>
-              <p className="text-[10px] sm:text-[12px] tracking-[0.3em] text-zinc-500 uppercase mb-2 font-medium">
+              <p className="text-[10px] sm:text-[14px] tracking-[0.3em] text-zinc-500 uppercase mb-2 font-medium">
                 NEW ARRIVALS
               </p>
               <h2 className="text-xl sm:text-3xl lg:text-4xl font-extralight tracking-[0.15em] text-zinc-900 uppercase whitespace-nowrap">
@@ -289,7 +289,7 @@ const BestsellerProducts = () => {
             exit={{ opacity: 0, y: 20 }}
             className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-[200] bg-white text-black px-5 py-3 rounded-none shadow-2xl flex items-center gap-3"
           >
-            <p className="text-[12px] font-black uppercase tracking-wider whitespace-nowrap">{feedbackMessage}</p>
+            <p className="text-[14px] font-black uppercase tracking-wider whitespace-nowrap">{feedbackMessage}</p>
             <button onClick={() => setFeedbackMessage(null)} className="opacity-40 hover:opacity-100 ml-1">
               <X size={13} />
             </button>

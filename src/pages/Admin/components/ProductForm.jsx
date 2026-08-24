@@ -326,7 +326,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
 
         {/* Product Name */}
         <div className="space-y-1.5 md:col-span-2">
-          <label className="text-[12px]   text-zinc-600 uppercase tracking-wide">
+          <label className="text-[14px]   text-zinc-600 uppercase tracking-wide">
             Product Name
           </label>
           <input
@@ -338,7 +338,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
 
         {/* Category (Dynamic from Firestore) */}
         <div className="space-y-1.5">
-          <label className="text-[12px]   text-zinc-600 uppercase tracking-wide">
+          <label className="text-[14px]   text-zinc-600 uppercase tracking-wide">
             Category
           </label>
           <select
@@ -354,7 +354,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
 
         {/* Subcategory (Dynamic & Filtered from Firestore) */}
         <div className="space-y-1.5">
-          <label className="text-[12px]   text-zinc-600 uppercase tracking-wide">
+          <label className="text-[14px]   text-zinc-600 uppercase tracking-wide">
             Subcategory
           </label>
           <select
@@ -370,7 +370,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
 
         {/* Gender */}
         <div className="space-y-1.5">
-          <label className="text-[12px]   text-zinc-600 uppercase tracking-wide">
+          <label className="text-[14px]   text-zinc-600 uppercase tracking-wide">
             Gender
           </label>
           <select
@@ -385,7 +385,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
 
         {/* Collection (Dynamic from Firestore) */}
         <div className="space-y-1.5 md:col-span-2 lg:col-span-2">
-          <label className="text-[12px]   text-zinc-600 uppercase tracking-wide">
+          <label className="text-[14px]   text-zinc-600 uppercase tracking-wide">
             Collection Tag
           </label>
           <select
@@ -464,7 +464,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         {sizePrices.map((sp, index) => (
           <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-3 items-end bg-white border border-gray-200 p-4 rounded-xl">
             <div className="space-y-1.5">
-              <label className="text-[12px] font-semibold text-gray-600 uppercase tracking-wide">Size</label>
+              <label className="text-[14px] font-semibold text-gray-600 uppercase tracking-wide">Size</label>
               <input
                 type="text"
                 value={sp.size}
@@ -474,7 +474,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-[12px] font-semibold text-gray-600 uppercase tracking-wide">Original Price</label>
+              <label className="text-[14px] font-semibold text-gray-600 uppercase tracking-wide">Original Price</label>
               <input
                 type="number"
                 value={sp.original_price}
@@ -484,7 +484,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-[12px] font-semibold text-gray-600 uppercase tracking-wide">Sale Price</label>
+              <label className="text-[14px] font-semibold text-gray-600 uppercase tracking-wide">Sale Price</label>
               <input
                 type="number"
                 value={sp.price}
@@ -519,7 +519,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
             {...register("stock")}
           />
           {/* Auto-derived status preview */}
-          <p className={`text-[12px]   mt-1 ${Number(stockValue) === 0 ? 'text-red-500' :
+          <p className={`text-[14px]   mt-1 ${Number(stockValue) === 0 ? 'text-red-500' :
             Number(stockValue) <= 5 ? 'text-amber-500' : 'text-green-600'
             }`}>
             Status: {Number(stockValue) === 0 ? 'Out of Stock' : Number(stockValue) <= 5 ? 'Low Stock' : 'In Stock'}
@@ -557,7 +557,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
       {/* Color Variant Images Assignment Section */}
       <div className="space-y-3 bg-amber-50/50 border border-amber-200/80 p-4 rounded-xl">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-          <label className="text-[12px] font-extrabold text-zinc-900 uppercase tracking-wider flex items-center gap-2">
+          <label className="text-[14px] font-extrabold text-zinc-900 uppercase tracking-wider flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-[#b8860b]" />
             Color Variant Image Mapping
           </label>
@@ -724,7 +724,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         {/* Image previews grid with explicit Color Tag selectors */}
         {imagePreviews.length > 0 && (
           <div className="space-y-2">
-            <span className="text-[12px] text-zinc-500 uppercase tracking-wider block">
+            <span className="text-[14px] text-zinc-500 uppercase tracking-wider block">
               Manage Images (Select primary thumbnail & tag color for each image)
             </span>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 bg-zinc-50 p-4 rounded-xl border border-zinc-200">
@@ -752,7 +752,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
                           e.stopPropagation();
                           removeImage(idx);
                         }}
-                        className="absolute top-2 right-2 z-30 bg-red-600 hover:bg-red-700 text-white p-1 rounded-full text-[12px] shadow transition-opacity"
+                        className="absolute top-2 right-2 z-30 bg-red-600 hover:bg-red-700 text-white p-1 rounded-full text-[14px] shadow transition-opacity"
                         title="Remove Image"
                       >
                         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -849,7 +849,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         {/* Model Image Preview */}
         {modelImagePreview && (
           <div className="space-y-2">
-            <span className="text-[12px] text-zinc-500 uppercase tracking-wider block">
+            <span className="text-[14px] text-zinc-500 uppercase tracking-wider block">
               Selected Model Image
             </span>
             <div className="relative w-36 aspect-[3/4] rounded-xl border-2 border-black overflow-hidden bg-zinc-50 shadow-md">
@@ -857,7 +857,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
               <button
                 type="button"
                 onClick={removeModelImage}
-                className="absolute top-1.5 right-1.5 z-30 bg-red-600 hover:bg-red-700 text-white p-1 rounded-full text-[12px] shadow transition-opacity"
+                className="absolute top-1.5 right-1.5 z-30 bg-red-600 hover:bg-red-700 text-white p-1 rounded-full text-[14px] shadow transition-opacity"
                 title="Remove Model Image"
               >
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -225,7 +225,7 @@ const Orders = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#faf9f5] text-zinc-900">
+    <div className="min-h-screen bg-[#f5f5f5] text-zinc-900">
       <SEOHead
         title="My Orders & Tracking | Pasoja"
         description="Track your order history, shipment status, and download invoices on Pasoja."
@@ -247,12 +247,12 @@ const Orders = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <Link
             to="/account"
-            className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.2em] font-semibold text-zinc-500 hover:text-black transition-colors"
+            className="inline-flex items-center gap-2 text-[14px] uppercase tracking-[0.2em] font-semibold text-zinc-500 hover:text-black transition-colors"
           >
             <ArrowLeft size={14} /> Back to Dashboard
           </Link>
 
-          <span className="text-[12px] uppercase tracking-widest text-[#b8860b] font-mono  ">
+          <span className="text-[14px] uppercase tracking-widest text-[#b8860b] font-mono  ">
             Total Orders: {orders.length}
           </span>
         </div>
@@ -289,7 +289,7 @@ const Orders = () => {
               placeholder="Search by Order ID or item..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full bg-zinc-50 border border-zinc-300 pl-9 pr-8 py-2 text-[12px] text-zinc-900 outline-none focus:border-zinc-500 transition-colors placeholder:text-zinc-400"
+              className="w-full bg-zinc-50 border border-zinc-300 pl-9 pr-8 py-2 text-[14px] text-zinc-900 outline-none focus:border-zinc-500 transition-colors placeholder:text-zinc-400"
             />
             {searchQuery && (
               <button
@@ -312,7 +312,7 @@ const Orders = () => {
             <h3 className="text-lg font-light text-zinc-900 tracking-widest uppercase mb-2">
               No Orders Found
             </h3>
-            <p className="text-[12px] text-zinc-500 leading-relaxed mb-6">
+            <p className="text-[14px] text-zinc-500 leading-relaxed mb-6">
               {searchQuery || statusFilter !== "all"
                 ? "No orders match your filter criteria."
                 : "You haven't placed any orders yet."}
@@ -369,7 +369,7 @@ const Orders = () => {
                         <span className="text-[9px] font-extrabold uppercase tracking-widest text-zinc-400 block">
                           Placed On
                         </span>
-                        <span className="text-[12px] text-zinc-700">{formattedDate}</span>
+                        <span className="text-[14px] text-zinc-700">{formattedDate}</span>
                       </div>
 
                       <span
@@ -435,7 +435,7 @@ const Orders = () => {
                               />
                             </div>
                             <div>
-                              <h4 className="text-[12px]   text-zinc-900 uppercase tracking-wider line-clamp-1">
+                              <h4 className="text-[14px]   text-zinc-900 uppercase tracking-wider line-clamp-1">
                                 {item.name}
                               </h4>
                               <div className="flex items-center gap-3 text-[11px] text-zinc-500 mt-1">
@@ -446,7 +446,7 @@ const Orders = () => {
                           </div>
 
                           <div className="text-right shrink-0">
-                            <span className="text-[12px] font-semibold text-zinc-900">
+                            <span className="text-[14px] font-semibold text-zinc-900">
                               ₹{((item.price || 0) * (item.quantity || 1)).toLocaleString("en-IN")}
                             </span>
                           </div>
@@ -456,7 +456,7 @@ const Orders = () => {
                   </div>
 
                   {/* Order Summary Bottom Bar */}
-                  <div className="pt-4 border-t border-zinc-200 flex items-center justify-between text-[12px]">
+                  <div className="pt-4 border-t border-zinc-200 flex items-center justify-between text-[14px]">
                     <div className="text-zinc-500 text-[11px]">
                       <span>Payment: <strong className="text-zinc-900 uppercase">{order.paymentMethod || "Online"}</strong></span>
                     </div>
@@ -515,7 +515,7 @@ const Orders = () => {
               </div>
 
               {/* Shipping & Payment Details */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-zinc-50 p-4 border border-zinc-200 text-[12px]">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-zinc-50 p-4 border border-zinc-200 text-[14px]">
                 <div className="space-y-1">
                   <div className="flex items-center gap-1.5 text-[#b8860b]   uppercase tracking-wider text-[10px] mb-1">
                     <MapPin size={12} /> Shipping Address
@@ -540,7 +540,7 @@ const Orders = () => {
 
               {/* Purchased Items List */}
               <div className="space-y-3">
-                <h4 className="text-[12px]   uppercase tracking-widest text-zinc-500">
+                <h4 className="text-[14px]   uppercase tracking-widest text-zinc-500">
                   Itemized Summary
                 </h4>
                 <div className="divide-y divide-zinc-200 bg-zinc-50 p-4 border border-zinc-200">
@@ -554,13 +554,13 @@ const Orders = () => {
                           className="w-12 h-14 object-cover bg-zinc-100 border border-zinc-200 shrink-0"
                         />
                         <div>
-                          <p className="text-[12px]   text-zinc-900 uppercase">{item.name}</p>
+                          <p className="text-[14px]   text-zinc-900 uppercase">{item.name}</p>
                           <p className="text-[11px] text-zinc-500">
                             {item.size ? `Size: ${item.size} • ` : ""}Qty: {item.quantity || 1}
                           </p>
                         </div>
                       </div>
-                      <span className="text-[12px]   text-zinc-900 font-mono">
+                      <span className="text-[14px]   text-zinc-900 font-mono">
                         ₹{((item.price || 0) * (item.quantity || 1)).toLocaleString("en-IN")}
                       </span>
                     </div>
@@ -569,7 +569,7 @@ const Orders = () => {
               </div>
 
               {/* Total Calculation */}
-              <div className="bg-zinc-50 p-4 border border-zinc-200 space-y-2 text-[12px]">
+              <div className="bg-zinc-50 p-4 border border-zinc-200 space-y-2 text-[14px]">
                 <div className="flex justify-between text-zinc-500">
                   <span>Subtotal</span>
                   <span>₹{(selectedOrder.total || 0).toLocaleString("en-IN")}</span>

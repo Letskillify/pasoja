@@ -145,18 +145,18 @@ const ProductCard = ({ product, idx, triggerToast }) => {
 
       {/* Info Area below Image (Screenshot 2 Typography) */}
       <div className="flex flex-col text-left px-0.5">
-        <h3 className="text-[11px] sm:text-[12px]   text-zinc-900 uppercase tracking-wider mb-1 line-clamp-1 group-hover:text-black transition-colors duration-300">
+        <h3 className="text-[11px] sm:text-[14px]   text-zinc-900 uppercase tracking-wider mb-1 line-clamp-1 group-hover:text-black transition-colors duration-300">
           {product.name}
         </h3>
 
         {/* Prices */}
         <div className="flex items-baseline gap-2">
           {savingsPercent > 0 && (
-            <span className="text-[11px] sm:text-[12px] text-zinc-400 line-through">
+            <span className="text-[11px] sm:text-[14px] text-zinc-400 line-through">
               ₹{Number(originalPrice).toLocaleString("en-IN")}
             </span>
           )}
-          <span className={`${savingsPercent > 0 ? "text-[#e53e3e]" : "text-zinc-900"} text-[12px] sm:text-sm font-semibold`}>
+          <span className={`${savingsPercent > 0 ? "text-[#e53e3e]" : "text-zinc-900"} text-[14px] sm:text-sm font-semibold`}>
             ₹{Number(displayPrice).toLocaleString("en-IN")}
           </span>
         </div>
@@ -460,7 +460,7 @@ const Shop = () => {
   }, [filters, searchTerm, maxPriceLimit]);
 
   return (
-    <div className="min-h-screen bg-[#faf9f5]">
+    <div className="min-h-screen bg-[#f5f5f5]">
       <SEOHead
         title={filters.category !== "All" ? `Shop ${filters.category} Collection | Pasoja` : "Shop All Apparel & Streetwear | Pasoja"}
         description="Browse Pasoja's complete collection of premium oversized t-shirts, casual shirts, jeans, and hoodies. Filter by category, price, size, and color."
@@ -484,7 +484,7 @@ const Shop = () => {
             <input
               type="text"
               placeholder="Search by name, fabric, or style..."
-              className="w-full bg-white border border-zinc-300 pl-10 pr-9 py-3 text-[12px] text-zinc-900 outline-none focus:border-zinc-500 transition-colors placeholder:text-zinc-400"
+              className="w-full bg-white border border-zinc-300 pl-10 pr-9 py-3 text-[14px] text-zinc-900 outline-none focus:border-zinc-500 transition-colors placeholder:text-zinc-400"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
             />
@@ -705,7 +705,7 @@ const Shop = () => {
                 <h3 className="text-lg font-light text-zinc-900 tracking-widest uppercase mb-2">
                   No Products Match
                 </h3>
-                <p className="text-[12px] text-zinc-500 leading-relaxed mb-6">
+                <p className="text-[14px] text-zinc-500 leading-relaxed mb-6">
                   Try clearing or adjusting your search keywords, price slider, or selected options.
                 </p>
                 <button

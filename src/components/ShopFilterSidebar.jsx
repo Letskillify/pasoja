@@ -47,7 +47,7 @@ const FilterSection = ({ title, children, defaultOpen = true, activeCount = 0 })
         className="w-full flex items-center justify-between text-left group cursor-pointer py-1"
       >
         <div className="flex items-center gap-2">
-          <span className="text-[12px]   uppercase tracking-[0.18em] text-zinc-900 group-hover:text-black transition-colors">
+          <span className="text-[14px]   uppercase tracking-[0.18em] text-zinc-900 group-hover:text-black transition-colors">
             {title}
           </span>
           {activeCount > 0 && (
@@ -126,7 +126,7 @@ const ShopFilterSidebar = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Filter size={15} className="text-[#b8860b]" />
-            <h2 className="text-[12px]   uppercase tracking-[0.2em] text-zinc-900">
+            <h2 className="text-[14px]   uppercase tracking-[0.2em] text-zinc-900">
               Refine By
             </h2>
           </div>
@@ -160,7 +160,7 @@ const ShopFilterSidebar = ({
       </div>
 
       {/* Filter Sections Scroll Container */}
-      <div className="flex-1 overflow-y-auto pr-1 text-[12px] scrollbar-hide space-y-1">
+      <div className="flex-1 overflow-y-auto pr-1 text-[14px] scrollbar-hide space-y-1">
 
         {/* Category Filter */}
         <FilterSection
@@ -223,7 +223,7 @@ const ShopFilterSidebar = ({
         >
           <div className="space-y-3.5">
             {/* Price values readout */}
-            <div className="flex items-center justify-between text-[12px] font-mono text-zinc-700">
+            <div className="flex items-center justify-between text-[14px] font-mono text-zinc-700">
               <span>₹{filters.minPrice?.toLocaleString("en-IN")}</span>
               <span className="text-[#b8860b]  ">₹{filters.maxPrice?.toLocaleString("en-IN")}</span>
             </div>
@@ -472,10 +472,10 @@ const ShopFilterSidebar = ({
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative w-full max-w-xs sm:max-w-sm bg-[#faf9f5] border-r border-zinc-200 h-full p-6 flex flex-col justify-between shadow-2xl z-10 text-zinc-900"
+              className="relative w-full max-w-xs sm:max-w-sm bg-[#f5f5f5] border-r border-zinc-200 h-full p-6 flex flex-col justify-between shadow-2xl z-10 text-zinc-900"
             >
               <div className="flex items-center justify-between pb-4 border-b border-zinc-200">
-                <span className="text-[12px]   uppercase tracking-[0.2em] text-[#b8860b]">
+                <span className="text-[14px]   uppercase tracking-[0.2em] text-[#b8860b]">
                   Filter Products
                 </span>
                 <button

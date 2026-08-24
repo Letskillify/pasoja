@@ -66,12 +66,12 @@ const ReportsView = () => {
           <h2 className="text-xl   font-poppins text-zinc-900 uppercase tracking-wider flex items-center gap-2">
             <ClipboardList className="text-[#b8860b]" size={22} /> Executive Store Audit & Reports
           </h2>
-          <p className="text-[12px] text-zinc-500 mt-1">Export formatted real-time sales and inventory logs directly from Firestore.</p>
+          <p className="text-[14px] text-zinc-500 mt-1">Export formatted real-time sales and inventory logs directly from Firestore.</p>
         </div>
         <div className="flex items-center gap-3">
           <button
             onClick={handleExportCSV}
-            className="flex items-center gap-2 px-5 py-2.5 bg-black hover:bg-zinc-800 text-white   text-[12px] rounded-xl shadow-md transition-all cursor-pointer"
+            className="flex items-center gap-2 px-5 py-2.5 bg-black hover:bg-zinc-800 text-white   text-[14px] rounded-xl shadow-md transition-all cursor-pointer"
           >
             <Download size={15} /> Export Live CSV Report
           </button>
@@ -83,14 +83,14 @@ const ReportsView = () => {
         <div className="flex items-center gap-2 bg-zinc-100 p-1 rounded-xl">
           <button
             onClick={() => setReportType("sales")}
-            className={`px-4 py-2 text-[12px]   rounded-lg transition-all ${reportType === "sales" ? "bg-white text-zinc-900 shadow-sm" : "text-zinc-500 hover:text-black"
+            className={`px-4 py-2 text-[14px]   rounded-lg transition-all ${reportType === "sales" ? "bg-white text-zinc-900 shadow-sm" : "text-zinc-500 hover:text-black"
               }`}
           >
             Sales & Orders Log ({orders.length})
           </button>
           <button
             onClick={() => setReportType("inventory")}
-            className={`px-4 py-2 text-[12px]   rounded-lg transition-all ${reportType === "inventory" ? "bg-white text-zinc-900 shadow-sm" : "text-zinc-500 hover:text-black"
+            className={`px-4 py-2 text-[14px]   rounded-lg transition-all ${reportType === "inventory" ? "bg-white text-zinc-900 shadow-sm" : "text-zinc-500 hover:text-black"
               }`}
           >
             Inventory Stock Audit ({products.length})
@@ -102,7 +102,7 @@ const ReportsView = () => {
           <select
             value={dateRange}
             onChange={(e) => setDateRange(e.target.value)}
-            className="px-3.5 py-2 bg-zinc-50 border border-zinc-300 rounded-xl text-[12px] font-semibold text-zinc-900 outline-none focus:border-black transition-all cursor-pointer"
+            className="px-3.5 py-2 bg-zinc-50 border border-zinc-300 rounded-xl text-[14px] font-semibold text-zinc-900 outline-none focus:border-black transition-all cursor-pointer"
           >
             <option value="month">Current Month</option>
             <option value="quarter">This Quarter</option>
@@ -124,11 +124,11 @@ const ReportsView = () => {
         </div>
 
         {loading ? (
-          <div className="py-12 text-center text-[12px] text-zinc-500">Loading live report items...</div>
+          <div className="py-12 text-center text-[14px] text-zinc-500">Loading live report items...</div>
         ) : (
           <div className="overflow-x-auto">
             {reportType === "sales" ? (
-              <table className="w-full text-left text-[12px] border-collapse">
+              <table className="w-full text-left text-[14px] border-collapse">
                 <thead>
                   <tr className="text-[10px]   uppercase tracking-widest text-zinc-400 border-b border-zinc-200">
                     <th className="py-3 px-3">Date</th>
@@ -170,7 +170,7 @@ const ReportsView = () => {
                 </tbody>
               </table>
             ) : (
-              <table className="w-full text-left text-[12px] border-collapse">
+              <table className="w-full text-left text-[14px] border-collapse">
                 <thead>
                   <tr className="text-[10px]   uppercase tracking-widest text-zinc-400 border-b border-zinc-200">
                     <th className="py-3 px-3">Product ID</th>

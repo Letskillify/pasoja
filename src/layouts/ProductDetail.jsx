@@ -199,7 +199,7 @@ const ProductDetail = () => {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-[#faf9f5] flex flex-col items-center justify-center text-center p-6">
+      <div className="min-h-screen bg-[#f5f5f5] flex flex-col items-center justify-center text-center p-6">
         <h3 className="text-sm font-light tracking-widest uppercase text-zinc-900 mb-4">Product Not Found</h3>
         <Link to="/shop" className="px-8 py-3 bg-black text-white font-semibold text-[10px] uppercase tracking-widest hover:bg-zinc-800 transition-all shadow-sm">
           Return To Collection
@@ -215,7 +215,7 @@ const ProductDetail = () => {
       : 0;
 
   return (
-    <div className="min-h-screen bg-[#faf9f5] text-zinc-900 pt-[155px] sm:pt-[140px] pb-36 sm:pb-32 selection:bg-black selection:text-white">
+    <div className="min-h-screen bg-[#f5f5f5] text-zinc-900 pt-[155px] sm:pt-[140px] pb-36 sm:pb-32 selection:bg-black selection:text-white">
       {/* Toast Notification */}
       <AnimatePresence>
         {feedbackMessage && (
@@ -260,7 +260,7 @@ const ProductDetail = () => {
               </div>
 
               <div className="overflow-x-auto mb-4">
-                <table className="w-full text-[12px] text-left border-collapse">
+                <table className="w-full text-[14px] text-left border-collapse">
                   <thead>
                     <tr className="bg-zinc-100 border-b border-zinc-200 text-zinc-900   uppercase tracking-wider">
                       <th className="p-2.5">SIZE</th>
@@ -434,7 +434,7 @@ const ProductDetail = () => {
                       Style Spotlight
                     </motion.h3>
 
-                    <div className="space-y-1 sm:space-y-1.5 text-[12px] sm:text-sm font-medium tracking-wide">
+                    <div className="space-y-1 sm:space-y-1.5 text-[14px] sm:text-sm font-medium tracking-wide">
                       {spotlightDetails.map((detail, i) => (
                         <motion.div
                           key={i}
@@ -487,7 +487,7 @@ const ProductDetail = () => {
                   <span>{product.rating || 4.4}</span>
                   <Star size={10} fill="white" strokeWidth={0} />
                 </div>
-                <span className="text-[12px] text-zinc-600 font-medium">
+                <span className="text-[14px] text-zinc-600 font-medium">
                   808 Ratings and 476 Reviews
                 </span>
               </div>
@@ -532,7 +532,7 @@ const ProductDetail = () => {
             {colorList.length > 0 && (
               <div className="border-t border-zinc-200 pt-5">
                 <div className="flex items-center justify-center mb-3">
-                  <span className="text-[12px] uppercase tracking-[0.2em] text-zinc-900">COLORS</span>
+                  <span className="text-[14px] uppercase tracking-[0.2em] text-zinc-900">COLORS</span>
                 </div>
                 <div className="flex items-center justify-center flex-wrap gap-2.5">
                   {colorList.map((col, idx) => {
@@ -564,7 +564,7 @@ const ProductDetail = () => {
             {/* SIZES Selection Grid (Snitch Screenshot 3 Style) */}
             <div className="border-t border-zinc-200 pt-5">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-[12px]   uppercase tracking-wider text-zinc-900">SIZES</span>
+                <span className="text-[14px]   uppercase tracking-wider text-zinc-900">SIZES</span>
                 <button
                   type="button"
                   onClick={() => setIsSizeChartOpen(true)}
@@ -584,7 +584,7 @@ const ProductDetail = () => {
                     key={idx}
                     type="button"
                     onClick={() => setSelectedSize(sp)}
-                    className={`w-12 h-11 flex items-center justify-center border text-[12px]   uppercase tracking-wider transition-all duration-200 cursor-pointer ${selectedSize?.size === sp.size
+                    className={`w-12 h-11 flex items-center justify-center border text-[14px]   uppercase tracking-wider transition-all duration-200 cursor-pointer ${selectedSize?.size === sp.size
                         ? 'border-black bg-black text-white shadow-md'
                         : 'border-zinc-300 bg-white text-zinc-800 hover:border-black'
                       }`}
@@ -605,7 +605,7 @@ const ProductDetail = () => {
                 type="button"
                 onClick={() => !isOutOfStock && addToCollection('cart')}
                 disabled={isOutOfStock}
-                className={`w-full h-12 bg-black text-white text-[12px] font-extrabold uppercase tracking-[0.2em] transition-all duration-300 cursor-pointer ${isOutOfStock ? 'opacity-40 cursor-not-allowed' : 'hover:bg-zinc-800'
+                className={`w-full h-12 bg-black text-white text-[14px] font-extrabold uppercase tracking-[0.2em] transition-all duration-300 cursor-pointer ${isOutOfStock ? 'opacity-40 cursor-not-allowed' : 'hover:bg-zinc-800'
                   }`}
               >
                 {isOutOfStock ? 'OUT OF STOCK' : isInCart ? 'VIEW IN BAG' : 'ADD TO BAG'}
@@ -622,7 +622,7 @@ const ProductDetail = () => {
                   onClick={() => setActiveAccordion(activeAccordion === 'description' ? null : 'description')}
                   className="w-full flex items-center justify-between py-4 text-left group cursor-pointer"
                 >
-                  <span className="text-[12px]   uppercase tracking-[0.2em] text-zinc-800 group-hover:text-black transition-colors">
+                  <span className="text-[14px]   uppercase tracking-[0.2em] text-zinc-800 group-hover:text-black transition-colors">
                     DETAILS
                   </span>
                   {activeAccordion === 'description' ? (
@@ -640,12 +640,12 @@ const ProductDetail = () => {
                       transition={{ duration: 0.2, ease: 'easeInOut' }}
                       className="overflow-hidden"
                     >
-                      <div className="pb-5 space-y-4 text-[12px] text-zinc-700 font-normal leading-relaxed">
+                      <div className="pb-5 space-y-4 text-[14px] text-zinc-700 font-normal leading-relaxed">
 
                         {/* Dynamic TinyMCE Rich HTML Description */}
                         {product.description ? (
                           <div
-                            className="prose prose-sm max-w-none text-zinc-700 font-sans leading-relaxed text-[12px] [&_p]:mb-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_strong]:font-semibold [&_strong]:text-zinc-900 [&_h1]:text-base [&_h2]:text-sm [&_h3]:text-xs [&_h3]: "
+                            className="prose prose-sm max-w-none text-zinc-700 font-sans leading-relaxed text-[14px] [&_p]:mb-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_strong]:font-semibold [&_strong]:text-zinc-900 [&_h1]:text-base [&_h2]:text-sm [&_h3]:text-xs [&_h3]: "
                             dangerouslySetInnerHTML={{ __html: product.description }}
                           />
                         ) : (
@@ -687,7 +687,7 @@ const ProductDetail = () => {
                   onClick={() => setActiveAccordion(activeAccordion === 'reviews' ? null : 'reviews')}
                   className="w-full flex items-center justify-between py-4 text-left group cursor-pointer"
                 >
-                  <span className="text-[12px]   uppercase tracking-[0.2em] text-zinc-800 group-hover:text-black transition-colors">
+                  <span className="text-[14px]   uppercase tracking-[0.2em] text-zinc-800 group-hover:text-black transition-colors">
                     REVIEWS
                   </span>
                   {activeAccordion === 'reviews' ? (
@@ -763,7 +763,7 @@ const ProductDetail = () => {
                               <ThumbsUp size={12} className="cursor-pointer hover:text-black" />
                             </div>
                           </div>
-                          <p className="text-[12px] text-zinc-700">Good material, looks rich</p>
+                          <p className="text-[14px] text-zinc-700">Good material, looks rich</p>
                         </div>
 
                       </div>
@@ -779,7 +779,7 @@ const ProductDetail = () => {
                   onClick={() => setActiveAccordion(activeAccordion === 'delivery' ? null : 'delivery')}
                   className="w-full flex items-center justify-between py-4 text-left group cursor-pointer"
                 >
-                  <span className="text-[12px]   uppercase tracking-[0.2em] text-zinc-800 group-hover:text-black transition-colors">
+                  <span className="text-[14px]   uppercase tracking-[0.2em] text-zinc-800 group-hover:text-black transition-colors">
                     DELIVERY
                   </span>
                   {activeAccordion === 'delivery' ? (
@@ -805,7 +805,7 @@ const ProductDetail = () => {
                             placeholder="Enter Pincode"
                             value={pincode}
                             onChange={(e) => setPincode(e.target.value)}
-                            className="flex-1 px-3 py-2 border border-zinc-300 text-[12px] focus:outline-none focus:border-black"
+                            className="flex-1 px-3 py-2 border border-zinc-300 text-[14px] focus:outline-none focus:border-black"
                           />
                           <button
                             type="submit"
@@ -842,7 +842,7 @@ const ProductDetail = () => {
                   onClick={() => setActiveAccordion(activeAccordion === 'returns' ? null : 'returns')}
                   className="w-full flex items-center justify-between py-4 text-left group cursor-pointer"
                 >
-                  <span className="text-[12px]   uppercase tracking-[0.2em] text-zinc-800 group-hover:text-black transition-colors">
+                  <span className="text-[14px]   uppercase tracking-[0.2em] text-zinc-800 group-hover:text-black transition-colors">
                     RETURNS
                   </span>
                   {activeAccordion === 'returns' ? (
@@ -860,7 +860,7 @@ const ProductDetail = () => {
                       transition={{ duration: 0.2, ease: 'easeInOut' }}
                       className="overflow-hidden"
                     >
-                      <div className="pb-5 text-[12px] text-zinc-600 font-light leading-relaxed space-y-2">
+                      <div className="pb-5 text-[14px] text-zinc-600 font-light leading-relaxed space-y-2">
                         <p className="flex items-start gap-2">
                           <RefreshCw size={13} className="text-zinc-800 shrink-0 mt-0.5" />
                           <span>Hassle-free <strong>30-day return & exchange</strong> window. Doorstep pickup scheduled automatically upon request.</span>
@@ -903,8 +903,8 @@ const ProductDetail = () => {
                       <Heart size={14} />
                     </button>
                   </div>
-                  <h3 className="text-[12px] font-medium tracking-wider uppercase text-zinc-900 truncate mb-0.5 group-hover:text-black transition-colors">{item.name}</h3>
-                  <span className="text-[12px]   text-zinc-900">₹{item.price?.toLocaleString()}</span>
+                  <h3 className="text-[14px] font-medium tracking-wider uppercase text-zinc-900 truncate mb-0.5 group-hover:text-black transition-colors">{item.name}</h3>
+                  <span className="text-[14px]   text-zinc-900">₹{item.price?.toLocaleString()}</span>
                 </Link>
               ))}
             </div>
@@ -932,7 +932,7 @@ const ProductDetail = () => {
           type="button"
           onClick={() => !isOutOfStock && addToCollection('cart')}
           disabled={isOutOfStock}
-          className={`flex-1 h-12 bg-black text-white text-[12px] font-extrabold uppercase tracking-[0.2em] flex items-center justify-center transition-all cursor-pointer ${isOutOfStock ? 'opacity-40 cursor-not-allowed' : 'active:bg-zinc-800'
+          className={`flex-1 h-12 bg-black text-white text-[14px] font-extrabold uppercase tracking-[0.2em] flex items-center justify-center transition-all cursor-pointer ${isOutOfStock ? 'opacity-40 cursor-not-allowed' : 'active:bg-zinc-800'
             }`}
         >
           {isOutOfStock ? 'OUT OF STOCK' : isInCart ? 'VIEW BAG' : 'ADD TO BAG'}

@@ -83,12 +83,12 @@ const AdminProfileSettings = () => {
           <h2 className="text-xl   font-poppins text-zinc-900 uppercase tracking-wider flex items-center gap-2">
             <User className="text-[#b8860b]" size={22} /> Administrator Profile Settings
           </h2>
-          <p className="text-[12px] text-zinc-500 mt-1">Manage your administrative name, profile photo, credentials, and bio details.</p>
+          <p className="text-[14px] text-zinc-500 mt-1">Manage your administrative name, profile photo, credentials, and bio details.</p>
         </div>
       </div>
 
       {loading ? (
-        <div className="py-12 text-center text-[12px] text-zinc-500">Loading administrator profile...</div>
+        <div className="py-12 text-center text-[14px] text-zinc-500">Loading administrator profile...</div>
       ) : (
         <form onSubmit={handleSaveProfile} className="space-y-6">
           <div className="bg-white p-6 sm:p-8 rounded-2xl border border-zinc-200 shadow-sm space-y-6">
@@ -99,7 +99,7 @@ const AdminProfileSettings = () => {
                 <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-zinc-300 shadow-md bg-zinc-100">
                   <OptimizedCloudinaryImage src={profile.image} alt={profile.name} preset="avatar" className="w-full h-full object-cover" />
                 </div>
-                <label className="absolute inset-0 bg-black/50 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-[12px]   gap-1">
+                <label className="absolute inset-0 bg-black/50 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-[14px]   gap-1">
                   <Camera size={16} />
                   <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
                 </label>
@@ -108,7 +108,7 @@ const AdminProfileSettings = () => {
                 <h3 className="text-base   text-zinc-900">{profile.name}</h3>
                 <p className="text-[10px] font-extrabold text-[#b8860b] uppercase tracking-widest">{profile.role}</p>
                 <div className="pt-1">
-                  <label className="inline-block px-4 py-1.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 text-[12px]   rounded-lg cursor-pointer transition-colors border border-zinc-300">
+                  <label className="inline-block px-4 py-1.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 text-[14px]   rounded-lg cursor-pointer transition-colors border border-zinc-300">
                     {uploading ? "Uploading Photo..." : "Change Profile Photo"}
                     <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
                   </label>
@@ -117,7 +117,7 @@ const AdminProfileSettings = () => {
             </div>
 
             {/* Profile Input Fields */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-[12px]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-[14px]">
               <div className="space-y-1.5">
                 <label className="  text-zinc-500 uppercase tracking-wider block">Administrator Name</label>
                 <input
@@ -175,7 +175,7 @@ const AdminProfileSettings = () => {
             {/* Save Button */}
             <div className="flex items-center justify-between pt-4 border-t border-zinc-100">
               {savedSuccess ? (
-                <div className="flex items-center gap-2 text-emerald-600 text-[12px]   animate-pulse">
+                <div className="flex items-center gap-2 text-emerald-600 text-[14px]   animate-pulse">
                   <CheckCircle2 size={16} /> Profile Saved Successfully!
                 </div>
               ) : <div />}
@@ -183,7 +183,7 @@ const AdminProfileSettings = () => {
               <button
                 type="submit"
                 disabled={saving || uploading}
-                className="px-6 py-3.5 bg-black hover:bg-zinc-800 text-white font-extrabold text-[12px] uppercase tracking-wider rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer ml-auto"
+                className="px-6 py-3.5 bg-black hover:bg-zinc-800 text-white font-extrabold text-[14px] uppercase tracking-wider rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer ml-auto"
               >
                 <Save size={15} />
                 <span>{saving ? "Saving Profile..." : "Save Profile Changes"}</span>

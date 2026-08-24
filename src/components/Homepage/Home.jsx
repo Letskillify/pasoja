@@ -11,7 +11,7 @@ import SEOHead from '../SEOHead';
 
 const Home = () => {
   return (
-    <main className="bg-[#faf9f5] min-h-screen selection:bg-black selection:text-white">
+    <main className="bg-[#f5f5f5] min-h-screen selection:bg-black selection:text-white">
       <SEOHead
         title="Pasoja | Premium Apparel, Oversized Tees & Modern Streetwear"
         description="Shop Pasoja online for premium oversized t-shirts, casual shirts, jeans, hoodies, and luxury streetwear fits. Worldwide shipping available."

@@ -19,11 +19,11 @@ const ProductsTable = ({ products, onEdit, onDelete }) => {
       <div className="px-6 py-5 flex items-center justify-between border-b border-zinc-200">
         <div>
           <h2 className="text-lg font-poppins   text-zinc-900">Clothing Products</h2>
-          <p className="text-[12px] text-zinc-500 mt-0.5">
+          <p className="text-[14px] text-zinc-500 mt-0.5">
             Manage your clothing catalog
           </p>
         </div>
-        <span className="px-3.5 py-1.5 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-800 text-[12px]  ">
+        <span className="px-3.5 py-1.5 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-800 text-[14px]  ">
           {products.length} Products
         </span>
       </div>
@@ -71,7 +71,7 @@ const ProductsTable = ({ products, onEdit, onDelete }) => {
                   {row.category || "-"}
                 </td>
                 <td className="px-6 py-4">
-                  <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-[12px]   ${row.gender === 'Men' ? 'bg-blue-50 text-blue-700 border border-blue-200' :
+                  <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-[14px]   ${row.gender === 'Men' ? 'bg-blue-50 text-blue-700 border border-blue-200' :
                     row.gender === 'Women' ? 'bg-pink-50 text-pink-700 border border-pink-200' :
                       'bg-zinc-100 text-zinc-700 border border-zinc-200'
                     }`}>
@@ -86,7 +86,7 @@ const ProductsTable = ({ products, onEdit, onDelete }) => {
                 </td>
                 <td className="px-6 py-4">
                   <span
-                    className={`inline-flex items-center px-3 py-1 rounded-full border text-[12px]   ${statusBadgeClasses(row.stock_status || "In Stock")}`}
+                    className={`inline-flex items-center px-3 py-1 rounded-full border text-[14px]   ${statusBadgeClasses(row.stock_status || "In Stock")}`}
                   >
                     {row.stock_status || "In Stock"}
                   </span>

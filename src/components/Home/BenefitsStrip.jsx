@@ -48,7 +48,7 @@ const BenefitsStrip = () => {
   if (loading || benefits.length === 0) return null;
 
   return (
-    <section className="bg-[#f4f1ea] border-y border-zinc-200 py-3.5 overflow-hidden">
+    <section className="bg-[#f5f5f5] border-y border-zinc-200 py-3.5 overflow-hidden">
       <motion.div
         animate={{ x: ['0%', '-50%'] }}
         transition={{ repeat: Infinity, duration: 15, ease: 'linear' }}

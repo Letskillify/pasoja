@@ -99,7 +99,7 @@ const Testimonials = () => {
   if (loading || !settings.is_active) return null;
 
   return (
-    <section className="py-8 md:py-12 bg-[#faf9f5] overflow-hidden relative border-t border-zinc-200">
+    <section className="py-8 md:py-12 bg-[#f5f5f5] overflow-hidden relative border-t border-zinc-200">
       <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Mobile Header (block md:hidden) - Screenshot 3 Style */}
@@ -113,7 +113,7 @@ const Testimonials = () => {
         <div className="hidden md:flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div className="flex-1 flex flex-col md:flex-row md:items-end gap-6 md:gap-12">
             <div>
-              <p className="text-[10px] sm:text-[12px] tracking-[0.3em] text-[#b8860b] uppercase mb-2  ">
+              <p className="text-[10px] sm:text-[14px] tracking-[0.3em] text-[#b8860b] uppercase mb-2  ">
                 {settings.eyebrow}
               </p>
               <h2 className="text-xl sm:text-3xl lg:text-4xl font-extralight tracking-[0.15em] text-zinc-900 uppercase whitespace-nowrap">
