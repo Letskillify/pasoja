@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { auth, db } from "./Firebase";
-import { onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, updatePassword } from "firebase/auth";
+import {
+  onAuthStateChanged,
+  signOut,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  updatePassword,
+  GoogleAuthProvider,
+  signInWithPopup
+} from "firebase/auth";
 import { doc, setDoc, getDoc, serverTimestamp, collection, getDocs, query, where } from "firebase/firestore";
 import { AuthContext } from "./useAuth";
 
@@ -27,8 +36,16 @@ const AuthProvider = ({ children }) => {
         return;
       }
 
+      // If the email is the superadmin, and customer flow did not explicitly authenticate them, ignore it for customer pages!
+      if (u && u.email === "super@pasoja.in" && localStorage.getItem("pasoja_customer_logged_in") !== "true") {
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+
       setUser(u || null);
       setLoading(false);
+
       if (u) {
         const userDoc = doc(db, "users", u.uid);
         const snap = await getDoc(userDoc);
@@ -46,6 +63,8 @@ const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const formattedEmail = email.toLowerCase().trim();
+    localStorage.setItem("pasoja_customer_logged_in", "true");
+
     // 1. Check if user document exists in Firestore and has custom password stored
     const usersRef = collection(db, "users");
     const q = query(usersRef, where("email", "==", formattedEmail));
@@ -104,6 +123,7 @@ const AuthProvider = ({ children }) => {
 
   const signup = async (email, password, displayName) => {
     const formattedEmail = email.toLowerCase().trim();
+    localStorage.setItem("pasoja_customer_logged_in", "true");
     const bypassPassword = "PasojaSecureBypassKey2026_" + formattedEmail;
 
     const cred = await createUserWithEmailAndPassword(auth, formattedEmail, bypassPassword);
@@ -119,8 +139,30 @@ const AuthProvider = ({ children }) => {
     return cred;
   };
 
+  const loginWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    localStorage.setItem("pasoja_customer_logged_in", "true");
+    try {
+      const cred = await signInWithPopup(auth, provider);
+      const userDoc = doc(db, "users", cred.user.uid);
+      const snap = await getDoc(userDoc);
+      if (!snap.exists()) {
+        await setDoc(userDoc, {
+          email: cred.user.email?.toLowerCase().trim() || "",
+          displayName: cred.user.displayName || "",
+          createdAt: serverTimestamp(),
+        });
+      }
+      return cred;
+    } catch (err) {
+      console.error("Google authentication failed:", err);
+      throw err;
+    }
+  };
+
   const logout = async () => {
     localStorage.removeItem("pasoja_custom_user");
+    localStorage.removeItem("pasoja_customer_logged_in");
     setUser(null);
     await signOut(auth);
   };
@@ -140,7 +182,7 @@ const AuthProvider = ({ children }) => {
     await setDoc(userDocRef, { password: newPassword }, { merge: true });
   };
 
-  const value = { user, loading, login, signup, logout, resetPassword };
+  const value = { user, loading, login, signup, loginWithGoogle, logout, resetPassword };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

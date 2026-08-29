@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { db } from "../../components/Firebase";
+import { db, auth } from "../../components/Firebase";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import {
   collection,
   getDocs,
@@ -30,7 +31,8 @@ import {
   X, Plus, Edit2, Trash2, CheckCircle2, AlertTriangle,
   User, Calendar, DollarSign, ShoppingBag, Eye, Printer,
   Download, PlusCircle, Check, HelpCircle, FileText,
-  Shirt, AlertCircle, Mail, Lock, ArrowRight, Image as ImageIcon
+  Shirt, AlertCircle, Mail, Lock, ArrowRight, Image as ImageIcon,
+  Upload
 } from "lucide-react";
 
 import { useSearchParams } from "react-router-dom";
@@ -54,6 +56,7 @@ import CloudinaryMediaPickerModal from "../../components/CloudinaryMediaPickerMo
 
 import uploadToCloudinary from "../../utils/cloudinary";
 import OptimizedCloudinaryImage from "../../components/OptimizedCloudinaryImage";
+import { exportToCSV, csvToJSON } from "../../utils/exportUtils";
 export { uploadToCloudinary };
 
 // Default Seed Data for Firebase Firestore
@@ -115,6 +118,62 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
   const [uploading, setUploading] = useState(false);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [activePickerField, setActivePickerField] = useState(null);
+  const [selectedIds, setSelectedIds] = useState([]);
+
+  useEffect(() => {
+    setSelectedIds([]);
+  }, [collectionName]);
+
+  const toggleSelectAll = () => {
+    if (selectedIds.length === items.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(items.map(item => item.id));
+    }
+  };
+
+  const toggleSelectRow = (id) => {
+    if (selectedIds.includes(id)) {
+      setSelectedIds(selectedIds.filter(selectedId => selectedId !== id));
+    } else {
+      setSelectedIds([...selectedIds, id]);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (!window.confirm(`Are you sure you want to delete ${selectedIds.length} selected items?`)) return;
+    try {
+      setLoading(true);
+      for (const id of selectedIds) {
+        await deleteDoc(doc(db, collectionName, id));
+      }
+      alert("Deleted successfully!");
+      setSelectedIds([]);
+      fetchItems();
+    } catch (err) {
+      alert("Error: " + err.message);
+      setLoading(false);
+    }
+  };
+
+  const handleBulkStatusChange = async (newStatus) => {
+    const statusField = fields.find(f => f.type === 'boolean');
+    if (!statusField) return;
+    try {
+      setLoading(true);
+      for (const id of selectedIds) {
+        await updateDoc(doc(db, collectionName, id), {
+          [statusField.key]: newStatus
+        });
+      }
+      alert(`Updated status to ${newStatus ? 'Active' : 'Inactive'} successfully!`);
+      setSelectedIds([]);
+      fetchItems();
+    } catch (err) {
+      alert("Error: " + err.message);
+      setLoading(false);
+    }
+  };
 
   const fetchItems = async () => {
     setLoading(true);
@@ -216,17 +275,145 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
     }
   };
 
+  const fileInputRef = useRef(null);
+
+  const handleExport = () => {
+    const keys = ["id", ...fields.map(f => f.key)];
+    const headers = ["ID", ...fields.map(f => f.label)];
+    exportToCSV(items, keys, headers, `pasoja_${collectionName}`);
+  };
+
+  const handleImport = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (evt) => {
+      try {
+        const text = evt.target.result;
+        const keys = ["id", ...fields.map(f => f.key)];
+        const headers = ["ID", ...fields.map(f => f.label)];
+
+        const rows = csvToJSON(text, keys, headers);
+        if (!rows || rows.length === 0) {
+          alert("No rows found or headers do not match!");
+          return;
+        }
+
+        let importCount = 0;
+        let updateCount = 0;
+
+        for (const row of rows) {
+          const docData = {};
+
+          fields.forEach(field => {
+            const rawVal = row[field.key];
+            if (field.type === 'boolean') {
+              docData[field.key] = rawVal === 'true' || rawVal === '1' || rawVal === 'Yes' || rawVal === 'ACTIVE' || rawVal === true;
+            } else if (field.type === 'number') {
+              docData[field.key] = parseFloat(rawVal) || 0;
+            } else {
+              docData[field.key] = rawVal || '';
+            }
+          });
+
+          if (row.id) {
+            await setDoc(doc(db, collectionName, row.id), docData, { merge: true });
+            updateCount++;
+          } else {
+            const newId = doc(collection(db, collectionName)).id;
+            await setDoc(doc(db, collectionName, newId), { ...docData, id: newId });
+            importCount++;
+          }
+        }
+
+        alert(`Import completed! ${importCount} new items created, ${updateCount} updated.`);
+        fetchItems();
+      } catch (err) {
+        alert("Import failed: " + err.message);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  };
+
   return (
     <div className="bg-white border border-zinc-200 rounded-xl p-6 text-zinc-900 shadow-sm">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg   text-zinc-900 uppercase tracking-wider">{title}</h2>
-        <button
-          onClick={handleCreateNew}
-          className="flex items-center gap-2 px-4 py-2 bg-black text-white text-[14px]   rounded-lg hover:bg-zinc-800 transition-all shadow-sm cursor-pointer"
-        >
-          <Plus size={14} /> Add New
-        </button>
+        <div className="flex items-center gap-2">
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleImport}
+            accept=".csv"
+            className="hidden"
+          />
+          <button
+            type="button"
+            onClick={() => fileInputRef.current.click()}
+            className="flex items-center gap-1.5 px-3 py-2 border border-zinc-200 rounded-lg bg-white hover:bg-zinc-50 text-[13px] font-semibold text-zinc-700 cursor-pointer transition-all shadow-sm"
+          >
+            <Upload size={14} /> Import
+          </button>
+          <button
+            type="button"
+            onClick={handleExport}
+            className="flex items-center gap-1.5 px-3 py-2 border border-zinc-200 rounded-lg bg-white hover:bg-zinc-50 text-[13px] font-semibold text-zinc-700 cursor-pointer transition-all shadow-sm"
+          >
+            <Download size={14} /> Export
+          </button>
+          <button
+            type="button"
+            onClick={handleCreateNew}
+            className="flex items-center gap-2 px-4 py-2 bg-black text-white text-[14px]   rounded-lg hover:bg-zinc-800 transition-all shadow-sm cursor-pointer"
+          >
+            <Plus size={14} /> Add New
+          </button>
+        </div>
       </div>
+
+      {selectedIds.length > 0 && (
+        <div className="flex flex-col sm:flex-row justify-between items-center bg-zinc-50 border border-zinc-200 p-4 rounded-xl mb-4 gap-3">
+          <div className="text-[13px] font-semibold text-zinc-700">
+            {selectedIds.length} item(s) selected
+          </div>
+          <div className="flex items-center gap-2">
+            {fields.some(f => f.type === 'boolean') && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => handleBulkStatusChange(true)}
+                  className="px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 rounded text-[13px] font-semibold cursor-pointer transition-colors"
+                >
+                  Mark Active
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleBulkStatusChange(false)}
+                  className="px-3 py-1.5 bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 rounded text-[13px] font-semibold cursor-pointer transition-colors"
+                >
+                  Mark Inactive
+                </button>
+              </>
+            )}
+            <button
+              type="button"
+              onClick={handleBulkDelete}
+              className="px-3 py-1.5 bg-red-600 text-white hover:bg-red-700 rounded text-[13px] font-semibold cursor-pointer transition-colors"
+            >
+              Delete Selected
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedIds([])}
+              className="px-3 py-1.5 bg-zinc-200 hover:bg-zinc-300 text-zinc-700 rounded text-[13px] font-semibold cursor-pointer transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
 
       {loading ? (
         <div className="py-8 text-center text-zinc-500 text-[14px]">Loading items...</div>
@@ -235,6 +422,14 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
           <table className="w-full text-left text-[14px] border-collapse">
             <thead>
               <tr className="border-b border-zinc-200 text-zinc-500 uppercase tracking-widest text-[10px]">
+                <th className="py-3 px-4 w-10">
+                  <input
+                    type="checkbox"
+                    checked={items.length > 0 && selectedIds.length === items.length}
+                    onChange={toggleSelectAll}
+                    className="w-4 h-4 accent-black cursor-pointer rounded border-zinc-300"
+                  />
+                </th>
                 {fields.map(f => (
                   <th key={f.key} className="py-3 px-4">{f.label}</th>
                 ))}
@@ -243,7 +438,15 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
             </thead>
             <tbody>
               {items.map(item => (
-                <tr key={item.id} className="border-b border-zinc-200 hover:bg-zinc-50/80 transition-colors">
+                <tr key={item.id} className={`border-b border-zinc-200 hover:bg-zinc-50/80 transition-colors ${selectedIds.includes(item.id) ? 'bg-zinc-50' : ''}`}>
+                  <td className="py-3.5 px-4 w-10">
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.includes(item.id)}
+                      onChange={() => toggleSelectRow(item.id)}
+                      className="w-4 h-4 accent-black cursor-pointer rounded border-zinc-300"
+                    />
+                  </td>
                   {fields.map(f => (
                     <td key={f.key} className="py-3.5 px-4 font-medium text-zinc-800">
                       {f.type === 'image' ? (
@@ -267,7 +470,7 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
               ))}
               {items.length === 0 && (
                 <tr>
-                  <td colSpan={fields.length + 1} className="py-8 text-center text-zinc-500">No items found.</td>
+                  <td colSpan={fields.length + 2} className="py-8 text-center text-zinc-500">No items found.</td>
                 </tr>
               )}
             </tbody>
@@ -403,6 +606,18 @@ const CommunityManager = () => {
   const [stats, setStats] = useState([]);
   const [statsLoading, setStatsLoading] = useState(true);
   const [savingStatId, setSavingStatId] = useState(null);
+
+  const handleExportGallery = () => {
+    const keys = ['id', 'image', 'link', 'sort_order', 'is_active'];
+    const headers = ['Image ID', 'Image URL', 'Destination Link', 'Sort Order', 'Active Status'];
+    exportToCSV(images, keys, headers, 'pasoja_community_gallery');
+  };
+
+  const handleExportStats = () => {
+    const keys = ['id', 'icon', 'value', 'label', 'sort_order', 'is_active'];
+    const headers = ['Stat ID', 'Icon', 'Primary Value', 'Label', 'Sort Order', 'Active Status'];
+    exportToCSV(stats, keys, headers, 'pasoja_community_stats');
+  };
 
   const fetchSettings = async () => {
     setSettingsLoading(true);
@@ -618,8 +833,14 @@ const CommunityManager = () => {
 
       {subTab === "gallery" && !imagesLoading && (
         <div className="space-y-6 text-[14px]">
-          <div className="flex justify-end">
-            <button onClick={handleAddImage} className="px-4 py-2 bg-[#c9a962] text-[#090909] hover:bg-white hover:text-black rounded   transition-all">Add New Image</button>
+          <div className="flex justify-between items-center sm:flex-row flex-col gap-3 bg-zinc-50 p-4 border border-zinc-200 rounded-xl">
+            <button
+              onClick={handleExportGallery}
+              className="flex items-center gap-1.5 px-3 py-1.5 border border-zinc-300 rounded bg-white hover:bg-zinc-100 text-[13px] font-semibold text-zinc-700 cursor-pointer transition-all shadow-sm"
+            >
+              <Download size={14} /> Export Gallery Images
+            </button>
+            <button onClick={handleAddImage} className="px-4 py-2 bg-[#c9a962] text-[#090909] hover:bg-white hover:text-black rounded transition-all">Add New Image</button>
           </div>
           <div className="grid gap-6 md:grid-cols-2">
             {images.map((img, idx) => (
@@ -673,54 +894,65 @@ const CommunityManager = () => {
       )}
 
       {subTab === "stats" && !statsLoading && (
-        <div className="grid gap-6 md:grid-cols-2 text-[14px]">
-          {stats.map((stat, idx) => (
-            <div key={stat.id} className="border border-[#1a1a1a] rounded-xl p-5 bg-[#161616] space-y-4">
-              <div className="flex items-center justify-between border-b border-[#222] pb-3">
-                <span className="  text-zinc-300">Stat #{idx + 1}</span>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id={`stat-active-${stat.id}`}
-                    checked={stat.is_active !== false}
-                    onChange={(e) => handleStatChange(stat.id, 'is_active', e.target.checked)}
-                    className="rounded text-[#c9a962] focus:ring-[#c9a962] w-4 h-4 cursor-pointer"
-                  />
-                  <label htmlFor={`stat-active-${stat.id}`} className="  text-zinc-400 cursor-pointer">Active</label>
+        <div className="space-y-6 text-[14px]">
+          <div className="flex justify-between items-center bg-zinc-50 p-4 border border-zinc-200 rounded-xl">
+            <button
+              onClick={handleExportStats}
+              className="flex items-center gap-1.5 px-3 py-1.5 border border-zinc-300 rounded bg-white hover:bg-zinc-100 text-[13px] font-semibold text-zinc-700 cursor-pointer transition-all shadow-sm"
+            >
+              <Download size={14} /> Export Stats
+            </button>
+            <span className="text-[13px] text-zinc-500 font-medium">{stats.length} Stats</span>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2">
+            {stats.map((stat, idx) => (
+              <div key={stat.id} className="border border-[#1a1a1a] rounded-xl p-5 bg-[#161616] space-y-4">
+                <div className="flex items-center justify-between border-b border-[#222] pb-3">
+                  <span className="  text-zinc-300">Stat #{idx + 1}</span>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id={`stat-active-${stat.id}`}
+                      checked={stat.is_active !== false}
+                      onChange={(e) => handleStatChange(stat.id, 'is_active', e.target.checked)}
+                      className="rounded text-[#c9a962] focus:ring-[#c9a962] w-4 h-4 cursor-pointer"
+                    />
+                    <label htmlFor={`stat-active-${stat.id}`} className="  text-zinc-400 cursor-pointer">Active</label>
+                  </div>
                 </div>
-              </div>
 
-              <div className="space-y-1">
-                <label className="text-[10px]   text-zinc-400 uppercase tracking-wider block">Icon</label>
-                <select value={stat.icon} onChange={(e) => handleStatChange(stat.id, 'icon', e.target.value)} className="w-full px-3 py-2 bg-[#090909] border border-[#222] rounded text-white">
-                  <option value="Star">Star (Rating)</option>
-                  <option value="Award">Award (Badge)</option>
-                  <option value="MessageSquare">Message (Reviews)</option>
-                  <option value="RefreshCw">Refresh (Retention)</option>
-                  <option value="Heart">Heart (Likes)</option>
-                </select>
-              </div>
+                <div className="space-y-1">
+                  <label className="text-[10px]   text-zinc-400 uppercase tracking-wider block">Icon</label>
+                  <select value={stat.icon} onChange={(e) => handleStatChange(stat.id, 'icon', e.target.value)} className="w-full px-3 py-2 bg-[#090909] border border-[#222] rounded text-white">
+                    <option value="Star">Star (Rating)</option>
+                    <option value="Award">Award (Badge)</option>
+                    <option value="MessageSquare">Message (Reviews)</option>
+                    <option value="RefreshCw">Refresh (Retention)</option>
+                    <option value="Heart">Heart (Likes)</option>
+                  </select>
+                </div>
 
-              <div className="space-y-1">
-                <label className="text-[10px]   text-zinc-400 uppercase tracking-wider block">Primary Value</label>
-                <input type="text" value={stat.value} onChange={(e) => handleStatChange(stat.id, 'value', e.target.value)} className="w-full px-3 py-2 bg-[#090909] border border-[#222] rounded text-white" />
-              </div>
+                <div className="space-y-1">
+                  <label className="text-[10px]   text-zinc-400 uppercase tracking-wider block">Primary Value</label>
+                  <input type="text" value={stat.value} onChange={(e) => handleStatChange(stat.id, 'value', e.target.value)} className="w-full px-3 py-2 bg-[#090909] border border-[#222] rounded text-white" />
+                </div>
 
-              <div className="space-y-1">
-                <label className="text-[10px]   text-zinc-400 uppercase tracking-wider block">Label</label>
-                <input type="text" value={stat.label} onChange={(e) => handleStatChange(stat.id, 'label', e.target.value)} className="w-full px-3 py-2 bg-[#090909] border border-[#222] rounded text-white" />
-              </div>
+                <div className="space-y-1">
+                  <label className="text-[10px]   text-zinc-400 uppercase tracking-wider block">Label</label>
+                  <input type="text" value={stat.label} onChange={(e) => handleStatChange(stat.id, 'label', e.target.value)} className="w-full px-3 py-2 bg-[#090909] border border-[#222] rounded text-white" />
+                </div>
 
-              <div className="space-y-1">
-                <label className="text-[10px]   text-zinc-400 uppercase tracking-wider block">Sort Order</label>
-                <input type="number" value={stat.sort_order} onChange={(e) => handleStatChange(stat.id, 'sort_order', parseInt(e.target.value) || 0)} className="w-full px-3 py-2 bg-[#090909] border border-[#222] rounded text-white" />
-              </div>
+                <div className="space-y-1">
+                  <label className="text-[10px]   text-zinc-400 uppercase tracking-wider block">Sort Order</label>
+                  <input type="number" value={stat.sort_order} onChange={(e) => handleStatChange(stat.id, 'sort_order', parseInt(e.target.value) || 0)} className="w-full px-3 py-2 bg-[#090909] border border-[#222] rounded text-white" />
+                </div>
 
-              <button onClick={() => handleSaveStat(stat)} disabled={savingStatId === stat.id} className="w-full py-2 bg-[#c9a962] text-[#090909] hover:bg-white hover:text-black   rounded">
-                {savingStatId === stat.id ? "Saving..." : "Save"}
-              </button>
-            </div>
-          ))}
+                <button onClick={() => handleSaveStat(stat)} disabled={savingStatId === stat.id} className="w-full py-2 bg-[#c9a962] text-[#090909] hover:bg-white hover:text-black   rounded">
+                  {savingStatId === stat.id ? "Saving..." : "Save"}
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
@@ -908,9 +1140,19 @@ const Admin = () => {
   const [adminPassword, setAdminPassword] = useState("");
   const [loginError, setLoginError] = useState("");
 
-  const handleAdminLogin = (e) => {
+  const handleAdminLogin = async (e) => {
     e.preventDefault();
     if (adminEmail === "super@pasoja.in" && adminPassword === "Super@321.Admin") {
+      try {
+        await signInWithEmailAndPassword(auth, adminEmail, adminPassword);
+      } catch (err) {
+        console.warn("Firebase admin login failed, attempting auto-registration:", err.message);
+        try {
+          await createUserWithEmailAndPassword(auth, adminEmail, adminPassword);
+        } catch (regErr) {
+          console.error("Firebase admin auto-registration failed:", regErr);
+        }
+      }
       sessionStorage.setItem("adminToken", "PASOJA_SUPER_ADMIN");
       setIsAdminLoggedIn(true);
       setLoginError("");
@@ -918,6 +1160,16 @@ const Admin = () => {
       setLoginError("Invalid Administrator Credentials.");
     }
   };
+
+  useEffect(() => {
+    if (sessionStorage.getItem("adminToken") === "PASOJA_SUPER_ADMIN" || localStorage.getItem("adminToken") === "PASOJA_SUPER_ADMIN") {
+      if (!auth.currentUser) {
+        signInWithEmailAndPassword(auth, "super@pasoja.in", "Super@321.Admin").catch(err => {
+          console.warn("Firebase admin session restoration failed:", err.message);
+        });
+      }
+    }
+  }, []);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const tabFromUrl = searchParams.get("tab") || "Overview";
@@ -957,16 +1209,26 @@ const Admin = () => {
   const loadData = async () => {
     setLoading(true);
     try {
-      const prodSnap = await getDocs(query(collection(db, "products"), orderBy("createdAt", "desc")));
+      const prodSnap = await getDocs(collection(db, "products"));
       const prodList = prodSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      prodList.sort((a, b) => {
+        const timeA = a.createdAt?.toDate ? a.createdAt.toDate().getTime() : (a.createdAt ? new Date(a.createdAt).getTime() : 0);
+        const timeB = b.createdAt?.toDate ? b.createdAt.toDate().getTime() : (b.createdAt ? new Date(b.createdAt).getTime() : 0);
+        return timeB - timeA;
+      });
       setProducts(prodList);
 
       const userSnap = await getDocs(query(collection(db, "users")));
       const userList = userSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
       setUsers(userList);
 
-      const orderSnap = await getDocs(query(collection(db, "orders"), orderBy("createdAt", "desc")));
+      const orderSnap = await getDocs(collection(db, "orders"));
       const orderList = orderSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      orderList.sort((a, b) => {
+        const timeA = a.createdAt?.toDate ? a.createdAt.toDate().getTime() : (a.createdAt ? new Date(a.createdAt).getTime() : 0);
+        const timeB = b.createdAt?.toDate ? b.createdAt.toDate().getTime() : (b.createdAt ? new Date(b.createdAt).getTime() : 0);
+        return timeB - timeA;
+      });
       setOrders(orderList);
 
       // Aggregate revenue
@@ -1198,20 +1460,21 @@ const Admin = () => {
               products={filteredProducts}
               onEdit={handleEditClick}
               onDelete={handleDeleteProduct}
+              onImportSuccess={loadData}
             />
           </>
         );
       case "Orders":
         return (
           <>
-            <OrdersTable />
+            <OrdersTable onRefresh={loadData} />
           </>
         );
       case "Users":
       case "Customers":
         return (
           <>
-            <UsersTable users={users} />
+            <UsersTable users={users} onRefresh={loadData} />
           </>
         );
       case "Categories":

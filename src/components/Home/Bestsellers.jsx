@@ -149,12 +149,15 @@ const BestsellerProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const q = query(collection(db, 'products'), orderBy('createdAt', 'desc'));
-        const snap = await getDocs(q);
-        const list = snap.docs
-          .map(doc => ({ id: doc.id, ...doc.data() }))
-          .filter(item => item.is_active !== false);
-        setProducts(list.slice(0, 8));
+        const snap = await getDocs(collection(db, 'products'));
+        const list = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        list.sort((a, b) => {
+          const timeA = a.createdAt?.toDate ? a.createdAt.toDate().getTime() : (a.createdAt ? new Date(a.createdAt).getTime() : 0);
+          const timeB = b.createdAt?.toDate ? b.createdAt.toDate().getTime() : (b.createdAt ? new Date(b.createdAt).getTime() : 0);
+          return timeB - timeA;
+        });
+        const activeList = list.filter(item => item.is_active !== false);
+        setProducts(activeList.slice(0, 8));
       } catch {
         setProducts([
           { id: '1', name: 'Classic Woolen Coat', price: 4999, category: 'Coats' },

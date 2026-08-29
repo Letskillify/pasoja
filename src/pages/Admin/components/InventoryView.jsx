@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { db } from '../../../components/Firebase';
-import { collection, getDocs, doc, setDoc } from 'firebase/firestore';
-import { ClipboardCheck, Search, Plus, Minus, Save, AlertTriangle, CheckCircle, Package } from 'lucide-react';
+import { collection, getDocs, doc, setDoc, getDoc, deleteDoc, updateDoc } from 'firebase/firestore';
+import { ClipboardCheck, Search, Plus, Minus, Save, AlertTriangle, CheckCircle, Package, Download, Upload } from 'lucide-react';
 import OptimizedCloudinaryImage from '../../../components/OptimizedCloudinaryImage';
+import { exportToCSV, parseCSV, csvToJSON } from '../../../utils/exportUtils';
+
 
 const InventoryView = () => {
   const [products, setProducts] = useState([]);
@@ -10,6 +12,97 @@ const InventoryView = () => {
   const [filter, setFilter] = useState("all"); // 'all', 'low', 'out', 'in'
   const [searchTerm, setSearchTerm] = useState("");
   const [savingId, setSavingId] = useState(null);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const fileInputRef = useRef(null);
+
+  const handleExportInventory = () => {
+    const keys = ['id', 'name', 'category', 'gender', 'price', 'stock', 'stock_status', 'sizes', 'colors', 'material', 'rating', 'image', 'model_image', 'images', 'description'];
+    const headers = ['Product ID', 'Product Name', 'Category', 'Gender', 'Price (INR)', 'Stock Quantity', 'Stock Status', 'Sizes', 'Colors', 'Material', 'Rating', 'Primary Image URL', 'Model Image URL', 'All Image URLs', 'Description'];
+    exportToCSV(products, keys, headers, 'pasoja_inventory');
+  };
+
+  const handleImportInventory = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (evt) => {
+      try {
+        const text = evt.target.result;
+        const keys = ['id', 'name', 'category', 'gender', 'price', 'stock', 'stock_status', 'sizes', 'colors', 'material', 'rating', 'image', 'model_image', 'images', 'description'];
+        const headers = ['Product ID', 'Product Name', 'Category', 'Gender', 'Price (INR)', 'Stock Quantity', 'Stock Status', 'Sizes', 'Colors', 'Material', 'Rating', 'Primary Image URL', 'Model Image URL', 'All Image URLs', 'Description'];
+
+        const rows = csvToJSON(text, keys, headers);
+        if (!rows || rows.length === 0) {
+          alert("No rows found or headers do not match!");
+          return;
+        }
+
+        let importCount = 0;
+        let updateCount = 0;
+
+        for (const row of rows) {
+          const priceObj = Number(row.price) || 0;
+          const stockObj = Number(row.stock) || 0;
+          const ratingObj = Number(row.rating) || 4.5;
+          const imagesArr = row.images ? row.images.split(',').map(x => x.trim()).filter(Boolean) : (row.image ? [row.image] : []);
+
+          const docData = {
+            name: row.name || 'Unnamed Product',
+            category: row.category || 'T-Shirts',
+            gender: row.gender || 'Unisex',
+            price: priceObj,
+            original_price: priceObj,
+            stock: stockObj,
+            stock_status: row.stock_status || (stockObj === 0 ? 'Out of Stock' : stockObj <= 5 ? 'Low Stock' : 'In Stock'),
+            sizes: row.sizes || '',
+            colors: row.colors || '',
+            material: row.material || '',
+            rating: ratingObj,
+            image: row.image || (imagesArr[0] || ''),
+            model_image: row.model_image || '',
+            images: imagesArr,
+            description: row.description || '',
+            updatedAt: new Date()
+          };
+
+          if (row.id) {
+            const docRef = doc(db, "products", row.id);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+              const existingData = docSnap.data();
+              await setDoc(docRef, {
+                ...docData,
+                createdAt: existingData.createdAt || new Date()
+              }, { merge: true });
+            } else {
+              await setDoc(docRef, {
+                ...docData,
+                id: row.id,
+                createdAt: new Date()
+              });
+            }
+            updateCount++;
+          } else {
+            const newId = doc(collection(db, "products")).id;
+            await setDoc(doc(db, "products", newId), {
+              ...docData,
+              id: newId,
+              createdAt: new Date()
+            });
+            importCount++;
+          }
+        }
+
+        alert(`Successfully imported inventory! ${importCount} new products created, ${updateCount} updated.`);
+        fetchInventory();
+      } catch (err) {
+        alert("Import failed: " + err.message);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  };
 
   const fetchInventory = async () => {
     setLoading(true);
@@ -75,6 +168,53 @@ const InventoryView = () => {
     return true;
   });
 
+  const toggleSelectAll = () => {
+    if (selectedIds.length === filteredProducts.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(filteredProducts.map(p => p.id));
+    }
+  };
+
+  const toggleSelectRow = (id) => {
+    if (selectedIds.includes(id)) {
+      setSelectedIds(selectedIds.filter(selectedId => selectedId !== id));
+    } else {
+      setSelectedIds([...selectedIds, id]);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (!window.confirm(`Are you sure you want to delete ${selectedIds.length} selected products?`)) return;
+    try {
+      for (const id of selectedIds) {
+        await deleteDoc(doc(db, "products", id));
+      }
+      alert("Selected products deleted!");
+      setSelectedIds([]);
+      fetchInventory();
+    } catch (err) {
+      alert("Bulk delete failed: " + err.message);
+    }
+  };
+
+  const handleBulkStatusChange = async (status) => {
+    try {
+      for (const id of selectedIds) {
+        const stockVal = status === "Out of Stock" ? 0 : status === "Low Stock" ? 3 : 15;
+        await updateDoc(doc(db, "products", id), {
+          stock_status: status,
+          stock: stockVal
+        });
+      }
+      alert(`Updated stock status to ${status} for ${selectedIds.length} items!`);
+      setSelectedIds([]);
+      fetchInventory();
+    } catch (err) {
+      alert("Bulk stock status change failed: " + err.message);
+    }
+  };
+
   const totalStockCount = products.reduce((acc, p) => acc + (parseInt(p.stock) || 0), 0);
   const lowStockCount = products.filter(p => (parseInt(p.stock) || 0) > 0 && (parseInt(p.stock) || 0) <= 5).length;
   const outOfStockCount = products.filter(p => (parseInt(p.stock) || 0) === 0).length;
@@ -88,6 +228,29 @@ const InventoryView = () => {
             <ClipboardCheck className="text-[#b8860b]" size={22} /> Inventory & Stock Control Center
           </h2>
           <p className="text-[14px] text-zinc-500 mt-1">Live stock levels, inventory valuation, and instant stock update controls.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleImportInventory}
+            accept=".csv"
+            className="hidden"
+          />
+          <button
+            type="button"
+            onClick={() => fileInputRef.current.click()}
+            className="flex items-center gap-1.5 px-4 py-2 border border-zinc-300 rounded-lg bg-white hover:bg-zinc-50 text-[13px] font-semibold text-zinc-700 cursor-pointer transition-all shadow-sm"
+          >
+            <Upload size={14} /> Import Inventory
+          </button>
+          <button
+            type="button"
+            onClick={handleExportInventory}
+            className="flex items-center gap-1.5 px-4 py-2 border border-zinc-300 rounded-lg bg-white hover:bg-zinc-50 text-[13px] font-semibold text-zinc-700 cursor-pointer transition-all shadow-sm"
+          >
+            <Download size={14} /> Export Inventory
+          </button>
         </div>
       </div>
 
@@ -155,6 +318,50 @@ const InventoryView = () => {
 
       {/* Stock Items Table */}
       <div className="bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm">
+        {selectedIds.length > 0 && (
+          <div className="mb-4 flex flex-col sm:flex-row justify-between items-center bg-zinc-50 border border-zinc-200 p-4 rounded-xl gap-3">
+            <div className="text-[13px] font-semibold text-zinc-700">
+              {selectedIds.length} item(s) selected
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => handleBulkStatusChange("In Stock")}
+                className="px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 rounded text-[13px] font-semibold cursor-pointer transition-colors"
+              >
+                Mark In Stock
+              </button>
+              <button
+                type="button"
+                onClick={() => handleBulkStatusChange("Low Stock")}
+                className="px-3 py-1.5 bg-amber-50 text-amber-700 border border-[#d9a036]/20 hover:bg-amber-100 rounded text-[13px] font-semibold cursor-pointer transition-colors"
+              >
+                Mark Low Stock
+              </button>
+              <button
+                type="button"
+                onClick={() => handleBulkStatusChange("Out of Stock")}
+                className="px-3 py-1.5 bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 rounded text-[13px] font-semibold cursor-pointer transition-colors"
+              >
+                Mark Out of Stock
+              </button>
+              <button
+                type="button"
+                onClick={handleBulkDelete}
+                className="px-3 py-1.5 bg-red-600 text-white hover:bg-red-700 rounded text-[13px] font-semibold cursor-pointer transition-colors"
+              >
+                Delete Selected
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedIds([])}
+                className="px-3 py-1.5 bg-zinc-200 hover:bg-zinc-300 text-zinc-700 rounded text-[13px] font-semibold cursor-pointer transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
         {loading ? (
           <div className="py-12 text-center text-[14px] text-zinc-500">Loading live stock data...</div>
         ) : (
@@ -162,6 +369,14 @@ const InventoryView = () => {
             <table className="w-full text-left text-[14px] border-collapse">
               <thead>
                 <tr className="text-[10px]   uppercase tracking-widest text-zinc-400 border-b border-zinc-200">
+                  <th className="py-3 px-3 w-10">
+                    <input
+                      type="checkbox"
+                      checked={filteredProducts.length > 0 && selectedIds.length === filteredProducts.length}
+                      onChange={toggleSelectAll}
+                      className="w-4 h-4 accent-black cursor-pointer rounded border-zinc-300"
+                    />
+                  </th>
                   <th className="py-3 px-3">Product</th>
                   <th className="py-3 px-3">Category</th>
                   <th className="py-3 px-3">Price</th>
@@ -174,7 +389,15 @@ const InventoryView = () => {
                 {filteredProducts.map((p) => {
                   const stockNum = parseInt(p.stock) || 0;
                   return (
-                    <tr key={p.id} className="hover:bg-zinc-50/80 transition-colors">
+                    <tr key={p.id} className={`hover:bg-zinc-50/80 transition-colors ${selectedIds.includes(p.id) ? 'bg-zinc-50' : ''}`}>
+                      <td className="py-3.5 px-3 w-10">
+                        <input
+                          type="checkbox"
+                          checked={selectedIds.includes(p.id)}
+                          onChange={() => toggleSelectRow(p.id)}
+                          className="w-4 h-4 accent-black cursor-pointer rounded border-zinc-300"
+                        />
+                      </td>
                       <td className="py-3.5 px-3">
                         <div className="flex items-center gap-3">
                           <OptimizedCloudinaryImage src={p.image || p.images?.[0]} preset="avatar" className="w-10 h-10 object-cover rounded-lg bg-zinc-100 border border-zinc-200" alt={p.name} />
@@ -231,7 +454,7 @@ const InventoryView = () => {
                 })}
                 {filteredProducts.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="py-8 text-center text-zinc-500 text-[14px]">No matching inventory items found.</td>
+                    <td colSpan={7} className="py-8 text-center text-zinc-500 text-[14px]">No matching inventory items found.</td>
                   </tr>
                 )}
               </tbody>

@@ -6,9 +6,9 @@ import { motion } from "framer-motion";
 const PageHeader = ({ title, subtitle, breadcrumbItems = [] }) => {
   return (
     <section className="relative w-full bg-[#f5f5f5] mt-[145px] md:mt-[130px] overflow-hidden border-b border-zinc-200">
-      <div className="max-w-7xl py-3 mx-auto px-5 md:px-10 lg:px-14 py-10 md:py-16">
+      <div className="max-w-7xl py-3 mx-auto px-5 md:px-10 lg:px-14 py-5">
         {/* Breadcrumbs */}
-        <nav aria-label="Breadcrumb" className="flex items-center gap-2 mb-5">
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2">
           {breadcrumbItems.map((item, index) => {
             const isLast = index === breadcrumbItems.length - 1;
             const isFirst = index === 0;
@@ -35,30 +35,6 @@ const PageHeader = ({ title, subtitle, breadcrumbItems = [] }) => {
             );
           })}
         </nav>
-
-        {/* Title */}
-        {title && (
-          <motion.h1
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-xl sm:text-5xl md:text-2xl font-light text-zinc-900 tracking-widest leading-[1.0] uppercase"
-          >
-            {title}
-          </motion.h1>
-        )}
-
-        {/* Subtitle */}
-        {subtitle && (
-          <motion.p
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-sm text-zinc-600 font-medium mt-3 max-w-lg"
-          >
-            {subtitle}
-          </motion.p>
-        )}
       </div>
     </section>
   );
