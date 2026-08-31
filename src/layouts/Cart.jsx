@@ -69,8 +69,7 @@ const Cart = () => {
   });
 
   const handleCheckout = () => {
-    if (!user) navigate(`/signup?redirect=${encodeURIComponent("/checkout")}`);
-    else navigate("/checkout");
+    navigate("/checkout");
   };
 
   /* ── Loading ── */

@@ -49,6 +49,7 @@ import AnalyticsView from "./components/AnalyticsView";
 import ReportsView from "./components/ReportsView";
 import InventoryView from "./components/InventoryView";
 import ReturnsRefundsManager from "./components/ReturnsRefundsManager";
+import CouponsManager from "./components/CouponsManager";
 
 import BillingSystem from "./components/BillingSystem";
 import AdminProfileSettings from "./components/AdminProfileSettings";
@@ -1533,20 +1534,7 @@ const Admin = () => {
           />
         );
       case "Coupons / Offers":
-        return (
-          <GenericCRUDManager
-            collectionName="coupons"
-            title="Store Coupons & Promotional Code Manager"
-            fields={[
-              { key: 'code', label: 'Coupon Code' },
-              { key: 'discount_type', label: 'Type (Percentage / Fixed)' },
-              { key: 'discount_val', label: 'Discount Value' },
-              { key: 'min_order', label: 'Min Order Requirement' },
-              { key: 'is_active', label: 'Status', type: 'boolean' }
-            ]}
-            defaultItem={{ code: '', discount_type: 'Percentage', discount_val: '10', min_order: '999', is_active: true }}
-          />
-        );
+        return <CouponsManager />;
       case "Blogs":
         return (
           <GenericCRUDManager

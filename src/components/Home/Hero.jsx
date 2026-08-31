@@ -173,7 +173,7 @@ const Hero = () => {
                 className="h-full w-full object-cover"
                 loading={currentSlide === 0 ? "eager" : "lazy"}
                 decoding="async"
-                fetchpriority={currentSlide === 0 ? "high" : "auto"}
+                fetchPriority={currentSlide === 0 ? "high" : "auto"}
                 initial={{ scale: 1.04 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 7, ease: 'linear' }}

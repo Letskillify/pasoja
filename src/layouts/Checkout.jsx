@@ -4,12 +4,13 @@ import { useAuth } from "../components/useAuth";
 import { db } from "../components/Firebase";
 import {
   collection, getDocs, addDoc, serverTimestamp,
-  doc, deleteDoc, getDoc, updateDoc
+  doc, deleteDoc, getDoc, updateDoc, query, where
 } from "firebase/firestore";
+import emailjs from "@emailjs/browser";
 import { Link, useNavigate } from "react-router-dom";
 import {
   MapPin, User, Phone, Mail, CheckCircle, X,
-  ShieldCheck, ChevronRight, Plus, Check, Lock,
+  ShieldCheck, ChevronRight, Plus, Check, Lock, Tag,
   ArrowRight, Package, Truck, Home
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -141,7 +142,7 @@ const OrderFailed = ({ onRetry }) => (
 
 /* ─── Main Checkout Component ────────────────────────────────────────────── */
 const Checkout = () => {
-  const { user } = useAuth();
+  const { user, signup } = useAuth();
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -155,12 +156,190 @@ const Checkout = () => {
   const [orderStatus, setOrderStatus] = useState(null);
   const [toast, setToast] = useState(null);
 
+  // Suggested states for postal lookup API
+  const [citySearchSuggestions, setCitySearchSuggestions] = useState([]);
+  const [showCitySuggestions, setShowCitySuggestions] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
+
+  // Suggested states for Coupon System
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponDiscount, setCouponDiscount] = useState(0);
+
   const showToast = (msg, type = "info") => {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 4000);
   };
 
   const total = items.reduce((sum, i) => sum + ((Number(i.price) || 0) * (i.quantity || 1)), 0);
+
+  const handleCityChange = async (val) => {
+    setFormData(prev => ({ ...prev, city: val }));
+    if (val.trim().length <= 2) {
+      setCitySearchSuggestions([]);
+      setShowCitySuggestions(false);
+      return;
+    }
+    try {
+      setSearchLoading(true);
+      const res = await fetch(`https://api.postalpincode.in/postoffice/${encodeURIComponent(val.trim())}`);
+      const data = await res.json();
+      if (data && data[0] && data[0].PostOffice) {
+        setCitySearchSuggestions(data[0].PostOffice);
+        setShowCitySuggestions(true);
+      } else {
+        setCitySearchSuggestions([]);
+      }
+    } catch (e) {
+      console.error("Error fetching city postal info:", e);
+    } finally {
+      setSearchLoading(false);
+    }
+  };
+
+  const selectCitySuggestion = (office) => {
+    setFormData(prev => ({
+      ...prev,
+      city: office.District || office.Block || office.Name || prev.city,
+      state: office.State || prev.state,
+      pincode: office.Pincode || prev.pincode
+    }));
+    setCitySearchSuggestions([]);
+    setShowCitySuggestions(false);
+  };
+
+  const handleApplyCoupon = async (codeToApply = couponCode) => {
+    const cleanCode = codeToApply.toUpperCase().trim();
+    if (!cleanCode) return;
+    try {
+      const snap = await getDoc(doc(db, "coupons", cleanCode));
+      if (!snap.exists()) {
+        showToast("Invalid coupon code.", "error");
+        return;
+      }
+      const data = snap.data();
+      if (!data.is_active) {
+        showToast("This coupon is no longer active.", "error");
+        return;
+      }
+
+      // Check min order threshold
+      const subtotal = items.reduce((sum, i) => sum + ((Number(i.price) || 0) * (i.quantity || 1)), 0);
+      if (subtotal < (Number(data.min_order) || 0)) {
+        showToast(`Minimum order of ₹${data.min_order} required.`, "error");
+        return;
+      }
+
+      // Check applicable products
+      if (data.applicableProducts && data.applicableProducts.length > 0) {
+        const matchingItems = items.filter(item => {
+          const productId = item.id || item.cartId?.split("-")[0];
+          return data.applicableProducts.includes(productId);
+        });
+
+        if (matchingItems.length === 0) {
+          showToast("This coupon is not applicable to any items in your bag.", "error");
+          return;
+        }
+      }
+
+      setAppliedCoupon(data);
+      localStorage.setItem("applied_coupon_code", cleanCode);
+      showToast("Coupon applied successfully!");
+    } catch (e) {
+      console.error(e);
+      showToast("Error checking coupon.", "error");
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponDiscount(0);
+    setCouponCode("");
+    localStorage.removeItem("applied_coupon_code");
+    showToast("Coupon removed.");
+  };
+
+  // Recalculate coupon discount if items or coupon changes
+  useEffect(() => {
+    if (appliedCoupon && items.length > 0) {
+      const subtotal = items.reduce((sum, i) => sum + ((Number(i.price) || 0) * (i.quantity || 1)), 0);
+      let eligibleSubtotal = subtotal;
+
+      if (appliedCoupon.applicableProducts && appliedCoupon.applicableProducts.length > 0) {
+        const matchingItems = items.filter(item => {
+          const productId = item.id || item.cartId?.split("-")[0];
+          return appliedCoupon.applicableProducts.includes(productId);
+        });
+
+        eligibleSubtotal = matchingItems.reduce((sum, i) => sum + ((Number(i.price) || 0) * (i.quantity || 1)), 0);
+      }
+
+      let discountAmount = 0;
+      if (appliedCoupon.discount_type === "Percentage") {
+        discountAmount = eligibleSubtotal * (Number(appliedCoupon.discount_val) / 100);
+      } else {
+        discountAmount = Math.min(eligibleSubtotal, Number(appliedCoupon.discount_val));
+      }
+      setCouponDiscount(Math.round(discountAmount));
+    } else {
+      setCouponDiscount(0);
+    }
+  }, [items, appliedCoupon]);
+
+  // Global listener to close suggestions on click outside
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (!e.target.closest('[name="city"]')) {
+        setShowCitySuggestions(false);
+      }
+    };
+    document.addEventListener("click", handleOutsideClick);
+    return () => document.removeEventListener("click", handleOutsideClick);
+  }, []);
+
+  const sendOrderConfirmationEmail = async (emailAddress, fullName, orderId, orderTotal, tempPassword = "") => {
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_ORDER_TEMPLATE_ID || import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+    if (serviceId && templateId && publicKey) {
+      try {
+        const itemsSummary = items
+          .map((item) => `${item.name} (${item.size ? "Size: " + item.size + ", " : ""}Qty: ${item.quantity || 1}) - ₹${item.price}`)
+          .join("\n");
+
+        let messageText = `Thank you for your order, ${fullName}!\n\nOrder ID: ${orderId}\nTotal Amount: ₹${orderTotal.toLocaleString("en-IN")}\n\nItems ordered:\n${itemsSummary}\n\nWe will process and ship your order within 3-5 business days.`;
+
+        if (tempPassword) {
+          messageText += `\n\nAn account has been automatically created for you!\nYour login details are:\nEmail: ${emailAddress}\nTemporary Password: ${tempPassword}\n\nPlease log in and change your password in your profile settings.`;
+        }
+
+        const templateParams = {
+          to_email: emailAddress.toLowerCase().trim(),
+          to_name: fullName,
+          order_id: orderId,
+          order_total: `₹${orderTotal.toLocaleString("en-IN")}`,
+          items_summary: itemsSummary,
+          temp_password: tempPassword,
+          account_created: tempPassword ? "Yes" : "No",
+          project_name: "Pasoja Atelier",
+          reply_to: "pasoja.help@gmail.com",
+          message: messageText
+        };
+
+        await emailjs.send(serviceId, templateId, templateParams, publicKey);
+        console.log("Order confirmation email sent successfully.");
+      } catch (err) {
+        console.error("Order confirmation email delivery failed:", err);
+      }
+    } else {
+      console.log(`[Dev Mode - EmailJS Order Confirmation] To: ${emailAddress}, Order: ${orderId}, Total: ₹${orderTotal}`);
+      if (tempPassword) {
+        console.log(`[Dev Mode - Auto Account Created] Password: ${tempPassword}`);
+      }
+    }
+  };
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -169,11 +348,22 @@ const Checkout = () => {
     document.body.appendChild(script);
 
     const load = async () => {
-      if (!user) { setLoading(false); return; }
+      if (!user) {
+        const guestCart = JSON.parse(localStorage.getItem("guest_cart") || "[]");
+        setItems(guestCart);
+        setLoading(false);
+
+        // Auto apply coupon if present in localstorage
+        const storedCoupon = localStorage.getItem("applied_coupon_code");
+        if (storedCoupon) {
+          setTimeout(() => handleApplyCoupon(storedCoupon), 150);
+        }
+        return;
+      }
       try {
         const snap = await getDocs(collection(db, "users", user.uid, "cart"));
         setItems(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
-        setFormData(prev => ({ ...prev, name: user.displayName || "", email: user.email || "" }));
+        setFormData(prev => ({ ...prev, name: user.displayName || prev.name || "", email: user.email || prev.email || "" }));
 
         const addressSnap = await getDocs(collection(db, "users", user.uid, "addresses"));
         const addrs = addressSnap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -192,6 +382,11 @@ const Checkout = () => {
             pincode: def.pincode || ""
           }));
         }
+
+        const storedCoupon = localStorage.getItem("applied_coupon_code");
+        if (storedCoupon) {
+          setTimeout(() => handleApplyCoupon(storedCoupon), 150);
+        }
       } catch (e) { console.error(e); }
       finally { setLoading(false); }
     };
@@ -199,20 +394,36 @@ const Checkout = () => {
     return () => { if (document.body.contains(script)) document.body.removeChild(script); };
   }, [user]);
 
-  const clearCart = async () => {
-    try {
-      const snap = await getDocs(collection(db, "users", user.uid, "cart"));
-      await Promise.all(snap.docs.map(d => deleteDoc(doc(db, "users", user.uid, "cart", d.id))));
-    } catch (e) { console.error("Error clearing cart:", e); }
+  const clearCart = async (targetUser) => {
+    if (targetUser && !targetUser.isGuestPlaceholder) {
+      try {
+        const snap = await getDocs(collection(db, "users", targetUser.uid, "cart"));
+        await Promise.all(snap.docs.map(d => deleteDoc(doc(db, "users", targetUser.uid, "cart", d.id))));
+      } catch (e) { console.error("Error clearing cart:", e); }
+    }
+    localStorage.removeItem("guest_cart");
   };
 
-  const saveOrder = async (paymentId = "COD", status = "confirmed", paymentStatus = "captured") => {
+  const saveOrder = async (buyerUser, paymentId = "COD", status = "confirmed", paymentStatus = "captured", tempPassword = "") => {
     try {
-      await addDoc(collection(db, "orders"), {
-        userId: user.uid, userEmail: user.email, items, total,
-        shipping: formData, paymentMethod: formData.paymentMethod,
-        paymentId, status, paymentStatus, createdAt: serverTimestamp(),
+      const finalUid = buyerUser ? buyerUser.uid : "GUEST_" + Math.random().toString(36).substr(2, 9);
+      const finalEmail = buyerUser ? buyerUser.email : formData.email;
+
+      const orderRef = await addDoc(collection(db, "orders"), {
+        userId: finalUid,
+        userEmail: finalEmail,
+        items,
+        total: Math.max(0, total - couponDiscount),
+        shipping: formData,
+        paymentMethod: formData.paymentMethod,
+        paymentId,
+        status,
+        paymentStatus,
+        appliedCoupon: appliedCoupon ? appliedCoupon.code : null,
+        couponDiscount,
+        createdAt: serverTimestamp(),
       });
+
       if (status === "confirmed") {
         for (const item of items) {
           try {
@@ -232,7 +443,8 @@ const Checkout = () => {
             }
           } catch (e) { console.error(e); }
         }
-        await clearCart();
+        await clearCart(buyerUser);
+        await sendOrderConfirmationEmail(finalEmail, formData.name, orderRef.id, Math.max(0, total - couponDiscount), tempPassword);
         setOrderStatus("success");
       } else {
         setOrderStatus("failed");
@@ -248,35 +460,59 @@ const Checkout = () => {
     if (items.length === 0) { showToast("Your bag is empty!", "error"); return; }
     setIsProcessing(true);
 
+    let buyerUser = user;
+    let tempPassword = "";
+
+    if (!user) {
+      try {
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("email", "==", formData.email.toLowerCase().trim()));
+        const querySnap = await getDocs(q);
+
+        if (!querySnap.empty) {
+          const existingUserDoc = querySnap.docs[0];
+          buyerUser = { uid: existingUserDoc.id, email: formData.email.toLowerCase().trim() };
+        } else {
+          tempPassword = `Pasoja@${Math.floor(100000 + Math.random() * 900000)}`;
+          console.log("Creating user automatically for guest checkout email:", formData.email);
+          const cred = await signup(formData.email.toLowerCase().trim(), tempPassword, formData.name);
+          buyerUser = cred.user;
+        }
+      } catch (authErr) {
+        console.error("Auto signup/verification failed; placing order as guest metadata fallback", authErr);
+        buyerUser = { uid: "GUEST_" + Math.random().toString(36).substr(2, 9), email: formData.email.toLowerCase().trim(), isGuestPlaceholder: true };
+      }
+    }
+
     if (formData.paymentMethod === "online") {
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-        amount: total * 100,
+        amount: Math.max(0, total - couponDiscount) * 100,
         currency: "INR",
         name: "Pasoja",
         description: "Premium Fashion Order",
         image: getOptimizedCloudinaryUrl("https://res.cloudinary.com/dcjn4y284/image/upload/v1786029668/p3jd3nuet4vkqbfd5qaz.png", { width: 150 }),
         handler: async (response) => {
-          await saveOrder(response.razorpay_payment_id, "confirmed", "captured");
+          await saveOrder(buyerUser, response.razorpay_payment_id, "confirmed", "captured", tempPassword);
           setIsProcessing(false);
         },
         prefill: { name: formData.name, email: formData.email, contact: formData.phone },
         theme: { color: "#111111" },
         modal: {
           ondismiss: async () => {
-            await saveOrder("CANCELLED_BY_USER", "failed", "cancelled");
+            await saveOrder(buyerUser, "CANCELLED_BY_USER", "failed", "cancelled", tempPassword);
             setIsProcessing(false);
           }
         }
       };
       const rzp = new window.Razorpay(options);
       rzp.on("payment.failed", async (response) => {
-        await saveOrder(response.error.metadata?.payment_id || "FAILED", "failed", "failed");
+        await saveOrder(buyerUser, response.error.metadata?.payment_id || "FAILED", "failed", "failed", tempPassword);
         setIsProcessing(false);
       });
       rzp.open();
     } else {
-      await saveOrder("COD", "confirmed", "pending");
+      await saveOrder(buyerUser, "COD", "confirmed", "pending", tempPassword);
       setIsProcessing(false);
     }
   };
@@ -290,22 +526,6 @@ const Checkout = () => {
 
   if (orderStatus === "success") return <OrderSuccess navigate={navigate} />;
   if (orderStatus === "failed") return <OrderFailed onRetry={() => setOrderStatus(null)} />;
-
-  if (!user) return (
-    <div className="min-h-screen bg-[#f5f5f5] flex items-center justify-center pt-[105px] px-4">
-      <SEOHead title="Checkout | Pasoja" robots="noindex" url="https://pasoja.in/checkout" />
-      <div className="bg-white rounded-2xl border border-zinc-200 p-10 text-center max-w-sm w-full shadow-sm">
-        <div className="w-14 h-14 rounded-full bg-zinc-100 flex items-center justify-center mx-auto mb-4">
-          <ShieldCheck size={24} className="text-zinc-500" />
-        </div>
-        <h2 className="text-xl font-bold text-zinc-900 mb-2">Sign in to Continue</h2>
-        <p className="text-sm text-zinc-500 mb-6">Please sign in to proceed with your order.</p>
-        <Link to="/login?redirect=checkout" className="w-full py-3.5 bg-zinc-900 hover:bg-black text-white text-sm font-bold uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 transition-colors">
-          Sign In / Register
-        </Link>
-      </div>
-    </div>
-  );
 
   /* ── Main checkout UI ── */
   return (
@@ -339,7 +559,7 @@ const Checkout = () => {
             <div className="w-full lg:flex-1 min-w-0 space-y-4">
 
               {/* Shipping address section */}
-              <div className="bg-white rounded-xl border border-zinc-200 overflow-hidden">
+              <div className="bg-white rounded-xl border border-zinc-200">
                 <div className="px-5 py-4 border-b border-zinc-100 flex items-center gap-2.5">
                   <div className="w-7 h-7 rounded-full bg-zinc-900 flex items-center justify-center text-white text-xs font-bold shrink-0">1</div>
                   <h2 className="text-sm font-bold text-zinc-900 uppercase tracking-wider">Shipping Address</h2>
@@ -415,13 +635,69 @@ const Checkout = () => {
                     <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wider block mb-1.5">Street Address *</label>
                     <textarea name="address" required rows={2} value={formData.address} onChange={handleInput} className={`${inputCls} resize-none`} placeholder="House no., street, area, landmark" />
                   </div>
-                  <div className="grid grid-cols-3 gap-3">
-                    {[["city", "City"], ["state", "State"], ["pincode", "Pincode"]].map(([field, label]) => (
-                      <div key={field}>
-                        <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wider block mb-1.5">{label} *</label>
-                        <input type="text" name={field} required value={formData[field]} onChange={handleInput} className={inputCls} placeholder={field === "pincode" ? "400001" : ""} />
-                      </div>
-                    ))}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div className="relative">
+                      <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wider block mb-1.5">City *</label>
+                      <input
+                        type="text"
+                        name="city"
+                        required
+                        value={formData.city}
+                        onChange={(e) => handleCityChange(e.target.value)}
+                        onFocus={() => { if (citySearchSuggestions.length > 0) setShowCitySuggestions(true); }}
+                        className={inputCls}
+                        placeholder="e.g. Indore"
+                        autoComplete="off"
+                      />
+                      {searchLoading && (
+                        <div className="absolute right-3 top-[41px] flex items-center justify-center">
+                          <div className="w-3.5 h-3.5 border-2 border-zinc-200 border-t-black rounded-full animate-spin" />
+                        </div>
+                      )}
+
+                      {/* Suggestion Dropdown */}
+                      {showCitySuggestions && citySearchSuggestions.length > 0 && (
+                        <div className="absolute left-0 md:-left-4 right-0 md:w-[360px] top-full mt-1.5 bg-white border border-zinc-200 shadow-2xl rounded-xl max-h-56 overflow-y-auto divide-y divide-zinc-100" style={{ zIndex: 999999 }}>
+                          {citySearchSuggestions.slice(0, 15).map((office, idx) => (
+                            <button
+                              key={idx}
+                              type="button"
+                              onClick={() => selectCitySuggestion(office)}
+                              className="w-full text-left px-4 py-3 hover:bg-zinc-50 transition-colors text-xs space-y-0.5 block cursor-pointer"
+                            >
+                              <div className="font-bold text-zinc-950 truncate">{office.Name || office.District}, {office.District}</div>
+                              <div className="text-zinc-500 font-medium font-mono text-[9px]">{office.State} – Pin: {office.Pincode}</div>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wider block mb-1.5">State *</label>
+                      <input
+                        type="text"
+                        name="state"
+                        required
+                        value={formData.state}
+                        onChange={handleInput}
+                        className={inputCls}
+                        placeholder="e.g. Madhya Pradesh"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wider block mb-1.5">Pincode *</label>
+                      <input
+                        type="text"
+                        name="pincode"
+                        required
+                        value={formData.pincode}
+                        onChange={handleInput}
+                        className={inputCls}
+                        placeholder="e.g. 452001"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -515,7 +791,7 @@ const Checkout = () => {
             <aside className="w-full lg:w-[360px] shrink-0 lg:sticky lg:top-28 space-y-4">
 
               {/* Order items */}
-              <div className="bg-white rounded-xl border border-zinc-200 overflow-hidden">
+              <div className="bg-white rounded-xl border border-zinc-200 overflow-hidden font-['Inter',sans-serif]">
                 <div className="px-5 py-4 border-b border-zinc-100">
                   <h3 className="text-sm font-bold text-zinc-900 uppercase tracking-wider">
                     Order Summary ({items.length} {items.length === 1 ? "item" : "items"})
@@ -541,13 +817,62 @@ const Checkout = () => {
 
                 <div className="px-5 py-4 border-t border-zinc-100 space-y-2.5">
                   <div className="flex justify-between text-sm"><span className="text-zinc-600">Subtotal</span><span className="font-medium">₹{total.toLocaleString("en-IN")}</span></div>
+                  {couponDiscount > 0 && (
+                    <div className="flex justify-between text-sm text-[#b8860b] font-bold">
+                      <span>Coupon Discount ({appliedCoupon?.code})</span>
+                      <span>-₹{couponDiscount.toLocaleString("en-IN")}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between text-sm"><span className="text-zinc-600">Delivery</span><span className="font-bold text-emerald-600">FREE</span></div>
                   <div className="flex justify-between text-sm"><span className="text-zinc-600">GST (Included)</span><span className="font-medium">₹0</span></div>
                   <div className="flex justify-between items-center pt-2 border-t border-zinc-100">
                     <span className="text-base font-bold text-zinc-900">Total</span>
-                    <span className="text-xl font-bold text-zinc-900">₹{total.toLocaleString("en-IN")}</span>
+                    <span className="text-xl font-bold text-zinc-900">₹{Math.max(0, total - couponDiscount).toLocaleString("en-IN")}</span>
                   </div>
                 </div>
+              </div>
+
+              {/* Promo Coupon Card */}
+              <div className="bg-white rounded-xl border border-zinc-200 p-5 space-y-3 font-['Inter',sans-serif]">
+                <div className="flex items-center gap-2">
+                  <Tag size={15} className="text-[#b8860b]" />
+                  <span className="text-xs font-bold text-zinc-900 uppercase tracking-wider">Apply Promo Code</span>
+                </div>
+                {!appliedCoupon ? (
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                      placeholder="ENTER COUPON"
+                      className="flex-1 bg-zinc-50 border border-zinc-300 rounded-lg px-3.5 py-2 text-xs font-mono text-zinc-900 outline-none focus:border-zinc-800 focus:bg-white transition-all uppercase placeholder:text-zinc-400 placeholder:font-sans"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleApplyCoupon()}
+                      className="bg-black text-white hover:bg-zinc-800 text-[10px] font-bold uppercase tracking-wider px-4 py-2 rounded-lg transition-all cursor-pointer shadow-sm shrink-0"
+                    >
+                      Apply
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between bg-[#b8860b]/5 border border-[#b8860b]/20 p-2.5 rounded-lg">
+                    <div className="min-w-0 text-left">
+                      <span className="text-xs font-bold text-[#b8860b] font-mono tracking-wider">{appliedCoupon.code}</span>
+                      <p className="text-[10px] text-zinc-500 font-medium mt-0.5">
+                        {appliedCoupon.discount_type === "Percentage" ? `${appliedCoupon.discount_val}% Extra Discount` : `Flat ₹${appliedCoupon.discount_val} Discount`}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleRemoveCoupon}
+                      className="text-zinc-400 hover:text-red-650 transition-colors p-1 rounded-full hover:bg-zinc-150 shrink-0"
+                      title="Remove Coupon"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* CTA */}

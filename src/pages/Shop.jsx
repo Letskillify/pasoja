@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { db } from "../components/Firebase";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, doc, getDoc } from "firebase/firestore";
 import {
   Search,
   Heart,
@@ -187,6 +187,7 @@ const Shop = () => {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [filters, setFilters] = useState(INITIAL_FILTERS);
   const [feedbackMessage, setFeedbackMessage] = useState(null);
+  const [activeCoupon, setActiveCoupon] = useState(null);
 
   // ── Read URL query params into state on mount / URL change ──
   useEffect(() => {
@@ -243,6 +244,22 @@ const Shop = () => {
           .map(doc => ({ id: doc.id, ...doc.data() }))
           .filter(item => item.is_active !== false);
         setProducts(list);
+
+        // Check for coupon in url
+        const params = new URLSearchParams(window.location.search);
+        const couponParam = params.get("coupon") || params.get("code");
+        if (couponParam) {
+          const cleanCode = couponParam.toUpperCase().trim();
+          const cDoc = await getDoc(doc(db, "coupons", cleanCode));
+          if (cDoc.exists()) {
+            const cData = cDoc.data();
+            if (cData.is_active) {
+              setActiveCoupon({ id: cDoc.id, ...cData });
+              localStorage.setItem("applied_coupon_code", cleanCode);
+              triggerToast(`Exclusive offer "${cleanCode}" applied!`);
+            }
+          }
+        }
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
@@ -318,10 +335,16 @@ const Shop = () => {
     setFilters({ ...INITIAL_FILTERS, maxPrice: maxPriceLimit });
   };
 
-  // Filter products
   const filteredProducts = useMemo(() => {
     return products
       .filter(p => {
+        // Coupon applicable products filtering
+        if (activeCoupon && activeCoupon.applicableProducts && activeCoupon.applicableProducts.length > 0) {
+          if (!activeCoupon.applicableProducts.includes(p.id)) {
+            return false;
+          }
+        }
+
         // Search term
         if (searchTerm && !p.name?.toLowerCase().includes(searchTerm.toLowerCase())) {
           return false;
@@ -670,7 +693,32 @@ const Shop = () => {
           />
 
           {/* Product Grid Container */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3 font-['Inter',sans-serif]">
+            {activeCoupon && (
+              <div className="mb-6 bg-[#b8860b]/5 border border-dashed border-[#b8860b]/30 p-4 rounded-xl flex items-center justify-between gap-3 text-zinc-950">
+                <div className="text-left">
+                  <h4 className="text-xs font-bold text-[#b8860b] uppercase tracking-wider font-mono">Coupon Activated: {activeCoupon.code}</h4>
+                  <p className="text-[11px] text-zinc-600 mt-1 leading-normal">
+                    Showing products eligible for this exclusive offer. The discount will be applied during checkout.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveCoupon(null);
+                    localStorage.removeItem("applied_coupon_code");
+                    const newParams = new URLSearchParams(window.location.search);
+                    newParams.delete("coupon");
+                    newParams.delete("code");
+                    setSearchParams(newParams);
+                  }}
+                  className="bg-white border border-zinc-200 text-zinc-700 hover:text-black hover:border-zinc-400 text-[10px] font-bold uppercase tracking-wider px-3.5 py-2 rounded-lg transition-all shrink-0 cursor-pointer shadow-sm"
+                >
+                  Clear
+                </button>
+              </div>
+            )}
+
             {/* Grid Header Info */}
             <div className="flex items-center justify-between text-[10px] text-zinc-500 uppercase tracking-widest mb-6 font-semibold">
               <span>Showing {filteredProducts.length} Results</span>

@@ -2,13 +2,33 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Secure Setup:
-    // 1. Allow anyone to read data (needed for customers to view products/categories/blogs)
-    // 2. Only allow the logged-in administrator (super@pasoja.in) to write, update, delete, or import data.
-    
-    match /{document=**} {
+    // Products rules: everyone can read and update stock, only super admin can manage items
+    match /products/{productId} {
       allow read: if true;
-      allow write: if request.auth != null && request.auth.token.email == 'super@pasoja.in';
+      allow create, delete: if request.auth != null && request.auth.token.email == 'super@pasoja.in';
+      allow update: if true; // Allowed for stock level reduction upon customer order placement
+    }
+    
+    // Users rules: allow listing/get (query checks for register lookup), restrict sub-collections to owners
+    match /users/{userId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == userId;
+      
+      match /{allSubcollections=**} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+    
+    // Orders rules: allow anyone (including guests) to place orders, restrict viewing
+    match /orders/{orderId} {
+      allow create: if true;
+      allow read: if request.auth != null && (request.auth.token.email == 'super@pasoja.in' || request.auth.uid == resource.data.userId);
+      allow update, delete: if request.auth != null && request.auth.token.email == 'super@pasoja.in';
+    }
+    
+    // Global fallback for any other collections
+    match /{document=**} {
+      allow read, write: if request.auth != null && request.auth.token.email == 'super@pasoja.in';
     }
   }
 }
