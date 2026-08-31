@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, Clock, CheckCircle2, XCircle, ChevronRight, X, ArrowLeft, ShoppingBag, Eye, MapPin, CreditCard, Download, Search, Filter } from 'lucide-react';
+import { Package, Clock, CheckCircle2, XCircle, ChevronRight, X, ArrowLeft, ShoppingBag, Eye, MapPin, CreditCard, Download, Search, Filter, Truck } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../components/Firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -461,13 +461,23 @@ const Orders = () => {
                       <span>Payment: <strong className="text-zinc-900 uppercase">{order.paymentMethod || "Online"}</strong></span>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <span className="text-zinc-500 uppercase text-[10px] tracking-wider  ">
-                        Grand Total:
-                      </span>
-                      <span className="text-sm   text-zinc-900 font-mono">
-                        ₹{(order.total || 0).toLocaleString("en-IN")}
-                      </span>
+                    <div className="flex items-center gap-4">
+                      {order.awbCode && (
+                        <Link
+                          to={`/track?awb=${order.awbCode}`}
+                          className="px-3 py-1.5 bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100/80 text-[10px] uppercase font-bold tracking-wider flex items-center gap-1.5 transition"
+                        >
+                          <Truck size={12} className="animate-pulse" /> Track Shipment Live
+                        </Link>
+                      )}
+                      <div className="flex items-center gap-2">
+                        <span className="text-zinc-500 uppercase text-[10px] tracking-wider">
+                          Grand Total:
+                        </span>
+                        <span className="text-sm text-zinc-900 font-mono font-bold">
+                          ₹{(order.total || 0).toLocaleString("en-IN")}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -513,6 +523,22 @@ const Orders = () => {
                   <X size={20} />
                 </button>
               </div>
+
+              {/* Live Shipping & Tracking details */}
+              {selectedOrder.awbCode && (
+                <div className="bg-emerald-50 border border-emerald-200 p-4 text-[13px] flex items-center justify-between text-left">
+                  <div className="space-y-0.5">
+                    <span className="text-[9px] text-emerald-800 uppercase tracking-wider block font-bold">Courier Shipping AWB</span>
+                    <span className="text-emerald-950 font-bold font-mono text-sm">{selectedOrder.awbCode} ({selectedOrder.courierName || 'Delhivery'})</span>
+                  </div>
+                  <Link
+                    to={`/track?awb=${selectedOrder.awbCode}`}
+                    className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-extrabold uppercase tracking-widest transition-colors flex items-center gap-1.5"
+                  >
+                    <Truck size={12} /> Track Live
+                  </Link>
+                </div>
+              )}
 
               {/* Shipping & Payment Details */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-zinc-50 p-4 border border-zinc-200 text-[14px]">

@@ -80,7 +80,7 @@ const Footer = () => {
             <ul className="flex flex-col gap-2.5">
               {[
                 { label: 'My Account', path: '/account' },
-                { label: 'Track Order', path: '/orders' },
+                { label: 'Track Order', path: '/track' },
                 { label: 'Return Policy', path: '/return-policy' },
                 { label: 'Terms & Conditions', path: '/terms' },
                 { label: 'Privacy Policy', path: '/privacy' },

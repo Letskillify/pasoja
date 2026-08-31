@@ -27,7 +27,10 @@ const Orders = lazy(() => import("./pages/Orders"));
 const TermsConditions = lazy(() => import("./pages/TermsConditions"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const ReturnPolicy = lazy(() => import("./pages/ReturnPolicy"));
+const Return = lazy(() => import("./pages/ReturnPolicy"));
+const RefundPolicy = lazy(() => import("./pages/ReturnPolicy"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const TrackOrder = lazy(() => import("./pages/TrackOrder"));
 
 const RouteLoader = () => (
   <div className="min-h-[60vh] flex items-center justify-center bg-[#f5f5f5]">
@@ -65,6 +68,8 @@ const AppRoutes = () => {
             <Route path="/shop" element={<Shop />} />
 
             <Route path="/orders" element={<Orders />} />
+            <Route path="/track" element={<TrackOrder />} />
+            <Route path="/track-order" element={<TrackOrder />} />
             <Route path="/terms" element={<TermsConditions />} />
             <Route path="/terms-and-conditions" element={<TermsConditions />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />

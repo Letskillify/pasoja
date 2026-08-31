@@ -59,55 +59,200 @@ const MasterIcon = () => (
 );
 
 /* ─── Order Status pages ─────────────────────────────────────────────────── */
-const OrderSuccess = ({ navigate }) => (
-  <div className="min-h-screen bg-[#f5f5f5] flex items-center justify-center px-4 pt-[145px] md:pt-[105px] pb-16">
-    <SEOHead title="Order Confirmed | Pasoja" robots="noindex" url="https://pasoja.in/checkout" />
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95, y: 20 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="bg-white rounded-2xl shadow-sm border border-zinc-200 max-w-md w-full overflow-hidden"
-    >
-      {/* Green banner */}
-      <div className="bg-emerald-500 px-8 py-10 text-center">
-        <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-4">
-          <CheckCircle size={36} className="text-white" />
-        </div>
-        <h1 className="text-2xl font-bold text-white mb-1">Order Confirmed!</h1>
-        <p className="text-emerald-100 text-sm">Thank you for shopping with Pasoja</p>
-      </div>
+const OrderSuccess = ({ navigate, orderDetails }) => {
+  const finalDetails = orderDetails || {
+    id: "PSJ-" + Math.floor(100000 + Math.random() * 900000),
+    total: 0,
+    shipping: { name: "", phone: "", address: "", city: "", state: "", pincode: "", paymentMethod: "COD" },
+    items: [],
+    appliedCoupon: null,
+    couponDiscount: 0,
+    tempPassword: ""
+  };
 
-      <div className="px-8 py-6 space-y-4">
-        {/* Steps */}
-        {[
-          { icon: Package, label: "Order Placed", desc: "Your order has been received", done: true },
-          { icon: Truck, label: "Processing", desc: "We're preparing your items", done: false },
-          { icon: Home, label: "Delivery", desc: "Estimated 3–5 business days", done: false },
-        ].map(({ icon: Icon, label, desc, done }, i) => (
-          <div key={i} className={`flex items-center gap-4 p-3 rounded-xl ${done ? "bg-emerald-50 border border-emerald-100" : "bg-zinc-50 border border-zinc-100"}`}>
-            <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${done ? "bg-emerald-500" : "bg-zinc-200"}`}>
-              <Icon size={16} className={done ? "text-white" : "text-zinc-500"} />
-            </div>
-            <div>
-              <p className={`text-sm font-semibold ${done ? "text-emerald-700" : "text-zinc-600"}`}>{label}</p>
-              <p className="text-xs text-zinc-500">{desc}</p>
-            </div>
-            {done && <Check size={16} className="text-emerald-500 ml-auto shrink-0" />}
+  const isCOD = finalDetails.shipping?.paymentMethod !== "online";
+
+  return (
+    <div className="min-h-screen bg-[#faf9f6] flex items-center justify-center px-4 pt-[155px] md:pt-[125px] pb-24">
+      <SEOHead title="Order Confirmed | Pasoja" robots="noindex" url="https://pasoja.in/checkout" />
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="bg-white border border-zinc-200/80 rounded-2xl max-w-2xl w-full shadow-2xl p-6 md:p-10 text-zinc-905"
+        style={{ color: "#18181b" }}
+      >
+        {/* Subtle Luxury Success Icon */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full border border-black/5 bg-emerald-50 mb-4 animate-pulse">
+            <CheckCircle size={28} className="text-emerald-600" />
           </div>
-        ))}
+          <h1 className="text-3xl font-light uppercase tracking-[0.15em] font-serif text-zinc-950">
+            Order Confirmed
+          </h1>
+          <p className="text-zinc-500 font-light text-sm mt-1.5 font-sans">
+            Thank you. Your order has been placed and is currently being processed.
+          </p>
+        </div>
 
-        <div className="pt-2 flex flex-col gap-2.5">
-          <Link to="/orders" className="w-full py-3.5 bg-zinc-900 hover:bg-black text-white text-sm font-bold uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 transition-colors">
-            <Package size={15} /> View My Orders
+        {/* Essential Info Columns */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 border-y border-zinc-205 py-6 mb-8 text-center text-xs tracking-wider uppercase font-medium">
+          <div>
+            <p className="text-zinc-400 font-normal">Order ID</p>
+            <p className="text-zinc-900 font-bold mt-1 select-all font-mono normal-case">{finalDetails.id}</p>
+          </div>
+          <div>
+            <p className="text-zinc-400 font-normal">Date</p>
+            <p className="text-zinc-900 font-bold mt-1 font-mono normal-case">
+              {new Date().toLocaleDateString("en-IN", { day: '2-digit', month: 'short', year: 'numeric' })}
+            </p>
+          </div>
+          <div>
+            <p className="text-zinc-400 font-normal">Total Amount</p>
+            <p className="text-zinc-905 font-extrabold mt-1 text-sm font-sans">
+              ₹{(finalDetails.total || 0).toLocaleString("en-IN")}
+            </p>
+          </div>
+          <div>
+            <p className="text-zinc-400 font-normal">Payment</p>
+            <p className="text-zinc-900 font-bold mt-1 text-[11px]">
+              {isCOD ? "COD" : "Prepaid"}
+            </p>
+          </div>
+        </div>
+
+        {/* Auto Generated Account Box */}
+        {finalDetails.tempPassword && (
+          <div className="mb-8 p-4 bg-zinc-50 border border-zinc-200 rounded-xl relative overflow-hidden">
+            <div className="absolute top-0 bottom-0 left-0 w-1 bg-zinc-905" />
+            <div className="flex gap-3">
+              <User size={18} className="text-zinc-700 mt-0.5 shrink-0" />
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-900">
+                  Account Created Successfully
+                </h4>
+                <p className="text-[11px] text-zinc-500 font-light mt-1 leading-relaxed">
+                  We've automatically generated an account for you using your email to help you track shipments and view receipts.
+                </p>
+                <div className="mt-2.5 flex flex-wrap gap-4 text-xs font-mono bg-white border border-zinc-200/80 p-2.5 rounded-lg">
+                  <div>
+                    <span className="text-zinc-400">Email:</span>{" "}
+                    <span className="text-zinc-800 font-semibold">{finalDetails.shipping?.email}</span>
+                  </div>
+                  <div>
+                    <span className="text-zinc-400">Password:</span>{" "}
+                    <span className="text-zinc-850 font-semibold select-all font-mono">{finalDetails.tempPassword}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 text-xs leading-relaxed">
+          {/* Shipping Address Summary */}
+          <div className="space-y-2 bg-zinc-50/50 p-4.5 rounded-xl border border-zinc-100/60 p-4 text-left">
+            <h3 className="font-extrabold text-zinc-950 uppercase tracking-widest text-[10px] pb-1.5 border-b border-zinc-200 flex items-center gap-1.5">
+              <MapPin size={12} className="text-zinc-500" /> Shipping Details
+            </h3>
+            <p className="font-bold text-zinc-900 text-sm font-serif">{finalDetails.shipping?.name}</p>
+            <p className="text-zinc-500 font-light">{finalDetails.shipping?.address}</p>
+            <p className="text-zinc-500 font-light">{finalDetails.shipping?.city}, {finalDetails.shipping?.state} – {finalDetails.shipping?.pincode}</p>
+            <p className="text-zinc-800 font-semibold mt-1">Phone: {finalDetails.shipping?.phone}</p>
+          </div>
+
+          {/* Delivery & Tracking Details */}
+          <div className="space-y-2 bg-zinc-50/50 p-4.5 rounded-xl border border-zinc-100/60 p-4 text-left flex flex-col justify-between">
+            <div className="space-y-2">
+              <h3 className="font-extrabold text-zinc-950 uppercase tracking-widest text-[10px] pb-1.5 border-b border-zinc-200 flex items-center gap-1.5">
+                <Truck size={12} className="text-zinc-500" /> Shipping & Tracking
+              </h3>
+              <div>
+                <p className="text-zinc-400 uppercase tracking-wider text-[9px]">Status</p>
+                <p className="text-zinc-800 font-semibold text-xs flex items-center gap-1.5 mt-0.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+                  Order Placed – Processing
+                </p>
+              </div>
+
+              {finalDetails.awbCode && (
+                <div className="pt-1.5 grid grid-cols-2 gap-2 text-[10px] bg-white border border-zinc-200 p-2 rounded-lg">
+                  <div>
+                    <span className="text-zinc-400 block uppercase font-medium">AWB Track Code</span>
+                    <span className="text-zinc-900 font-bold font-mono text-xs select-all">{finalDetails.awbCode}</span>
+                  </div>
+                  <div>
+                    <span className="text-zinc-400 block uppercase font-medium">Carrier Partner</span>
+                    <span className="text-zinc-900 font-bold uppercase">{finalDetails.courierName || "Delhivery"}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {finalDetails.awbCode && (
+              <a
+                href={finalDetails.trackingUrl || `https://shiprocket.co/tracking/${finalDetails.awbCode}`}
+                target="_blank"
+                rel="noreferrer"
+                className="w-full text-center py-2.5 bg-zinc-900 hover:bg-black text-[10px] text-white font-extrabold uppercase tracking-widest rounded-lg transition-colors border border-black inline-block mt-2"
+              >
+                Track Live Order
+              </a>
+            )}
+          </div>
+        </div>
+
+        {/* Order Items Summary */}
+        <div className="space-y-3 mb-8 text-left">
+          <h3 className="font-extrabold text-zinc-950 uppercase tracking-widest text-[10px] pb-1.5 border-b border-zinc-200">
+            Order Items
+          </h3>
+          <div className="divide-y divide-zinc-100 max-h-48 overflow-y-auto pr-1">
+            {(finalDetails.items || []).map((item, idx) => (
+              <div key={idx} className="py-2.5 flex items-center justify-between gap-4 text-xs">
+                <div className="flex items-center gap-3 min-w-0">
+                  <OptimizedCloudinaryImage
+                    src={item.image}
+                    preset="avatar"
+                    alt={item.name}
+                    className="w-12 h-12 object-cover rounded-lg border border-zinc-150 bg-zinc-55 shrink-0"
+                  />
+                  <div className="truncate">
+                    <p className="font-bold text-zinc-900 text-sm truncate font-serif">{item.name}</p>
+                    <p className="text-[10px] text-zinc-400 mt-0.5">
+                      {item.size ? `Size: ${item.size}` : ""}
+                      {item.color ? ` • Color: ${item.color}` : ""}
+                      {` • Qty: ${item.quantity || 1}`}
+                    </p>
+                  </div>
+                </div>
+                <span className="font-semibold text-zinc-800 shrink-0 font-sans">
+                  ₹{((Number(item.price) || 0) * (item.quantity || 1)).toLocaleString("en-IN")}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="grid grid-cols-2 gap-3 pt-6 border-t border-zinc-200">
+          <Link
+            to="/orders"
+            className="w-full py-3.5 bg-zinc-900 hover:bg-black text-white text-xs font-bold uppercase tracking-widest rounded-xl transition-all text-center flex items-center justify-center gap-2 border border-zinc-900 shadow-sm"
+          >
+            <Package size={14} /> My Orders
           </Link>
-          <Link to="/shop" className="w-full py-3 border border-zinc-200 text-zinc-700 text-sm font-semibold rounded-xl hover:bg-zinc-50 transition-colors text-center">
+          <Link
+            to="/shop"
+            className="w-full py-3.5 bg-white hover:bg-zinc-50 text-zinc-805 text-xs font-extrabold uppercase tracking-widest rounded-xl transition-all text-center border border-zinc-200"
+          >
             Continue Shopping
           </Link>
         </div>
-      </div>
-    </motion.div>
-  </div>
-);
+      </motion.div>
+    </div>
+  );
+};
 
 const OrderFailed = ({ onRetry }) => (
   <div className="min-h-screen bg-[#f5f5f5] flex items-center justify-center px-4 pt-[145px] md:pt-[105px] pb-16">
@@ -165,6 +310,9 @@ const Checkout = () => {
   const [couponCode, setCouponCode] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [couponDiscount, setCouponDiscount] = useState(0);
+  const [couponError, setCouponError] = useState("");
+  const [couponSuccess, setCouponSuccess] = useState("");
+  const [createdOrderDetails, setCreatedOrderDetails] = useState(null);
 
   const showToast = (msg, type = "info") => {
     setToast({ msg, type });
@@ -211,21 +359,26 @@ const Checkout = () => {
   const handleApplyCoupon = async (codeToApply = couponCode) => {
     const cleanCode = codeToApply.toUpperCase().trim();
     if (!cleanCode) return;
+    setCouponError("");
+    setCouponSuccess("");
     try {
       const snap = await getDoc(doc(db, "coupons", cleanCode));
       if (!snap.exists()) {
-        showToast("Invalid coupon code.", "error");
+        setCouponError("Coupon code not found or expired.");
+        showToast("Coupon code not found or expired.", "error");
         return;
       }
       const data = snap.data();
       if (!data.is_active) {
-        showToast("This coupon is no longer active.", "error");
+        setCouponError("Coupon code not found or expired.");
+        showToast("Coupon not found or expired.", "error");
         return;
       }
 
       // Check min order threshold
       const subtotal = items.reduce((sum, i) => sum + ((Number(i.price) || 0) * (i.quantity || 1)), 0);
       if (subtotal < (Number(data.min_order) || 0)) {
+        setCouponError(`Minimum order of ₹${data.min_order} required for this coupon.`);
         showToast(`Minimum order of ₹${data.min_order} required.`, "error");
         return;
       }
@@ -238,6 +391,7 @@ const Checkout = () => {
         });
 
         if (matchingItems.length === 0) {
+          setCouponError("This coupon is not applicable to any items in your bag.");
           showToast("This coupon is not applicable to any items in your bag.", "error");
           return;
         }
@@ -245,9 +399,11 @@ const Checkout = () => {
 
       setAppliedCoupon(data);
       localStorage.setItem("applied_coupon_code", cleanCode);
+      setCouponSuccess("Coupon code applied successfully!");
       showToast("Coupon applied successfully!");
     } catch (e) {
       console.error(e);
+      setCouponError("Error checking coupon. Permissions restricted.");
       showToast("Error checking coupon.", "error");
     }
   };
@@ -256,6 +412,8 @@ const Checkout = () => {
     setAppliedCoupon(null);
     setCouponDiscount(0);
     setCouponCode("");
+    setCouponError("");
+    setCouponSuccess("");
     localStorage.removeItem("applied_coupon_code");
     showToast("Coupon removed.");
   };
@@ -425,6 +583,55 @@ const Checkout = () => {
       });
 
       if (status === "confirmed") {
+        // Trigger Shiprocket Order Creation
+        let shiprocketData = null;
+        try {
+          const res = await fetch("/api/shiprocket", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              orderId: orderRef.id,
+              orderDate: new Date().toISOString().replace('T', ' ').substring(0, 16),
+              customerName: formData.name,
+              email: finalEmail,
+              phone: formData.phone,
+              address: formData.address,
+              city: formData.city,
+              state: formData.state,
+              pincode: formData.pincode,
+              paymentMethod: formData.paymentMethod === "online" ? "Prepaid" : "COD",
+              totalAmount: Math.max(0, total - couponDiscount),
+              items: items.map(item => ({
+                name: item.name,
+                sku: item.sku || item.id || "SKU-PRODUCT",
+                units: item.quantity || 1,
+                price: item.price
+              }))
+            })
+          });
+          if (res.ok) {
+            shiprocketData = await res.json();
+            console.log("Shiprocket sync data:", shiprocketData);
+          }
+        } catch (shipErr) {
+          console.error("Error creating Shiprocket order:", shipErr);
+        }
+
+        // Store shiprocket tracking information on Firebase order document
+        if (shiprocketData && shiprocketData.shipment_id) {
+          try {
+            await updateDoc(doc(db, "orders", orderRef.id), {
+              shipmentId: shiprocketData.shipment_id,
+              awbCode: shiprocketData.awb_code || "",
+              courierName: shiprocketData.courier_name || "",
+              trackingUrl: shiprocketData.tracking_url || `https://shiprocket.co/tracking/${shiprocketData.awb_code || ""}`,
+            });
+          } catch (writeErr) {
+            console.error("Error writing Shiprocket details to Firestore order:", writeErr);
+          }
+        }
+
+        // Reduce stock in product entries
         for (const item of items) {
           try {
             const productId = item.id || item.cartId?.split("-")[0];
@@ -443,6 +650,20 @@ const Checkout = () => {
             }
           } catch (e) { console.error(e); }
         }
+
+        setCreatedOrderDetails({
+          id: orderRef.id,
+          total: Math.max(0, total - couponDiscount),
+          shipping: { ...formData, email: finalEmail },
+          items: items,
+          appliedCoupon: appliedCoupon ? appliedCoupon.code : null,
+          couponDiscount,
+          tempPassword,
+          awbCode: shiprocketData?.awb_code || "",
+          courierName: shiprocketData?.courier_name || "",
+          trackingUrl: shiprocketData?.tracking_url || ""
+        });
+
         await clearCart(buyerUser);
         await sendOrderConfirmationEmail(finalEmail, formData.name, orderRef.id, Math.max(0, total - couponDiscount), tempPassword);
         setOrderStatus("success");
@@ -524,7 +745,7 @@ const Checkout = () => {
   /* ── Guards ── */
   if (loading) return <MiniLoader message="Preparing Checkout" />;
 
-  if (orderStatus === "success") return <OrderSuccess navigate={navigate} />;
+  if (orderStatus === "success") return <OrderSuccess navigate={navigate} orderDetails={createdOrderDetails} />;
   if (orderStatus === "failed") return <OrderFailed onRetry={() => setOrderStatus(null)} />;
 
   /* ── Main checkout UI ── */
@@ -839,38 +1060,48 @@ const Checkout = () => {
                   <span className="text-xs font-bold text-zinc-900 uppercase tracking-wider">Apply Promo Code</span>
                 </div>
                 {!appliedCoupon ? (
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={couponCode}
-                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                      placeholder="ENTER COUPON"
-                      className="flex-1 bg-zinc-50 border border-zinc-300 rounded-lg px-3.5 py-2 text-xs font-mono text-zinc-900 outline-none focus:border-zinc-800 focus:bg-white transition-all uppercase placeholder:text-zinc-400 placeholder:font-sans"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => handleApplyCoupon()}
-                      className="bg-black text-white hover:bg-zinc-800 text-[10px] font-bold uppercase tracking-wider px-4 py-2 rounded-lg transition-all cursor-pointer shadow-sm shrink-0"
-                    >
-                      Apply
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-between bg-[#b8860b]/5 border border-[#b8860b]/20 p-2.5 rounded-lg">
-                    <div className="min-w-0 text-left">
-                      <span className="text-xs font-bold text-[#b8860b] font-mono tracking-wider">{appliedCoupon.code}</span>
-                      <p className="text-[10px] text-zinc-500 font-medium mt-0.5">
-                        {appliedCoupon.discount_type === "Percentage" ? `${appliedCoupon.discount_val}% Extra Discount` : `Flat ₹${appliedCoupon.discount_val} Discount`}
-                      </p>
+                  <>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={couponCode}
+                        onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                        placeholder="ENTER COUPON"
+                        className="flex-1 bg-zinc-50 border border-zinc-300 rounded-lg px-3.5 py-2 text-xs font-mono text-zinc-900 outline-none focus:border-zinc-800 focus:bg-white transition-all uppercase placeholder:text-zinc-400 placeholder:font-sans"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleApplyCoupon()}
+                        className="bg-black text-white hover:bg-zinc-800 text-[10px] font-bold uppercase tracking-wider px-4 py-2 rounded-lg transition-all cursor-pointer shadow-sm shrink-0"
+                      >
+                        Apply
+                      </button>
                     </div>
-                    <button
-                      type="button"
-                      onClick={handleRemoveCoupon}
-                      className="text-zinc-400 hover:text-red-650 transition-colors p-1 rounded-full hover:bg-zinc-150 shrink-0"
-                      title="Remove Coupon"
-                    >
-                      <X size={14} />
-                    </button>
+                    {couponError && (
+                      <p className="text-[11.5px] text-red-650 font-semibold">{couponError}</p>
+                    )}
+                  </>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between bg-[#b8860b]/5 border border-[#b8860b]/20 p-2.5 rounded-lg">
+                      <div className="min-w-0 text-left">
+                        <span className="text-xs font-bold text-[#b8860b] font-mono tracking-wider">{appliedCoupon.code}</span>
+                        <p className="text-[10px] text-zinc-500 font-medium mt-0.5">
+                          {appliedCoupon.discount_type === "Percentage" ? `${appliedCoupon.discount_val}% Extra Discount` : `Flat ₹${appliedCoupon.discount_val} Discount`}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleRemoveCoupon}
+                        className="text-zinc-400 hover:text-zinc-650 transition-colors p-1 rounded-full hover:bg-zinc-150 shrink-0 cursor-pointer"
+                        title="Remove Coupon"
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                    {couponSuccess && (
+                      <p className="text-[11.5px] text-emerald-600 font-semibold">{couponSuccess}</p>
+                    )}
                   </div>
                 )}
               </div>

@@ -24,6 +24,9 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.VITE_RAZORPAY_KEY_ID': JSON.stringify(env.VITE_RAZORPAY_KEY_ID || env.RAZORPAY_KEY_ID),
       'import.meta.env.VITE_RAZORPAY_KEY_SECRET': JSON.stringify(env.VITE_RAZORPAY_KEY_SECRET || env.RAZORPAY_KEY_SECRET),
 
+      'import.meta.env.VITE_SHIPROCKET_EMAIL': JSON.stringify(env.VITE_SHIPROCKET_EMAIL || env.SHIPROCKET_EMAIL),
+      'import.meta.env.VITE_SHIPROCKET_PASSWORD': JSON.stringify(env.VITE_SHIPROCKET_PASSWORD || env.SHIPROCKET_PASSWORD),
+
       'import.meta.env.VITE_EMAILJS_PUBLIC_KEY': JSON.stringify(env.VITE_EMAILJS_PUBLIC_KEY || env.EMAILJS_PUBLIC_KEY),
       'import.meta.env.VITE_EMAILJS_PRIVATE_KEY': JSON.stringify(env.VITE_EMAILJS_PRIVATE_KEY || env.EMAILJS_PRIVATE_KEY),
       'import.meta.env.VITE_EMAILJS_SERVICE_ID': JSON.stringify(env.VITE_EMAILJS_SERVICE_ID || env.EMAILJS_SERVICE_ID),

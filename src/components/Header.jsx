@@ -230,6 +230,7 @@ const Header = () => {
     : [];
 
   const rightNavLinks = [
+    { name: 'Track Order', path: '/track' },
     { name: 'Our Story', path: '/about' },
     { name: 'Contact', path: '/contact' },
   ];
@@ -734,6 +735,10 @@ const Header = () => {
                   <div className="flex items-center gap-4 text-zinc-600">
                     <User size={18} strokeWidth={1.5} />
                     <Link to="/account" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-medium hover:text-black transition-colors">My Account</Link>
+                  </div>
+                  <div className="flex items-center gap-4 text-[#b8860b]">
+                    <Search size={18} strokeWidth={1.5} />
+                    <Link to="/track" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-semibold hover:text-[#b8860b] transition-colors uppercase tracking-wider">Track Order</Link>
                   </div>
                   <div className="flex items-center gap-4 text-zinc-600">
                     <Compass size={18} strokeWidth={1.5} />

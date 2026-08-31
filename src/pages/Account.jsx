@@ -525,7 +525,7 @@ const Account = () => {
 
           {/* SIDEBAR NAVIGATION */}
           <aside className={`lg:col-span-3 space-y-4 fixed inset-y-0 left-0 z-40 w-64 border-r border-zinc-200 bg-white text-zinc-600 flex flex-col h-screen shrink-0 transition-transform duration-300 lg:static lg:translate-x-0 lg:border-none lg:bg-transparent lg:h-auto ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-            
+
             {/* Mobile Header */}
             <div className="lg:hidden px-6 py-5 border-b border-zinc-200 sticky top-0 bg-white z-10 flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -710,6 +710,15 @@ const Account = () => {
                             </div>
 
                             <div className="flex gap-2">
+                              {order.awbCode && (
+                                <Link
+                                  to={`/track?awb=${order.awbCode}`}
+                                  className="p-2 border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-all flex items-center"
+                                  title="Track Shipment Live"
+                                >
+                                  <Truck size={13} />
+                                </Link>
+                              )}
                               <button
                                 onClick={() => setSelectedOrder(order)}
                                 className="px-3 py-2 bg-zinc-100 border border-zinc-300 text-zinc-800 text-[9px]   uppercase tracking-wider hover:bg-black hover:text-white transition-all"
@@ -897,12 +906,27 @@ const Account = () => {
                           </div>
                         </div>
 
-                        <div className="pt-2 flex justify-end">
+                        <div className="pt-2 flex justify-between items-center">
+                          {order.awbCode ? (
+                            <Link
+                              to={`/track?awb=${order.awbCode}`}
+                              className="text-[10px] text-emerald-700 hover:text-emerald-800 font-bold uppercase tracking-wider flex items-center gap-1"
+                            >
+                              <Truck size={12} className="animate-pulse" /> Track Shipment Live
+                            </Link>
+                          ) : (
+                            <Link
+                              to={`/track?orderId=${order.id}`}
+                              className="text-[10px] text-zinc-500 hover:text-zinc-800 font-semibold uppercase tracking-wider flex items-center gap-1"
+                            >
+                              <Clock size={11} /> View Packing Status
+                            </Link>
+                          )}
                           <button
                             onClick={() => setSelectedOrder(order)}
-                            className="text-[10px] text-zinc-600 hover:text-black   uppercase tracking-widest flex items-center gap-1 transition-colors"
+                            className="text-[10px] text-zinc-600 hover:text-black uppercase tracking-widest flex items-center gap-1 transition-colors"
                           >
-                            Track & View Full Order Details <ChevronRight size={11} />
+                            Details <ChevronRight size={11} />
                           </button>
                         </div>
                       </div>
@@ -1285,12 +1309,22 @@ const Account = () => {
 
             <div className="p-6 space-y-6 text-[14px]">
               {/* STEPPER TIMELINE */}
-              <div className="space-y-4 bg-zinc-50 border border-zinc-200 p-5 rounded">
+              <div className="space-y-4 bg-zinc-50 border border-[#e4e4e7] p-5 rounded">
                 <div className="flex justify-between items-center">
-                  <span className="text-[10px] text-zinc-500 uppercase tracking-widest  ">Shipment Status</span>
-                  <span className="px-2.5 py-0.5 text-[8px] font-black uppercase tracking-wider border border-[#b8860b]/40 text-[#b8860b] bg-[#b8860b]/10 rounded">
-                    {selectedOrder.status || 'Confirmed'}
-                  </span>
+                  <span className="text-[10px] text-zinc-500 uppercase tracking-widest">Shipment status</span>
+                  <div className="flex items-center gap-2">
+                    {selectedOrder.awbCode && (
+                      <Link
+                        to={`/track?awb=${selectedOrder.awbCode}`}
+                        className="px-2.5 py-0.5 text-[8px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded uppercase tracking-wider transition"
+                      >
+                        Track Live Shipment
+                      </Link>
+                    )}
+                    <span className="px-2.5 py-0.5 text-[8px] font-black uppercase tracking-wider border border-[#b8860b]/40 text-[#b8860b] bg-[#b8860b]/10 rounded">
+                      {selectedOrder.status || 'Confirmed'}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="relative pt-2">
