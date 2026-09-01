@@ -5,7 +5,7 @@ import { useCustomerAuth } from "../components/CustomerAuthProvider";
 import { auth, db } from "../components/Firebase";
 import { updateProfile } from "firebase/auth";
 import { doc, getDoc, collection, getDocs, query, where, updateDoc, setDoc, addDoc, deleteDoc } from "firebase/firestore";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import Preloader from "./Preloader";
 import {
   User, Package, Heart, LogOut, ChevronRight, Settings, ShoppingBag,
@@ -26,13 +26,16 @@ const Account = () => {
   const activeName = user?.displayName || customer?.name || "";
   const isCustomerOnly = !user && !!customer;               // OTP-logged-in, no Firebase Auth
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [userData, setUserData] = useState(null);
   const [recentOrders, setRecentOrders] = useState([]);
   const [stats, setStats] = useState({ cart: 0, wishlist: 0, orders: 0 });
   const [loading, setLoading] = useState(true);
   const [dataReady, setDataReady] = useState(false);
   const [showPreloader, setShowPreloader] = useState(true);
-  const [activeTab, setActiveTab] = useState("overview"); // overview, profile, orders, payments, addresses, notifications
+  // Tab driven by URL ?tab= query param
+  const activeTab = searchParams.get("tab") || "overview";
+  const setActiveTab = (tab) => setSearchParams({ tab }, { replace: true });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Modals & Feedback
@@ -109,6 +112,12 @@ const Account = () => {
         setRecentOrders(ordersList);
         setStats({ cart: 0, wishlist: 0, orders: ordersList.length });
 
+        // Load addresses from customers sub-collection
+        try {
+          const addrSnap = await getDocs(collection(db, "customers", customerDocId, "addresses"));
+          setAddresses(addrSnap.docs.map(d => ({ id: d.id, ...d.data() })));
+        } catch (_) { }
+
       } else if (user) {
         // ── Firebase Auth user: standard uid-based fetch ──────────────────
         const userSnap = await getDoc(doc(db, "users", user.uid));
@@ -180,10 +189,15 @@ const Account = () => {
     setUploadingAvatar(true);
     try {
       const imageUrl = await uploadToCloudinary(file, "logo");
-
-      await updateProfile(auth.currentUser, { photoURL: imageUrl });
-      await setDoc(doc(db, "users", user.uid), { photoURL: imageUrl }, { merge: true });
-
+      if (auth.currentUser) {
+        await updateProfile(auth.currentUser, { photoURL: imageUrl });
+      }
+      if (user?.uid) {
+        await setDoc(doc(db, "users", user.uid), { photoURL: imageUrl }, { merge: true });
+      } else if (isCustomerOnly) {
+        const docId = (customer.email || "").toLowerCase().replace(/[^a-z0-9]/g, "_");
+        await setDoc(doc(db, "customers", docId), { photoURL: imageUrl }, { merge: true });
+      }
       setUserData(prev => ({ ...prev, photoURL: imageUrl }));
       showToast("Profile picture updated!");
     } catch (err) {
@@ -201,15 +215,26 @@ const Account = () => {
       if (auth.currentUser) {
         await updateProfile(auth.currentUser, { displayName });
       }
-      await setDoc(doc(db, "users", user.uid), {
-        displayName,
-        phone,
-        bio,
-        email: user.email,
-        updatedAt: new Date()
-      }, { merge: true });
-
-      setUserData(prev => ({ ...prev, displayName, phone, bio }));
+      if (user?.uid) {
+        // Firebase Auth user → write to users collection
+        await setDoc(doc(db, "users", user.uid), {
+          displayName, phone, bio,
+          email: user.email,
+          updatedAt: new Date()
+        }, { merge: true });
+      } else if (isCustomerOnly) {
+        // OTP customer → write to customers collection
+        const docId = (customer.email || "").toLowerCase().replace(/[^a-z0-9]/g, "_");
+        await setDoc(doc(db, "customers", docId), {
+          name: displayName, phone,
+          email: customer.email,
+          updatedAt: new Date()
+        }, { merge: true });
+        // Also update the local customer session
+        const updated = { ...JSON.parse(localStorage.getItem("pasoja_customer_session") || "{}"), name: displayName, phone };
+        localStorage.setItem("pasoja_customer_session", JSON.stringify(updated));
+      }
+      setUserData(prev => ({ ...prev, displayName, name: displayName, phone, bio }));
       showToast("Profile details updated successfully!");
     } catch (err) {
       showToast("Error saving profile: " + err.message);
@@ -242,14 +267,20 @@ const Account = () => {
     }
 
     try {
+      // Determine collection path based on session type
+      const addrCollection = user?.uid
+        ? collection(db, "users", user.uid, "addresses")
+        : collection(db, "customers", (customer.email || "").toLowerCase().replace(/[^a-z0-9]/g, "_"), "addresses");
+
       if (editingAddressId) {
-        // Update existing address
-        await updateDoc(doc(db, "users", user.uid, "addresses", editingAddressId), addressForm);
+        const addrRef = user?.uid
+          ? doc(db, "users", user.uid, "addresses", editingAddressId)
+          : doc(db, "customers", (customer.email || "").toLowerCase().replace(/[^a-z0-9]/g, "_"), "addresses", editingAddressId);
+        await updateDoc(addrRef, addressForm);
         setAddresses(prev => prev.map(a => a.id === editingAddressId ? { ...a, ...addressForm } : a));
         showToast("Address updated!");
       } else {
-        // Add new address
-        const docRef = await addDoc(collection(db, "users", user.uid, "addresses"), addressForm);
+        const docRef = await addDoc(addrCollection, addressForm);
         setAddresses(prev => [...prev, { id: docRef.id, ...addressForm }]);
         showToast("New address added!");
       }
@@ -278,7 +309,10 @@ const Account = () => {
   const handleDeleteAddress = async (id) => {
     if (!window.confirm("Delete this address?")) return;
     try {
-      await deleteDoc(doc(db, "users", user.uid, "addresses", id));
+      const addrRef = user?.uid
+        ? doc(db, "users", user.uid, "addresses", id)
+        : doc(db, "customers", (customer?.email || "").toLowerCase().replace(/[^a-z0-9]/g, "_"), "addresses", id);
+      await deleteDoc(addrRef);
       setAddresses(prev => prev.filter(a => a.id !== id));
       showToast("Address deleted");
     } catch (err) {
@@ -288,13 +322,13 @@ const Account = () => {
 
   const handleSetDefaultAddress = async (id) => {
     try {
-      const updatedList = addresses.map(a => ({
-        ...a,
-        isDefault: a.id === id
-      }));
+      const updatedList = addresses.map(a => ({ ...a, isDefault: a.id === id }));
       setAddresses(updatedList);
       for (const a of updatedList) {
-        await updateDoc(doc(db, "users", user.uid, "addresses", a.id), { isDefault: a.id === id });
+        const addrRef = user?.uid
+          ? doc(db, "users", user.uid, "addresses", a.id)
+          : doc(db, "customers", (customer?.email || "").toLowerCase().replace(/[^a-z0-9]/g, "_"), "addresses", a.id);
+        await updateDoc(addrRef, { isDefault: a.id === id });
       }
       showToast("Default address updated!");
     } catch (err) {
@@ -519,11 +553,11 @@ const Account = () => {
               <div className="space-y-1.5">
                 <div className="flex items-center justify-center md:justify-start gap-3">
                   <h1 className="text-2xl font-light text-zinc-900 uppercase tracking-widest">
-                    {userData?.displayName || user?.displayName || "Atelier Guest"}
+                    {userData?.displayName || userData?.name || user?.displayName || customer?.name || "Atelier Guest"}
                   </h1>
                   <span className="px-2.5 py-0.5 bg-[#b8860b]/10 border border-[#b8860b]/30 text-[#b8860b] text-[8px] font-black uppercase tracking-widest">Client Member</span>
                 </div>
-                <p className="text-[14px] text-zinc-500">{user?.email}</p>
+                <p className="text-[14px] text-zinc-500">{activeEmail}</p>
                 {phone && (
                   <p className="text-[11px] text-[#b8860b] flex items-center justify-center md:justify-start gap-1 font-semibold">
                     <Phone size={10} /> {phone}
