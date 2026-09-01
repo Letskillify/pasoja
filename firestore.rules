@@ -35,7 +35,8 @@ service cloud.firestore {
     match /orders/{orderId} {
       allow create: if true;
       allow read: if true;
-      allow update, delete: if isSuperAdmin();
+      allow update: if true;   // Needed for Shiprocket tracking sync after order creation
+      allow delete: if isSuperAdmin();
     }
     
     // Coupons rules: everyone can read (to apply at checkout), only admin can write

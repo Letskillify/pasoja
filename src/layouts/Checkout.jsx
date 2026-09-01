@@ -698,7 +698,23 @@ const Checkout = () => {
         });
 
         await clearCart(buyerUser);
-        await sendOrderConfirmationEmail(finalEmail, formData.name, orderRef.id, Math.max(0, total - couponDiscount), tempPassword);
+        await sendOrderConfirmationEmail(finalEmail, formData.name, orderRef.id, Math.max(0, total - couponDiscount), "");
+
+        // ── Auto-set customer session so user doesn't need to login after checkout ──
+        try {
+          const customerSession = {
+            id: (finalEmail || "").replace(/[^a-z0-9]/g, "_"),
+            email: finalEmail,
+            name: formData.name || "",
+            phone: formData.phone || "",
+            address: formData.address || "",
+            city: formData.city || "",
+            state: formData.state || "",
+            pincode: formData.pincode || "",
+          };
+          localStorage.setItem("pasoja_customer_session", JSON.stringify(customerSession));
+        } catch (_) { }
+
         setOrderStatus("success");
       } else {
         setOrderStatus("failed");
@@ -718,24 +734,10 @@ const Checkout = () => {
     let tempPassword = "";
 
     if (!user) {
-      try {
-        const usersRef = collection(db, "users");
-        const q = query(usersRef, where("email", "==", formData.email.toLowerCase().trim()));
-        const querySnap = await getDocs(q);
-
-        if (!querySnap.empty) {
-          const existingUserDoc = querySnap.docs[0];
-          buyerUser = { uid: existingUserDoc.id, email: formData.email.toLowerCase().trim() };
-        } else {
-          tempPassword = `Pasoja@${Math.floor(100000 + Math.random() * 900000)}`;
-          console.log("Creating user automatically for guest checkout email:", formData.email);
-          const cred = await signup(formData.email.toLowerCase().trim(), tempPassword, formData.name);
-          buyerUser = cred.user;
-        }
-      } catch (authErr) {
-        console.error("Auto signup/verification failed; placing order as guest metadata fallback", authErr);
-        buyerUser = { uid: "GUEST_" + Math.random().toString(36).substr(2, 9), email: formData.email.toLowerCase().trim(), isGuestPlaceholder: true };
-      }
+      // For guest checkout: do NOT create Firebase Auth accounts.
+      // Instead just use email as the identifier and set a customer session.
+      const cleanEmail = (formData.email || "").toLowerCase().trim();
+      buyerUser = { uid: "GUEST_" + Math.random().toString(36).substr(2, 9), email: cleanEmail, isGuestPlaceholder: true };
     }
 
     if (formData.paymentMethod === "online") {
