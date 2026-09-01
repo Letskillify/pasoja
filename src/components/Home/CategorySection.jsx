@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { db } from '../../components/Firebase';
-import { collection, getDocs, query, orderBy, setDoc, doc } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import OptimizedCloudinaryImage from '../OptimizedCloudinaryImage';
 
 const DEFAULT_DESKTOP_BANNERS = [
@@ -38,9 +38,6 @@ const CategorySection = () => {
           .map(doc => ({ id: doc.id, ...doc.data() }));
 
         if (desktopList.length === 0) {
-          for (const item of DEFAULT_DESKTOP_BANNERS) {
-            await setDoc(doc(db, 'shop_by_category', item.id), item);
-          }
           desktopList = [...DEFAULT_DESKTOP_BANNERS];
         }
 
@@ -48,7 +45,7 @@ const CategorySection = () => {
           .filter(item => item.is_active !== false)
           .sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
 
-        const positionedList = activeDesktop.map((item, index) => ({
+        const positionedList = (activeDesktop.length > 0 ? activeDesktop : DEFAULT_DESKTOP_BANNERS).map((item, index) => ({
           ...item,
           position: index % 2 === 0 ? 'left' : 'right'
         }));
@@ -60,9 +57,6 @@ const CategorySection = () => {
           .map(doc => ({ id: doc.id, ...doc.data() }));
 
         if (mobileList.length === 0) {
-          for (const item of DEFAULT_MOBILE_CATEGORIES) {
-            await setDoc(doc(db, 'mobile_categories', item.id), item);
-          }
           mobileList = [...DEFAULT_MOBILE_CATEGORIES];
         }
 
@@ -70,10 +64,13 @@ const CategorySection = () => {
           .filter(item => item.is_active !== false)
           .sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
 
-        setMobileCategories(activeMobile);
+        setMobileCategories(activeMobile.length > 0 ? activeMobile : DEFAULT_MOBILE_CATEGORIES);
       } catch (error) {
-        console.error("Error fetching categories:", error);
-        setBanners(DEFAULT_DESKTOP_BANNERS.filter(item => item.is_active !== false));
+        console.warn("Using default categories fallback:", error);
+        setBanners(DEFAULT_DESKTOP_BANNERS.filter(item => item.is_active !== false).map((item, index) => ({
+          ...item,
+          position: index % 2 === 0 ? 'left' : 'right'
+        })));
         setMobileCategories(DEFAULT_MOBILE_CATEGORIES.filter(item => item.is_active !== false));
       } finally {
         setLoading(false);

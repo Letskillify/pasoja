@@ -4,8 +4,44 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { db } from '../../components/Firebase';
-import { collection, getDocs, query, orderBy, doc, setDoc } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { getOptimizedCloudinaryUrl, generateCloudinarySrcSet } from '../../utils/cloudinaryUtils';
+
+const DEFAULT_HERO_SLIDES = [
+  {
+    id: 'slide_1',
+    image: 'https://res.cloudinary.com/duzwys877/image/upload/v1783595080/ChatGPT_Image_Jul_9_2026_04_31_19_PM_nholgd.png',
+    tag: 'AW 2025',
+    title: 'Define Your\nElegance.',
+    subtitle: 'Curated silhouettes for the modern connoisseur.',
+    cta: 'Shop Collection',
+    ctaLink: '/shop',
+    sort_order: 1,
+    is_active: true
+  },
+  {
+    id: 'slide_2',
+    image: 'https://res.cloudinary.com/duzwys877/image/upload/v1783595088/ChatGPT_Image_Jul_9_2026_04_31_27_PM_yam8qn.png',
+    tag: 'Just Dropped',
+    title: 'New Season\nArrivals.',
+    subtitle: 'Fresh perspectives on timeless design.',
+    cta: 'Explore Now',
+    ctaLink: '/shop?filter=new',
+    sort_order: 2,
+    is_active: true
+  },
+  {
+    id: 'slide_3',
+    image: 'https://res.cloudinary.com/duzwys877/image/upload/v1783595079/ChatGPT_Image_Jul_9_2026_04_33_24_PM_nudlxb.png',
+    tag: 'Limited Edition',
+    title: 'The Artisan\nEdit.',
+    subtitle: 'Handcrafted exclusives. Meticulous detailing.',
+    cta: 'Discover Now',
+    ctaLink: '/shop?filter=sale',
+    sort_order: 3,
+    is_active: true
+  }
+];
 
 const Hero = () => {
   const [slides, setSlides] = useState([]);
@@ -20,50 +56,14 @@ const Hero = () => {
         const q = query(collection(db, 'hero_slides'), orderBy('sort_order', 'asc'));
         const snap = await getDocs(q);
         if (snap.empty) {
-          const defaults = [
-            {
-              id: 'slide_1',
-              image: 'https://res.cloudinary.com/duzwys877/image/upload/v1783595080/ChatGPT_Image_Jul_9_2026_04_31_19_PM_nholgd.png',
-              tag: 'AW 2025',
-              title: 'Define Your\nElegance.',
-              subtitle: 'Curated silhouettes for the modern connoisseur.',
-              cta: 'Shop Collection',
-              ctaLink: '/shop',
-              sort_order: 1,
-              is_active: true
-            },
-            {
-              id: 'slide_2',
-              image: 'https://res.cloudinary.com/duzwys877/image/upload/v1783595088/ChatGPT_Image_Jul_9_2026_04_31_27_PM_yam8qn.png',
-              tag: 'Just Dropped',
-              title: 'New Season\nArrivals.',
-              subtitle: 'Fresh perspectives on timeless design.',
-              cta: 'Explore Now',
-              ctaLink: '/shop?filter=new',
-              sort_order: 2,
-              is_active: true
-            },
-            {
-              id: 'slide_3',
-              image: 'https://res.cloudinary.com/duzwys877/image/upload/v1783595079/ChatGPT_Image_Jul_9_2026_04_33_24_PM_nudlxb.png',
-              tag: 'Limited Edition',
-              title: 'The Artisan\nEdit.',
-              subtitle: 'Handcrafted exclusives. Meticulous detailing.',
-              cta: 'Discover Now',
-              ctaLink: '/shop?filter=sale',
-              sort_order: 3,
-              is_active: true
-            }
-          ];
-          for (const item of defaults) {
-            await setDoc(doc(db, 'hero_slides', item.id), item);
-          }
-          setSlides(defaults);
+          setSlides(DEFAULT_HERO_SLIDES);
         } else {
-          setSlides(snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(item => item.is_active !== false));
+          const list = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(item => item.is_active !== false);
+          setSlides(list.length > 0 ? list : DEFAULT_HERO_SLIDES);
         }
       } catch (err) {
-        console.error("Error loading hero slides:", err);
+        console.warn("Using default hero slides fallback:", err);
+        setSlides(DEFAULT_HERO_SLIDES);
       } finally {
         setLoading(false);
       }

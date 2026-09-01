@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { db } from '../../components/Firebase';
-import { collection, getDocs, query, orderBy, setDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { Star, Award, MessageSquare, RefreshCw, Heart } from 'lucide-react';
 import { Autoplay, Mousewheel } from 'swiper/modules';
 import OptimizedCloudinaryImage from '../OptimizedCloudinaryImage';
@@ -17,16 +17,34 @@ const IconMap = {
   Heart: Heart
 };
 
+const DEFAULT_COMMUNITY_SETTINGS = {
+  eyebrow: 'TESTIMONIALS',
+  heading: 'LOVED BY OUR COMMUNITY',
+  description_line_1: 'Real people. Real style. Real reviews.',
+  description_line_2: 'See why they love Pasoja.',
+  is_active: true
+};
+
+const DEFAULT_COMMUNITY_IMAGES = [
+  { id: 'img_1', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029808/imjhv8luafwtxfu9iswq.jpg', link: '', sort_order: 1, is_active: true },
+  { id: 'img_2', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029852/ffl2xbtgi5vetrobuxzl.jpg', link: '', sort_order: 2, is_active: true },
+  { id: 'img_3', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029876/vuoqvdcaff3ni3jdmjkq.jpg', link: '', sort_order: 3, is_active: true },
+  { id: 'img_4', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029891/bz0d4jlszdu0ju8e0iwl.jpg', link: '', sort_order: 4, is_active: true },
+  { id: 'img_5', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029911/fc1is0gziu7rgyejzlwf.jpg', link: '', sort_order: 5, is_active: true },
+  { id: 'img_6', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029935/zikp7hjgjndo7mjvqm4f.jpg', link: '', sort_order: 6, is_active: true }
+];
+
+const DEFAULT_COMMUNITY_STATS = [
+  { id: 'stat_1', icon: 'Star', value: '15,000+', label: 'Happy Customers', sort_order: 1, is_active: true },
+  { id: 'stat_2', icon: 'Award', value: '4.8/5', label: 'Avg. Rating', sort_order: 2, is_active: true },
+  { id: 'stat_3', icon: 'MessageSquare', value: '2,000+', label: 'Reviews', sort_order: 3, is_active: true },
+  { id: 'stat_4', icon: 'RefreshCw', value: '95%', label: 'Recommend Us', sort_order: 4, is_active: true }
+];
+
 const Testimonials = () => {
-  const [settings, setSettings] = useState({
-    eyebrow: 'TESTIMONIALS',
-    heading: 'LOVED BY OUR COMMUNITY',
-    description_line_1: 'Real people. Real style. Real reviews.',
-    description_line_2: 'See why they love Pasoja.',
-    is_active: true
-  });
-  const [images, setImages] = useState([]);
-  const [stats, setStats] = useState([]);
+  const [settings, setSettings] = useState(DEFAULT_COMMUNITY_SETTINGS);
+  const [images, setImages] = useState(DEFAULT_COMMUNITY_IMAGES);
+  const [stats, setStats] = useState(DEFAULT_COMMUNITY_STATS);
   const [loading, setLoading] = useState(true);
   const swiperRef = useRef(null);
 
@@ -36,58 +54,35 @@ const Testimonials = () => {
         // 1. Settings
         const settingsDoc = await getDocs(collection(db, 'community_settings'));
         if (settingsDoc.empty) {
-          const defaultSettings = {
-            eyebrow: 'TESTIMONIALS',
-            heading: 'LOVED BY OUR COMMUNITY',
-            description_line_1: 'Real people. Real style. Real reviews.',
-            description_line_2: 'See why they love Pasoja.',
-            is_active: true
-          };
-          await setDoc(doc(db, 'community_settings', 'main'), defaultSettings);
-          setSettings(defaultSettings);
+          setSettings(DEFAULT_COMMUNITY_SETTINGS);
         } else {
-          setSettings(settingsDoc.docs[0].data());
+          setSettings(settingsDoc.docs[0]?.data() || DEFAULT_COMMUNITY_SETTINGS);
         }
 
         // 2. Images
         const imgQuery = query(collection(db, 'community_images'), orderBy('sort_order', 'asc'));
         const imgSnap = await getDocs(imgQuery);
         if (imgSnap.empty) {
-          const defaultImages = [
-            { id: 'img_1', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029808/imjhv8luafwtxfu9iswq.jpg', link: '', sort_order: 1, is_active: true },
-            { id: 'img_2', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029852/ffl2xbtgi5vetrobuxzl.jpg', link: '', sort_order: 2, is_active: true },
-            { id: 'img_3', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029876/vuoqvdcaff3ni3jdmjkq.jpg', link: '', sort_order: 3, is_active: true },
-            { id: 'img_4', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029891/bz0d4jlszdu0ju8e0iwl.jpg', link: '', sort_order: 4, is_active: true },
-            { id: 'img_5', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029911/fc1is0gziu7rgyejzlwf.jpg', link: '', sort_order: 5, is_active: true },
-            { id: 'img_6', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029935/zikp7hjgjndo7mjvqm4f.jpg', link: '', sort_order: 6, is_active: true }
-          ];
-          for (const item of defaultImages) {
-            await setDoc(doc(db, 'community_images', item.id), item);
-          }
-          setImages(defaultImages);
+          setImages(DEFAULT_COMMUNITY_IMAGES);
         } else {
-          setImages(imgSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(item => item.is_active !== false));
+          const list = imgSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(item => item.is_active !== false);
+          setImages(list.length > 0 ? list : DEFAULT_COMMUNITY_IMAGES);
         }
 
         // 3. Stats
         const statsQuery = query(collection(db, 'community_stats'), orderBy('sort_order', 'asc'));
         const statsSnap = await getDocs(statsQuery);
         if (statsSnap.empty) {
-          const defaultStats = [
-            { id: 'stat_1', icon: 'Star', value: '15,000+', label: 'Happy Customers', sort_order: 1, is_active: true },
-            { id: 'stat_2', icon: 'Award', value: '4.8/5', label: 'Avg. Rating', sort_order: 2, is_active: true },
-            { id: 'stat_3', icon: 'MessageSquare', value: '2,000+', label: 'Reviews', sort_order: 3, is_active: true },
-            { id: 'stat_4', icon: 'RefreshCw', value: '95%', label: 'Recommend Us', sort_order: 4, is_active: true }
-          ];
-          for (const item of defaultStats) {
-            await setDoc(doc(db, 'community_stats', item.id), item);
-          }
-          setStats(defaultStats);
+          setStats(DEFAULT_COMMUNITY_STATS);
         } else {
-          setStats(statsSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(item => item.is_active !== false));
+          const list = statsSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(item => item.is_active !== false);
+          setStats(list.length > 0 ? list : DEFAULT_COMMUNITY_STATS);
         }
       } catch (err) {
-        console.error("Error fetching community data:", err);
+        console.warn("Using default community fallback:", err);
+        setSettings(DEFAULT_COMMUNITY_SETTINGS);
+        setImages(DEFAULT_COMMUNITY_IMAGES);
+        setStats(DEFAULT_COMMUNITY_STATS);
       } finally {
         setLoading(false);
       }

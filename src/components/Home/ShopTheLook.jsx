@@ -3,15 +3,22 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { db } from '../../components/Firebase';
-import { collection, getDocs, query, orderBy, setDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { Autoplay, Mousewheel, FreeMode } from 'swiper/modules';
 import OptimizedCloudinaryImage from '../OptimizedCloudinaryImage';
 
 import 'swiper/css';
 import 'swiper/css/free-mode';
 
+const DEFAULT_LOOKS = [
+  { id: 'look_1', title: 'TEES', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029696/yastxilcsghbsdmkcp2x.jpg', link: '/shop?category=T-Shirts', sort_order: 1, is_active: true, price: 2499, category: 'OVERSIZED T-SHIRT' },
+  { id: 'look_2', title: 'JEANS', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029717/kq4a9s5dkptuvp8iev2j.jpg', link: '/shop?category=Jeans', sort_order: 2, is_active: true, price: 2499, category: 'WAFFLE KNIT' },
+  { id: 'look_3', title: 'HOODIES', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029740/qegbcn6kqdrl2s44cwm0.jpg', link: '/shop?category=Hoodies', sort_order: 3, is_active: true, price: 2000, category: 'BABY TEE' },
+  { id: 'look_4', title: 'SETS', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029769/pac3lrqmjr4nsemoldna.jpg', link: '/shop?category=Sets', sort_order: 4, is_active: true, price: 2499, category: 'OVERSIZED T-SHIRT' }
+];
+
 const ShopTheLook = () => {
-  const [looks, setLooks] = useState([]);
+  const [looks, setLooks] = useState(DEFAULT_LOOKS);
   const [loading, setLoading] = useState(true);
   const swiperRef = useRef(null);
 
@@ -21,24 +28,16 @@ const ShopTheLook = () => {
         const q = query(collection(db, 'shop_the_look'), orderBy('sort_order', 'asc'));
         const snap = await getDocs(q);
         if (snap.empty) {
-          const defaults = [
-            { id: 'look_1', title: 'TEES', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029696/yastxilcsghbsdmkcp2x.jpg', link: '/shop?category=T-Shirts', sort_order: 1, is_active: true, price: 2499, category: 'OVERSIZED T-SHIRT' },
-            { id: 'look_2', title: 'JEANS', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029717/kq4a9s5dkptuvp8iev2j.jpg', link: '/shop?category=Jeans', sort_order: 2, is_active: true, price: 2499, category: 'WAFFLE KNIT' },
-            { id: 'look_3', title: 'HOODIES', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029740/qegbcn6kqdrl2s44cwm0.jpg', link: '/shop?category=Hoodies', sort_order: 3, is_active: true, price: 2000, category: 'BABY TEE' },
-            { id: 'look_4', title: 'SETS', image: 'https://res.cloudinary.com/dcjn4y284/image/upload/v1786029769/pac3lrqmjr4nsemoldna.jpg', link: '/shop?category=Sets', sort_order: 4, is_active: true, price: 2499, category: 'OVERSIZED T-SHIRT' }
-          ];
-          for (const item of defaults) {
-            await setDoc(doc(db, 'shop_the_look', item.id), item);
-          }
-          setLooks(defaults);
+          setLooks(DEFAULT_LOOKS);
         } else {
           const list = snap.docs
             .map(doc => ({ id: doc.id, ...doc.data() }))
             .filter(item => item.is_active !== false);
-          setLooks(list);
+          setLooks(list.length > 0 ? list : DEFAULT_LOOKS);
         }
       } catch (error) {
-        console.error("Error loading Shop The Look data:", error);
+        console.warn("Using default Shop The Look fallback:", error);
+        setLooks(DEFAULT_LOOKS);
       } finally {
         setLoading(false);
       }
