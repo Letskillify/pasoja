@@ -482,6 +482,9 @@ const Checkout = () => {
           temp_password: tempPassword,
           account_created: tempPassword ? "Yes" : "No",
           project_name: "Pasoja Atelier",
+          logo_url: "https://res.cloudinary.com/dcjn4y284/image/upload/v1786029668/p3jd3nuet4vkqbfd5qaz.png",
+          website_url: "https://pasoja.in",
+          support_email: "pasoja.help@gmail.com",
           reply_to: "pasoja.help@gmail.com",
           message: messageText
         };
@@ -581,6 +584,36 @@ const Checkout = () => {
         couponDiscount,
         createdAt: serverTimestamp(),
       });
+
+      // ── Save / Update customer profile in 'customers' collection ────────────
+      // This is the source of truth for OTP-based customer login.
+      // We use email as the document ID so lookups are O(1) and prevent duplicates.
+      try {
+        const customerEmail = (finalEmail || "").toLowerCase().trim();
+        if (customerEmail) {
+          const customerDocId = customerEmail.replace(/[^a-z0-9]/g, "_");
+          const customerRef = doc(db, "customers", customerDocId);
+          await setDoc(customerRef, {
+            email: customerEmail,
+            name: formData.name || "",
+            phone: formData.phone || "",
+            address: formData.address || "",
+            city: formData.city || "",
+            state: formData.state || "",
+            pincode: formData.pincode || "",
+            updatedAt: serverTimestamp(),
+          }, { merge: true });  // merge: true preserves older fields like createdAt on first write
+
+          // Set createdAt only on first write
+          const snapCheck = await getDoc(customerRef);
+          if (snapCheck.exists() && !snapCheck.data().createdAt) {
+            await setDoc(customerRef, { createdAt: serverTimestamp() }, { merge: true });
+          }
+        }
+      } catch (custErr) {
+        console.error("Customer profile upsert failed:", custErr);
+        // Non-blocking — order is already saved
+      }
 
       if (status === "confirmed") {
         // Trigger Shiprocket Order Creation

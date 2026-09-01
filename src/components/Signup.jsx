@@ -38,6 +38,9 @@ const Signup = () => {
           to_email: emailAddress.toLowerCase().trim(),
           to_name: fullName,
           project_name: "Pasoja Atelier",
+          logo_url: "https://res.cloudinary.com/dcjn4y284/image/upload/v1786029668/p3jd3nuet4vkqbfd5qaz.png",
+          website_url: "https://pasoja.in",
+          support_email: "pasoja.help@gmail.com",
           reply_to: "pasoja.help@gmail.com",
           message: `Welcome to Pasoja Atelier, ${fullName}! Your style profile is now active.`
         };

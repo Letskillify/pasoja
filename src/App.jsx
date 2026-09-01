@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Footer from "./components/Home/Footer";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import AuthProvider from "./components/AuthProvider";
+import CustomerAuthProvider from "./components/CustomerAuthProvider";
 import { StoreProvider } from "./components/StoreProvider";
 import ScrollToTop from "./components/ScrollToTop";
 import Preloader from "./pages/Preloader";
@@ -101,13 +102,15 @@ function App() {
     <>
       {!isPreloaderDone && <Preloader onComplete={() => setIsPreloaderDone(true)} />}
       <AuthProvider>
-        <StoreProvider>
-          <BrowserRouter>
-            <AppRoutes />
-            <PromoPopup />
-            <AddToCartModal />
-          </BrowserRouter>
-        </StoreProvider>
+        <CustomerAuthProvider>
+          <StoreProvider>
+            <BrowserRouter>
+              <AppRoutes />
+              <PromoPopup />
+              <AddToCartModal />
+            </BrowserRouter>
+          </StoreProvider>
+        </CustomerAuthProvider>
       </AuthProvider>
     </>
   );

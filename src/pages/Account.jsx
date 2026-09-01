@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MiniLoader from "../components/MiniLoader";
 import { useAuth } from "../components/useAuth";
+import { useCustomerAuth } from "../components/CustomerAuthProvider";
 import { auth, db } from "../components/Firebase";
 import { updateProfile } from "firebase/auth";
 import { doc, getDoc, collection, getDocs, query, where, updateDoc, setDoc, addDoc, deleteDoc } from "firebase/firestore";
@@ -16,7 +17,14 @@ import uploadToCloudinary from "../utils/cloudinary";
 import OptimizedCloudinaryImage from "../components/OptimizedCloudinaryImage";
 
 const Account = () => {
-  const { user, logout } = useAuth();
+  const { user, logout } = useAuth();                        // Firebase Auth (admin & Google users)
+  const { customer, customerLogout } = useCustomerAuth();   // OTP-based customer session
+
+  // Unified session: prefer Firebase Auth user; fall back to customer session
+  const activeEmail = user?.email || customer?.email || null;
+  const activeUid = user?.uid || null;                  // only Firebase users have uid
+  const activeName = user?.displayName || customer?.name || "";
+  const isCustomerOnly = !user && !!customer;               // OTP-logged-in, no Firebase Auth
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [recentOrders, setRecentOrders] = useState([]);
@@ -74,41 +82,68 @@ const Account = () => {
   };
 
   const fetchData = async () => {
-    if (!user) return;
     try {
-      // 1. User doc
-      const userSnap = await getDoc(doc(db, "users", user.uid));
-      if (userSnap.exists()) {
-        const d = userSnap.data();
-        setUserData(d);
-        setDisplayName(d.displayName || user.displayName || "");
-        setPhone(d.phone || user.phoneNumber || "");
-        setBio(d.bio || "");
-      } else {
-        setDisplayName(user.displayName || "");
-        setPhone(user.phoneNumber || "");
+      if (isCustomerOnly) {
+        // ── OTP Customer session: fetch from customers collection by email ──
+        const cleanEmail = (customer.email || "").toLowerCase().trim();
+        const customerDocId = cleanEmail.replace(/[^a-z0-9]/g, "_");
+        const customerSnap = await getDoc(doc(db, "customers", customerDocId));
+        if (customerSnap.exists()) {
+          const d = customerSnap.data();
+          setUserData(d);
+          setDisplayName(d.name || customer.name || "");
+          setPhone(d.phone || customer.phone || "");
+        } else {
+          setDisplayName(customer.name || "");
+          setPhone(customer.phone || "");
+        }
+
+        // Fetch orders by email
+        const ordersSnap = await getDocs(query(collection(db, "orders"), where("userEmail", "==", cleanEmail)));
+        const ordersList = ordersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        ordersList.sort((a, b) => {
+          const tA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt?.toDate ? a.createdAt.toDate().getTime() : 0);
+          const tB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt?.toDate ? b.createdAt.toDate().getTime() : 0);
+          return tB - tA;
+        });
+        setRecentOrders(ordersList);
+        setStats({ cart: 0, wishlist: 0, orders: ordersList.length });
+
+      } else if (user) {
+        // ── Firebase Auth user: standard uid-based fetch ──────────────────
+        const userSnap = await getDoc(doc(db, "users", user.uid));
+        if (userSnap.exists()) {
+          const d = userSnap.data();
+          setUserData(d);
+          setDisplayName(d.displayName || user.displayName || "");
+          setPhone(d.phone || user.phoneNumber || "");
+          setBio(d.bio || "");
+        } else {
+          setDisplayName(user.displayName || "");
+          setPhone(user.phoneNumber || "");
+        }
+
+        const cartSnap = await getDocs(collection(db, "users", user.uid, "cart"));
+        const wishlistSnap = await getDocs(collection(db, "users", user.uid, "wishlist"));
+        const ordersSnap = await getDocs(query(collection(db, "orders"), where("userId", "==", user.uid)));
+        // Also try fetching by email (for orders placed as guest before logging in)
+        const ordersEmailSnap = await getDocs(query(collection(db, "orders"), where("userEmail", "==", user.email?.toLowerCase())));
+        const combined = [...ordersSnap.docs, ...ordersEmailSnap.docs];
+        const seen = new Set();
+        const ordersList = combined
+          .filter(d => { if (seen.has(d.id)) return false; seen.add(d.id); return true; })
+          .map(d => ({ id: d.id, ...d.data() }));
+        ordersList.sort((a, b) => {
+          const tA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt?.toDate ? a.createdAt.toDate().getTime() : 0);
+          const tB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt?.toDate ? b.createdAt.toDate().getTime() : 0);
+          return tB - tA;
+        });
+        setRecentOrders(ordersList);
+        setStats({ cart: cartSnap.size, wishlist: wishlistSnap.size, orders: ordersList.length });
+
+        const addressSnap = await getDocs(collection(db, "users", user.uid, "addresses"));
+        setAddresses(addressSnap.docs.map(d => ({ id: d.id, ...d.data() })));
       }
-
-      // 2. Stats & Orders
-      const cartSnap = await getDocs(collection(db, "users", user.uid, "cart"));
-      const wishlistSnap = await getDocs(collection(db, "users", user.uid, "wishlist"));
-      const ordersSnap = await getDocs(query(collection(db, "orders"), where("userId", "==", user.uid)));
-      const ordersList = ordersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-      ordersList.sort((a, b) => {
-        const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt?.toDate ? a.createdAt.toDate().getTime() : 0);
-        const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt?.toDate ? b.createdAt.toDate().getTime() : 0);
-        return timeB - timeA;
-      });
-      setRecentOrders(ordersList);
-      setStats({
-        cart: cartSnap.size,
-        wishlist: wishlistSnap.size,
-        orders: ordersList.length
-      });
-
-      // 3. Addresses
-      const addressSnap = await getDocs(collection(db, "users", user.uid, "addresses"));
-      setAddresses(addressSnap.docs.map(d => ({ id: d.id, ...d.data() })));
     } catch (error) {
       console.error("Error loading account data:", error);
     } finally {
@@ -118,14 +153,19 @@ const Account = () => {
   };
 
   useEffect(() => {
-    if (!user) { navigate("/login"); return; }
+    // Redirect to login if neither session is active
+    if (!user && !customer) { navigate("/login"); return; }
     fetchData();
-  }, [user, navigate]);
+  }, [user, customer, navigate]);
 
   const handleLogout = async () => {
     if (window.confirm("Are you sure you want to logout?")) {
       try {
-        await logout();
+        if (isCustomerOnly) {
+          customerLogout();
+        } else {
+          await logout();
+        }
         navigate("/");
       } catch (error) {
         console.error("Logout failed:", error);

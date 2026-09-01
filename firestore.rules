@@ -41,6 +41,16 @@ service cloud.firestore {
       allow write: if isSuperAdmin();
     }
 
+    // Customers collection: stores shipping profile for every buyer (guest or logged-in)
+    // Used as the source of truth for OTP-based customer login.
+    // Email is used as document ID (sanitised). Anyone can read (for login lookup),
+    // anyone can create/update (needed during guest checkout), only admin can delete.
+    match /customers/{customerId} {
+      allow read: if true;
+      allow create, update: if true;
+      allow delete: if isSuperAdmin();
+    }
+
     // CMS & Storefront Dynamic Content Collections: everyone can read, only super admin can write
     match /hero_slides/{slideId} {
       allow read: if true;
