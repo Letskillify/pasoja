@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { Mail, Lock, ArrowRight, AlertCircle, Eye, EyeOff, KeyRound, CheckCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import emailjs from "@emailjs/browser";
+
 import { db } from "./Firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { useAuth } from "./useAuth";
@@ -66,25 +66,27 @@ const ForgotPassword = () => {
             const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
             setGeneratedOtp(otpCode);
 
-            // 3. Send OTP email using EmailJS
-            const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-            const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-            const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+            // 3. Send OTP email via new API
+            try {
+                const response = await fetch("/api/send-email", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        type: "otp",
+                        to_email: formattedEmail,
+                        otp_code: otpCode
+                    })
+                });
 
-            if (serviceId && templateId && publicKey) {
-                const templateParams = {
-                    to_email: formattedEmail,
-                    otp_code: otpCode,
-                    project_name: "Pasoja Atelier",
-                    reply_to: "pasoja.help@gmail.com"
-                };
-
-                await emailjs.send(serviceId, templateId, templateParams, publicKey);
-                setSuccess("OTP sent successfully to your email address!");
-            } else {
-                // Fallback info for local development if keys are not configured yet
-                console.log(`[Dev Mode] Verification Code for ${formattedEmail} is: ${otpCode}`);
-                setSuccess(`[Dev Mode] OTP is ${otpCode} (Configure EmailJS in env for live mail)`);
+                if (response.ok) {
+                    setSuccess("OTP sent successfully to your email address!");
+                } else {
+                    console.log(`[Dev Mode] Verification Code for ${formattedEmail} is: ${otpCode}`);
+                    setSuccess(`[Dev Mode] OTP is ${otpCode}`);
+                }
+            } catch (err) {
+                console.error(err);
+                setSuccess(`[Dev Mode] OTP is ${otpCode}`);
             }
 
             setResendTimer(30);
@@ -109,21 +111,25 @@ const ForgotPassword = () => {
             const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
             setGeneratedOtp(otpCode);
 
-            const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-            const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-            const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+            try {
+                const response = await fetch("/api/send-email", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        type: "otp",
+                        to_email: formattedEmail,
+                        otp_code: otpCode
+                    })
+                });
 
-            if (serviceId && templateId && publicKey) {
-                const templateParams = {
-                    to_email: formattedEmail,
-                    otp_code: otpCode,
-                    project_name: "Pasoja Atelier",
-                    reply_to: "pasoja.help@gmail.com"
-                };
-                await emailjs.send(serviceId, templateId, templateParams, publicKey);
-                setSuccess("A new verification code has been sent!");
-            } else {
-                console.log(`[Dev Mode] Resent Verification Code for ${formattedEmail} is: ${otpCode}`);
+                if (response.ok) {
+                    setSuccess("A new verification code has been sent!");
+                } else {
+                    console.log(`[Dev Mode] Resent Verification Code for ${formattedEmail} is: ${otpCode}`);
+                    setSuccess(`[Dev Mode] New OTP is ${otpCode}`);
+                }
+            } catch (err) {
+                console.error(err);
                 setSuccess(`[Dev Mode] New OTP is ${otpCode}`);
             }
 

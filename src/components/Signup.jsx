@@ -3,7 +3,7 @@ import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "./useAuth";
 import { Mail, Lock, User, ArrowRight, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import emailjs from "@emailjs/browser";
+
 import SEOHead from "./SEOHead";
 import OptimizedCloudinaryImage from "./OptimizedCloudinaryImage";
 
@@ -28,29 +28,23 @@ const Signup = () => {
   }, [user, navigate, redirectPath]);
 
   const sendWelcomeEmail = async (emailAddress, fullName) => {
-    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-    const templateId = import.meta.env.VITE_EMAILJS_WELCOME_TEMPLATE_ID || import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-
-    if (serviceId && templateId && publicKey) {
-      try {
-        const templateParams = {
+    try {
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "welcome",
           to_email: emailAddress.toLowerCase().trim(),
-          to_name: fullName,
-          project_name: "Pasoja Atelier",
-          logo_url: "https://res.cloudinary.com/dcjn4y284/image/upload/v1786029668/p3jd3nuet4vkqbfd5qaz.png",
-          website_url: "https://pasoja.in",
-          support_email: "pasoja.help@gmail.com",
-          reply_to: "pasoja.help@gmail.com",
-          message: `Welcome to Pasoja Atelier, ${fullName}! Your style profile is now active.`
-        };
-        await emailjs.send(serviceId, templateId, templateParams, publicKey);
+          to_name: fullName
+        })
+      });
+      if (response.ok) {
         console.log("Welcome email sent successfully.");
-      } catch (err) {
-        console.error("Welcome email delivery failed:", err);
+      } else {
+        console.error("Welcome email delivery failed.");
       }
-    } else {
-      console.log(`[Dev Mode - EmailJS Welcome Email] To: ${emailAddress}, Name: ${fullName} (Set VITE_EMAILJS_WELCOME_TEMPLATE_ID env key for live dispatch)`);
+    } catch (err) {
+      console.error("Welcome email delivery failed:", err);
     }
   };
 

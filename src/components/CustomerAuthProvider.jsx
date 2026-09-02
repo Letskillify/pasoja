@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { db } from "./Firebase";
 import { collection, query, where, getDocs, setDoc, getDoc, doc, serverTimestamp } from "firebase/firestore";
-import emailjs from "@emailjs/browser";
 
 // ─── Context ─────────────────────────────────────────────────────────────────
 export const CustomerAuthContext = createContext(null);
@@ -14,23 +13,25 @@ export const useCustomerAuth = () => {
 
 // ─── OTP Send Helper ──────────────────────────────────────────────────────────
 export const sendOTPEmail = async (email, otp, name = "") => {
-    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+    try {
+        const response = await fetch("/api/send-email", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                type: "otp",
+                to_email: email,
+                to_name: name || email,
+                otp_code: otp
+            })
+        });
 
-    if (serviceId && templateId && publicKey) {
-        await emailjs.send(serviceId, templateId, {
-            to_email: email,
-            to_name: name || email,
-            otp_code: otp,
-            project_name: "Pasoja Atelier",
-            logo_url: "https://res.cloudinary.com/dcjn4y284/image/upload/v1786029668/p3jd3nuet4vkqbfd5qaz.png",
-            website_url: "https://pasoja.in",
-            support_email: "pasoja.help@gmail.com",
-            reply_to: "pasoja.help@gmail.com",
-        }, publicKey);
-    } else {
-        console.log(`[Dev OTP] Login code for ${email}: ${otp}`);
+        if (response.ok) {
+            console.log("OTP email sent successfully.");
+        } else {
+            console.error("OTP email delivery failed.");
+        }
+    } catch (err) {
+        console.error("OTP email delivery failed:", err);
     }
 };
 

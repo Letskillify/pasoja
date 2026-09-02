@@ -6,7 +6,7 @@ import {
   collection, getDocs, addDoc, serverTimestamp,
   doc, deleteDoc, getDoc, updateDoc, query, where, setDoc
 } from "firebase/firestore";
-import emailjs from "@emailjs/browser";
+
 import { Link, useNavigate } from "react-router-dom";
 import {
   MapPin, User, Phone, Mail, CheckCircle, X,
@@ -457,48 +457,39 @@ const Checkout = () => {
   }, []);
 
   const sendOrderConfirmationEmail = async (emailAddress, fullName, orderId, orderTotal, tempPassword = "") => {
-    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-    const templateId = import.meta.env.VITE_EMAILJS_ORDER_TEMPLATE_ID || import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+    try {
+      const itemsSummary = items
+        .map((item) => `${item.name} (${item.size ? "Size: " + item.size + ", " : ""}Qty: ${item.quantity || 1}) - ₹${item.price}`)
+        .join("\n");
 
-    if (serviceId && templateId && publicKey) {
-      try {
-        const itemsSummary = items
-          .map((item) => `${item.name} (${item.size ? "Size: " + item.size + ", " : ""}Qty: ${item.quantity || 1}) - ₹${item.price}`)
-          .join("\n");
+      let messageText = `Thank you for your order, ${fullName}!\n\nOrder ID: ${orderId}\nTotal Amount: ₹${orderTotal.toLocaleString("en-IN")}\n\nItems ordered:\n${itemsSummary}\n\nWe will process and ship your order within 3-5 business days.`;
 
-        let messageText = `Thank you for your order, ${fullName}!\n\nOrder ID: ${orderId}\nTotal Amount: ₹${orderTotal.toLocaleString("en-IN")}\n\nItems ordered:\n${itemsSummary}\n\nWe will process and ship your order within 3-5 business days.`;
+      if (tempPassword) {
+        messageText += `\n\nAn account has been automatically created for you!\nYour login details are:\nEmail: ${emailAddress}\nTemporary Password: ${tempPassword}\n\nPlease log in and change your password in your profile settings.`;
+      }
 
-        if (tempPassword) {
-          messageText += `\n\nAn account has been automatically created for you!\nYour login details are:\nEmail: ${emailAddress}\nTemporary Password: ${tempPassword}\n\nPlease log in and change your password in your profile settings.`;
-        }
-
-        const templateParams = {
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "order",
           to_email: emailAddress.toLowerCase().trim(),
           to_name: fullName,
           order_id: orderId,
           order_total: `₹${orderTotal.toLocaleString("en-IN")}`,
           items_summary: itemsSummary,
           temp_password: tempPassword,
-          account_created: tempPassword ? "Yes" : "No",
-          project_name: "Pasoja Atelier",
-          logo_url: "https://res.cloudinary.com/dcjn4y284/image/upload/v1786029668/p3jd3nuet4vkqbfd5qaz.png",
-          website_url: "https://pasoja.in",
-          support_email: "pasoja.help@gmail.com",
-          reply_to: "pasoja.help@gmail.com",
-          message: messageText
-        };
+          account_created: tempPassword ? "Yes" : "No"
+        })
+      });
 
-        await emailjs.send(serviceId, templateId, templateParams, publicKey);
+      if (response.ok) {
         console.log("Order confirmation email sent successfully.");
-      } catch (err) {
-        console.error("Order confirmation email delivery failed:", err);
+      } else {
+        console.error("Order confirmation email delivery failed.");
       }
-    } else {
-      console.log(`[Dev Mode - EmailJS Order Confirmation] To: ${emailAddress}, Order: ${orderId}, Total: ₹${orderTotal}`);
-      if (tempPassword) {
-        console.log(`[Dev Mode - Auto Account Created] Password: ${tempPassword}`);
-      }
+    } catch (err) {
+      console.error("Order confirmation email delivery failed:", err);
     }
   };
 
