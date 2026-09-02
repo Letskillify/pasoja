@@ -25,7 +25,7 @@ const ShopTheLook = () => {
   useEffect(() => {
     const fetchLooks = async () => {
       try {
-        const q = query(collection(db, 'shop_the_look'), orderBy('sort_order', 'asc'));
+        const q = query(collection(db, 'shop_the_look'));
         const snap = await getDocs(q);
         if (snap.empty) {
           setLooks(DEFAULT_LOOKS);
@@ -33,6 +33,7 @@ const ShopTheLook = () => {
           const list = snap.docs
             .map(doc => ({ id: doc.id, ...doc.data() }))
             .filter(item => item.is_active !== false);
+          list.sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
           setLooks(list.length > 0 ? list : DEFAULT_LOOKS);
         }
       } catch (error) {
@@ -84,17 +85,25 @@ const ShopTheLook = () => {
               />
             </Link>
             {/* Product Meta Text Content below Image */}
-            <div className="pt-5 pb-6 text-center flex flex-col items-center border-none">
-              <span className="text-[9px] uppercase tracking-[0.2em] font-medium text-zinc-500 mb-1.5">
-                {look.category || 'COLLECTION'}
-              </span>
-              <h4 className="text-[14px] font-semibold text-zinc-900 tracking-wider uppercase leading-snug px-3 line-clamp-1 mb-1">
-                {look.title || 'Brand Look'}
-              </h4>
-              <span className="text-[10px]   text-zinc-700 tracking-widest mt-1">
-                INR {Number(look.price || 2499).toLocaleString("en-IN")}.00
-              </span>
-            </div>
+            {(look.category || look.title || look.price) ? (
+              <div className="pt-5 pb-6 text-center flex flex-col items-center border-none">
+                {look.category && (
+                  <span className="text-[9px] uppercase tracking-[0.2em] font-medium text-zinc-500 mb-1.5">
+                    {look.category}
+                  </span>
+                )}
+                {look.title && (
+                  <h4 className="text-[14px] font-semibold text-zinc-900 tracking-wider uppercase leading-snug px-3 line-clamp-1 mb-1">
+                    {look.title}
+                  </h4>
+                )}
+                {look.price && (
+                  <span className="text-[10px] text-zinc-700 tracking-widest mt-1">
+                    INR {Number(look.price).toLocaleString("en-IN")}.00
+                  </span>
+                )}
+              </div>
+            ) : null}
           </div>
         ))}
       </div>
@@ -135,17 +144,25 @@ const ShopTheLook = () => {
                 />
               </Link>
               {/* Product Meta Text Content below Image */}
-              <div className="py-4 px-2 text-center flex flex-col items-center border-none">
-                <span className="text-[10px] uppercase tracking-[0.2em] font-medium text-zinc-500 mb-1">
-                  {look.category || 'COLLECTION'}
-                </span>
-                <h5 className="text-[14px] sm:text-sm   text-zinc-900 tracking-wider uppercase leading-snug px-1 line-clamp-1 mb-1">
-                  {look.title || 'Brand Look'}
-                </h5>
-                <span className="text-[14px]   text-zinc-800 tracking-widest">
-                  INR {Number(look.price || 2499).toLocaleString("en-IN")}.00
-                </span>
-              </div>
+              {(look.category || look.title || look.price) ? (
+                <div className="py-4 px-2 text-center flex flex-col items-center border-none">
+                  {look.category && (
+                    <span className="text-[10px] uppercase tracking-[0.2em] font-medium text-zinc-500 mb-1">
+                      {look.category}
+                    </span>
+                  )}
+                  {look.title && (
+                    <h5 className="text-[14px] sm:text-sm text-zinc-900 tracking-wider uppercase leading-snug px-1 line-clamp-1 mb-1">
+                      {look.title}
+                    </h5>
+                  )}
+                  {look.price && (
+                    <span className="text-[14px] text-zinc-800 tracking-widest">
+                      INR {Number(look.price).toLocaleString("en-IN")}.00
+                    </span>
+                  )}
+                </div>
+              ) : null}
             </SwiperSlide>
           ))}
         </Swiper>

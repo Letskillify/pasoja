@@ -81,6 +81,11 @@ service cloud.firestore {
       allow write: if isSuperAdmin();
     }
 
+    match /explore_banner/{bannerId} {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+    }
+
     match /community_settings/{settingId} {
       allow read: if true;
       allow write: if isSuperAdmin();

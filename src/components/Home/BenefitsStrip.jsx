@@ -27,12 +27,13 @@ const BenefitsStrip = () => {
   useEffect(() => {
     const fetchBenefits = async () => {
       try {
-        const q = query(collection(db, 'benefits_strip'), orderBy('sort_order', 'asc'));
+        const q = query(collection(db, 'benefits_strip'));
         const snap = await getDocs(q);
         if (snap.empty) {
           setBenefits(DEFAULT_BENEFITS);
         } else {
           const list = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(item => item.is_active !== false);
+          list.sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
           setBenefits(list.length > 0 ? list : DEFAULT_BENEFITS);
         }
       } catch (err) {

@@ -53,12 +53,13 @@ const Hero = () => {
   useEffect(() => {
     const fetchHeroSlides = async () => {
       try {
-        const q = query(collection(db, 'hero_slides'), orderBy('sort_order', 'asc'));
+        const q = query(collection(db, 'hero_slides'));
         const snap = await getDocs(q);
         if (snap.empty) {
           setSlides(DEFAULT_HERO_SLIDES);
         } else {
           const list = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(item => item.is_active !== false);
+          list.sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
           setSlides(list.length > 0 ? list : DEFAULT_HERO_SLIDES);
         }
       } catch (err) {

@@ -181,6 +181,7 @@ const INITIAL_FILTERS = {
 const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
+  const [categoriesList, setCategoriesList] = useState(["All"]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("newest");
@@ -188,6 +189,8 @@ const Shop = () => {
   const [filters, setFilters] = useState(INITIAL_FILTERS);
   const [feedbackMessage, setFeedbackMessage] = useState(null);
   const [activeCoupon, setActiveCoupon] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 12;
 
   // ── Read URL query params into state on mount / URL change ──
   useEffect(() => {
@@ -245,6 +248,24 @@ const Shop = () => {
           .filter(item => item.is_active !== false);
         setProducts(list);
 
+        try {
+          const catSnap = await getDocs(collection(db, "categories"));
+          if (!catSnap.empty) {
+            const fetchedCats = catSnap.docs
+              .map(doc => doc.data())
+              .filter(cat => cat.is_active !== false)
+              .sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0))
+              .map(cat => cat.name)
+              .filter(Boolean);
+
+            if (fetchedCats.length > 0) {
+              setCategoriesList(["All", ...fetchedCats]);
+            }
+          }
+        } catch (catErr) {
+          console.error("Error fetching categories:", catErr);
+        }
+
         // Check for coupon in url
         const params = new URLSearchParams(window.location.search);
         const couponParam = params.get("coupon") || params.get("code");
@@ -282,12 +303,12 @@ const Shop = () => {
   }, [products]);
 
   const dynamicCategories = useMemo(() => {
-    const set = new Set(DEFAULT_CATEGORIES);
+    const set = new Set(categoriesList);
     products.forEach(p => {
       if (p.category) set.add(p.category.trim());
     });
     return Array.from(set);
-  }, [products]);
+  }, [products, categoriesList]);
 
   const availableColors = useMemo(() => {
     const set = new Set();
@@ -310,6 +331,21 @@ const Shop = () => {
     return Array.from(set);
   }, [products]);
 
+  const availableSizes = useMemo(() => {
+    const set = new Set();
+    products.forEach(p => {
+      if (p.sizes) {
+        p.sizes.split(",").forEach(s => set.add(s.trim().toUpperCase()));
+      }
+      if (p.size_prices && Array.isArray(p.size_prices)) {
+        p.size_prices.forEach(sp => {
+          if (sp.size) set.add(sp.size.trim().toUpperCase());
+        });
+      }
+    });
+    return Array.from(set).filter(Boolean);
+  }, [products]);
+
   // ── Write filter state back to URL query params ──
   useEffect(() => {
     const params = new URLSearchParams();
@@ -328,6 +364,7 @@ const Shop = () => {
     if (sortBy !== "newest") params.set("sort", sortBy);
 
     setSearchParams(params, { replace: true });
+    setCurrentPage(1);
   }, [filters, searchTerm, sortBy, maxPriceLimit, setSearchParams]);
 
   const resetFilters = () => {
@@ -464,7 +501,14 @@ const Shop = () => {
         if (sortBy === "name") return (a.name || "").localeCompare(b.name || "");
         return 0;
       });
-  }, [products, searchTerm, filters, sortBy]);
+  }, [products, searchTerm, filters, sortBy, activeCoupon]);
+
+  const paginatedProducts = useMemo(() => {
+    const start = (currentPage - 1) * productsPerPage;
+    return filteredProducts.slice(start, start + productsPerPage);
+  }, [filteredProducts, currentPage]);
+
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
   // Active filter pills count
   const activeFiltersCount = useMemo(() => {
@@ -688,6 +732,7 @@ const Shop = () => {
             totalResults={filteredProducts.length}
             allCategories={dynamicCategories}
             availableColors={availableColors}
+            availableSizes={availableSizes}
             availableMaterials={availableMaterials}
             maxPriceLimit={maxPriceLimit}
           />
@@ -735,16 +780,46 @@ const Shop = () => {
                 ))}
               </div>
             ) : filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-x-1 gap-y-6 md:gap-x-2 md:gap-y-8">
-                {filteredProducts.map((product, idx) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    idx={idx}
-                    triggerToast={triggerToast}
-                  />
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-x-1 gap-y-6 md:gap-x-2 md:gap-y-8">
+                  {filteredProducts.slice((currentPage - 1) * productsPerPage, currentPage * productsPerPage).map((product, idx) => (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      idx={idx}
+                      triggerToast={triggerToast}
+                    />
+                  ))}
+                </div>
+                {/* Pagination Controls */}
+                {filteredProducts.length > productsPerPage && (
+                  <div className="flex justify-center items-center gap-2 mt-12 md:mt-16">
+                    <button
+                      onClick={() => {
+                        setCurrentPage(p => Math.max(1, p - 1));
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      disabled={currentPage === 1}
+                      className="px-4 py-2 border border-zinc-200 text-sm font-semibold disabled:opacity-50 hover:bg-black hover:text-white transition-colors"
+                    >
+                      Prev
+                    </button>
+                    <span className="text-sm text-zinc-500 font-medium px-4">
+                      Page {currentPage} of {Math.ceil(filteredProducts.length / productsPerPage)}
+                    </span>
+                    <button
+                      onClick={() => {
+                        setCurrentPage(p => Math.min(Math.ceil(filteredProducts.length / productsPerPage), p + 1));
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      disabled={currentPage === Math.ceil(filteredProducts.length / productsPerPage)}
+                      className="px-4 py-2 border border-zinc-200 text-sm font-semibold disabled:opacity-50 hover:bg-black hover:text-white transition-colors"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+              </>
             ) : (
               <div className="text-center py-24 bg-white border border-zinc-200 p-8 max-w-md mx-auto shadow-sm">
                 <div className="w-14 h-14 border border-zinc-300 flex items-center justify-center text-zinc-400 mx-auto mb-5">

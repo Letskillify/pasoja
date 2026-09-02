@@ -19,6 +19,8 @@ const statusBadgeClasses = (status) => {
 const ProductsTable = ({ products, onEdit, onDelete, onImportSuccess }) => {
   const fileInputRef = useRef(null);
   const [selectedIds, setSelectedIds] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const toggleSelectAll = () => {
     if (selectedIds.length === products.length) {
@@ -262,7 +264,7 @@ const ProductsTable = ({ products, onEdit, onDelete, onImportSuccess }) => {
             </tr>
           </thead>
           <tbody className="divide-y divide-zinc-200">
-            {products.map((row) => (
+            {products.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((row) => (
               <tr key={row.id} className={`hover:bg-zinc-50/80 transition-colors ${selectedIds.includes(row.id) ? 'bg-zinc-50' : ''}`}>
                 <td className="px-6 py-4 w-10">
                   <input
@@ -352,6 +354,31 @@ const ProductsTable = ({ products, onEdit, onDelete, onImportSuccess }) => {
             )}
           </tbody>
         </table>
+        {products.length > itemsPerPage && (
+          <div className="flex justify-between items-center px-6 py-4 border-t border-zinc-200 bg-white">
+            <span className="text-[13px] text-zinc-500">
+              Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, products.length)} of {products.length} products
+            </span>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="px-3 py-1.5 border border-zinc-300 rounded text-[13px] font-medium text-zinc-700 hover:bg-zinc-50 disabled:opacity-50 transition-colors"
+              >
+                Previous
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrentPage(p => Math.min(Math.ceil(products.length / itemsPerPage), p + 1))}
+                disabled={currentPage === Math.ceil(products.length / itemsPerPage)}
+                className="px-3 py-1.5 border border-zinc-300 rounded text-[13px] font-medium text-zinc-700 hover:bg-zinc-50 disabled:opacity-50 transition-colors"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

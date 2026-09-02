@@ -56,6 +56,11 @@ const SuperAdmin = () => {
   const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
 
+  const [currentProductsPage, setCurrentProductsPage] = useState(1);
+  const [currentOrdersPage, setCurrentOrdersPage] = useState(1);
+  const [currentUsersPage, setCurrentUsersPage] = useState(1);
+  const itemsPerPage = 10;
+
   const loadProducts = async () => {
     const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
     const snap = await getDocs(q);
@@ -162,7 +167,7 @@ const SuperAdmin = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {products.map((row) => (
+            {products.slice((currentProductsPage - 1) * itemsPerPage, currentProductsPage * itemsPerPage).map((row) => (
               <tr key={row.id} className="hover:bg-slate-50/60">
                 <td className="px-5 py-3 text-slate-900 font-medium">
                   {row.name}
@@ -210,6 +215,31 @@ const SuperAdmin = () => {
             )}
           </tbody>
         </table>
+        {products.length > itemsPerPage && (
+          <div className="flex justify-between items-center px-5 py-4 border-t border-slate-100">
+            <span className="text-sm text-slate-500">
+              Showing {(currentProductsPage - 1) * itemsPerPage + 1} to {Math.min(currentProductsPage * itemsPerPage, products.length)} of {products.length} products
+            </span>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setCurrentProductsPage(p => Math.max(1, p - 1))}
+                disabled={currentProductsPage === 1}
+                className="px-3 py-1 bg-white border border-slate-200 rounded text-sm text-slate-600 hover:bg-slate-50 disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrentProductsPage(p => Math.min(Math.ceil(products.length / itemsPerPage), p + 1))}
+                disabled={currentProductsPage === Math.ceil(products.length / itemsPerPage)}
+                className="px-3 py-1 bg-white border border-slate-200 rounded text-sm text-slate-600 hover:bg-slate-50 disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
@@ -238,7 +268,7 @@ const SuperAdmin = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {orderRows.map((row) => (
+            {orderRows.slice((currentOrdersPage - 1) * itemsPerPage, currentOrdersPage * itemsPerPage).map((row) => (
               <tr key={row.id} className="hover:bg-slate-50/60">
                 <td className="px-5 py-3 font-medium text-slate-900">
                   {row.id}
@@ -258,6 +288,31 @@ const SuperAdmin = () => {
             ))}
           </tbody>
         </table>
+        {orderRows.length > itemsPerPage && (
+          <div className="flex justify-between items-center px-5 py-4 border-t border-slate-100">
+            <span className="text-sm text-slate-500">
+              Showing {(currentOrdersPage - 1) * itemsPerPage + 1} to {Math.min(currentOrdersPage * itemsPerPage, orderRows.length)} of {orderRows.length} orders
+            </span>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setCurrentOrdersPage(p => Math.max(1, p - 1))}
+                disabled={currentOrdersPage === 1}
+                className="px-3 py-1 bg-white border border-slate-200 rounded text-sm text-slate-600 hover:bg-slate-50 disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrentOrdersPage(p => Math.min(Math.ceil(orderRows.length / itemsPerPage), p + 1))}
+                disabled={currentOrdersPage === Math.ceil(orderRows.length / itemsPerPage)}
+                className="px-3 py-1 bg-white border border-slate-200 rounded text-sm text-slate-600 hover:bg-slate-50 disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
@@ -288,7 +343,7 @@ const SuperAdmin = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {users.map((user) => (
+            {users.slice((currentUsersPage - 1) * itemsPerPage, currentUsersPage * itemsPerPage).map((user) => (
               <tr key={user.id} className="hover:bg-slate-50/60">
                 <td className="px-5 py-3 text-slate-900 font-medium">
                   {user.displayName || user.name || "-"}
@@ -303,7 +358,7 @@ const SuperAdmin = () => {
                   {user.address || "-"}
                 </td>
                 <td className="px-5 py-3 text-slate-600 text-sm">
-                  {user.createdAt 
+                  {user.createdAt
                     ? new Date(user.createdAt.toDate?.() || user.createdAt).toLocaleDateString()
                     : "-"
                   }
@@ -327,6 +382,31 @@ const SuperAdmin = () => {
             )}
           </tbody>
         </table>
+        {users.length > itemsPerPage && (
+          <div className="flex justify-between items-center px-5 py-4 border-t border-slate-100">
+            <span className="text-sm text-slate-500">
+              Showing {(currentUsersPage - 1) * itemsPerPage + 1} to {Math.min(currentUsersPage * itemsPerPage, users.length)} of {users.length} users
+            </span>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setCurrentUsersPage(p => Math.max(1, p - 1))}
+                disabled={currentUsersPage === 1}
+                className="px-3 py-1 bg-white border border-slate-200 rounded text-sm text-slate-600 hover:bg-slate-50 disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrentUsersPage(p => Math.min(Math.ceil(users.length / itemsPerPage), p + 1))}
+                disabled={currentUsersPage === Math.ceil(users.length / itemsPerPage)}
+                className="px-3 py-1 bg-white border border-slate-200 rounded text-sm text-slate-600 hover:bg-slate-50 disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
@@ -393,11 +473,10 @@ const SuperAdmin = () => {
                 key={item}
                 type="button"
                 onClick={() => setActiveItem(item)}
-                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                  isActive
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive
                     ? "bg-[#811331]/10 text-[#811331]"
                     : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                }`}
+                  }`}
               >
                 <span>{item}</span>
                 {isActive && (

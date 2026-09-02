@@ -30,6 +30,8 @@ const OrdersTable = ({ onRefresh }) => {
   const [trackingData, setTrackingData] = useState(null);
   const [loadingTracking, setLoadingTracking] = useState(false);
   const [trackingError, setTrackingError] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const [syncingOrderId, setSyncingOrderId] = useState(null);
 
   const fetchOrders = async () => {
@@ -240,7 +242,7 @@ const OrdersTable = ({ onRefresh }) => {
           {["all", "confirmed", "pending", "failed"].map(status => (
             <button
               key={status}
-              onClick={() => setStatusFilter(status)}
+              onClick={() => { setStatusFilter(status); setCurrentPage(1); }}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition ${statusFilter === status ? "bg-black text-white" : "bg-white border border-zinc-300 text-zinc-650 hover:bg-zinc-100"}`}
             >
               {status}
@@ -254,7 +256,7 @@ const OrdersTable = ({ onRefresh }) => {
             type="text"
             placeholder="Search by ID, email, buyer, AWB..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
             className="w-full pl-9 pr-4 py-2 border border-zinc-300 rounded-lg text-xs bg-white focus:border-zinc-800 outline-none transition"
           />
         </div>
@@ -339,7 +341,7 @@ const OrdersTable = ({ onRefresh }) => {
                 </td>
               </tr>
             ) : filteredOrders.length > 0 ? (
-              filteredOrders.map((order) => (
+              filteredOrders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((order) => (
                 <tr key={order.id} className={`hover:bg-zinc-50/80 transition-colors font-sans ${selectedIds.includes(order.id) ? 'bg-zinc-50' : ''}`}>
                   <td className="px-6 py-4 w-10">
                     <input
@@ -420,6 +422,31 @@ const OrdersTable = ({ onRefresh }) => {
             )}
           </tbody>
         </table>
+        {filteredOrders.length > itemsPerPage && (
+          <div className="flex justify-between items-center px-6 py-4 border-t border-zinc-200 bg-[#FAF9F6]">
+            <span className="text-[13px] text-zinc-500">
+              Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredOrders.length)} of {filteredOrders.length} orders
+            </span>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="px-3 py-1.5 border border-zinc-300 rounded text-[13px] font-medium text-zinc-700 hover:bg-zinc-50 disabled:opacity-50 transition-colors"
+              >
+                Previous
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrentPage(p => Math.min(Math.ceil(filteredOrders.length / itemsPerPage), p + 1))}
+                disabled={currentPage === Math.ceil(filteredOrders.length / itemsPerPage)}
+                className="px-3 py-1.5 border border-zinc-300 rounded text-[13px] font-medium text-zinc-700 hover:bg-zinc-50 disabled:opacity-50 transition-colors"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* TRACKING DETAILS SIDEBAR / DRAWER */}

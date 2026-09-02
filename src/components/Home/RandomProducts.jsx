@@ -234,6 +234,7 @@ const RandomProducts = () => {
   const [loading, setLoading] = useState(true);
   const [isShuffling, setIsShuffling] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState(null);
+  const [bannerData, setBannerData] = useState(null);
 
   const triggerToast = (msg) => {
     setFeedbackMessage(msg);
@@ -269,7 +270,16 @@ const RandomProducts = () => {
         setLoading(false);
       }
     };
+    const fetchBanner = async () => {
+      try {
+        const snap = await getDocs(collection(db, 'explore_banner'));
+        if (!snap.empty) {
+          setBannerData(snap.docs[0].data());
+        }
+      } catch (err) { }
+    };
     fetchProducts();
+    fetchBanner();
   }, []);
 
   if (loading) {
@@ -290,6 +300,25 @@ const RandomProducts = () => {
 
   return (
     <section className="py-12 md:py-16 bg-[#f5f5f5] relative border-t border-zinc-200 overflow-hidden">
+
+      {/* ── Dynamic Explore Banner ── */}
+      {bannerData && (bannerData.desktop_image || bannerData.mobile_image) && bannerData.is_active !== false && (
+        <div className="w-full max-w-[1800px] mx-auto mb-10">
+          <Link to={bannerData.link || "/shop"} className="block relative w-full overflow-hidden group">
+            <picture>
+              {bannerData.desktop_image && <source media="(min-width: 1024px)" srcSet={bannerData.desktop_image} />}
+              {bannerData.tablet_image && <source media="(min-width: 768px)" srcSet={bannerData.tablet_image} />}
+              <img
+                src={bannerData.mobile_image || bannerData.desktop_image || bannerData.image_url}
+                alt="Explore Features"
+                className="w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02] m-0 p-0 block leading-[0]"
+              />
+            </picture>
+            <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-300" />
+          </Link>
+        </div>
+      )}
+
       <div className="w-full max-w-[1800px] mx-auto px-1 sm:px-6 lg:px-8">
 
         {/* Section Header */}

@@ -60,13 +60,14 @@ const Testimonials = () => {
         }
 
         // 2. Images
-        const imgQuery = query(collection(db, 'community_images'), orderBy('sort_order', 'asc'));
+        const imgQuery = query(collection(db, 'community_images'));
         const imgSnap = await getDocs(imgQuery);
         if (imgSnap.empty) {
-          setImages(DEFAULT_COMMUNITY_IMAGES);
+          setImages(DEFAULT_COMMUNITY_IMAGES.filter(item => item.is_active !== false));
         } else {
           const list = imgSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(item => item.is_active !== false);
-          setImages(list.length > 0 ? list : DEFAULT_COMMUNITY_IMAGES);
+          list.sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
+          setImages(list.length > 0 ? list : DEFAULT_COMMUNITY_IMAGES.filter(item => item.is_active !== false));
         }
 
         // 3. Stats

@@ -120,9 +120,12 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [activePickerField, setActivePickerField] = useState(null);
   const [selectedIds, setSelectedIds] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     setSelectedIds([]);
+    setCurrentPage(1);
   }, [collectionName]);
 
   const toggleSelectAll = () => {
@@ -438,7 +441,7 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
               </tr>
             </thead>
             <tbody>
-              {items.map(item => (
+              {items.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(item => (
                 <tr key={item.id} className={`border-b border-zinc-200 hover:bg-zinc-50/80 transition-colors ${selectedIds.includes(item.id) ? 'bg-zinc-50' : ''}`}>
                   <td className="py-3.5 px-4 w-10">
                     <input
@@ -476,6 +479,31 @@ const GenericCRUDManager = ({ collectionName, title, fields, defaultItem }) => {
               )}
             </tbody>
           </table>
+          {items.length > itemsPerPage && (
+            <div className="flex justify-between items-center px-4 py-4 border-t border-zinc-200">
+              <span className="text-[13px] text-zinc-500">
+                Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, items.length)} of {items.length} items
+              </span>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1.5 border border-zinc-300 rounded text-[13px] hover:bg-zinc-100 disabled:opacity-50 transition-colors"
+                >
+                  Prev
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCurrentPage(p => Math.min(Math.ceil(items.length / itemsPerPage), p + 1))}
+                  disabled={currentPage === Math.ceil(items.length / itemsPerPage)}
+                  className="px-3 py-1.5 border border-zinc-300 rounded text-[13px] hover:bg-zinc-100 disabled:opacity-50 transition-colors"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -637,11 +665,13 @@ const CommunityManager = () => {
   const fetchImages = async () => {
     setImagesLoading(true);
     try {
-      const q = query(collection(db, 'community_images'), orderBy('sort_order', 'asc'));
+      const q = query(collection(db, 'community_images'));
       const snap = await getDocs(q);
-      setImages(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      const list = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      list.sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
+      setImages(list);
     } catch (err) {
-      console.error(err);
+      console.error("Error loading images:", err);
     } finally {
       setImagesLoading(false);
     }
@@ -650,11 +680,13 @@ const CommunityManager = () => {
   const fetchStats = async () => {
     setStatsLoading(true);
     try {
-      const q = query(collection(db, 'community_stats'), orderBy('sort_order', 'asc'));
+      const q = query(collection(db, 'community_stats'));
       const snap = await getDocs(q);
-      setStats(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      const list = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      list.sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
+      setStats(list);
     } catch (err) {
-      console.error(err);
+      console.error("Error loading stats:", err);
     } finally {
       setStatsLoading(false);
     }
@@ -1612,6 +1644,21 @@ const Admin = () => {
               { key: 'is_active', label: 'Status', type: 'boolean' }
             ]}
             defaultItem={{ image: '', category: 'STREETWEAR', title: 'Product Name', price: 2499, link: '/shop', sort_order: 1, is_active: true }}
+          />
+        );
+      case "Explore Banner":
+        return (
+          <GenericCRUDManager
+            collectionName="explore_banner"
+            title="Explore Banner Settings"
+            fields={[
+              { key: 'desktop_image', label: 'Desktop Banner Image', type: 'image' },
+              { key: 'tablet_image', label: 'Tablet Banner Image', type: 'image' },
+              { key: 'mobile_image', label: 'Mobile Banner Image', type: 'image' },
+              { key: 'link', label: 'Destination Link (e.g. /shop)' },
+              { key: 'is_active', label: 'Status', type: 'boolean' }
+            ]}
+            defaultItem={{ desktop_image: '', tablet_image: '', mobile_image: '', link: '/shop', is_active: true }}
           />
         );
       case "Community Gallery":

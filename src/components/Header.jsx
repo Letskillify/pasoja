@@ -168,15 +168,28 @@ const Header = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Fetch products for search autocomplete
         const snap = await getDocs(collection(db, 'products'));
         const productsList = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setAllProducts(productsList);
 
-        const set = new Set(DEFAULT_COLLECTIONS);
-        productsList.forEach(d => {
-          if (d.category && typeof d.category === 'string') set.add(d.category.trim());
-        });
-        setCollections(Array.from(set));
+        // Fetch categories dynamically rather than relying on defaults
+        try {
+          const catSnap = await getDocs(collection(db, 'categories'));
+          if (!catSnap.empty) {
+            const categoriesList = catSnap.docs
+              .map(doc => doc.data())
+              .filter(cat => cat.is_active !== false)
+              .sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0))
+              .map(cat => cat.name)
+              .filter(Boolean);
+            if (categoriesList.length > 0) {
+              setCollections(categoriesList);
+            }
+          }
+        } catch (catErr) {
+          console.warn("Could not fetch categories collection", catErr);
+        }
       } catch (err) {
         console.error('Error loading header data:', err);
       }

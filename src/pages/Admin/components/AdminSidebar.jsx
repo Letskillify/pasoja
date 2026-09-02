@@ -32,7 +32,8 @@ import {
   HelpCircle,
   LogOut,
   Shirt,
-  X
+  X,
+  AlertCircle
 } from 'lucide-react';
 
 const sidebarSections = [
@@ -71,7 +72,8 @@ const sidebarSections = [
       { name: "Hero Slides", icon: Layout },
       { name: "Shop By Category", icon: Grid },
       { name: "Shop The Look", icon: Sparkles },
-      { name: "Community Gallery", icon: Image },
+      { name: "Explore Banner", icon: Image },
+      { name: "Global Alert", icon: AlertCircle },
       { name: "Benefits Strip", icon: ClipboardList },
       { name: "Blogs", icon: BookOpen },
       { name: "Mobile Category", icon: Grid }

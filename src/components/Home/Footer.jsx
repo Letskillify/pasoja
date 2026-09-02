@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../components/Firebase';
 import OptimizedCloudinaryImage from '../OptimizedCloudinaryImage';
 import {
   Instagram,
@@ -18,6 +20,29 @@ import {
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [categories, setCategories] = useState(['New Arrivals', 'Best Sellers', 'Men', 'Women', 'Accessories', 'Sale']);
+
+  useEffect(() => {
+    const fetchCats = async () => {
+      try {
+        const snap = await getDocs(collection(db, 'categories'));
+        if (!snap.empty) {
+          const list = snap.docs
+            .map(d => d.data())
+            .filter(c => c.is_active !== false)
+            .sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0))
+            .map(c => c.name)
+            .filter(Boolean);
+          if (list.length > 0) {
+            setCategories(list.slice(0, 6)); // max 6 items for footer
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch footer categories", err);
+      }
+    };
+    fetchCats();
+  }, []);
 
   return (
     <footer className="bg-[#0a0a0a] pt-16 md:pt-24 pb-10 overflow-hidden border-t border-zinc-800 text-white font-['Inter',sans-serif]">
@@ -64,9 +89,9 @@ const Footer = () => {
           <div>
             <h4 className="text-[14px]   uppercase tracking-[0.25em] text-[#b8860b] mb-5">Shop</h4>
             <ul className="flex flex-col gap-2.5">
-              {['New Arrivals', 'Best Sellers', 'Men', 'Women', 'Accessories', 'Sale'].map((item) => (
+              {categories.map((item) => (
                 <li key={item}>
-                  <Link to="/shop" className="text-[14px] sm:text-sm text-zinc-300 hover:text-white transition-colors duration-300 font-medium">
+                  <Link to={`/shop?category=${encodeURIComponent(item)}`} className="text-[14px] sm:text-sm text-zinc-300 hover:text-white transition-colors duration-300 font-medium">
                     {item}
                   </Link>
                 </li>
@@ -135,10 +160,17 @@ const Footer = () => {
 
             {/* Socials */}
             <div className="flex gap-2">
-              {[Instagram, Facebook, Youtube, Twitter].map((Icon, i) => (
+              {[
+                { icon: Instagram, url: 'https://www.instagram.com/pasojaofficial/' },
+                { icon: Facebook, url: 'https://www.facebook.com/pasojaonline/' },
+                { icon: Youtube, url: 'https://www.youtube.com/@pasojaofficial' },
+                { icon: Twitter, url: 'https://x.com/Pasojaofficial' }
+              ].map(({ icon: Icon, url }, i) => (
                 <a
                   key={i}
-                  href="#"
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-9 h-9 border border-zinc-800 bg-zinc-900/80 flex items-center justify-center text-zinc-300 hover:text-black hover:bg-white hover:border-white transition-all duration-300 rounded-none"
                 >
                   <Icon size={15} strokeWidth={1.75} />
