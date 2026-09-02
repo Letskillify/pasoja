@@ -84,7 +84,8 @@ export const StoreProvider = ({ children }) => {
       category: product.category || "",
       size: selectedSize?.size || "",
       addedAt: new Date().toISOString(),
-      quantity: 1
+      quantity: 1,
+      shipping: product.shipping || { weight: 0.4, length: 30, breadth: 20, height: 5 }
     };
 
     if (user) {

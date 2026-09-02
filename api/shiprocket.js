@@ -17,7 +17,8 @@ export default async function handler(req, res) {
         pincode,
         paymentMethod, // "Prepaid" or "COD"
         totalAmount,
-        items
+        items,
+        packageInfo // { weight, length, breadth, height }
     } = req.body;
 
     const shiprocketEmail = process.env.SHIPROCKET_EMAIL || process.env.VITE_SHIPROCKET_EMAIL;
@@ -51,7 +52,7 @@ export default async function handler(req, res) {
         const orderPayload = {
             order_id: orderId,
             order_date: orderDate || new Date().toISOString().replace('T', ' ').substring(0, 16),
-            pickup_location: "Primary",
+            pickup_location: process.env.VITE_SHIPROCKET_PICKUP_LOCATION || process.env.SHIPROCKET_PICKUP_LOCATION || "Primary",
             billing_customer_name: firstName,
             billing_last_name: lastName,
             billing_address: address || "Pasoja Store",
@@ -70,10 +71,10 @@ export default async function handler(req, res) {
             })),
             payment_method: paymentMethod === "COD" ? "COD" : "Prepaid",
             sub_total: Number(totalAmount) || 0,
-            length: 10,
-            width: 10,
-            height: 5,
-            weight: 0.4
+            length: Number(packageInfo?.length) || 10,
+            width: Number(packageInfo?.breadth) || 10,
+            height: Number(packageInfo?.height) || 5,
+            weight: Number(packageInfo?.weight) || 0.4
         };
 
         const orderRes = await axios.post("https://apiv2.shiprocket.in/v1/external/orders/create/adhoc", orderPayload, {

@@ -561,7 +561,70 @@ const Checkout = () => {
       const finalUid = buyerUser ? buyerUser.uid : "GUEST_" + Math.random().toString(36).substr(2, 9);
       const finalEmail = buyerUser ? buyerUser.email : formData.email;
 
-      const orderRef = await addDoc(collection(db, "orders"), {
+      const orderRef = doc(collection(db, "orders"));
+
+      // Call Shiprocket Before saving order to Firestore (Bypass update requirement)
+      let shiprocketData = null;
+      if (status === "confirmed") {
+        try {
+          // Dynamic Package Weight & Dimensions Calculation
+          let totalWeight = 0;
+          for (const item of items) {
+            const itemWeight = item.shipping?.weight || 0.4;
+            totalWeight += Number(itemWeight) * (Number(item.quantity) || 1);
+          }
+
+          let packageLength = 30;
+          let packageBreadth = 20;
+          let packageHeight = 5;
+
+          if (totalWeight <= 0.5) {
+            packageLength = 25; packageBreadth = 20; packageHeight = 5;
+          } else if (totalWeight <= 1.0) {
+            packageLength = 35; packageBreadth = 25; packageHeight = 8;
+          } else {
+            packageLength = 40; packageBreadth = 30; packageHeight = 12;
+          }
+
+          const res = await fetch("/api/shiprocket", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              orderId: orderRef.id,
+              orderDate: new Date().toISOString().replace('T', ' ').substring(0, 16),
+              customerName: formData.name,
+              email: finalEmail,
+              phone: formData.phone,
+              address: formData.address,
+              city: formData.city,
+              state: formData.state,
+              pincode: formData.pincode,
+              paymentMethod: formData.paymentMethod === "online" ? "Prepaid" : "COD",
+              totalAmount: Math.max(0, total - couponDiscount),
+              items: items.map(item => ({
+                name: item.name,
+                sku: item.sku || item.id || "SKU-PRODUCT",
+                units: item.quantity || 1,
+                price: item.price
+              })),
+              packageInfo: {
+                weight: totalWeight,
+                length: packageLength,
+                breadth: packageBreadth,
+                height: packageHeight
+              }
+            })
+          });
+          if (res.ok) {
+            shiprocketData = await res.json();
+            console.log("Shiprocket sync data:", shiprocketData);
+          }
+        } catch (shipErr) {
+          console.error("Error creating Shiprocket order:", shipErr);
+        }
+      }
+
+      await setDoc(orderRef, {
         userId: finalUid,
         userEmail: finalEmail,
         items,
@@ -574,6 +637,11 @@ const Checkout = () => {
         appliedCoupon: appliedCoupon ? appliedCoupon.code : null,
         couponDiscount,
         createdAt: serverTimestamp(),
+        // Insert shiprocket properties securely from the start
+        shipmentId: shiprocketData?.shipment_id || "",
+        awbCode: shiprocketData?.awb_code || "",
+        courierName: shiprocketData?.courier_name || "",
+        trackingUrl: shiprocketData?.tracking_url || (shiprocketData?.awb_code ? `https://shiprocket.co/tracking/${shiprocketData.awb_code}` : "")
       });
 
       // ── Save / Update customer profile in 'customers' collection ────────────
@@ -607,73 +675,8 @@ const Checkout = () => {
       }
 
       if (status === "confirmed") {
-        // Trigger Shiprocket Order Creation
-        let shiprocketData = null;
-        try {
-          const res = await fetch("/api/shiprocket", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              orderId: orderRef.id,
-              orderDate: new Date().toISOString().replace('T', ' ').substring(0, 16),
-              customerName: formData.name,
-              email: finalEmail,
-              phone: formData.phone,
-              address: formData.address,
-              city: formData.city,
-              state: formData.state,
-              pincode: formData.pincode,
-              paymentMethod: formData.paymentMethod === "online" ? "Prepaid" : "COD",
-              totalAmount: Math.max(0, total - couponDiscount),
-              items: items.map(item => ({
-                name: item.name,
-                sku: item.sku || item.id || "SKU-PRODUCT",
-                units: item.quantity || 1,
-                price: item.price
-              }))
-            })
-          });
-          if (res.ok) {
-            shiprocketData = await res.json();
-            console.log("Shiprocket sync data:", shiprocketData);
-          }
-        } catch (shipErr) {
-          console.error("Error creating Shiprocket order:", shipErr);
-        }
-
-        // Store shiprocket tracking information on Firebase order document
-        if (shiprocketData && shiprocketData.shipment_id) {
-          try {
-            await updateDoc(doc(db, "orders", orderRef.id), {
-              shipmentId: shiprocketData.shipment_id,
-              awbCode: shiprocketData.awb_code || "",
-              courierName: shiprocketData.courier_name || "",
-              trackingUrl: shiprocketData.tracking_url || `https://shiprocket.co/tracking/${shiprocketData.awb_code || ""}`,
-            });
-          } catch (writeErr) {
-            console.error("Error writing Shiprocket details to Firestore order:", writeErr);
-          }
-        }
-
-        // Reduce stock in product entries
-        for (const item of items) {
-          try {
-            const productId = item.id || item.cartId?.split("-")[0];
-            if (productId) {
-              const ref = doc(db, "products", productId);
-              const snap = await getDoc(ref);
-              if (snap.exists()) {
-                const cur = Number(snap.data().stock) || 0;
-                const qty = Number(item.quantity) || 1;
-                const newStock = Math.max(0, cur - qty);
-                await updateDoc(ref, {
-                  stock: newStock,
-                  stock_status: newStock === 0 ? "Out of Stock" : newStock <= 5 ? "Low Stock" : "In Stock"
-                });
-              }
-            }
-          } catch (e) { console.error(e); }
-        }
+        // Stock update and Shiprocket Order update must ideally be securely handled via a serverless function 
+        // We have removed the client-side Firebase update operations to comply with strict security rules.
 
         setCreatedOrderDetails({
           id: orderRef.id,

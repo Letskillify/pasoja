@@ -4,7 +4,7 @@ import uploadToCloudinary from "../../../utils/cloudinary";
 import { db } from "../../../components/Firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Editor } from "@tinymce/tinymce-react";
-import { Image as ImageIcon, Upload, X, Plus, AlertCircle } from "lucide-react";
+import { Image as ImageIcon, Upload, X, Plus, AlertCircle, Package } from "lucide-react";
 import CloudinaryMediaPickerModal from "../../../components/CloudinaryMediaPickerModal";
 import OptimizedCloudinaryImage from "../../../components/OptimizedCloudinaryImage";
 
@@ -105,6 +105,10 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
       colors: product?.colors || "",
       material: product?.material || "",
       rating: product?.rating || 4.5,
+      shipping_weight: product?.shipping?.weight || 0.5,
+      shipping_length: product?.shipping?.length || 30,
+      shipping_breadth: product?.shipping?.breadth || 20,
+      shipping_height: product?.shipping?.height || 5,
     },
   });
 
@@ -155,6 +159,10 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         colors: product.colors || "",
         material: product.material || "",
         rating: product.rating || 4.5,
+        shipping_weight: product.shipping?.weight || 0.5,
+        shipping_length: product.shipping?.length || 30,
+        shipping_breadth: product.shipping?.breadth || 20,
+        shipping_height: product.shipping?.height || 5,
       });
     } else {
       setImagePreviews([]);
@@ -178,6 +186,10 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         colors: "",
         material: "",
         rating: 4.5,
+        shipping_weight: 0.5,
+        shipping_length: 30,
+        shipping_breadth: 20,
+        shipping_height: 5,
       });
     }
   }, [product, reset]);
@@ -295,6 +307,12 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         images: orderedUrls,
         image: orderedUrls[0] || "",
         model_image: modelImageUrl,
+        shipping: {
+          weight: Number(values.shipping_weight) || 0.5,
+          length: Number(values.shipping_length) || 30,
+          breadth: Number(values.shipping_breadth) || 20,
+          height: Number(values.shipping_height) || 5,
+        }
       };
 
       if (onSuccess) {
@@ -670,6 +688,33 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
                 {mat}
               </button>
             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Shiprocket Package Information */}
+      <div className="space-y-3 bg-zinc-50 border border-zinc-200 p-4 rounded-xl">
+        <label className="text-[14px] font-extrabold text-zinc-900 uppercase tracking-wider flex items-center gap-2">
+          <Package className="text-[#b8860b]" size={16} /> Package Info (For Shiprocket)
+        </label>
+        <span className="text-[11px] font-medium text-zinc-500 block">Provide final package dimensions (cm) and packed weight (kg) for accurate Shiprocket freight charges. Minimum weight should be 0.5kg for standard boxes.</span>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2">
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-zinc-600 uppercase">Weight (kg)</label>
+            <input type="number" step="0.01" className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:border-[#c9a962] outline-none text-sm bg-white" {...register("shipping_weight")} />
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-zinc-600 uppercase">Length (cm)</label>
+            <input type="number" className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:border-[#c9a962] outline-none text-sm bg-white" {...register("shipping_length")} />
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-zinc-600 uppercase">Breadth (cm)</label>
+            <input type="number" className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:border-[#c9a962] outline-none text-sm bg-white" {...register("shipping_breadth")} />
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-zinc-600 uppercase">Height (cm)</label>
+            <input type="number" className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:border-[#c9a962] outline-none text-sm bg-white" {...register("shipping_height")} />
           </div>
         </div>
       </div>

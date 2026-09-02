@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { getOptimizedCloudinaryUrl } from '../utils/cloudinaryUtils';
 
 const SEOHead = ({
@@ -12,78 +13,42 @@ const SEOHead = ({
   canonical = "",
   jsonLd = null
 }) => {
-  useEffect(() => {
-    const optimizedImage = getOptimizedCloudinaryUrl(image, { width: 1200 });
-    // Title
-    const fullTitle = title.includes("Pasoja") ? title : `${title} | Pasoja`;
-    document.title = fullTitle;
+  const optimizedImage = getOptimizedCloudinaryUrl?.(image, { width: 1200 }) || image;
+  const fullTitle = title.includes("Pasoja") ? title : `${title} | Pasoja`;
+  const targetUrl = canonical || url || "https://pasoja.in";
 
-    // Helper to update meta tag
-    const updateMeta = (nameAttr, nameVal, contentVal) => {
-      if (!contentVal) return;
-      let tag = document.querySelector(`meta[${nameAttr}="${nameVal}"]`);
-      if (!tag) {
-        tag = document.createElement('meta');
-        tag.setAttribute(nameAttr, nameVal);
-        document.head.appendChild(tag);
-      }
-      tag.setAttribute('content', contentVal);
-    };
+  return (
+    <Helmet>
+      {/* Standard Meta Tags */}
+      <title>{fullTitle}</title>
+      <meta name="description" content={description} />
+      <meta name="keywords" content={keywords} />
+      <meta name="robots" content={robots} />
+      <meta name="author" content="Pasoja" />
+      <link rel="canonical" href={targetUrl} />
 
-    // Helper to update link tag
-    const updateLink = (relVal, hrefVal) => {
-      if (!hrefVal) return;
-      let tag = document.querySelector(`link[rel="${relVal}"]`);
-      if (!tag) {
-        tag = document.createElement('link');
-        tag.setAttribute('rel', relVal);
-        document.head.appendChild(tag);
-      }
-      tag.setAttribute('href', hrefVal);
-    };
+      {/* Open Graph Tags */}
+      <meta property="og:title" content={fullTitle} />
+      <meta property="og:description" content={description} />
+      <meta property="og:image" content={optimizedImage} />
+      <meta property="og:url" content={targetUrl} />
+      <meta property="og:type" content={type} />
+      <meta property="og:site_name" content="Pasoja" />
 
-    const targetUrl = canonical || url || "https://pasoja.in";
+      {/* Twitter Card Tags */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={fullTitle} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={optimizedImage} />
 
-    // Standard Meta Tags
-    updateMeta('name', 'description', description);
-    updateMeta('name', 'keywords', keywords);
-    updateMeta('name', 'robots', robots);
-    updateMeta('name', 'author', 'Pasoja');
-
-    // Open Graph Tags
-    updateMeta('property', 'og:title', fullTitle);
-    updateMeta('property', 'og:description', description);
-    updateMeta('property', 'og:image', optimizedImage);
-    updateMeta('property', 'og:url', targetUrl);
-    updateMeta('property', 'og:type', type);
-    updateMeta('property', 'og:site_name', 'Pasoja');
-
-    // Twitter Card Tags
-    updateMeta('name', 'twitter:card', 'summary_large_image');
-    updateMeta('name', 'twitter:title', fullTitle);
-    updateMeta('name', 'twitter:description', description);
-    updateMeta('name', 'twitter:image', optimizedImage);
-
-    // Canonical Link
-    updateLink('canonical', targetUrl);
-
-    // JSON-LD Structured Data
-    let scriptTag = document.querySelector('script[type="application/ld+json"]#seo-jsonld');
-    if (jsonLd) {
-      if (!scriptTag) {
-        scriptTag = document.createElement('script');
-        scriptTag.setAttribute('type', 'application/ld+json');
-        scriptTag.setAttribute('id', 'seo-jsonld');
-        document.head.appendChild(scriptTag);
-      }
-      scriptTag.textContent = JSON.stringify(jsonLd);
-    } else if (scriptTag) {
-      scriptTag.remove();
-    }
-
-  }, [title, description, keywords, image, url, type, robots, canonical, jsonLd]);
-
-  return null;
+      {/* JSON-LD Structured Data */}
+      {jsonLd && (
+        <script type="application/ld+json" id="seo-jsonld">
+          {JSON.stringify(jsonLd)}
+        </script>
+      )}
+    </Helmet>
+  );
 };
 
 export default SEOHead;
