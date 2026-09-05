@@ -299,11 +299,11 @@ const RandomProducts = () => {
   }
 
   return (
-    <section className="py-12 md:py-16 bg-[#f5f5f5] relative border-t border-zinc-200 overflow-hidden">
+    <section className="bg-[#f5f5f5] relative border-t border-zinc-200 overflow-hidden">
 
       {/* ── Dynamic Explore Banner ── */}
       {bannerData && (bannerData.desktop_image || bannerData.mobile_image) && bannerData.is_active !== false && (
-        <div className="w-full max-w-[1800px] mx-auto mb-10">
+        <div className="w-full mb-10">
           <Link to={bannerData.link || "/shop"} className="block relative w-full overflow-hidden group">
             <picture>
               {bannerData.desktop_image && <source media="(min-width: 1024px)" srcSet={bannerData.desktop_image} />}
