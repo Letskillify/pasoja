@@ -40,7 +40,7 @@ const UsersTable = ({ users, onRefresh }) => {
     setDeleting(true);
     try {
       for (const id of selectedIds) {
-        await deleteDoc(doc(db, "users", id));
+        await deleteDoc(doc(db, "customers", id));
       }
       alert("Selected users deleted successfully!");
       setSelectedIds([]);

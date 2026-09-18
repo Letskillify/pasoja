@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   }
 
   const user = process.env.VITE_GMAIL_USER || process.env.GMAIL_USER;
-  const pass = process.env.VITE_GMAIL_PASS || process.env.GMAIL_PASS;
+  const pass = (process.env.VITE_GMAIL_PASS || process.env.GMAIL_PASS || "").replace(/\s+/g, "");
 
   if (!user || !pass) {
     console.warn("Gmail credentials missing. Skipping email send.");

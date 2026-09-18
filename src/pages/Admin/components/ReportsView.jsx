@@ -34,7 +34,7 @@ const ReportsView = () => {
       csvContent += "Date,Order ID,Customer Name,Items Count,Total Amount,Payment Method,Status\n";
       orders.forEach(o => {
         const dateStr = o.createdAt ? new Date(o.createdAt.seconds ? o.createdAt.seconds * 1000 : o.createdAt).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10);
-        const customer = o.customerName || o.shippingAddress?.fullName || 'Guest User';
+        const customer = o.shipping?.name || o.shippingAddress?.fullName || o.customerName || 'Guest User';
         const itemsCount = (o.items || o.cartItems || []).length || 1;
         const total = o.total || o.grandTotal || 0;
         const payment = o.paymentMethod || 'UPI / Razorpay';
@@ -143,7 +143,7 @@ const ReportsView = () => {
                 <tbody className="divide-y divide-zinc-100">
                   {orders.map((o) => {
                     const dateStr = o.createdAt ? new Date(o.createdAt.seconds ? o.createdAt.seconds * 1000 : o.createdAt).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10);
-                    const customer = o.customerName || o.shippingAddress?.fullName || 'Guest User';
+                    const customer = o.shipping?.name || o.shippingAddress?.fullName || o.customerName || 'Guest User';
                     const itemsCount = (o.items || o.cartItems || []).length || 1;
                     const total = o.total || o.grandTotal || 0;
                     return (

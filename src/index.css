@@ -99,19 +99,7 @@ body * {
   min-height: 0;
 }
 
-body :is([class*="text-xxs"],
-  [class*="text-[14px]"],
-  [class*="text-[9px]"],
-  [class*="text-[10px]"],
-  [class*="text-[11px]"],
-  [class*="text-[14px]"],
-  [class*="text-[13px]"]) {
-  /* font-size: 12px !important; */
-}
 
-body ::placeholder {
-  /* font-size: 12px !important; */
-}
 
 /* Shop Sidebar Typography Overrides */
 .shop-sidebar-badge {
@@ -183,4 +171,95 @@ body ::placeholder {
   letter-spacing: 0.25em;
   color: rgba(0, 0, 0, 0.4);
   margin: 0;
+}
+
+/* Product Description Rich Text Styles */
+.product-description {
+  font-family: var(--font-sans);
+  color: #27272a;
+}
+
+.product-description h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.product-description h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.product-description h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.product-description h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.product-description p {
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+.product-description ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.product-description ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.product-description li {
+  margin-bottom: 0.25rem;
+}
+
+.product-description strong,
+.product-description b {
+  font-weight: 700;
+  color: #111111;
+}
+
+.product-description em,
+.product-description i {
+  font-style: italic;
+}
+
+.product-description a {
+  color: #b8860b;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.product-description a:hover {
+  color: #8a6408;
+}
+
+.product-description img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
+.product-description blockquote {
+  border-left: 4px solid #e5e7eb;
+  padding-left: 1rem;
+  color: #4b5563;
+  margin: 1rem 0;
+  font-style: italic;
 }

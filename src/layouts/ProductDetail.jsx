@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import MiniLoader from '../components/MiniLoader';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { db } from '../components/Firebase';
-import { doc, getDoc, collection, getDocs, query, limit } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs, query, limit, where } from 'firebase/firestore';
 import { useAuth } from '../components/useAuth';
 import { Heart, ShoppingBag, Minus, Plus, ChevronRight, ChevronLeft, Star, Truck, Ruler, Sparkles, Share2, Tag, Copy, X, ThumbsUp, Check, ShieldCheck, RefreshCw, ZoomIn } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -14,6 +14,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import SEOHead from '../components/SEOHead';
 import OptimizedCloudinaryImage from '../components/OptimizedCloudinaryImage';
+import DOMPurify from 'dompurify';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -21,6 +22,8 @@ const ProductDetail = () => {
   const { user } = useAuth();
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [coupons, setCoupons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
@@ -114,6 +117,20 @@ const ProductDetail = () => {
               const cols = typeof data.colors === 'string' ? data.colors.split(',').map(c => c.trim()) : data.colors;
               if (cols.length > 0) setSelectedColor(cols[0]);
             }
+            // Fetch dynamic reviews
+            try {
+              const revQ = query(collection(db, "product_reviews"), where("productId", "==", id));
+              const revSnap = await getDocs(revQ);
+              setReviews(revSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            } catch (err) {
+              console.error("Error fetching reviews:", err);
+            }
+            // Fetch live active coupons
+            try {
+              const coupQ = query(collection(db, "coupons"), where("is_active", "==", true));
+              const coupSnap = await getDocs(coupQ);
+              setCoupons(coupSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            } catch (err) { }
             const q = query(collection(db, "products"), limit(5));
             const snap = await getDocs(q);
             setRelatedProducts(snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.id !== id && p.is_active !== false).slice(0, 4));
@@ -186,12 +203,12 @@ const ProductDetail = () => {
 
   // Key product attributes for 3rd slide "Style Spotlight"
   const spotlightDetails = [
-    { label: 'Fit', value: product?.fit || 'Regular / Oversized' },
-    { label: 'Pattern', value: product?.pattern || 'Graphic Printed' },
-    { label: 'Color', value: selectedColor || product?.color || product?.colors || 'Natural / Multi' },
-    { label: 'Size', value: 'Model is wearing size L' },
-    { label: 'Material', value: product?.material || '100% Super-Combed Cotton' },
-  ];
+    product?.fit && { label: 'Fit', value: product.fit },
+    product?.pattern && { label: 'Pattern', value: product.pattern },
+    (selectedColor || product?.color || product?.colors) && { label: 'Color', value: selectedColor || product?.color || product?.colors },
+    product?.size_fit && { label: 'Size', value: product.size_fit },
+    product?.material && { label: 'Material', value: product.material },
+  ].filter(Boolean);
 
   if (loading) {
     return <MiniLoader message="Loading Product Details" />;
@@ -259,30 +276,38 @@ const ProductDetail = () => {
                 </button>
               </div>
 
-              <div className="overflow-x-auto mb-4">
-                <table className="w-full text-[14px] text-left border-collapse">
-                  <thead>
-                    <tr className="bg-zinc-100 border-b border-zinc-200 text-zinc-900   uppercase tracking-wider">
-                      <th className="p-2.5">SIZE</th>
-                      <th className="p-2.5">CHEST</th>
-                      <th className="p-2.5">SHOULDER</th>
-                      <th className="p-2.5">LENGTH</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-zinc-200 text-zinc-700">
-                    <tr><td className="p-2.5  ">XS</td><td className="p-2.5">36"</td><td className="p-2.5">17.0"</td><td className="p-2.5">27.0"</td></tr>
-                    <tr><td className="p-2.5  ">S</td><td className="p-2.5">38"</td><td className="p-2.5">17.5"</td><td className="p-2.5">27.5"</td></tr>
-                    <tr><td className="p-2.5  ">M</td><td className="p-2.5">40"</td><td className="p-2.5">18.0"</td><td className="p-2.5">28.0"</td></tr>
-                    <tr><td className="p-2.5  ">L</td><td className="p-2.5">42"</td><td className="p-2.5">18.5"</td><td className="p-2.5">28.5"</td></tr>
-                    <tr><td className="p-2.5  ">XL</td><td className="p-2.5">44"</td><td className="p-2.5">19.0"</td><td className="p-2.5">29.0"</td></tr>
-                    <tr><td className="p-2.5  ">XXL</td><td className="p-2.5">46"</td><td className="p-2.5">19.5"</td><td className="p-2.5">29.5"</td></tr>
-                  </tbody>
-                </table>
-              </div>
+              {product?.size_chart_image ? (
+                <div className="w-full mb-4 flex justify-center">
+                  <img src={product.size_chart_image} alt="Size Chart" className="w-full max-w-sm h-auto object-contain rounded" />
+                </div>
+              ) : (
+                <>
+                  <div className="overflow-x-auto mb-4">
+                    <table className="w-full text-[14px] text-left border-collapse">
+                      <thead>
+                        <tr className="bg-zinc-100 border-b border-zinc-200 text-zinc-900   uppercase tracking-wider">
+                          <th className="p-2.5">SIZE</th>
+                          <th className="p-2.5">CHEST</th>
+                          <th className="p-2.5">SHOULDER</th>
+                          <th className="p-2.5">LENGTH</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-zinc-200 text-zinc-700">
+                        <tr><td className="p-2.5  ">XS</td><td className="p-2.5">36"</td><td className="p-2.5">17.0"</td><td className="p-2.5">27.0"</td></tr>
+                        <tr><td className="p-2.5  ">S</td><td className="p-2.5">38"</td><td className="p-2.5">17.5"</td><td className="p-2.5">27.5"</td></tr>
+                        <tr><td className="p-2.5  ">M</td><td className="p-2.5">40"</td><td className="p-2.5">18.0"</td><td className="p-2.5">28.0"</td></tr>
+                        <tr><td className="p-2.5  ">L</td><td className="p-2.5">42"</td><td className="p-2.5">18.5"</td><td className="p-2.5">28.5"</td></tr>
+                        <tr><td className="p-2.5  ">XL</td><td className="p-2.5">44"</td><td className="p-2.5">19.0"</td><td className="p-2.5">29.0"</td></tr>
+                        <tr><td className="p-2.5  ">XXL</td><td className="p-2.5">46"</td><td className="p-2.5">19.5"</td><td className="p-2.5">29.5"</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
 
-              <div className="bg-zinc-50 p-3 border border-zinc-200 text-[11px] text-zinc-600 font-medium">
-                <p>💡 <strong>Note:</strong> Standard relaxed fit. Model is 6'1" wearing size <strong>L</strong>.</p>
-              </div>
+                  <div className="bg-zinc-50 p-3 border border-zinc-200 text-[11px] text-zinc-600 font-medium">
+                    <p>💡 <strong>Note:</strong> Standard relaxed fit. Model is 6'1" wearing size <strong>L</strong>.</p>
+                  </div>
+                </>
+              )}
             </motion.div>
           </motion.div>
         )}
@@ -326,16 +351,16 @@ const ProductDetail = () => {
                     setSelectedImage(idx);
                     swiperRef.current?.slideTo(idx);
                   }}
-                  className={`aspect-[3/4] w-full overflow-hidden transition-all duration-300 bg-zinc-100 border cursor-pointer ${selectedImage === idx ? 'border-black ring-1 ring-black opacity-100' : 'border-zinc-200 opacity-60 hover:opacity-100'
+                  className={`aspect-[3/4] w-full overflow-hidden transition-all duration-300 bg-white border cursor-pointer ${selectedImage === idx ? 'border-black ring-1 ring-black opacity-100' : 'border-zinc-200 opacity-60 hover:opacity-100'
                     }`}
                 >
-                  <OptimizedCloudinaryImage src={img} alt={`Thumbnail ${idx + 1}`} preset="avatar" className="w-full h-full object-cover" />
+                  <OptimizedCloudinaryImage src={img} alt={`Thumbnail ${idx + 1}`} preset="avatar" className="w-full h-full object-contain" />
                 </button>
               ))}
             </div>
 
             {/* Main Swiper Hero Image View */}
-            <div className="relative flex-1 w-full aspect-[3/4] sm:aspect-[3/4] min-h-[62vh] sm:min-h-[72vh] bg-zinc-100 overflow-hidden border border-zinc-200 shadow-sm group">
+            <div className="relative flex-1 w-full aspect-[3/4] sm:aspect-[3/4] min-h-[62vh] sm:min-h-[72vh] bg-white overflow-hidden border border-zinc-200 shadow-sm group">
 
               {/* Color Switch Shimmer & Loader Overlay */}
               <AnimatePresence>
@@ -406,7 +431,7 @@ const ProductDetail = () => {
                       alt={`${product.name} view ${idx + 1}`}
                       preset="product-details"
                       priority={idx === 0}
-                      className="w-full h-full object-cover object-center"
+                      className="w-full h-full object-contain object-center"
                     />
                     <div className="absolute bottom-4 right-4 z-20 bg-black/60 text-white p-2 rounded-full backdrop-blur-xs opacity-0 group-hover:opacity-100 transition-opacity">
                       <ZoomIn size={18} />
@@ -463,18 +488,18 @@ const ProductDetail = () => {
 
             {/* Title & Price Header */}
             <div>
-              <h1 className="text-lg sm:text-xl md:text-2xl tracking-wide text-zinc-900 uppercase mb-2 leading-snug">
+              <h1 className="text-xl sm:text-[22px] md:text-[26px] tracking-wide text-zinc-900 mb-2 leading-snug font-normal uppercase">
                 {product.name}
               </h1>
 
               {/* Price Row */}
-              <div className="flex items-baseline justify-between sm:justify-start gap-4">
-                <div className="flex items-baseline gap-3">
-                  <span className="text-xl sm:text-2xl text-zinc-900">
+              <div className="flex items-baseline justify-between sm:justify-start gap-3 mt-1">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-2xl sm:text-[28px] text-zinc-900 font-normal">
                     ₹{(selectedSize?.price || product.price)?.toLocaleString('en-IN')}
                   </span>
                   {(selectedSize?.original_price || product.original_price) && (
-                    <span className="text-sm text-zinc-400 line-through font-normal">
+                    <span className="text-lg text-zinc-400 line-through font-normal">
                       ₹{(selectedSize?.original_price || product.original_price)?.toLocaleString('en-IN')}
                     </span>
                   )}
@@ -482,51 +507,42 @@ const ProductDetail = () => {
               </div>
 
               {/* Ratings Badge */}
-              <div className="mt-3 flex items-center gap-2">
-                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-black text-white text-[11px] rounded-none">
-                  <span>{product.rating || 4.4}</span>
-                  <Star size={10} fill="white" strokeWidth={0} />
+              {reviews.length > 0 && (
+                <div className="mt-3.5 flex items-center gap-2.5">
+                  <div className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-black text-white text-[12px] font-medium leading-tight">
+                    <span>{(reviews.reduce((acc, r) => acc + (Number(r.rating) || 5), 0) / reviews.length).toFixed(1)}</span>
+                    <Star size={10} fill="white" strokeWidth={0} />
+                  </div>
+                  <span className="text-[14px] text-zinc-600 font-medium tracking-wide">
+                    {reviews.length} Review{reviews.length !== 1 ? 's' : ''}
+                  </span>
                 </div>
-                <span className="text-[14px] text-zinc-600 font-medium">
-                  808 Ratings and 476 Reviews
-                </span>
-              </div>
+              )}
             </div>
 
             {/* Offer Coupons Strip */}
-            <div className="grid grid-cols-2 gap-2.5 pt-1">
-              <div
-                onClick={() => handleCopyCoupon('TRYPASOJA5')}
-                className="p-3 bg-[#faf5ed] border border-[#e8ded0] flex flex-col justify-between rounded-none cursor-pointer hover:border-[#c9a962] transition-colors group"
-              >
-                <div className="flex items-center justify-between text-[10px] font-extrabold tracking-wider uppercase text-zinc-900 mb-1">
-                  <span className="flex items-center gap-1">
-                    <Tag size={11} className="text-[#b8860b]" />
-                    TRYPASOJA5
-                  </span>
-                  <Copy size={10} className="text-zinc-400 group-hover:text-black transition-colors" />
-                </div>
-                <p className="text-[10px] text-zinc-600 font-normal leading-tight">
-                  Enjoy 5% off on your first web order.
-                </p>
+            {coupons.length > 0 && (
+              <div className="grid grid-cols-2 gap-2.5 pt-1">
+                {coupons.map((coupon) => (
+                  <div
+                    key={coupon.id}
+                    onClick={() => handleCopyCoupon(coupon.code)}
+                    className="p-3 bg-[#faf5ed] border border-[#e8ded0] flex flex-col justify-between rounded-none cursor-pointer hover:border-[#c9a962] transition-colors group"
+                  >
+                    <div className="flex items-center justify-between text-[10px] font-extrabold tracking-wider uppercase text-zinc-900 mb-1">
+                      <span className="flex items-center gap-1">
+                        <Tag size={11} className="text-[#b8860b]" />
+                        {coupon.code}
+                      </span>
+                      <Copy size={10} className="text-zinc-400 group-hover:text-black transition-colors" />
+                    </div>
+                    <p className="text-[10px] text-zinc-600 font-normal leading-tight">
+                      Enjoy {coupon.discount_type === "Percentage" ? `${coupon.discount_val}%` : `₹${coupon.discount_val}`} off{coupon.min_order > 0 ? ` on orders over ₹${coupon.min_order}` : ''}.
+                    </p>
+                  </div>
+                ))}
               </div>
-
-              <div
-                onClick={() => handleCopyCoupon('NEW10')}
-                className="p-3 bg-[#faf5ed] border border-[#e8ded0] flex flex-col justify-between rounded-none cursor-pointer hover:border-[#c9a962] transition-colors group"
-              >
-                <div className="flex items-center justify-between text-[10px] font-extrabold tracking-wider uppercase text-zinc-900 mb-1">
-                  <span className="flex items-center gap-1">
-                    <Tag size={11} className="text-[#b8860b]" />
-                    NEW10
-                  </span>
-                  <Copy size={10} className="text-zinc-400 group-hover:text-black transition-colors" />
-                </div>
-                <p className="text-[10px] text-zinc-600 font-normal leading-tight">
-                  Enjoy 10% off on orders over ₹1,999.
-                </p>
-              </div>
-            </div>
+            )}
 
             {/* COLORS Selection Section */}
             {colorList.length > 0 && (
@@ -545,8 +561,8 @@ const ProductDetail = () => {
                         type="button"
                         onClick={() => handleColorChange(col)}
                         className={`px-4 py-2 border text-[11px] font-extrabold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${isSelected
-                            ? 'border-black bg-black text-white shadow-md scale-[1.02]'
-                            : 'border-zinc-300 bg-white text-zinc-700 hover:border-black hover:bg-zinc-50'
+                          ? 'border-black bg-black text-white shadow-md scale-[1.02]'
+                          : 'border-zinc-300 bg-white text-zinc-700 hover:border-black hover:bg-zinc-50'
                           }`}
                       >
                         <span
@@ -585,8 +601,8 @@ const ProductDetail = () => {
                     type="button"
                     onClick={() => setSelectedSize(sp)}
                     className={`w-12 h-11 flex items-center justify-center border text-[14px]   uppercase tracking-wider transition-all duration-200 cursor-pointer ${selectedSize?.size === sp.size
-                        ? 'border-black bg-black text-white shadow-md'
-                        : 'border-zinc-300 bg-white text-zinc-800 hover:border-black'
+                      ? 'border-black bg-black text-white shadow-md'
+                      : 'border-zinc-300 bg-white text-zinc-800 hover:border-black'
                       }`}
                   >
                     {sp.size}
@@ -643,35 +659,43 @@ const ProductDetail = () => {
                       <div className="pb-5 space-y-4 text-[14px] text-zinc-700 font-normal leading-relaxed">
 
                         {/* Dynamic TinyMCE Rich HTML Description */}
-                        {product.description ? (
+                        {product.description && (
                           <div
-                            className="prose prose-sm max-w-none text-zinc-700 font-sans leading-relaxed text-[14px] [&_p]:mb-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_strong]:font-semibold [&_strong]:text-zinc-900 [&_h1]:text-base [&_h2]:text-sm [&_h3]:text-xs [&_h3]: "
-                            dangerouslySetInnerHTML={{ __html: product.description }}
+                            className="product-description"
+                            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.description) }}
                           />
-                        ) : (
-                          <p>Crafted with premium fabric, combining breathable comfort with a sleek design. Perfect for smart casual occasions with refined yet approachable style.</p>
                         )}
 
                         {/* Size & Fit Specs */}
-                        <div className="space-y-1 pt-2 border-t border-zinc-100">
-                          <p className="  text-zinc-900 uppercase tracking-wider text-[11px]">Size & Fit</p>
-                          <p>Fit - {product.fit || 'Regular Fit'}</p>
-                          <p>Size - Model Is Wearing Size L</p>
-                        </div>
+                        {(product.fit || product.size_fit || product.fit_type) && (
+                          <div className="space-y-1 pt-2 border-t border-zinc-100">
+                            <p className="font-semibold text-zinc-900 uppercase tracking-wider text-[11px]">Size & Fit</p>
+                            {product.fit && <p>Fit - {product.fit}</p>}
+                            {product.fit_type && <p>Fit Type - {product.fit_type}</p>}
+                            {product.size_fit && <p>Size - {product.size_fit}</p>}
+                          </div>
+                        )}
 
                         {/* Wash care */}
-                        <div className="space-y-1 pt-1">
-                          <p className="  text-zinc-900 uppercase tracking-wider text-[11px]">Wash care</p>
-                          <p>{product.wash_care || 'Machine Wash'}</p>
-                        </div>
+                        {product.wash_care && (
+                          <div className="space-y-1 pt-1">
+                            <p className="font-semibold text-zinc-900 uppercase tracking-wider text-[11px]">Wash care</p>
+                            <p>{product.wash_care}</p>
+                          </div>
+                        )}
 
                         {/* Specifications */}
                         <div className="space-y-1 pt-1">
-                          <p className="  text-zinc-900 uppercase tracking-wider text-[11px]">Specification</p>
-                          <p>Pattern - {product.pattern || 'Embroidered / Solid'}</p>
-                          <p>Collar - {product.collar || 'Classic'}</p>
-                          <p>Sleeve - {product.sleeve || 'Full Sleeve'}</p>
-                          <p className="pt-1 text-zinc-500 font-mono text-[11px]">SKU: {product.sku || `${product.id?.slice(0, 10)?.toUpperCase() || '4SFS145-01'}`}</p>
+                          <p className="font-semibold text-zinc-900 uppercase tracking-wider text-[11px]">Specification</p>
+                          {product.color && <p>Color - {product.color}</p>}
+                          {(product.material || product.fabric) && <p>Fabric - {product.material || product.fabric}</p>}
+                          {product.pattern && <p>Pattern - {product.pattern}</p>}
+                          {product.design && <p>Design - {product.design}</p>}
+                          {product.neck && <p>Neck - {product.neck}</p>}
+                          {product.collar && <p>Collar - {product.collar}</p>}
+                          {product.sleeve && <p>Sleeve - {product.sleeve}</p>}
+                          {product.fabric_finish && <p>Fabric Finish - {product.fabric_finish}</p>}
+                          <p className="pt-1 text-zinc-500 font-mono text-[11px]">SKU: {product.sku || product.id?.toUpperCase()}</p>
                         </div>
 
                       </div>
@@ -713,8 +737,8 @@ const ProductDetail = () => {
                             type="button"
                             onClick={() => setReviewTab('style')}
                             className={`flex-1 py-2.5 text-[11px]   uppercase tracking-wider transition-colors ${reviewTab === 'style'
-                                ? 'text-black border-b-2 border-[#d92323]'
-                                : 'text-zinc-400 hover:text-zinc-700'
+                              ? 'text-black border-b-2 border-[#d92323]'
+                              : 'text-zinc-400 hover:text-zinc-700'
                               }`}
                           >
                             STYLE REVIEWS
@@ -723,8 +747,8 @@ const ProductDetail = () => {
                             type="button"
                             onClick={() => setReviewTab('category')}
                             className={`flex-1 py-2.5 text-[11px]   uppercase tracking-wider transition-colors ${reviewTab === 'category'
-                                ? 'text-black border-b-2 border-[#d92323]'
-                                : 'text-zinc-400 hover:text-zinc-700'
+                              ? 'text-black border-b-2 border-[#d92323]'
+                              : 'text-zinc-400 hover:text-zinc-700'
                               }`}
                           >
                             CATEGORY REVIEWS
@@ -732,39 +756,45 @@ const ProductDetail = () => {
                         </div>
 
                         {/* Overall Rating Box */}
-                        <div className="text-center py-3 bg-zinc-50 border border-zinc-200">
-                          <div className="flex items-center justify-center gap-1 text-xl font-black text-zinc-900">
-                            <span>4.4</span>
-                            <div className="flex text-black">
-                              <Star size={16} fill="black" strokeWidth={0} />
-                              <Star size={16} fill="black" strokeWidth={0} />
-                              <Star size={16} fill="black" strokeWidth={0} />
-                              <Star size={16} fill="black" strokeWidth={0} />
-                              <Star size={16} fill="none" stroke="black" strokeWidth={1.5} />
+                        {reviews.length > 0 && (
+                          <div className="text-center py-3 bg-zinc-50 border border-zinc-200">
+                            <div className="flex items-center justify-center gap-1 text-xl font-black text-zinc-900">
+                              <span>{(reviews.reduce((acc, r) => acc + (Number(r.rating) || 5), 0) / reviews.length).toFixed(1)}</span>
+                              <div className="flex text-black">
+                                <Star size={16} fill="black" strokeWidth={0} />
+                              </div>
                             </div>
+                            <p className="text-[11px] text-zinc-600 font-medium mt-1">
+                              Based on {reviews.length} review{reviews.length !== 1 ? 's' : ''}
+                            </p>
                           </div>
-                          <p className="text-[11px] text-zinc-600 font-medium mt-1">
-                            Loved by our users! <strong>74 out of 128</strong> rated 5 stars
-                          </p>
-                        </div>
+                        )}
 
-                        {/* Sample Verified Customer Review (Snitch Screenshot 5) */}
-                        <div className="p-3.5 bg-white border border-zinc-200 space-y-2">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <span className="px-1.5 py-0.5 bg-zinc-900 text-white text-[10px]   flex items-center gap-0.5">
-                                5 <Star size={8} fill="white" strokeWidth={0} />
-                              </span>
-                              <span className="text-[11px]   text-zinc-900">AAKASH</span>
-                              <span className="text-[10px] text-[#d92323] font-semibold">Verified User</span>
+                        {/* Map Dynamic Reviews */}
+                        {reviews.length > 0 ? (
+                          reviews.map(rev => (
+                            <div key={rev.id} className="p-3.5 bg-white border border-zinc-200 space-y-2">
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                  <span className="px-1.5 py-0.5 bg-zinc-900 text-white text-[10px]   flex items-center gap-0.5">
+                                    {rev.rating || 5} <Star size={8} fill="white" strokeWidth={0} />
+                                  </span>
+                                  <span className="text-[11px]   text-zinc-900">{rev.userName?.toUpperCase() || 'USER'}</span>
+                                  <span className="text-[10px] text-[#d92323] font-semibold">Verified User</span>
+                                </div>
+                                <div className="flex items-center gap-1 text-zinc-500 text-[11px]">
+                                  <span>{rev.likes || 0}</span>
+                                  <ThumbsUp size={12} className="cursor-pointer hover:text-black" />
+                                </div>
+                              </div>
+                              <p className="text-[14px] text-zinc-700">{rev.comment}</p>
                             </div>
-                            <div className="flex items-center gap-1 text-zinc-500 text-[11px]">
-                              <span>2</span>
-                              <ThumbsUp size={12} className="cursor-pointer hover:text-black" />
-                            </div>
+                          ))
+                        ) : (
+                          <div className="text-center py-8">
+                            <p className="text-zinc-500 text-sm">No reviews were given yet.</p>
                           </div>
-                          <p className="text-[14px] text-zinc-700">Good material, looks rich</p>
-                        </div>
+                        )}
 
                       </div>
                     </motion.div>

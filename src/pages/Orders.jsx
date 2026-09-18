@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, Clock, CheckCircle2, XCircle, ChevronRight, X, ArrowLeft, ShoppingBag, Eye, MapPin, CreditCard, Download, Search, Filter, Truck } from 'lucide-react';
+import { Package, Clock, CheckCircle2, XCircle, ChevronRight, X, ArrowLeft, ShoppingBag, Eye, MapPin, CreditCard, Download, Search, Filter, Truck, Undo2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../components/Firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, setDoc } from 'firebase/firestore';
 import { useAuth } from '../components/useAuth';
 import PageHeader from '../components/Home/PageHeader';
 import SEOHead from '../components/SEOHead';
@@ -83,6 +83,7 @@ const Orders = () => {
     const shippingAddr = order.shipping || {};
     const recipientName = shippingAddr.name || user?.displayName || 'Valued Client';
     const recipientPhone = shippingAddr.phone || 'N/A';
+    const recipientEmail = order.userEmail || user?.email || 'N/A';
 
     const invoiceHtml = `
       <!DOCTYPE html>
@@ -145,7 +146,7 @@ const Orders = () => {
                 ${shippingAddr.address || 'Standard Address'}<br />
                 ${shippingAddr.city ? `${shippingAddr.city}, ${shippingAddr.state} - ${shippingAddr.pincode}` : ''}<br />
                 Phone: ${recipientPhone}<br />
-                Email: ${user?.email || 'N/A'}
+                Email: ${recipientEmail}
               </div>
               <div class="address-box" style="text-align: right;">
                 <h3>Order Information</h3>
@@ -202,6 +203,30 @@ const Orders = () => {
 
     invoiceWindow.document.write(invoiceHtml);
     invoiceWindow.document.close();
+  };
+
+  const handleReturnRequest = async (order) => {
+    const reason = prompt("Please provide a reason for the return request:");
+    if (!reason || reason.trim() === "") return;
+
+    try {
+      const newId = `RET-${Math.floor(1000 + Math.random() * 9000)}`;
+      const returnDoc = {
+        id: newId,
+        orderId: order.id,
+        customerName: order.shipping?.name || user?.displayName || "Customer",
+        customerEmail: order.userEmail || user?.email || "N/A",
+        productName: (order.items && order.items.length > 0) ? order.items.map(i => i.name).join(", ") : "Items",
+        reason: reason,
+        amount: order.total || 0,
+        status: "Requested",
+        requestDate: new Date().toISOString().slice(0, 10)
+      };
+      await setDoc(doc(db, 'returns', newId), returnDoc);
+      alert("Your return request has been submitted successfully!");
+    } catch (err) {
+      alert("Error submitting request. Please contact support.");
+    }
   };
 
   // Filter orders by status and search query
@@ -611,7 +636,7 @@ const Orders = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center gap-3 pt-2">
+              <div className="flex flex-wrap items-center gap-3 pt-2">
                 <button
                   type="button"
                   onClick={() => handleDownloadInvoice(selectedOrder)}
@@ -619,6 +644,15 @@ const Orders = () => {
                 >
                   <Download size={14} /> Download PDF Invoice
                 </button>
+                {(selectedOrder.status === "delivered" || selectedOrder.status === "confirmed") && (
+                  <button
+                    type="button"
+                    onClick={() => handleReturnRequest(selectedOrder)}
+                    className="flex-1 py-3 bg-zinc-100 text-zinc-900 border border-zinc-200 font-extrabold text-[10px] uppercase tracking-widest hover:bg-zinc-200 transition-all flex items-center justify-center gap-2"
+                  >
+                    <Undo2 size={14} /> Request Return
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={() => setSelectedOrder(null)}

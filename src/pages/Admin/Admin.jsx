@@ -1130,11 +1130,8 @@ const ActivityLogsView = () => {
         const snap = await getDocs(query(collection(db, 'activity_logs'), orderBy('timestamp', 'desc'), limit(15)));
         setLogs(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
       } catch (err) {
-        // Fallback mock logs
-        setLogs([
-          { id: '1', admin: 'superadmin@pasoja.com', action: 'Product Created', entity: 'Black Oversized Tee', timestamp: { toDate: () => new Date() } },
-          { id: '2', admin: 'superadmin@pasoja.com', action: 'Stock Adjusted', entity: 'White Graphic Tee (+5)', timestamp: { toDate: () => new Date() } }
-        ]);
+        console.error("Error fetching logs:", err);
+        setLogs([]);
       } finally {
         setLoading(false);
       }
@@ -1186,7 +1183,23 @@ const Admin = () => {
           console.error("Firebase admin auto-registration failed:", regErr);
         }
       }
-      sessionStorage.setItem("adminToken", "PASOJA_SUPER_ADMIN");
+
+      // Sweep Admin dummy data from customer tables
+      try {
+        const cleanEmail = "super@pasoja.in";
+        const customerDocId = cleanEmail.replace(/[^a-z0-9]/g, "_");
+
+        await deleteDoc(doc(db, "customers", customerDocId)).catch(() => { });
+
+        const qOrders = query(collection(db, "orders"), where("userEmail", "==", cleanEmail));
+        const qOrdersSnap = await getDocs(qOrders);
+        for (const order of qOrdersSnap.docs) {
+          await deleteDoc(doc(db, "orders", order.id)).catch(() => { });
+        }
+        console.log("Swept admin mock customer data");
+      } catch (e) { console.error(e); }
+
+      localStorage.setItem("adminToken", "PASOJA_SUPER_ADMIN");
       setIsAdminLoggedIn(true);
       setLoginError("");
     } else {
@@ -1233,10 +1246,10 @@ const Admin = () => {
 
   // Stats / executive summary
   const [statsSummary, setStatsSummary] = useState({
-    revenue: 395420,
-    orders: 248,
-    customers: 1486,
-    products: 256
+    revenue: 0,
+    orders: 0,
+    customers: 0,
+    products: 0
   });
 
   const loadData = async () => {
@@ -1251,7 +1264,7 @@ const Admin = () => {
       });
       setProducts(prodList);
 
-      const userSnap = await getDocs(query(collection(db, "users")));
+      const userSnap = await getDocs(query(collection(db, "customers")));
       const userList = userSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
       setUsers(userList);
 
@@ -1267,10 +1280,10 @@ const Admin = () => {
       // Aggregate revenue
       const totalRev = orderList.reduce((acc, curr) => acc + (parseFloat(curr.total || curr.grandTotal || 0)), 0);
       setStatsSummary({
-        revenue: totalRev || 395420,
-        orders: orderList.length || 248,
-        customers: userList.length || 1486,
-        products: prodList.length || 256
+        revenue: totalRev,
+        orders: orderList.length,
+        customers: userList.length,
+        products: prodList.length
       });
     } catch (error) {
       console.log("Error loading dashboard metrics, using fallback metrics:", error);
@@ -1338,16 +1351,45 @@ const Admin = () => {
   );
 
   const renderDashboardCharts = () => {
-    // Generate simple chart data
-    const chartData = [
-      { name: "May 20", Revenue: 30000, Orders: 20 },
-      { name: "May 25", Revenue: 50000, Orders: 32 },
-      { name: "May 30", Revenue: 42000, Orders: 25 },
-      { name: "Jun 4", Revenue: 60000, Orders: 45 },
-      { name: "Jun 9", Revenue: 85000, Orders: 55 },
-      { name: "Jun 14", Revenue: 70000, Orders: 38 },
-      { name: "Jun 18", Revenue: 95000, Orders: 60 },
-    ];
+    // Generate dynamic chartData from real orders
+    const dateMap = {};
+    orders.forEach(o => {
+      let dateObj = null;
+      if (o.createdAt?.toDate) {
+        dateObj = o.createdAt.toDate();
+      } else if (o.createdAt) {
+        dateObj = new Date(o.createdAt);
+      } else {
+        dateObj = new Date();
+      }
+
+      const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      if (!dateMap[dateStr]) {
+        dateMap[dateStr] = { Revenue: 0, Orders: 0 };
+      }
+      dateMap[dateStr].Orders += 1;
+      dateMap[dateStr].Revenue += parseFloat(o.total || o.grandTotal || 0) || 0;
+    });
+
+    const chartData = Object.keys(dateMap).map(k => ({
+      name: k,
+      Revenue: dateMap[k].Revenue,
+      Orders: dateMap[k].Orders
+    }));
+
+    if (chartData.length === 0) {
+      // Empty state
+      return (
+        <div className="grid gap-6 md:grid-cols-2 mt-8">
+          <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm h-64 flex items-center justify-center text-zinc-500 text-sm">
+            No revenue data available
+          </div>
+          <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm h-64 flex items-center justify-center text-zinc-500 text-sm">
+            No order data available
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div className="grid gap-6 md:grid-cols-2 mt-8">
@@ -1398,22 +1440,18 @@ const Admin = () => {
           <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm">
             <p className="text-[10px]   text-zinc-500 uppercase tracking-wider">Total Revenue</p>
             <h3 className="text-xl   text-zinc-900 mt-1">₹{statsSummary.revenue.toLocaleString('en-IN')}</h3>
-            <span className="text-[10px] text-emerald-600   block mt-1">+18.5% vs last month</span>
           </div>
           <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm">
             <p className="text-[10px]   text-zinc-500 uppercase tracking-wider">Total Orders</p>
             <h3 className="text-xl   text-zinc-900 mt-1">{statsSummary.orders}</h3>
-            <span className="text-[10px] text-emerald-600   block mt-1">+22.4% vs last month</span>
           </div>
           <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm">
             <p className="text-[10px]   text-zinc-500 uppercase tracking-wider">Total Customers</p>
             <h3 className="text-xl   text-zinc-900 mt-1">{statsSummary.customers}</h3>
-            <span className="text-[10px] text-emerald-600   block mt-1">+15.3% vs last month</span>
           </div>
           <div className="bg-white border border-zinc-200 p-5 rounded-xl shadow-sm">
             <p className="text-[10px]   text-zinc-500 uppercase tracking-wider">Total Products</p>
             <h3 className="text-xl   text-zinc-900 mt-1">{statsSummary.products}</h3>
-            <span className="text-[10px] text-zinc-500   block mt-1">Flat stock index</span>
           </div>
         </div>
 
@@ -1661,6 +1699,20 @@ const Admin = () => {
             defaultItem={{ desktop_image: '', tablet_image: '', mobile_image: '', link: '/shop', is_active: true }}
           />
         );
+      case "Promo Popup":
+        return (
+          <GenericCRUDManager
+            collectionName="promo_popup_settings"
+            title="Promo Popup Settings"
+            fields={[
+              { key: 'desktop_image', label: 'Desktop Image', type: 'image' },
+              { key: 'tablet_image', label: 'Tablet Image', type: 'image' },
+              { key: 'mobile_image', label: 'Mobile Image', type: 'image' },
+              { key: 'is_active', label: 'Status', type: 'boolean' }
+            ]}
+            defaultItem={{ desktop_image: '', tablet_image: '', mobile_image: '', is_active: true }}
+          />
+        );
       case "Community Gallery":
       case "Reviews":
         return <CommunityManager />;
@@ -1822,10 +1874,10 @@ const Admin = () => {
   }
 
   return (
-    <div className="min-h-screen flex bg-[#f5f5f5] text-zinc-900 selection:bg-black selection:text-white">
+    <div className="h-screen overflow-hidden flex bg-[#f5f5f5] text-zinc-900 selection:bg-black selection:text-white">
       <AdminSidebar activeItem={activeItem} setActiveItem={setActiveItem} isOpen={isMobileSidebarOpen} onClose={() => setIsMobileSidebarOpen(false)} />
 
-      <main className="flex-1 px-4 py-6 md:px-8 lg:px-12 overflow-auto bg-[#f5f5f5]">
+      <main className="flex-1 px-4 py-6 md:px-8 lg:px-12 overflow-y-auto bg-[#f5f5f5]">
         <div className="max-w-7xl mx-auto">
           <AdminHeader activeItem={activeItem} searchVal={searchVal} setSearchVal={setSearchVal} onMenuClick={() => setIsMobileSidebarOpen(true)} />
 

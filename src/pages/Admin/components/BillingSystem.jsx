@@ -27,9 +27,9 @@ const BillingSystem = () => {
 
   const filteredOrders = orders.filter(o => {
     const term = searchTerm.toLowerCase();
-    const customer = (o.customerName || o.shippingAddress?.fullName || '').toLowerCase();
-    const email = (o.customerEmail || o.email || o.shippingAddress?.email || '').toLowerCase();
-    const phone = (o.phone || o.shippingAddress?.phone || '').toLowerCase();
+    const customer = (o.shipping?.name || '').toLowerCase();
+    const email = (o.userEmail || o.email || '').toLowerCase();
+    const phone = (o.shipping?.phone || '').toLowerCase();
     const id = (o.id || '').toLowerCase();
     return customer.includes(term) || email.includes(term) || phone.includes(term) || id.includes(term);
   });
@@ -84,9 +84,9 @@ const BillingSystem = () => {
               </thead>
               <tbody className="divide-y divide-zinc-100">
                 {filteredOrders.map((o) => {
-                  const customer = o.customerName || o.shippingAddress?.fullName || 'Guest Customer';
-                  const email = o.customerEmail || o.email || o.shippingAddress?.email || 'N/A';
-                  const phone = o.phone || o.shippingAddress?.phone || 'N/A';
+                  const customer = o.shipping?.name || 'Customer';
+                  const email = o.userEmail || o.email || 'N/A';
+                  const phone = o.shipping?.phone || 'N/A';
                   const total = o.total || o.grandTotal || o.totalPrice || 0;
                   const dateStr = o.createdAt ? new Date(o.createdAt.seconds ? o.createdAt.seconds * 1000 : o.createdAt).toLocaleDateString('en-IN') : new Date().toLocaleDateString('en-IN');
 
@@ -191,19 +191,19 @@ const BillingSystem = () => {
               <div className="grid grid-cols-2 gap-6 bg-zinc-50 p-4 rounded-xl border border-zinc-200 text-[14px]">
                 <div className="space-y-1">
                   <p className="text-[10px]   text-zinc-400 uppercase tracking-widest">Billed To (Customer):</p>
-                  <p className="  text-zinc-900 text-sm">{selectedOrder.customerName || selectedOrder.shippingAddress?.fullName || 'Valued Customer'}</p>
-                  <p className="text-zinc-600">{selectedOrder.customerEmail || selectedOrder.shippingAddress?.email || 'customer@email.com'}</p>
-                  <p className="text-zinc-600">{selectedOrder.phone || selectedOrder.shippingAddress?.phone || '+91 98765 43210'}</p>
+                  <p className="  text-zinc-900 text-sm">{selectedOrder.shipping?.name || 'Customer'}</p>
+                  <p className="text-zinc-600">{selectedOrder.userEmail || 'N/A'}</p>
+                  <p className="text-zinc-600">{selectedOrder.shipping?.phone || 'N/A'}</p>
                 </div>
                 <div className="space-y-1 text-right">
                   <p className="text-[10px]   text-zinc-400 uppercase tracking-widest">Shipping Address:</p>
                   <p className="text-zinc-800 font-medium">
-                    {selectedOrder.shippingAddress?.street || selectedOrder.address || 'Standard Delivery Address'}
+                    {selectedOrder.shipping?.address || 'N/A'}
                   </p>
                   <p className="text-zinc-600">
-                    {selectedOrder.shippingAddress?.city || 'New Delhi'}, {selectedOrder.shippingAddress?.pincode || '110001'}
+                    {selectedOrder.shipping?.city || 'N/A'}, {selectedOrder.shipping?.pincode || ''}
                   </p>
-                  <p className="font-semibold text-zinc-900 mt-1">Payment Method: {selectedOrder.paymentMethod || 'Paid via Razorpay/UPI'}</p>
+                  <p className="font-semibold text-zinc-900 mt-1">Payment Method: {selectedOrder.paymentMethod || 'N/A'}</p>
                 </div>
               </div>
 

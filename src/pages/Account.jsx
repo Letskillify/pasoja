@@ -384,6 +384,7 @@ const Account = () => {
     const shippingAddr = order.shipping || {};
     const recipientName = shippingAddr.name || displayName || user?.displayName || 'Valued Customer';
     const recipientPhone = shippingAddr.phone || phone || 'N/A';
+    const recipientEmail = order.userEmail || activeEmail || 'N/A';
 
     const invoiceHtml = `
       <!DOCTYPE html>
@@ -446,7 +447,7 @@ const Account = () => {
                 ${shippingAddr.address || 'Standard Address'}<br />
                 ${shippingAddr.city ? `${shippingAddr.city}, ${shippingAddr.state} - ${shippingAddr.pincode}` : ''}<br />
                 Phone: ${recipientPhone}<br />
-                Email: ${user?.email || 'N/A'}
+                Email: ${recipientEmail}
               </div>
               <div class="address-box" style="text-align: right;">
                 <h3>Order Info</h3>

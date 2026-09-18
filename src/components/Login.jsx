@@ -63,6 +63,13 @@ const Login = () => {
     setLoading(true);
     try {
       const cleanEmail = email.toLowerCase().trim();
+
+      if (cleanEmail === "super@pasoja.in") {
+        setError("Admin accounts cannot log into the customer portal.");
+        setLoading(false);
+        return;
+      }
+
       const found = await findCustomerByEmail(cleanEmail);
 
       if (!found) {

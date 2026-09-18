@@ -1,6 +1,8 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import path from 'path';
+import { pathToFileURL } from 'url';
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -8,7 +10,72 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
   return {
-    plugins: [react(), tailwindcss()],
+    plugins: [
+      react(),
+      tailwindcss(),
+      {
+        name: 'api-middleware',
+        configureServer(server) {
+          server.middlewares.use(async (req, res, next) => {
+            if (req.url.startsWith('/api/')) {
+              const url = new URL(req.url, `http://${req.headers.host}`);
+              let apiPath = url.pathname.replace('/api/', '');
+              // Strip trailing slashes or queries
+              apiPath = apiPath.split('?')[0];
+              try {
+                // Dynamically import the API route module using absolute file URL
+                const absolutePath = path.resolve(process.cwd(), 'api', `${apiPath}.js`);
+                const module = await import(pathToFileURL(absolutePath).href);
+
+                // Polyfill for req.body (Vercel provides this)
+                if (req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH') {
+                  let body = '';
+                  req.on('data', chunk => {
+                    body += chunk.toString();
+                  });
+                  req.on('end', async () => {
+                    try {
+                      req.body = body ? JSON.parse(body) : {};
+                    } catch (e) {
+                      req.body = body; // fallback to text
+                    }
+
+                    // Populate process.env with loaded values so nodemailer works
+                    Object.assign(process.env, env);
+
+                    // Polyfill res.status and res.json
+                    res.status = (statusCode) => {
+                      res.statusCode = statusCode;
+                      return res;
+                    };
+                    res.json = (data) => {
+                      res.setHeader('Content-Type', 'application/json');
+                      res.end(JSON.stringify(data));
+                    };
+
+                    await module.default(req, res);
+                  });
+                } else {
+                  // Populate process.env
+                  Object.assign(process.env, env);
+
+                  res.status = (statusCode) => { res.statusCode = statusCode; return res; };
+                  res.json = (data) => { res.setHeader('Content-Type', 'application/json'); res.end(JSON.stringify(data)); };
+                  await module.default(req, res);
+                }
+                return; // Stop next middleware
+              } catch (error) {
+                console.error(`Error executing API route /api/${apiPath}:`, error);
+                res.statusCode = 500;
+                res.end(JSON.stringify({ error: "Internal API Error" }));
+                return;
+              }
+            }
+            next();
+          });
+        }
+      }
+    ],
     define: {
       'import.meta.env.VITE_CLOUDINARY_CLOUD_NAME': JSON.stringify(env.VITE_CLOUDINARY_CLOUD_NAME || env.CLOUDINARY_CLOUD_NAME),
       'import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET': JSON.stringify(env.VITE_CLOUDINARY_UPLOAD_PRESET || env.CLOUDINARY_UPLOAD_PRESET),

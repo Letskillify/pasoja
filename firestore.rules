@@ -16,6 +16,11 @@ service cloud.firestore {
       allow read: if true;
       allow write: if isSuperAdmin();
     }
+
+    match /product_reviews/{reviewId} {
+      allow read: if true;
+      allow write: if isSuperAdmin() || request.auth != null;
+    }
     
     // Users rules: allow listing/get (query checks for register lookup), restrict sub-collections to owners
     match /users/{userId} {
@@ -75,6 +80,11 @@ service cloud.firestore {
     }
 
     match /explore_banner/{bannerId} {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+    }
+
+    match /promo_popup_settings/{settingId} {
       allow read: if true;
       allow write: if isSuperAdmin();
     }

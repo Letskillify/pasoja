@@ -36,8 +36,8 @@ const AuthProvider = ({ children }) => {
         return;
       }
 
-      // If the email is the superadmin, and customer flow did not explicitly authenticate them, ignore it for customer pages!
-      if (u && u.email === "super@pasoja.in" && localStorage.getItem("pasoja_customer_logged_in") !== "true") {
+      // If the email is the superadmin, prevent them entirely from customer flow context
+      if (u && u.email === "super@pasoja.in") {
         setUser(null);
         setLoading(false);
         return;
@@ -63,6 +63,9 @@ const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const formattedEmail = email.toLowerCase().trim();
+    if (formattedEmail === "super@pasoja.in") {
+      throw new Error("Admin accounts cannot log into the customer portal.");
+    }
     localStorage.setItem("pasoja_customer_logged_in", "true");
 
     // 1. Check if user document exists in Firestore and has custom password stored
@@ -123,6 +126,9 @@ const AuthProvider = ({ children }) => {
 
   const signup = async (email, password, displayName) => {
     const formattedEmail = email.toLowerCase().trim();
+    if (formattedEmail === "super@pasoja.in") {
+      throw new Error("This email is reserved for administrators.");
+    }
     localStorage.setItem("pasoja_customer_logged_in", "true");
     const bypassPassword = "PasojaSecureBypassKey2026_" + formattedEmail;
 
@@ -146,9 +152,15 @@ const AuthProvider = ({ children }) => {
       const cred = await signInWithPopup(auth, provider);
       const userDoc = doc(db, "users", cred.user.uid);
       const snap = await getDoc(userDoc);
+      const providerEmail = cred.user.email?.toLowerCase().trim();
+      if (providerEmail === "super@pasoja.in") {
+        await signOut(auth);
+        throw new Error("Admin accounts cannot log into the customer portal.");
+      }
+
       if (!snap.exists()) {
         await setDoc(userDoc, {
-          email: cred.user.email?.toLowerCase().trim() || "",
+          email: providerEmail || "",
           displayName: cred.user.displayName || "",
           createdAt: serverTimestamp(),
         });

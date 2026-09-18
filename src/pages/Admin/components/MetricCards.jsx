@@ -18,7 +18,7 @@ const MetricCards = () => {
         const [productsSnap, ordersSnap, usersSnap] = await Promise.all([
           getDocs(collection(db, "products")),
           getDocs(collection(db, "orders")),
-          getDocs(collection(db, "users"))
+          getDocs(collection(db, "customers"))
         ]);
 
         const totalRevenue = ordersSnap.docs.reduce((acc, doc) => {

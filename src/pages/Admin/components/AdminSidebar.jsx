@@ -35,6 +35,8 @@ import {
   X,
   AlertCircle
 } from 'lucide-react';
+import { auth } from '../../../components/Firebase';
+import { signOut } from 'firebase/auth';
 
 const sidebarSections = [
   {
@@ -73,6 +75,7 @@ const sidebarSections = [
       { name: "Shop By Category", icon: Grid },
       { name: "Shop The Look", icon: Sparkles },
       { name: "Explore Banner", icon: Image },
+      { name: "Promo Popup", icon: Sparkles },
       { name: "Global Alert", icon: AlertCircle },
       { name: "Benefits Strip", icon: ClipboardList },
       { name: "Blogs", icon: BookOpen },
@@ -97,8 +100,13 @@ const sidebarSections = [
 ];
 
 const AdminSidebar = ({ activeItem, setActiveItem, isOpen, onClose }) => {
-  const handleLogout = () => {
+  const handleLogout = async () => {
     if (window.confirm("Are you sure you want to logout?")) {
+      try {
+        await signOut(auth);
+      } catch (err) {
+        console.error(err);
+      }
       localStorage.removeItem("adminToken");
       sessionStorage.removeItem("adminToken");
       window.location.reload();

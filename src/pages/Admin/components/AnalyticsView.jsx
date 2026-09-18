@@ -22,8 +22,8 @@ const AnalyticsView = () => {
         const prodList = prodSnap.docs.map(d => ({ id: d.id, ...d.data() }));
         setProducts(prodList);
 
-        const userSnap = await getDocs(collection(db, 'users'));
-        setUsersCount(userSnap.size || 142);
+        const userSnap = await getDocs(collection(db, 'customers'));
+        setUsersCount(userSnap.size || 0);
       } catch (err) {
         console.error("Error fetching live analytics data:", err);
       } finally {
@@ -46,29 +46,20 @@ const AnalyticsView = () => {
     ? ((completedOrdersCount / usersCount) * 100).toFixed(1)
     : "4.2";
 
-  // Compute Category Revenue Share from real order items or products
+  // Compute Category Revenue Share from real order items
   const categorySalesMap = {};
   orders.forEach(o => {
     const items = o.items || o.cartItems || [];
     items.forEach(item => {
-      const cat = item.category || "T-Shirts";
+      const cat = item.category || "General";
       const price = parseFloat(item.price || 0) * (parseInt(item.quantity || item.qty || 1));
       categorySalesMap[cat] = (categorySalesMap[cat] || 0) + price;
     });
   });
 
-  // Fallback to product category index if orders items have no category details
-  if (Object.keys(categorySalesMap).length === 0) {
-    products.forEach(p => {
-      const cat = p.category || "General";
-      const val = parseFloat(p.price || 0) * (parseInt(p.stock || 10));
-      categorySalesMap[cat] = (categorySalesMap[cat] || 0) + val;
-    });
-  }
-
   const categoryPerformance = Object.keys(categorySalesMap).map(catName => {
     const rev = categorySalesMap[catName];
-    const share = totalGrossRevenue > 0 ? ((rev / totalGrossRevenue) * 100).toFixed(1) : "20.0";
+    const share = totalGrossRevenue > 0 ? ((rev / totalGrossRevenue) * 100).toFixed(1) : "0.0";
     return {
       name: catName,
       revenue: `₹${Math.round(rev).toLocaleString('en-IN')}`,
@@ -79,15 +70,19 @@ const AnalyticsView = () => {
   // Compute Payment Channels breakdown
   const channelMap = { "UPI / Online": 0, "Razorpay Card": 0, "Cash on Delivery": 0, "Net Banking": 0 };
   orders.forEach(o => {
-    const method = o.paymentMethod || o.payment_method || "UPI / Online";
-    channelMap[method] = (channelMap[method] || 0) + parseFloat(o.total || o.grandTotal || 1999);
+    let method = o.paymentMethod || o.payment_method;
+    if (method && method.toLowerCase().includes("cod")) method = "Cash on Delivery";
+    if (method && method.toLowerCase().includes("razor")) method = "Razorpay Card";
+    if (method && method.toLowerCase().includes("card")) method = "Razorpay Card";
+    if (method && method.toLowerCase().includes("upi")) method = "UPI / Online";
+    channelMap[method] = (channelMap[method] || 0) + parseFloat(o.total || o.grandTotal || 0);
   });
 
   const totalChannelRev = Object.values(channelMap).reduce((a, b) => a + b, 0) || 1;
   const channelBreakdown = [
-    { channel: "UPI / Online Payment", percentage: Math.round(((channelMap["UPI / Online"] || 6500) / totalChannelRev) * 100), revenue: `₹${Math.round(channelMap["UPI / Online"] || 6500).toLocaleString('en-IN')}`, color: "bg-black" },
-    { channel: "Razorpay / Cards", percentage: Math.round(((channelMap["Razorpay Card"] || 4200) / totalChannelRev) * 100), revenue: `₹${Math.round(channelMap["Razorpay Card"] || 4200).toLocaleString('en-IN')}`, color: "bg-[#c9a962]" },
-    { channel: "Cash on Delivery (COD)", percentage: Math.round(((channelMap["Cash on Delivery"] || 3100) / totalChannelRev) * 100), revenue: `₹${Math.round(channelMap["Cash on Delivery"] || 3100).toLocaleString('en-IN')}`, color: "bg-zinc-600" },
+    { channel: "UPI / Online Payment", percentage: Math.round(((channelMap["UPI / Online"] || 0) / totalChannelRev) * 100), revenue: `₹${Math.round(channelMap["UPI / Online"] || 0).toLocaleString('en-IN')}`, color: "bg-black" },
+    { channel: "Razorpay / Cards", percentage: Math.round(((channelMap["Razorpay Card"] || 0) / totalChannelRev) * 100), revenue: `₹${Math.round(channelMap["Razorpay Card"] || 0).toLocaleString('en-IN')}`, color: "bg-[#c9a962]" },
+    { channel: "Cash on Delivery (COD)", percentage: Math.round(((channelMap["Cash on Delivery"] || 0) / totalChannelRev) * 100), revenue: `₹${Math.round(channelMap["Cash on Delivery"] || 0).toLocaleString('en-IN')}`, color: "bg-zinc-600" },
   ];
 
   return (
@@ -127,9 +122,6 @@ const AnalyticsView = () => {
                 <div className="p-2 bg-emerald-50 text-emerald-600 rounded-xl"><DollarSign size={16} /></div>
               </div>
               <h3 className="text-2xl   text-zinc-900">₹{Math.round(totalGrossRevenue).toLocaleString('en-IN')}</h3>
-              <div className="flex items-center gap-1.5 text-[14px]   text-emerald-600">
-                <ArrowUpRight size={14} /> <span>+14.2% vs last period</span>
-              </div>
             </div>
 
             <div className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-sm space-y-2">
@@ -138,9 +130,6 @@ const AnalyticsView = () => {
                 <div className="p-2 bg-blue-50 text-blue-600 rounded-xl"><ShoppingBag size={16} /></div>
               </div>
               <h3 className="text-2xl   text-zinc-900">{completedOrdersCount}</h3>
-              <div className="flex items-center gap-1.5 text-[14px]   text-emerald-600">
-                <ArrowUpRight size={14} /> <span>+8.6% vs last period</span>
-              </div>
             </div>
 
             <div className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-sm space-y-2">
@@ -149,9 +138,6 @@ const AnalyticsView = () => {
                 <div className="p-2 bg-amber-50 text-[#b8860b] rounded-xl"><TrendingUp size={16} /></div>
               </div>
               <h3 className="text-2xl   text-zinc-900">₹{aov.toLocaleString('en-IN')}</h3>
-              <div className="flex items-center gap-1.5 text-[14px]   text-emerald-600">
-                <ArrowUpRight size={14} /> <span>+5.1% vs last period</span>
-              </div>
             </div>
 
             <div className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-sm space-y-2">
@@ -160,9 +146,6 @@ const AnalyticsView = () => {
                 <div className="p-2 bg-purple-50 text-purple-600 rounded-xl"><Users size={16} /></div>
               </div>
               <h3 className="text-2xl   text-zinc-900">{conversionRate}%</h3>
-              <div className="flex items-center gap-1.5 text-[14px]   text-emerald-600">
-                <ArrowUpRight size={14} /> <span>+0.8% vs last period</span>
-              </div>
             </div>
           </div>
 

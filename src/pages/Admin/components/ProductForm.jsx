@@ -67,6 +67,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
     fetchCatalogData();
   }, []);
 
+
   const getInitialImages = () => {
     if (product) {
       if (Array.isArray(product.images) && product.images.length > 0) {
@@ -84,6 +85,10 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
   // Model Image state (1 image)
   const [modelImagePreview, setModelImagePreview] = useState(product?.model_image || null);
   const [modelImageFile, setModelImageFile] = useState(null);
+
+  // Size Chart Image state
+  const [sizeChartPreview, setSizeChartPreview] = useState(product?.size_chart_image || null);
+  const [sizeChartFile, setSizeChartFile] = useState(null);
 
   // Cloudinary Library Picker state
   const [isPickerOpen, setIsPickerOpen] = useState(false);
@@ -112,15 +117,38 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
     },
   });
 
-  // Color Variant Images Mapping state ({ "black": "url", "white": "url" })
-  const [colorImages, setColorImages] = useState(product?.color_images || {});
-  const [activePickerColor, setActivePickerColor] = useState(null);
-
   const stockValue = watch("stock");
   const selectedCategory = watch("category");
   const watchedColors = watch("colors");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Fix for Issue 6: Re-apply select values after async options load
+  useEffect(() => {
+    if (isEdit && product && dbCategories.length > 0) {
+      setValue("category", product.category || "", { shouldDirty: false });
+    }
+  }, [isEdit, product, dbCategories, setValue]);
+
+  useEffect(() => {
+    if (isEdit && product && dbSubcategories.length > 0) {
+      // Small timeout ensures parent category changes propagate before subcategory is set
+      setTimeout(() => {
+        setValue("subcategory", product.subcategory || "", { shouldDirty: false });
+      }, 0);
+    }
+  }, [isEdit, product, dbSubcategories, setValue, selectedCategory]);
+
+  useEffect(() => {
+    if (isEdit && product && dbCollections.length > 0) {
+      setValue("collection", product.collection || "", { shouldDirty: false });
+    }
+  }, [isEdit, product, dbCollections, setValue]);
+
+  // Color Variant Images Mapping state ({ "black": "url", "white": "url" })
+  const [colorImages, setColorImages] = useState(product?.color_images || {});
+  const [activePickerColor, setActivePickerColor] = useState(null);
+
 
   const filteredSubcategories = dbSubcategories.filter(
     sub => !selectedCategory || !sub.parent_category || sub.parent_category === selectedCategory
@@ -142,6 +170,8 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
       setPrimaryIndex(0);
       setModelImagePreview(product.model_image || null);
       setModelImageFile(null);
+      setSizeChartPreview(product.size_chart_image || null);
+      setSizeChartFile(null);
       setColorImages(product.color_images || {});
       setSizePrices(product.size_prices && product.size_prices.length > 0 ? product.size_prices : [{ size: "", price: 0, original_price: 0 }]);
       reset({
@@ -169,6 +199,8 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
       setPrimaryIndex(0);
       setModelImagePreview(null);
       setModelImageFile(null);
+      setSizeChartPreview(null);
+      setSizeChartFile(null);
       setColorImages({});
       setSizePrices([{ size: "", price: 0, original_price: 0 }]);
       reset({
@@ -266,6 +298,13 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         modelImageUrl = "";
       }
 
+      let sizeChartUrl = product?.size_chart_image || "";
+      if (sizeChartFile) {
+        sizeChartUrl = await uploadToCloudinary(sizeChartFile);
+      } else if (!sizeChartPreview) {
+        sizeChartUrl = "";
+      }
+
       let orderedUrls = [...uploadUrls];
       if (uploadUrls.length > 0) {
         const primaryUrl = uploadUrls[primaryIndex] || uploadUrls[0];
@@ -307,6 +346,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         images: orderedUrls,
         image: orderedUrls[0] || "",
         model_image: modelImageUrl,
+        size_chart_image: sizeChartUrl,
         shipping: {
           weight: Number(values.shipping_weight) || 0.5,
           length: Number(values.shipping_length) || 30,
@@ -323,6 +363,8 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
       setPrimaryIndex(0);
       setModelImagePreview(null);
       setModelImageFile(null);
+      setSizeChartPreview(null);
+      setSizeChartFile(null);
     } catch (err) {
       setError("Upload failed: " + err.message);
     } finally {
@@ -917,6 +959,64 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         )}
       </div>
 
+      {/* Size Chart Image Section */}
+      <div className="space-y-3 pt-3 border-t border-zinc-200">
+        <div className="flex items-center justify-between">
+          <label className="text-sm font-semibold text-zinc-700 uppercase tracking-wide flex items-center gap-2">
+            <span>Size Chart (Optional)</span>
+          </label>
+          <span className="text-[11px] font-medium text-zinc-500 bg-zinc-100 px-2.5 py-1 rounded-full border border-zinc-200">
+            Replaces default size table on product page
+          </span>
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <label className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-zinc-300 bg-zinc-100 hover:bg-zinc-200 text-sm font-semibold text-zinc-900 cursor-pointer transition-all">
+            <Upload size={16} />
+            <span>Upload Size Chart</span>
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  setSizeChartFile(file);
+                  setSizeChartPreview(URL.createObjectURL(file));
+                }
+              }}
+            />
+          </label>
+          <button
+            type="button"
+            onClick={() => {
+              setPickerTarget("size_chart");
+              setIsPickerOpen(true);
+            }}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-zinc-300 bg-white hover:bg-zinc-50 text-sm font-semibold text-zinc-900 cursor-pointer transition-all shadow-sm"
+          >
+            <ImageIcon size={16} className="text-[#b8860b]" />
+            <span>Choose from Cloudinary</span>
+          </button>
+        </div>
+        {sizeChartPreview && (
+          <div className="space-y-2">
+            <div className="relative w-full max-w-sm rounded-xl border-2 border-black overflow-hidden bg-zinc-50 shadow-md">
+              <img src={sizeChartPreview} alt="Size Chart Preview" className="w-full h-auto" />
+              <button
+                type="button"
+                onClick={() => {
+                  setSizeChartPreview(null);
+                  setSizeChartFile(null);
+                }}
+                className="absolute top-1.5 right-1.5 z-30 bg-red-600 hover:bg-red-700 text-white p-1 rounded-full text-[14px] shadow transition-opacity"
+              >
+                <X size={14} />
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
       <div className="flex items-center justify-end gap-3 pt-2 border-t border-zinc-200 mt-4">
         {formState.isSubmitted && !loading && !error && (
           <span className="flex items-center gap-1.5 text-sm text-emerald-600">
@@ -958,6 +1058,10 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
           } else if (pickerTarget === "color" && activePickerColor) {
             const singleUrl = Array.isArray(selected) ? selected[0] : selected;
             setColorImages(prev => ({ ...prev, [activePickerColor]: singleUrl }));
+          } else if (pickerTarget === "size_chart") {
+            const singleUrl = Array.isArray(selected) ? selected[0] : selected;
+            setSizeChartPreview(singleUrl);
+            setSizeChartFile(null);
           } else {
             const singleUrl = Array.isArray(selected) ? selected[0] : selected;
             setModelImagePreview(singleUrl);

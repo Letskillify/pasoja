@@ -3,42 +3,6 @@ import { db } from '../../../components/Firebase';
 import { collection, getDocs, doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { Undo2, Plus, CheckCircle, Clock, XCircle, AlertCircle, Trash2, Search, X } from 'lucide-react';
 
-const DEFAULT_RETURNS_SEED = [
-  {
-    id: "RET-1001",
-    orderId: "ORD-9842",
-    customerName: "Aarav Sharma",
-    customerEmail: "aarav@gmail.com",
-    productName: "Oversized Vintage Cotton Tee",
-    reason: "Size too large (Ordered L, need M)",
-    amount: 1499,
-    status: "Requested",
-    requestDate: "2026-07-30"
-  },
-  {
-    id: "RET-1002",
-    orderId: "ORD-9815",
-    customerName: "Sneha Reddy",
-    customerEmail: "sneha@yahoo.com",
-    productName: "Linen Relaxed Casual Shirt",
-    reason: "Slight color variation from photo",
-    amount: 2199,
-    status: "Approved",
-    requestDate: "2026-07-28"
-  },
-  {
-    id: "RET-1003",
-    orderId: "ORD-9780",
-    customerName: "Vikram Malhotra",
-    customerEmail: "vikram@outlook.com",
-    productName: "Heavyweight Quarter Zip Hoodie",
-    reason: "Defective zipper slider",
-    amount: 2999,
-    status: "Refunded",
-    requestDate: "2026-07-25"
-  }
-];
-
 const ReturnsRefundsManager = () => {
   const [returnsList, setReturnsList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -61,10 +25,7 @@ const ReturnsRefundsManager = () => {
     try {
       const snap = await getDocs(collection(db, 'returns'));
       if (snap.empty) {
-        for (const item of DEFAULT_RETURNS_SEED) {
-          await setDoc(doc(db, 'returns', item.id), item);
-        }
-        setReturnsList(DEFAULT_RETURNS_SEED);
+        setReturnsList([]);
       } else {
         setReturnsList(snap.docs.map(d => ({ id: d.id, ...d.data() })));
       }

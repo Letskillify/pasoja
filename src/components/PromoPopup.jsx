@@ -1,25 +1,70 @@
 import React, { useState, useEffect } from 'react';
 import { X, Check, Sparkles } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import OptimizedCloudinaryImage from './OptimizedCloudinaryImage';
+import { db } from './Firebase';
+import { collection, getDocs, query, limit, where } from 'firebase/firestore';
 
 const PromoPopup = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const location = useLocation();
   const [mobile, setMobile] = useState('');
   const [email, setEmail] = useState('');
   const [birthday, setBirthday] = useState('');
   const [notify, setNotify] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const defaultImage = "https://res.cloudinary.com/dcjn4y284/image/upload/v1786029696/yastxilcsghbsdmkcp2x.jpg";
+  const [promoImages, setPromoImages] = useState({
+    desktop: defaultImage,
+    tablet: defaultImage,
+    mobile: defaultImage
+  });
+  const [currentImage, setCurrentImage] = useState(defaultImage);
+
+  useEffect(() => {
+    const fetchPromoSettings = async () => {
+      try {
+        const q = query(collection(db, "promo_popup_settings"), where("is_active", "==", true), limit(1));
+        const snap = await getDocs(q);
+        if (!snap.empty) {
+          const data = snap.docs[0].data();
+          const desktop = data.desktop_image || defaultImage;
+          const tablet = data.tablet_image || desktop;
+          const mobile = data.mobile_image || tablet;
+          setPromoImages({ desktop, tablet, mobile });
+          setCurrentImage(window.innerWidth < 768 ? mobile : window.innerWidth < 1024 ? tablet : desktop);
+        }
+      } catch (err) {
+        console.error("Failed to load promo settings", err);
+      }
+    };
+    fetchPromoSettings();
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setCurrentImage(promoImages.mobile);
+      } else if (window.innerWidth < 1024) {
+        setCurrentImage(promoImages.tablet);
+      } else {
+        setCurrentImage(promoImages.desktop);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [promoImages]);
+
   useEffect(() => {
     // Check if user has already dismissed or submitted the popup in this session
     const hasBeenDismissed = sessionStorage.getItem('pasoja_promo_dismissed');
     if (hasBeenDismissed) return;
 
-    // Show popup 8 seconds after website loading
+    // Show popup 3 seconds after website loading
     const timer = setTimeout(() => {
       setIsVisible(true);
-    }, 8000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -38,7 +83,7 @@ const PromoPopup = () => {
     }, 2500);
   };
 
-  if (!isVisible) return null;
+  if (!isVisible || location.pathname.startsWith('/admin')) return null;
 
   return (
     <div
@@ -63,7 +108,7 @@ const PromoPopup = () => {
         {/* Left Column: Visual Banner Graphic */}
         <div className="md:col-span-6 relative bg-black min-h-[240px] md:min-h-[460px] flex items-center justify-center overflow-hidden group">
           <OptimizedCloudinaryImage
-            src="https://res.cloudinary.com/dcjn4y284/image/upload/v1786029696/yastxilcsghbsdmkcp2x.jpg"
+            src={currentImage}
             alt="Pasoja Sale Campaign"
             preset="product-grid"
             className="absolute inset-0 w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-700"
