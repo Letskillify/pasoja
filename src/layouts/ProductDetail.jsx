@@ -360,7 +360,7 @@ const ProductDetail = () => {
             </div>
 
             {/* Main Swiper Hero Image View */}
-            <div className="relative flex-1 w-full aspect-[3/4] sm:aspect-[3/4] min-h-[62vh] sm:min-h-[72vh] bg-white overflow-hidden border border-zinc-200 shadow-sm group">
+            <div className="relative flex-1 w-full h-[75vh] sm:h-auto sm:aspect-[3/4] sm:min-h-[72vh] bg-white overflow-hidden border border-zinc-200 shadow-sm group">
 
               {/* Color Switch Shimmer & Loader Overlay */}
               <AnimatePresence>
@@ -431,7 +431,7 @@ const ProductDetail = () => {
                       alt={`${product.name} view ${idx + 1}`}
                       preset="product-details"
                       priority={idx === 0}
-                      className="w-full h-full object-contain object-center"
+                      className="w-full h-full object-cover object-center"
                     />
                     <div className="absolute bottom-4 right-4 z-20 bg-black/60 text-white p-2 rounded-full backdrop-blur-xs opacity-0 group-hover:opacity-100 transition-opacity">
                       <ZoomIn size={18} />
@@ -893,7 +893,7 @@ const ProductDetail = () => {
                       <div className="pb-5 text-[14px] text-zinc-600 font-light leading-relaxed space-y-2">
                         <p className="flex items-start gap-2">
                           <RefreshCw size={13} className="text-zinc-800 shrink-0 mt-0.5" />
-                          <span>Hassle-free <strong>30-day return & exchange</strong> window. Doorstep pickup scheduled automatically upon request.</span>
+                          <span>Hassle-free <strong>7-day return & exchange</strong> window. Doorstep pickup scheduled automatically upon request.</span>
                         </p>
                       </div>
                     </motion.div>

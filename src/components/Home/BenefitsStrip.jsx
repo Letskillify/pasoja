@@ -14,7 +14,7 @@ const IconMap = {
 const DEFAULT_BENEFITS = [
   { id: 'b_1', icon: 'Truck', text: 'Free Shipping Over ₹1999', sort_order: 1, is_active: true },
   { id: 'b_2', icon: 'Zap', text: 'Fast Delivery 3–5 Days', sort_order: 2, is_active: true },
-  { id: 'b_3', icon: 'RotateCcw', text: '30-Day Easy Returns', sort_order: 3, is_active: true },
+  { id: 'b_3', icon: 'RotateCcw', text: '7-Day Easy Returns', sort_order: 3, is_active: true },
   { id: 'b_4', icon: 'ShieldCheck', text: 'Secure Checkout', sort_order: 4, is_active: true },
   { id: 'b_5', icon: 'Truck', text: 'Ethically Sourced', sort_order: 5, is_active: true },
   { id: 'b_6', icon: 'Zap', text: 'Premium Quality', sort_order: 6, is_active: true }

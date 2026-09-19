@@ -183,7 +183,7 @@ const Footer = () => {
           {[
             { icon: Truck, title: 'Free Shipping', sub: 'On all orders over ₹1999' },
             { icon: Zap, title: 'Fast Delivery', sub: 'Delivered in 3–5 working days' },
-            { icon: RotateCcw, title: 'Easy Returns', sub: '30-day hassle-free returns' },
+            { icon: RotateCcw, title: 'Easy Returns', sub: '7-day hassle-free returns' },
             { icon: ShieldCheck, title: 'Secure Checkout', sub: 'Encrypted payment gateway' },
           ].map(({ icon: Icon, title, sub }) => (
             <div key={title} className="flex items-center gap-3.5 p-4 bg-zinc-900/40 border border-zinc-800/80 rounded-none hover:border-zinc-700 transition-colors">

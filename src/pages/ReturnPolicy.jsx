@@ -9,7 +9,7 @@ const ReturnPolicy = () => {
     <div className="min-h-screen bg-[#f5f5f5] text-zinc-900">
       <SEOHead
         title="Return, Refund & Cancellation Policy | Pasoja"
-        description="Read Pasoja's return and refund policy. 7–10 day easy returns, refund processed after product inspection."
+        description="Read Pasoja's return and refund policy. 7-day easy returns, refund processed after product inspection."
         url="https://pasoja.in/return-policy"
       />
       <PageHeader
@@ -23,7 +23,7 @@ const ReturnPolicy = () => {
         {/* Quick Info Cards */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { icon: RotateCcw, title: 'Easy 7–10 Day Returns', sub: 'Raise return within 10 days' },
+            { icon: RotateCcw, title: 'Easy 7-Day Returns', sub: 'Raise return within 7 days' },
             { icon: Package, title: 'Condition Applies', sub: 'Unworn with tags intact' },
             { icon: Truck, title: 'Free Reverse Pickup', sub: 'On eligible pincodes' },
             { icon: CreditCard, title: 'Quick Refund', sub: '7–10 days after receipt' },
@@ -47,7 +47,7 @@ const ReturnPolicy = () => {
           <ul className="space-y-3 text-[13px] md:text-sm text-zinc-600 leading-relaxed list-none">
             <li className="flex gap-3 items-start">
               <CheckCircle size={15} className="text-emerald-600 shrink-0 mt-1" />
-              <span>Returns must be initiated within <strong className="text-zinc-900">7 to 10 calendar days</strong> from the date of product delivery.</span>
+              <span>Returns must be initiated within <strong className="text-zinc-900">7 calendar days</strong> from the date of product delivery.</span>
             </li>
             <li className="flex gap-3 items-start">
               <CheckCircle size={15} className="text-emerald-600 shrink-0 mt-1" />
